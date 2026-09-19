@@ -1,0 +1,7 @@
+# No line-ending conversion anywhere: the generators replace exact line ranges
+# of ps3.asm and depend on files being byte-exact.
+* -text
+*.bin binary
+*.exe binary
+*.dll binary
+*.png binary

@@ -1,0 +1,5873 @@
+{
+ "format": "ps3 script v1",
+ "notes": "Edit only `en`. Markup as in dialogue.json. `line` is the ps3.asm line of the run at extraction time (informational; generators relocate runs by label bounds).",
+ "segments": {
+  "title": {
+   "note": "title screen: (c)SEGA 1991, TM, PRESS START BUTTON",
+   "start": "loc_1B5C",
+   "end": "loc_1B8C",
+   "runs": [
+    {
+     "id": "title#000",
+     "line": 2024,
+     "line_end": 2026,
+     "addr": "01B78",
+     "hex": "505245535320535441525420425554544f4e2efc",
+     "us": "PRESS START BUTTON.",
+     "en": "PRESS START BUTTON."
+    }
+   ]
+  },
+  "equip": {
+   "note": "equipment slot labels in the Equip window",
+   "start": "loc_5F86",
+   "end": "loc_5F9A",
+   "runs": [
+    {
+     "id": "equip#000",
+     "line": 7383,
+     "line_end": 7384,
+     "addr": "05F86",
+     "hex": "426f6479fc",
+     "us": "Body",
+     "en": "Body"
+    },
+    {
+     "id": "equip#001",
+     "line": 7389,
+     "line_end": 7390,
+     "addr": "05F8B",
+     "hex": "522d48616e64fc",
+     "us": "R-Hand",
+     "en": "R-Hand"
+    },
+    {
+     "id": "equip#002",
+     "line": 7395,
+     "line_end": 7396,
+     "addr": "05F92",
+     "hex": "4c2d48616e64fc",
+     "us": "L-Hand",
+     "en": "L-Hand"
+    }
+   ]
+  },
+  "megido": {
+   "note": "the two story techniques named in cutscenes",
+   "start": "loc_A0E4",
+   "end": "MainGame_GameScript",
+   "runs": [
+    {
+     "id": "megido#000",
+     "line": 13358,
+     "line_end": 13359,
+     "addr": "0A0E4",
+     "hex": "4d656769646ffc",
+     "us": "Megido",
+     "en": "Megido"
+    },
+    {
+     "id": "megido#001",
+     "line": 13364,
+     "line_end": 13365,
+     "addr": "0A0EB",
+     "hex": "4772616e747afc",
+     "us": "Grantz",
+     "en": "Grantz"
+    }
+   ]
+  },
+  "marriage": {
+   "note": "marriage choice menus, two lines each",
+   "start": "loc_17EAC",
+   "end": "Obj_EventTreasureChest",
+   "runs": [
+    {
+     "id": "marriage#000",
+     "line": 31163,
+     "line_end": 31166,
+     "addr": "17EAC",
+     "hex": "492077696c6c206d61727279204d6169612ef8492077696c6c206d61727279204c656e612efc",
+     "us": "I will marry Maia.{BR}I will marry Lena.",
+     "en": "I will marry Maia.{BR}I will marry Lena."
+    },
+    {
+     "id": "marriage#001",
+     "line": 31169,
+     "line_end": 31172,
+     "addr": "17ED2",
+     "hex": "492077696c6c206d6172727920546865612ef8492077696c6c206d617272792053617269fc",
+     "us": "I will marry Thea.{BR}I will marry Sari",
+     "en": "I will marry Thea.{BR}I will marry Sari"
+    },
+    {
+     "id": "marriage#002",
+     "line": 31175,
+     "line_end": 31178,
+     "addr": "17EF7",
+     "hex": "492077696c6c206d61727279204c6179612ef8492077696c6c206d6172727920416c616972fc",
+     "us": "I will marry Laya.{BR}I will marry Alair",
+     "en": "I will marry Laya.{BR}I will marry Alair"
+    }
+   ]
+  },
+  "credits": {
+   "note": "ending credits: each labelled entry is 2 position bytes (kept in `hdr`), text, $FC; bold capitals are written as fullwidth letters",
+   "start": "loc_1A33C",
+   "end": "loc_1A7C4",
+   "hdr": 2,
+   "runs": [
+    {
+     "id": "loc_1A33C",
+     "addr": "1A33C",
+     "hex": "0282546865206c6567656e6473206f66207468652070617374fc",
+     "hdr": "0282",
+     "us": "The legends of the past",
+     "en": "The legends of the past"
+    },
+    {
+     "id": "loc_1A356",
+     "addr": "1A356",
+     "hex": "02867368617065206f7572206c6976657320616e64fc",
+     "hdr": "0286",
+     "us": "shape our lives and",
+     "en": "shape our lives and"
+    },
+    {
+     "id": "loc_1A36C",
+     "addr": "1A36C",
+     "hex": "028a74686f7365206f66206f7572206368696c6472656e2efc",
+     "hdr": "028a",
+     "us": "those of our children.",
+     "en": "those of our children."
+    },
+    {
+     "id": "loc_1A386",
+     "addr": "1A386",
+     "hex": "028e4f6e652073756368206c6567656e64206973206f662061fc",
+     "hdr": "028e",
+     "us": "One such legend is of a",
+     "en": "One such legend is of a"
+    },
+    {
+     "id": "loc_1A3A0",
+     "addr": "1A3A0",
+     "hex": "02927374727567676c65207468617420616c6d6f7374fc",
+     "hdr": "0292",
+     "us": "struggle that almost",
+     "en": "struggle that almost"
+    },
+    {
+     "id": "loc_1A3B8",
+     "addr": "1A3B8",
+     "hex": "029664657374726f796564206f757220776f726c642efc",
+     "hdr": "0296",
+     "us": "destroyed our world.",
+     "en": "destroyed our world."
+    },
+    {
+     "id": "loc_1A3D0",
+     "addr": "1A3D0",
+     "hex": "029a546865206e616d6573206f66204f72616b696f20616e64fc",
+     "hdr": "029a",
+     "us": "The names of Orakio and",
+     "en": "The names of Orakio and"
+    },
+    {
+     "id": "loc_1A3EA",
+     "addr": "1A3EA",
+     "hex": "029e4c617961206563686f20646f776e207468726f756768fc",
+     "hdr": "029e",
+     "us": "Laya echo down through",
+     "en": "Laya echo down through"
+    },
+    {
+     "id": "loc_1A404",
+     "addr": "1A404",
+     "hex": "02a27468652079656172732c207374696c6c20696e737069722dfc",
+     "hdr": "02a2",
+     "us": "the years, still inspir-",
+     "en": "the years, still inspir-"
+    },
+    {
+     "id": "loc_1A420",
+     "addr": "1A420",
+     "hex": "02a6696e67206c6f766520616e6420686174726564206576656efc",
+     "hdr": "02a6",
+     "us": "ing love and hatred even",
+     "en": "ing love and hatred even"
+    },
+    {
+     "id": "loc_1A43C",
+     "addr": "1A43C",
+     "hex": "02aa6e6f772c20312c303030207965617273206166746572fc",
+     "hdr": "02aa",
+     "us": "now, 1,000 years after",
+     "en": "now, 1,000 years after"
+    },
+    {
+     "id": "loc_1A456",
+     "addr": "1A456",
+     "hex": "02ae746865697220747261676963206465617468732efc",
+     "hdr": "02ae",
+     "us": "their tragic deaths.",
+     "en": "their tragic deaths."
+    },
+    {
+     "id": "loc_1A46E",
+     "addr": "1A46E",
+     "hex": "02b2546865697220636f6e666c696374207769706564206f7574fc",
+     "hdr": "02b2",
+     "us": "Their conflict wiped out",
+     "en": "Their conflict wiped out"
+    },
+    {
+     "id": "loc_1A48A",
+     "addr": "1A48A",
+     "hex": "02b6636976696c697a6174696f6e20616e64206c656674fc",
+     "hdr": "02b6",
+     "us": "civilization and left",
+     "en": "civilization and left"
+    },
+    {
+     "id": "loc_1A4A2",
+     "addr": "1A4A2",
+     "hex": "02ba746865207375727669766f727320696e206120776f726c64fc",
+     "hdr": "02ba",
+     "us": "the survivors in a world",
+     "en": "the survivors in a world"
+    },
+    {
+     "id": "loc_1A4BE",
+     "addr": "1A4BE",
+     "hex": "02be6f66206d7574617465642063726561747572657320616e64fc",
+     "hdr": "02be",
+     "us": "of mutated creatures and",
+     "en": "of mutated creatures and"
+    },
+    {
+     "id": "loc_1A4DA",
+     "addr": "1A4DA",
+     "hex": "02c277617272696e6720706f636b657473206f66206d656e2efc",
+     "hdr": "02c2",
+     "us": "warring pockets of men.",
+     "en": "warring pockets of men."
+    },
+    {
+     "id": "loc_1A4F4",
+     "addr": "1A4F4",
+     "hex": "02c6496e746f207468697320736861747465726564fc",
+     "hdr": "02c6",
+     "us": "Into this shattered",
+     "en": "Into this shattered"
+    },
+    {
+     "id": "loc_1A50A",
+     "addr": "1A50A",
+     "hex": "02ca776f726c6420796f7520617265207468727573742c20746ffc",
+     "hdr": "02ca",
+     "us": "world you are thrust, to",
+     "en": "world you are thrust, to"
+    },
+    {
+     "id": "loc_1A526",
+     "addr": "1A526",
+     "hex": "02ce6c697665206f722064696520627920796f7572fc",
+     "hdr": "02ce",
+     "us": "live or die by your",
+     "en": "live or die by your"
+    },
+    {
+     "id": "loc_1A53C",
+     "addr": "1A53C",
+     "hex": "02d273776f726420616e6420796f757220776974732e2e2e2efc",
+     "hdr": "02d2",
+     "us": "sword and your wits....",
+     "en": "sword and your wits...."
+    },
+    {
+     "id": "loc_1A556",
+     "addr": "1A556",
+     "hex": "02e400fc",
+     "hdr": "02e4",
+     "us": "{00}",
+     "en": "{00}"
+    },
+    {
+     "id": "loc_1A55A",
+     "addr": "1A55A",
+     "hex": "0880b6b1a8b3b3a4ad1fa0ada31fa3a8b1a4a2b3a4a31fa1b8fc",
+     "hdr": "0880",
+     "us": "ＷＲＩＴＴＥＮ ＡＮＤ ＤＩＲＥＣＴＥＤ ＢＹ",
+     "en": "ＷＲＩＴＴＥＮ ＡＮＤ ＤＩＲＥＣＴＥＤ ＢＹ"
+    },
+    {
+     "id": "loc_1A574",
+     "addr": "1A574",
+     "hex": "1382b203fc",
+     "hdr": "1382",
+     "us": "Ｓ2",
+     "en": "Ｓ2"
+    },
+    {
+     "id": "loc_1A57A",
+     "addr": "1A57A",
+     "hex": "0990a2ae10b6b1a8b3a4b11420a2ae10a3a8b1a4a2b3aeb1fc",
+     "hdr": "0990",
+     "us": "ＣＯ-ＷＲＩＴＥＲ, ＣＯ-ＤＩＲＥＣＴＯＲ",
+     "en": "ＣＯ-ＷＲＩＴＥＲ, ＣＯ-ＤＩＲＥＣＴＯＲ"
+    },
+    {
+     "id": "loc_1A594",
+     "addr": "1A594",
+     "hex": "0f92b8a0ada61fb6a0b3b3fc",
+     "hdr": "0f92",
+     "us": "ＹＡＮＧ ＷＡＴＴ",
+     "en": "ＹＡＮＧ ＷＡＴＴ"
+    },
+    {
+     "id": "loc_1A5A0",
+     "addr": "1A5A0",
+     "hex": "0ea0a0b1b31fa3a8b1a4a2b3aeb1fc",
+     "hdr": "0ea0",
+     "us": "ＡＲＴ ＤＩＲＥＣＴＯＲ",
+     "en": "ＡＲＴ ＤＩＲＥＣＴＯＲ"
+    },
+    {
+     "id": "loc_1A5B0",
+     "addr": "1A5B0",
+     "hex": "0fa2ab10b110b5a0ababa4b8fc",
+     "hdr": "0fa2",
+     "us": "Ｌ-Ｒ-ＶＡＬＬＥＹ",
+     "en": "Ｌ-Ｒ-ＶＡＬＬＥＹ"
+    },
+    {
+     "id": "loc_1A5BE",
+     "addr": "1A5BE",
+     "hex": "08b0a2a7a8a4a51fa2a7a0b1a0a2b3a4b11fa3a4b2a8a6ada4b1fc",
+     "hdr": "08b0",
+     "us": "ＣＨＩＥＦ ＣＨＡＲＡＣＴＥＲ ＤＥＳＩＧＮＥＲ",
+     "en": "ＣＨＩＥＦ ＣＨＡＲＡＣＴＥＲ ＤＥＳＩＧＮＥＲ"
+    },
+    {
+     "id": "loc_1A5DA",
+     "addr": "1A5DA",
+     "hex": "0fb2b3aeb8ae1faeb9a0aaa8fc",
+     "hdr": "0fb2",
+     "us": "ＴＯＹＯ ＯＺＡＫＩ",
+     "en": "ＴＯＹＯ ＯＺＡＫＩ"
+    },
+    {
+     "id": "loc_1A5E8",
+     "addr": "1A5E8",
+     "hex": "09c0a2a7a8a4a51fb2a2b1aeabab1fa3a4b2a8a6ada4b1fc",
+     "hdr": "09c0",
+     "us": "ＣＨＩＥＦ ＳＣＲＯＬＬ ＤＥＳＩＧＮＥＲ",
+     "en": "ＣＨＩＥＦ ＳＣＲＯＬＬ ＤＥＳＩＧＮＥＲ"
+    },
+    {
+     "id": "loc_1A600",
+     "addr": "1A600",
+     "hex": "0fc2b1aea6a4b11fa0b1acfc",
+     "hdr": "0fc2",
+     "us": "ＲＯＧＥＲ ＡＲＭ",
+     "en": "ＲＯＧＥＲ ＡＲＭ"
+    },
+    {
+     "id": "loc_1A60C",
+     "addr": "1A60C",
+     "hex": "0cd0acb4b2a8a21fa2aeacafaeb2a4b1fc",
+     "hdr": "0cd0",
+     "us": "ＭＵＳＩＣ ＣＯＭＰＯＳＥＲ",
+     "en": "ＭＵＳＩＣ ＣＯＭＰＯＳＥＲ"
+    },
+    {
+     "id": "loc_1A61E",
+     "addr": "1A61E",
+     "hex": "11d2a8afafaefc",
+     "hdr": "11d2",
+     "us": "ＩＰＰＯ",
+     "en": "ＩＰＰＯ"
+    },
+    {
+     "id": "loc_1A626",
+     "addr": "1A626",
+     "hex": "0be0a2a7a8a4a51fafb1aea6b1a0acaca4b1fc",
+     "hdr": "0be0",
+     "us": "ＣＨＩＥＦ ＰＲＯＧＲＡＭＭＥＲ",
+     "en": "ＣＨＩＥＦ ＰＲＯＧＲＡＭＭＥＲ"
+    },
+    {
+     "id": "loc_1A63A",
+     "addr": "1A63A",
+     "hex": "10e2b2b6a4a4afa4b1fc",
+     "hdr": "10e2",
+     "us": "ＳＷＥＥＰＥＲ",
+     "en": "ＳＷＥＥＰＥＲ"
+    },
+    {
+     "id": "loc_1A644",
+     "addr": "1A644",
+     "hex": "0cf0b2afa4a2a8a0ab1fa4a5a5a4a2b3fc",
+     "hdr": "0cf0",
+     "us": "ＳＰＥＣＩＡＬ ＥＦＦＥＣＴ",
+     "en": "ＳＰＥＣＩＡＬ ＥＦＦＥＣＴ"
+    },
+    {
+     "id": "loc_1A656",
+     "addr": "1A656",
+     "hex": "11f2a513a613a2fc",
+     "hdr": "11f2",
+     "us": "Ｆ.Ｇ.Ｃ",
+     "en": "Ｆ.Ｇ.Ｃ"
+    },
+    {
+     "id": "loc_1A65E",
+     "addr": "1A65E",
+     "hex": "0a00a0b2b2a8b2b3a0adb31fafb1aea6b1a0acaca4b1fc",
+     "hdr": "0a00",
+     "us": "ＡＳＳＩＳＴＡＮＴ ＰＲＯＧＲＡＭＭＥＲ",
+     "en": "ＡＳＳＩＳＴＡＮＴ ＰＲＯＧＲＡＭＭＥＲ"
+    },
+    {
+     "id": "loc_1A676",
+     "addr": "1A676",
+     "hex": "0f02b6a8abab1fa2a0ada4fc",
+     "hdr": "0f02",
+     "us": "ＷＩＬＬ ＣＡＮＥ",
+     "en": "ＷＩＬＬ ＣＡＮＥ"
+    },
+    {
+     "id": "loc_1A682",
+     "addr": "1A682",
+     "hex": "0b10a0b2b2a8b2b3a0adb31fa3a4b2a8a6ada4b1fc",
+     "hdr": "0b10",
+     "us": "ＡＳＳＩＳＴＡＮＴ ＤＥＳＩＧＮＥＲ",
+     "en": "ＡＳＳＩＳＴＡＮＴ ＤＥＳＩＧＮＥＲ"
+    },
+    {
+     "id": "loc_1A698",
+     "addr": "1A698",
+     "hex": "1112b3b2b4a6b4fc",
+     "hdr": "1112",
+     "us": "ＴＳＵＧＵ",
+     "en": "ＴＳＵＧＵ"
+    },
+    {
+     "id": "loc_1A6A0",
+     "addr": "1A6A0",
+     "hex": "0b20a0b2b2a8b2b3a0adb31fa3a8b1a4a2b3aeb1fc",
+     "hdr": "0b20",
+     "us": "ＡＳＳＩＳＴＡＮＴ ＤＩＲＥＣＴＯＲ",
+     "en": "ＡＳＳＩＳＴＡＮＴ ＤＩＲＥＣＴＯＲ"
+    },
+    {
+     "id": "loc_1A6B6",
+     "addr": "1A6B6",
+     "hex": "1022a1b1aeb21f050101fc",
+     "hdr": "1022",
+     "us": "ＢＲＯＳ 400",
+     "en": "ＢＲＯＳ 400"
+    },
+    {
+     "id": "loc_1A6C2",
+     "addr": "1A6C2",
+     "hex": "0d2cb2afa4a2a8a0ab1fb3a7a0adaab2fc",
+     "hdr": "0d2c",
+     "us": "ＳＰＥＣＩＡＬ ＴＨＡＮＫＳ",
+     "en": "ＳＰＥＣＩＡＬ ＴＨＡＮＫＳ"
+    },
+    {
+     "id": "loc_1A6D4",
+     "addr": "1A6D4",
+     "hex": "0e32aeb2b2a0aba41faaaea7b3a0fc",
+     "hdr": "0e32",
+     "us": "ＯＳＳＡＬＥ ＫＯＨＴＡ",
+     "en": "ＯＳＳＡＬＥ ＫＯＨＴＡ"
+    },
+    {
+     "id": "loc_1A6E4",
+     "addr": "1A6E4",
+     "hex": "0f35afa7a4ada8b71fb1a8a4fc",
+     "hdr": "0f35",
+     "us": "ＰＨＥＮＩＸ ＲＩＥ",
+     "en": "ＰＨＥＮＩＸ ＲＩＥ"
+    },
+    {
+     "id": "loc_1A6F2",
+     "addr": "1A6F2",
+     "hex": "1038b8aeb2a7a8a1aeadfc",
+     "hdr": "1038",
+     "us": "ＹＯＳＨＩＢＯＮ",
+     "en": "ＹＯＳＨＩＢＯＮ"
+    },
+    {
+     "id": "loc_1A6FE",
+     "addr": "1A6FE",
+     "hex": "103ba2aeac1fa1abb4a4fc",
+     "hdr": "103b",
+     "us": "ＣＯＭ ＢＬＵＥ",
+     "en": "ＣＯＭ ＢＬＵＥ"
+    },
+    {
+     "id": "loc_1A70A",
+     "addr": "1A70A",
+     "hex": "0f3eacb4b4b4b41fb8b4a9a8fc",
+     "hdr": "0f3e",
+     "us": "ＭＵＵＵＵ ＹＵＪＩ",
+     "en": "ＭＵＵＵＵ ＹＵＪＩ"
+    },
+    {
+     "id": "loc_1A718",
+     "addr": "1A718",
+     "hex": "0f41aca0a31fa7a0b3b3a4b1fc",
+     "hdr": "0f41",
+     "us": "ＭＡＤ ＨＡＴＴＥＲ",
+     "en": "ＭＡＤ ＨＡＴＴＥＲ"
+    },
+    {
+     "id": "loc_1A726",
+     "addr": "1A726",
+     "hex": "1144aca8adaea6a4fc",
+     "hdr": "1144",
+     "us": "ＭＩＮＯＧＥ",
+     "en": "ＭＩＮＯＧＥ"
+    },
+    {
+     "id": "loc_1A730",
+     "addr": "1A730",
+     "hex": "1247aab8b9fc",
+     "hdr": "1247",
+     "us": "ＫＹＺ",
+     "en": "ＫＹＺ"
+    },
+    {
+     "id": "loc_1A736",
+     "addr": "1A736",
+     "hex": "104aacaeb1a8b3a0adfc",
+     "hdr": "104a",
+     "us": "ＭＯＲＩＴＡＮ",
+     "en": "ＭＯＲＩＴＡＮ"
+    },
+    {
+     "id": "loc_1A740",
+     "addr": "1A740",
+     "hex": "124dafa0afa0fc",
+     "hdr": "124d",
+     "us": "ＰＡＰＡ",
+     "en": "ＰＡＰＡ"
+    },
+    {
+     "id": "loc_1A748",
+     "addr": "1A748",
+     "hex": "1050aab8a0acb4b1a0fc",
+     "hdr": "1050",
+     "us": "ＫＹＡＭＵＲＡ",
+     "en": "ＫＹＡＭＵＲＡ"
+    },
+    {
+     "id": "loc_1A752",
+     "addr": "1A752",
+     "hex": "1253ab13a213fc",
+     "hdr": "1253",
+     "us": "Ｌ.Ｃ.",
+     "en": "Ｌ.Ｃ."
+    },
+    {
+     "id": "loc_1A75A",
+     "addr": "1A75A",
+     "hex": "1256a0ada3fc",
+     "hdr": "1256",
+     "us": "ＡＮＤ",
+     "en": "ＡＮＤ"
+    },
+    {
+     "id": "loc_1A760",
+     "addr": "1A760",
+     "hex": "0f59a2a7a8a4acb4b2a7a8fc",
+     "hdr": "0f59",
+     "us": "ＣＨＩＥＭＵＳＨＩ",
+     "en": "ＣＨＩＥＭＵＳＨＩ"
+    },
+    {
+     "id": "loc_1A76C",
+     "addr": "1A76C",
+     "hex": "0774afb1aea3b4a2a4a31fa0ada31fafb1aea6b1a0acaca4a31fa1b8fc",
+     "hdr": "0774",
+     "us": "ＰＲＯＤＵＣＥＤ ＡＮＤ ＰＲＯＧＲＡＭＭＥＤ ＢＹ",
+     "en": "ＰＲＯＤＵＣＥＤ ＡＮＤ ＰＲＯＧＲＡＭＭＥＤ ＢＹ"
+    },
+    {
+     "id": "loc_1A78A",
+     "addr": "1A78A",
+     "hex": "1076b3b2b4aaa0afaeadfc",
+     "hdr": "1076",
+     "us": "ＴＳＵＫＡＰＯＮ",
+     "en": "ＴＳＵＫＡＰＯＮ"
+    },
+    {
+     "id": "loc_1A796",
+     "addr": "1A796",
+     "hex": "0d94afb1a4b2a4adb3a4a31fa1b8fc",
+     "hdr": "0d94",
+     "us": "ＰＲＥＳＥＮＴＥＤ ＢＹ",
+     "en": "ＰＲＥＳＥＮＴＥＤ ＢＹ"
+    },
+    {
+     "id": "loc_1A7A6",
+     "addr": "1A7A6",
+     "hex": "0b96b2a4a6a01fa4adb3a4b1afb1a8b2a4b2fc",
+     "hdr": "0b96",
+     "us": "ＳＥＧＡ ＥＮＴＥＲＰＲＩＳＥＳ",
+     "en": "ＳＥＧＡ ＥＮＴＥＲＰＲＩＳＥＳ"
+    },
+    {
+     "id": "loc_1A7BA",
+     "addr": "1A7BA",
+     "hex": "10b4b3a7a420a4ada3fc",
+     "hdr": "10b4",
+     "us": "ＴＨＥ ＥＮＤ",
+     "en": "ＴＨＥ ＥＮＤ"
+    }
+   ]
+  },
+  "charnames": {
+   "note": "party member names in the initial stats records",
+   "start": "MieuInitStatsData",
+   "end": "loc_1E4C6",
+   "runs": [
+    {
+     "id": "charnames#000",
+     "line": 38056,
+     "line_end": 38057,
+     "addr": "1E039",
+     "hex": "4d696575fc",
+     "us": "Mieu",
+     "en": "Mieu"
+    },
+    {
+     "id": "charnames#001",
+     "line": 38078,
+     "line_end": 38079,
+     "addr": "1E073",
+     "hex": "5772656efc",
+     "us": "Wren",
+     "en": "Wren"
+    },
+    {
+     "id": "charnames#002",
+     "line": 38125,
+     "line_end": 38126,
+     "addr": "1E0D3",
+     "hex": "52687973fc",
+     "us": "Rhys",
+     "en": "Rhys"
+    },
+    {
+     "id": "charnames#003",
+     "line": 38146,
+     "line_end": 38147,
+     "addr": "1E10B",
+     "hex": "4c796c65fc",
+     "us": "Lyle",
+     "en": "Lyle"
+    },
+    {
+     "id": "charnames#004",
+     "line": 38169,
+     "line_end": 38170,
+     "addr": "1E147",
+     "hex": "4c656e61fc",
+     "us": "Lena",
+     "en": "Lena"
+    },
+    {
+     "id": "charnames#005",
+     "line": 38192,
+     "line_end": 38193,
+     "addr": "1E183",
+     "hex": "4e69616cfc",
+     "us": "Nial",
+     "en": "Nial"
+    },
+    {
+     "id": "charnames#006",
+     "line": 38218,
+     "line_end": 38219,
+     "addr": "1E1C5",
+     "hex": "4c617961fc",
+     "us": "Laya",
+     "en": "Laya"
+    },
+    {
+     "id": "charnames#007",
+     "line": 38241,
+     "line_end": 38242,
+     "addr": "1E201",
+     "hex": "4777796efc",
+     "us": "Gwyn",
+     "en": "Gwyn"
+    },
+    {
+     "id": "charnames#008",
+     "line": 38265,
+     "line_end": 38266,
+     "addr": "1E23F",
+     "hex": "5279616efc",
+     "us": "Ryan",
+     "en": "Ryan"
+    },
+    {
+     "id": "charnames#009",
+     "line": 38314,
+     "line_end": 38315,
+     "addr": "1E2BD",
+     "hex": "53617269fc",
+     "us": "Sari",
+     "en": "Sari"
+    },
+    {
+     "id": "charnames#010",
+     "line": 38338,
+     "line_end": 38339,
+     "addr": "1E2FB",
+     "hex": "54686561fc",
+     "us": "Thea",
+     "en": "Thea"
+    },
+    {
+     "id": "charnames#011",
+     "line": 38361,
+     "line_end": 38362,
+     "addr": "1E337",
+     "hex": "4164616efc",
+     "us": "Adan",
+     "en": "Adan"
+    },
+    {
+     "id": "charnames#012",
+     "line": 38390,
+     "line_end": 38391,
+     "addr": "1E37F",
+     "hex": "4b617261fc",
+     "us": "Kara",
+     "en": "Kara"
+    },
+    {
+     "id": "charnames#013",
+     "line": 38413,
+     "line_end": 38414,
+     "addr": "1E3BB",
+     "hex": "4b617261fc",
+     "us": "Kara",
+     "en": "Kara"
+    },
+    {
+     "id": "charnames#014",
+     "line": 38436,
+     "line_end": 38437,
+     "addr": "1E3F7",
+     "hex": "41726f6efc",
+     "us": "Aron",
+     "en": "Aron"
+    },
+    {
+     "id": "charnames#015",
+     "line": 38466,
+     "line_end": 38467,
+     "addr": "1E441",
+     "hex": "43727973fc",
+     "us": "Crys",
+     "en": "Crys"
+    },
+    {
+     "id": "charnames#016",
+     "line": 38494,
+     "line_end": 38495,
+     "addr": "1E487",
+     "hex": "5365616efc",
+     "us": "Sean",
+     "en": "Sean"
+    }
+   ]
+  },
+  "menus": {
+   "note": "field menu labels and prompts",
+   "start": "loc_1F6CE",
+   "end": "loc_1F920",
+   "runs": [
+    {
+     "id": "menus#000",
+     "line": 40085,
+     "line_end": 40092,
+     "addr": "1F6CE",
+     "hex": "204974656df820546563686e6971f8205374617473f8204571756970fc",
+     "us": " Item{BR} Techniq{BR} Stats{BR} Equip",
+     "en": " Item{BR} Techniq{BR} Stats{BR} Equip"
+    },
+    {
+     "id": "menus#001",
+     "line": 40095,
+     "line_end": 40096,
+     "addr": "1F6EB",
+     "hex": "20537769746368fc",
+     "us": " Switch",
+     "en": " Switch"
+    },
+    {
+     "id": "menus#002",
+     "line": 40122,
+     "line_end": 40123,
+     "addr": "1F732",
+     "hex": "57686f73653ffc",
+     "us": "Whose?",
+     "en": "Whose?"
+    },
+    {
+     "id": "menus#003",
+     "line": 40130,
+     "line_end": 40131,
+     "addr": "1F73E",
+     "hex": "57686f3ffc",
+     "us": "Who?",
+     "en": "Who?"
+    },
+    {
+     "id": "menus#004",
+     "line": 40138,
+     "line_end": 40139,
+     "addr": "1F748",
+     "hex": "2020576861743ffc",
+     "us": "  What?",
+     "en": "  What?"
+    },
+    {
+     "id": "menus#005",
+     "line": 40146,
+     "line_end": 40148,
+     "addr": "1F754",
+     "hex": "20546f57686f6d3ff8f8fc",
+     "us": " ToWhom?{BR}{BR}",
+     "en": " ToWhom?{BR}{BR}"
+    },
+    {
+     "id": "menus#006",
+     "line": 40155,
+     "line_end": 40160,
+     "addr": "1F764",
+     "hex": "20557365f82047697665f82044697363617264fc",
+     "us": " Use{BR} Give{BR} Discard",
+     "en": " Use{BR} Give{BR} Discard"
+    },
+    {
+     "id": "menus#007",
+     "line": 40167,
+     "line_end": 40168,
+     "addr": "1F77C",
+     "hex": "f8f8fc",
+     "us": "{BR}{BR}",
+     "en": "{BR}{BR}"
+    },
+    {
+     "id": "menus#008",
+     "line": 40183,
+     "line_end": 40184,
+     "addr": "1F78E",
+     "hex": "4669727374fc",
+     "us": "First",
+     "en": "First"
+    },
+    {
+     "id": "menus#009",
+     "line": 40191,
+     "line_end": 40192,
+     "addr": "1F798",
+     "hex": "5365636f6e64fc",
+     "us": "Second",
+     "en": "Second"
+    },
+    {
+     "id": "menus#010",
+     "line": 40199,
+     "line_end": 40200,
+     "addr": "1F7A4",
+     "hex": "5468697264fc",
+     "us": "Third",
+     "en": "Third"
+    },
+    {
+     "id": "menus#011",
+     "line": 40207,
+     "line_end": 40208,
+     "addr": "1F7AE",
+     "hex": "466f75727468fc",
+     "us": "Fourth",
+     "en": "Fourth"
+    },
+    {
+     "id": "menus#012",
+     "line": 40215,
+     "line_end": 40216,
+     "addr": "1F7BA",
+     "hex": "4669667468fc",
+     "us": "Fifth",
+     "en": "Fifth"
+    },
+    {
+     "id": "menus#013",
+     "line": 40223,
+     "line_end": 40228,
+     "addr": "1F7C4",
+     "hex": "48656164f8f8522048616e64f8f84c2048616e64fc",
+     "us": "Head{BR}{BR}R Hand{BR}{BR}L Hand",
+     "en": "Head{BR}{BR}R Hand{BR}{BR}L Hand"
+    },
+    {
+     "id": "menus#014",
+     "line": 40235,
+     "line_end": 40240,
+     "addr": "1F7DE",
+     "hex": "546f72736ff8f846656574f8f84275636b6c65fc",
+     "us": "Torso{BR}{BR}Feet{BR}{BR}Buckle",
+     "en": "Torso{BR}{BR}Feet{BR}{BR}Buckle"
+    },
+    {
+     "id": "menus#015",
+     "line": 40247,
+     "line_end": 40252,
+     "addr": "1F7F6",
+     "hex": "44616d616765f8f8446566656e7365f8f85370656564fc",
+     "us": "Damage{BR}{BR}Defense{BR}{BR}Speed",
+     "en": "Damage{BR}{BR}Defense{BR}{BR}Speed"
+    },
+    {
+     "id": "menus#016",
+     "line": 40269,
+     "line_end": 40274,
+     "addr": "1F81A",
+     "hex": "4c6576656cf8f85850f8f852657164205850fc",
+     "us": "Level{BR}{BR}XP{BR}{BR}Reqd XP",
+     "en": "Level{BR}{BR}XP{BR}{BR}Reqd XP"
+    },
+    {
+     "id": "menus#017",
+     "line": 40281,
+     "line_end": 40286,
+     "addr": "1F832",
+     "hex": "5370656564f8f844616d616765f8f8446566656e7365fc",
+     "us": "Speed{BR}{BR}Damage{BR}{BR}Defense",
+     "en": "Speed{BR}{BR}Damage{BR}{BR}Defense"
+    },
+    {
+     "id": "menus#018",
+     "line": 40293,
+     "line_end": 40296,
+     "addr": "1F84E",
+     "hex": "496e74656cf8f85374616d696e61f8fc",
+     "us": "Intel{BR}{BR}Stamina{BR}",
+     "en": "Intel{BR}{BR}Stamina{BR}"
+    },
+    {
+     "id": "menus#019",
+     "line": 40303,
+     "line_end": 40306,
+     "addr": "1F862",
+     "hex": "4c75636bf8f8536b696c6cfc",
+     "us": "Luck{BR}{BR}Skill",
+     "en": "Luck{BR}{BR}Skill"
+    },
+    {
+     "id": "menus#020",
+     "line": 40333,
+     "line_end": 40334,
+     "addr": "1F892",
+     "hex": "466f69fc",
+     "us": "Foi",
+     "en": "Foi"
+    },
+    {
+     "id": "menus#021",
+     "line": 40341,
+     "line_end": 40342,
+     "addr": "1F89A",
+     "hex": "5a616efc",
+     "us": "Zan",
+     "en": "Zan"
+    },
+    {
+     "id": "menus#022",
+     "line": 40349,
+     "line_end": 40350,
+     "addr": "1F8A2",
+     "hex": "477261fc",
+     "us": "Gra",
+     "en": "Gra"
+    },
+    {
+     "id": "menus#023",
+     "line": 40357,
+     "line_end": 40358,
+     "addr": "1F8AA",
+     "hex": "547375fc",
+     "us": "Tsu",
+     "en": "Tsu"
+    },
+    {
+     "id": "menus#024",
+     "line": 40365,
+     "line_end": 40366,
+     "addr": "1F8B2",
+     "hex": "526573fc",
+     "us": "Res",
+     "en": "Res"
+    },
+    {
+     "id": "menus#025",
+     "line": 40373,
+     "line_end": 40374,
+     "addr": "1F8BA",
+     "hex": "4769726573fc",
+     "us": "Gires",
+     "en": "Gires"
+    },
+    {
+     "id": "menus#026",
+     "line": 40381,
+     "line_end": 40382,
+     "addr": "1F8C4",
+     "hex": "5265766572fc",
+     "us": "Rever",
+     "en": "Rever"
+    },
+    {
+     "id": "menus#027",
+     "line": 40389,
+     "line_end": 40390,
+     "addr": "1F8CE",
+     "hex": "416e7469fc",
+     "us": "Anti",
+     "en": "Anti"
+    },
+    {
+     "id": "menus#028",
+     "line": 40397,
+     "line_end": 40398,
+     "addr": "1F8D8",
+     "hex": "4e6572fc",
+     "us": "Ner",
+     "en": "Ner"
+    },
+    {
+     "id": "menus#029",
+     "line": 40405,
+     "line_end": 40406,
+     "addr": "1F8E0",
+     "hex": "52696d6974fc",
+     "us": "Rimit",
+     "en": "Rimit"
+    },
+    {
+     "id": "menus#030",
+     "line": 40413,
+     "line_end": 40414,
+     "addr": "1F8EA",
+     "hex": "5368697a61fc",
+     "us": "Shiza",
+     "en": "Shiza"
+    },
+    {
+     "id": "menus#031",
+     "line": 40421,
+     "line_end": 40422,
+     "addr": "1F8F4",
+     "hex": "446562616efc",
+     "us": "Deban",
+     "en": "Deban"
+    },
+    {
+     "id": "menus#032",
+     "line": 40429,
+     "line_end": 40430,
+     "addr": "1F8FE",
+     "hex": "46616e6269fc",
+     "us": "Fanbi",
+     "en": "Fanbi"
+    },
+    {
+     "id": "menus#033",
+     "line": 40437,
+     "line_end": 40438,
+     "addr": "1F908",
+     "hex": "466f727361fc",
+     "us": "Forsa",
+     "en": "Forsa"
+    },
+    {
+     "id": "menus#034",
+     "line": 40445,
+     "line_end": 40446,
+     "addr": "1F912",
+     "hex": "4e6173616bfc",
+     "us": "Nasak",
+     "en": "Nasak"
+    },
+    {
+     "id": "menus#035",
+     "line": 40453,
+     "line_end": 40454,
+     "addr": "1F91C",
+     "hex": "536875fc",
+     "us": "Shu",
+     "en": "Shu"
+    }
+   ]
+  },
+  "menus2": {
+   "note": "field menu: Can't etc.",
+   "start": "loc_1F9C4",
+   "end": "loc_1F9D2",
+   "runs": [
+    {
+     "id": "menus2#000",
+     "line": 40579,
+     "line_end": 40580,
+     "addr": "1F9CB",
+     "hex": "2043616e2774fc",
+     "us": " Can't",
+     "en": " Can't"
+    }
+   ]
+  },
+  "namestrings": {
+   "note": "strings inserted into dialogue through {NAME:nn}",
+   "start": "loc_30CD8",
+   "end": "loc_31136",
+   "runs": [
+    {
+     "id": "namestrings#000",
+     "line": 56920,
+     "line_end": 56923,
+     "addr": "30CD8",
+     "hex": "48656c6c6f20416c69736120bebf2e2054686973206973fc",
+     "us": "Hello Alisa {III}. This is",
+     "en": "Hello Alisa {III}. This is"
+    },
+    {
+     "id": "namestrings#001",
+     "line": 56928,
+     "line_end": 56929,
+     "addr": "30CF0",
+     "hex": "74686520737061636573686970204e656f2050616c6d2efc",
+     "us": "the spaceship Neo Palm.",
+     "en": "the spaceship Neo Palm."
+    },
+    {
+     "id": "namestrings#002",
+     "line": 56934,
+     "line_end": 56935,
+     "addr": "30D08",
+     "hex": "54686174206578706c6f73696f6e206561726c696572fc",
+     "us": "That explosion earlier",
+     "en": "That explosion earlier"
+    },
+    {
+     "id": "namestrings#003",
+     "line": 56940,
+     "line_end": 56941,
+     "addr": "30D20",
+     "hex": "617474726163746564206f757220617474656e74696f6e2efc",
+     "us": "attracted our attention.",
+     "en": "attracted our attention."
+    },
+    {
+     "id": "namestrings#004",
+     "line": 56946,
+     "line_end": 56947,
+     "addr": "30D3A",
+     "hex": "576520677565737365642074686174204461726bfc",
+     "us": "We guessed that Dark",
+     "en": "We guessed that Dark"
+    },
+    {
+     "id": "namestrings#005",
+     "line": 56952,
+     "line_end": 56953,
+     "addr": "30D50",
+     "hex": "466f726365206861642061726973656e20616761696efc",
+     "us": "Force had arisen again",
+     "en": "Force had arisen again"
+    },
+    {
+     "id": "namestrings#006",
+     "line": 56958,
+     "line_end": 56959,
+     "addr": "30D68",
+     "hex": "616e642077652063616d65206f76657220746f206c656e64fc",
+     "us": "and we came over to lend",
+     "en": "and we came over to lend"
+    },
+    {
+     "id": "namestrings#007",
+     "line": 56964,
+     "line_end": 56965,
+     "addr": "30D82",
+     "hex": "616e792068656c7020796f75206e65656465642efc",
+     "us": "any help you needed.",
+     "en": "any help you needed."
+    },
+    {
+     "id": "namestrings#008",
+     "line": 56970,
+     "line_end": 56971,
+     "addr": "30D98",
+     "hex": "53696e636520796f75277265207374696c6c20686572652cfc",
+     "us": "Since you're still here,",
+     "en": "Since you're still here,"
+    },
+    {
+     "id": "namestrings#009",
+     "line": 56976,
+     "line_end": 56977,
+     "addr": "30DB2",
+     "hex": "776520617373756d6520796f7527766520776f6e2efc",
+     "us": "we assume you've won.",
+     "en": "we assume you've won."
+    },
+    {
+     "id": "namestrings#010",
+     "line": 56982,
+     "line_end": 56983,
+     "addr": "30DC8",
+     "hex": "496e20312c3030302079656172732c204461726bfc",
+     "us": "In 1,000 years, Dark",
+     "en": "In 1,000 years, Dark"
+    },
+    {
+     "id": "namestrings#011",
+     "line": 56988,
+     "line_end": 56989,
+     "addr": "30DDE",
+     "hex": "466f7263652077696c6c20617269736520616761696e2efc",
+     "us": "Force will arise again.",
+     "en": "Force will arise again."
+    },
+    {
+     "id": "namestrings#012",
+     "line": 56994,
+     "line_end": 56995,
+     "addr": "30DF6",
+     "hex": "4c657427732067657420726964206f6620697420666f72fc",
+     "us": "Let's get rid of it for",
+     "en": "Let's get rid of it for"
+    },
+    {
+     "id": "namestrings#013",
+     "line": 57000,
+     "line_end": 57001,
+     "addr": "30E0E",
+     "hex": "676f6f64206e6578742074696d6521fc",
+     "us": "good next time!",
+     "en": "good next time!"
+    },
+    {
+     "id": "namestrings#014",
+     "line": 57006,
+     "line_end": 57007,
+     "addr": "30E1E",
+     "hex": "48656c6c6f2c2074686973206973204165726f6e652efc",
+     "us": "Hello, this is Aerone.",
+     "en": "Hello, this is Aerone."
+    },
+    {
+     "id": "namestrings#015",
+     "line": 57012,
+     "line_end": 57013,
+     "addr": "30E36",
+     "hex": "5468616e6b7320666f7220796f75722068656c702efc",
+     "us": "Thanks for your help.",
+     "en": "Thanks for your help."
+    },
+    {
+     "id": "namestrings#016",
+     "line": 57018,
+     "line_end": 57019,
+     "addr": "30E4C",
+     "hex": "5765277265206f6e636520616761696e206261636b206f6efc",
+     "us": "We're once again back on",
+     "en": "We're once again back on"
+    },
+    {
+     "id": "namestrings#017",
+     "line": 57024,
+     "line_end": 57025,
+     "addr": "30E66",
+     "hex": "6f7572206f726967696e616c20636f757273652efc",
+     "us": "our original course.",
+     "en": "our original course."
+    },
+    {
+     "id": "namestrings#018",
+     "line": 57030,
+     "line_end": 57031,
+     "addr": "30E7C",
+     "hex": "576974686f757420796f752c204461726b20466f726365fc",
+     "us": "Without you, Dark Force",
+     "en": "Without you, Dark Force"
+    },
+    {
+     "id": "namestrings#019",
+     "line": 57036,
+     "line_end": 57037,
+     "addr": "30E94",
+     "hex": "776f756c642068617665207072657661696c65642efc",
+     "us": "would have prevailed.",
+     "en": "would have prevailed."
+    },
+    {
+     "id": "namestrings#020",
+     "line": 57042,
+     "line_end": 57043,
+     "addr": "30EAA",
+     "hex": "576527726520676f696e6720746f7761726420746865fc",
+     "us": "We're going toward the",
+     "en": "We're going toward the"
+    },
+    {
+     "id": "namestrings#021",
+     "line": 57048,
+     "line_end": 57049,
+     "addr": "30EC2",
+     "hex": "62726967687465737420737461722075702061686561642efc",
+     "us": "brightest star up ahead.",
+     "en": "brightest star up ahead."
+    },
+    {
+     "id": "namestrings#022",
+     "line": 57054,
+     "line_end": 57055,
+     "addr": "30EDC",
+     "hex": "57652772652068656164696e6720666f72206f6e65206f66fc",
+     "us": "We're heading for one of",
+     "en": "We're heading for one of"
+    },
+    {
+     "id": "namestrings#023",
+     "line": 57060,
+     "line_end": 57061,
+     "addr": "30EF6",
+     "hex": "69747320706c616e6574732d2d746865207468697264fc",
+     "us": "its planets--the third",
+     "en": "its planets--the third"
+    },
+    {
+     "id": "namestrings#024",
+     "line": 57066,
+     "line_end": 57067,
+     "addr": "30F0E",
+     "hex": "6f6e65206f75742066726f6d2074686520737461722efc",
+     "us": "one out from the star.",
+     "en": "one out from the star."
+    },
+    {
+     "id": "namestrings#025",
+     "line": 57072,
+     "line_end": 57073,
+     "addr": "30F26",
+     "hex": "4974207365656d73207065726665637420666f722075732efc",
+     "us": "It seems perfect for us.",
+     "en": "It seems perfect for us."
+    },
+    {
+     "id": "namestrings#026",
+     "line": 57078,
+     "line_end": 57079,
+     "addr": "30F40",
+     "hex": "4174206c6173742c206f7572206a6f75726e6579206973fc",
+     "us": "At last, our journey is",
+     "en": "At last, our journey is"
+    },
+    {
+     "id": "namestrings#027",
+     "line": 57084,
+     "line_end": 57085,
+     "addr": "30F58",
+     "hex": "616c6d6f7374206f76657221fc",
+     "us": "almost over!",
+     "en": "almost over!"
+    },
+    {
+     "id": "namestrings#028",
+     "line": 57090,
+     "line_end": 57091,
+     "addr": "30F66",
+     "hex": "48656c6c6f2c2074686973206973204165726f6e652efc",
+     "us": "Hello, this is Aerone.",
+     "en": "Hello, this is Aerone."
+    },
+    {
+     "id": "namestrings#029",
+     "line": 57096,
+     "line_end": 57097,
+     "addr": "30F7E",
+     "hex": "5468616e6b7320666f7220796f75722068656c702efc",
+     "us": "Thanks for your help.",
+     "en": "Thanks for your help."
+    },
+    {
+     "id": "namestrings#030",
+     "line": 57102,
+     "line_end": 57103,
+     "addr": "30F94",
+     "hex": "5765277265206f6e636520616761696e206261636b206f6efc",
+     "us": "We're once again back on",
+     "en": "We're once again back on"
+    },
+    {
+     "id": "namestrings#031",
+     "line": 57108,
+     "line_end": 57109,
+     "addr": "30FAE",
+     "hex": "6f7572206f726967696e616c20636f757273652efc",
+     "us": "our original course.",
+     "en": "our original course."
+    },
+    {
+     "id": "namestrings#032",
+     "line": 57114,
+     "line_end": 57115,
+     "addr": "30FC4",
+     "hex": "576974686f757420796f752c204461726b20466f726365fc",
+     "us": "Without you, Dark Force",
+     "en": "Without you, Dark Force"
+    },
+    {
+     "id": "namestrings#033",
+     "line": 57120,
+     "line_end": 57121,
+     "addr": "30FDC",
+     "hex": "776f756c642068617665207072657661696c65642efc",
+     "us": "would have prevailed.",
+     "en": "would have prevailed."
+    },
+    {
+     "id": "namestrings#034",
+     "line": 57126,
+     "line_end": 57127,
+     "addr": "30FF2",
+     "hex": "576527726520676f696e6720746f7761726420746865fc",
+     "us": "We're going toward the",
+     "en": "We're going toward the"
+    },
+    {
+     "id": "namestrings#035",
+     "line": 57132,
+     "line_end": 57133,
+     "addr": "3100A",
+     "hex": "62726967687465737420737461722075702061686561642efc",
+     "us": "brightest star up ahead.",
+     "en": "brightest star up ahead."
+    },
+    {
+     "id": "namestrings#036",
+     "line": 57138,
+     "line_end": 57139,
+     "addr": "31024",
+     "hex": "57652772652068656164696e6720666f72206f6e65206f66fc",
+     "us": "We're heading for one of",
+     "en": "We're heading for one of"
+    },
+    {
+     "id": "namestrings#037",
+     "line": 57144,
+     "line_end": 57145,
+     "addr": "3103E",
+     "hex": "69747320706c616e6574732d2d746865207468697264fc",
+     "us": "its planets--the third",
+     "en": "its planets--the third"
+    },
+    {
+     "id": "namestrings#038",
+     "line": 57150,
+     "line_end": 57151,
+     "addr": "31056",
+     "hex": "6f6e65206f75742066726f6d2074686520737461722efc",
+     "us": "one out from the star.",
+     "en": "one out from the star."
+    },
+    {
+     "id": "namestrings#039",
+     "line": 57156,
+     "line_end": 57157,
+     "addr": "3106E",
+     "hex": "4974206973207065726665637420666f722075732efc",
+     "us": "It is perfect for us.",
+     "en": "It is perfect for us."
+    },
+    {
+     "id": "namestrings#040",
+     "line": 57162,
+     "line_end": 57163,
+     "addr": "31084",
+     "hex": "4174206c617374207765277265206e656172696e67fc",
+     "us": "At last we're nearing",
+     "en": "At last we're nearing"
+    },
+    {
+     "id": "namestrings#041",
+     "line": 57168,
+     "line_end": 57169,
+     "addr": "3109A",
+     "hex": "74686520656e64206f66206f7572206a6f75726e657921fc",
+     "us": "the end of our journey!",
+     "en": "the end of our journey!"
+    },
+    {
+     "id": "namestrings#042",
+     "line": 57174,
+     "line_end": 57175,
+     "addr": "310B2",
+     "hex": "4772656574696e67732c20616c69656e20637261667421fc",
+     "us": "Greetings, alien craft!",
+     "en": "Greetings, alien craft!"
+    },
+    {
+     "id": "namestrings#043",
+     "line": 57180,
+     "line_end": 57181,
+     "addr": "310CA",
+     "hex": "4964656e7469667920796f757273656c7665732efc",
+     "us": "Identify yourselves.",
+     "en": "Identify yourselves."
+    },
+    {
+     "id": "namestrings#044",
+     "line": 57186,
+     "line_end": 57187,
+     "addr": "310E0",
+     "hex": "5468697320697320746865204c6f6e646f6efc",
+     "us": "This is the London",
+     "en": "This is the London"
+    },
+    {
+     "id": "namestrings#045",
+     "line": 57192,
+     "line_end": 57193,
+     "addr": "310F4",
+     "hex": "436f6d6d756e69636174696f6e732043656e746572206f6efc",
+     "us": "Communications Center on",
+     "en": "Communications Center on"
+    },
+    {
+     "id": "namestrings#046",
+     "line": 57198,
+     "line_end": 57199,
+     "addr": "3110E",
+     "hex": "4561727468206f662074686520536f6c2073797374656d2efc",
+     "us": "Earth of the Sol system.",
+     "en": "Earth of the Sol system."
+    },
+    {
+     "id": "namestrings#047",
+     "line": 57204,
+     "line_end": 57205,
+     "addr": "31128",
+     "hex": "4f76657220616e64206f75742efc",
+     "us": "Over and out.",
+     "en": "Over and out."
+    }
+   ]
+  },
+  "items": {
+   "note": "item names",
+   "start": "InventoryNameData",
+   "end": "TechniqueData",
+   "runs": [
+    {
+     "id": "ItemName_Monomate",
+     "line": 65552,
+     "line_end": 65552,
+     "addr": "39242",
+     "hex": "4d6f6e6f6d617465fc",
+     "us": "Monomate",
+     "en": "Monomate"
+    },
+    {
+     "id": "ItemName_Dimate",
+     "line": 65553,
+     "line_end": 65553,
+     "addr": "3924B",
+     "hex": "44696d617465fc",
+     "us": "Dimate",
+     "en": "Dimate"
+    },
+    {
+     "id": "ItemName_Trimate",
+     "line": 65554,
+     "line_end": 65554,
+     "addr": "39252",
+     "hex": "5472696d617465fc",
+     "us": "Trimate",
+     "en": "Trimate"
+    },
+    {
+     "id": "ItemName_Antidote",
+     "line": 65555,
+     "line_end": 65555,
+     "addr": "3925A",
+     "hex": "416e7469646f7465fc",
+     "us": "Antidote",
+     "en": "Antidote"
+    },
+    {
+     "id": "ItemName_StarMist",
+     "line": 65556,
+     "line_end": 65556,
+     "addr": "39263",
+     "hex": "53746172204d697374fc",
+     "us": "Star Mist",
+     "en": "Star Mist"
+    },
+    {
+     "id": "ItemName_MoonDew",
+     "line": 65557,
+     "line_end": 65557,
+     "addr": "3926D",
+     "hex": "4d6f6f6e20446577fc",
+     "us": "Moon Dew",
+     "en": "Moon Dew"
+    },
+    {
+     "id": "ItemName_Escapipe",
+     "line": 65558,
+     "line_end": 65558,
+     "addr": "39276",
+     "hex": "4573636170697065fc",
+     "us": "Escapipe",
+     "en": "Escapipe"
+    },
+    {
+     "id": "ItemName_Monitor",
+     "line": 65559,
+     "line_end": 65559,
+     "addr": "3927F",
+     "hex": "4d6f6e69746f72fc",
+     "us": "Monitor",
+     "en": "Monitor"
+    },
+    {
+     "id": "ItemName_ShortSwd",
+     "line": 65560,
+     "line_end": 65560,
+     "addr": "39287",
+     "hex": "53686f727420537764fc",
+     "us": "Short Swd",
+     "en": "Short Swd"
+    },
+    {
+     "id": "ItemName_Sword",
+     "line": 65561,
+     "line_end": 65561,
+     "addr": "39291",
+     "hex": "53776f7264fc",
+     "us": "Sword",
+     "en": "Sword"
+    },
+    {
+     "id": "ItemName_SteelSwd",
+     "line": 65562,
+     "line_end": 65562,
+     "addr": "39297",
+     "hex": "537465656c20537764fc",
+     "us": "Steel Swd",
+     "en": "Steel Swd"
+    },
+    {
+     "id": "ItemName_CeramSwd",
+     "line": 65563,
+     "line_end": 65563,
+     "addr": "392A1",
+     "hex": "436572616d20537764fc",
+     "us": "Ceram Swd",
+     "en": "Ceram Swd"
+    },
+    {
+     "id": "ItemName_LaserSwd",
+     "line": 65564,
+     "line_end": 65564,
+     "addr": "392AB",
+     "hex": "4c6173657220537764fc",
+     "us": "Laser Swd",
+     "en": "Laser Swd"
+    },
+    {
+     "id": "ItemName_ForceSwd",
+     "line": 65565,
+     "line_end": 65565,
+     "addr": "392B5",
+     "hex": "466f72636520537764fc",
+     "us": "Force Swd",
+     "en": "Force Swd"
+    },
+    {
+     "id": "ItemName_LaconSwd",
+     "line": 65566,
+     "line_end": 65566,
+     "addr": "392BF",
+     "hex": "4c61636f6e20537764fc",
+     "us": "Lacon Swd",
+     "en": "Lacon Swd"
+    },
+    {
+     "id": "ItemName_RoyalSwd",
+     "line": 65567,
+     "line_end": 65567,
+     "addr": "392C9",
+     "hex": "526f79616c20537764fc",
+     "us": "Royal Swd",
+     "en": "Royal Swd"
+    },
+    {
+     "id": "ItemName_PlanarSwd",
+     "line": 65568,
+     "line_end": 65568,
+     "addr": "392D3",
+     "hex": "506c616e6172537764fc",
+     "us": "PlanarSwd",
+     "en": "PlanarSwd"
+    },
+    {
+     "id": "ItemName_OrakioSwd",
+     "line": 65569,
+     "line_end": 65569,
+     "addr": "392DD",
+     "hex": "4f72616b696f537764fc",
+     "us": "OrakioSwd",
+     "en": "OrakioSwd"
+    },
+    {
+     "id": "ItemName_NeiSword",
+     "line": 65570,
+     "line_end": 65570,
+     "addr": "392E7",
+     "hex": "4e65692053776f7264fc",
+     "us": "Nei Sword",
+     "en": "Nei Sword"
+    },
+    {
+     "id": "ItemName_Knife",
+     "line": 65571,
+     "line_end": 65571,
+     "addr": "392F1",
+     "hex": "4b6e696665fc",
+     "us": "Knife",
+     "en": "Knife"
+    },
+    {
+     "id": "ItemName_HuntgKnf",
+     "line": 65572,
+     "line_end": 65572,
+     "addr": "392F7",
+     "hex": "48756e7467204b6e66fc",
+     "us": "Huntg Knf",
+     "en": "Huntg Knf"
+    },
+    {
+     "id": "ItemName_SteelKnf",
+     "line": 65573,
+     "line_end": 65573,
+     "addr": "39301",
+     "hex": "537465656c204b6e66fc",
+     "us": "Steel Knf",
+     "en": "Steel Knf"
+    },
+    {
+     "id": "ItemName_CeramKnf",
+     "line": 65574,
+     "line_end": 65574,
+     "addr": "3930B",
+     "hex": "436572616d204b6e66fc",
+     "us": "Ceram Knf",
+     "en": "Ceram Knf"
+    },
+    {
+     "id": "ItemName_LaserKnf",
+     "line": 65575,
+     "line_end": 65575,
+     "addr": "39315",
+     "hex": "4c61736572204b6e66fc",
+     "us": "Laser Knf",
+     "en": "Laser Knf"
+    },
+    {
+     "id": "ItemName_ForceKnf",
+     "line": 65576,
+     "line_end": 65576,
+     "addr": "3931F",
+     "hex": "466f726365204b6e66fc",
+     "us": "Force Knf",
+     "en": "Force Knf"
+    },
+    {
+     "id": "ItemName_LaconKnf",
+     "line": 65577,
+     "line_end": 65577,
+     "addr": "39329",
+     "hex": "4c61636f6e204b6e66fc",
+     "us": "Lacon Knf",
+     "en": "Lacon Knf"
+    },
+    {
+     "id": "ItemName_RoyalKnf",
+     "line": 65578,
+     "line_end": 65578,
+     "addr": "39333",
+     "hex": "526f79616c204b6e66fc",
+     "us": "Royal Knf",
+     "en": "Royal Knf"
+    },
+    {
+     "id": "ItemName_HuntgStf",
+     "line": 65579,
+     "line_end": 65579,
+     "addr": "3933D",
+     "hex": "48756e746720537466fc",
+     "us": "Huntg Stf",
+     "en": "Huntg Stf"
+    },
+    {
+     "id": "ItemName_SteelStf",
+     "line": 65580,
+     "line_end": 65580,
+     "addr": "39347",
+     "hex": "537465656c20537466fc",
+     "us": "Steel Stf",
+     "en": "Steel Stf"
+    },
+    {
+     "id": "ItemName_CeramStf",
+     "line": 65581,
+     "line_end": 65581,
+     "addr": "39351",
+     "hex": "436572616d20537466fc",
+     "us": "Ceram Stf",
+     "en": "Ceram Stf"
+    },
+    {
+     "id": "ItemName_LaserStf",
+     "line": 65582,
+     "line_end": 65582,
+     "addr": "3935B",
+     "hex": "4c6173657220537466fc",
+     "us": "Laser Stf",
+     "en": "Laser Stf"
+    },
+    {
+     "id": "ItemName_ForceStf",
+     "line": 65583,
+     "line_end": 65583,
+     "addr": "39365",
+     "hex": "466f72636520537466fc",
+     "us": "Force Stf",
+     "en": "Force Stf"
+    },
+    {
+     "id": "ItemName_LaconStf",
+     "line": 65584,
+     "line_end": 65584,
+     "addr": "3936F",
+     "hex": "4c61636f6e20537466fc",
+     "us": "Lacon Stf",
+     "en": "Lacon Stf"
+    },
+    {
+     "id": "ItemName_CeramSlr",
+     "line": 65585,
+     "line_end": 65585,
+     "addr": "39379",
+     "hex": "436572616d20536c72fc",
+     "us": "Ceram Slr",
+     "en": "Ceram Slr"
+    },
+    {
+     "id": "ItemName_LaserSlr",
+     "line": 65586,
+     "line_end": 65586,
+     "addr": "39383",
+     "hex": "4c6173657220536c72fc",
+     "us": "Laser Slr",
+     "en": "Laser Slr"
+    },
+    {
+     "id": "ItemName_ForceSlr",
+     "line": 65587,
+     "line_end": 65587,
+     "addr": "3938D",
+     "hex": "466f72636520536c72fc",
+     "us": "Force Slr",
+     "en": "Force Slr"
+    },
+    {
+     "id": "ItemName_LaconSlr",
+     "line": 65588,
+     "line_end": 65588,
+     "addr": "39397",
+     "hex": "4c61636f6e20536c72fc",
+     "us": "Lacon Slr",
+     "en": "Lacon Slr"
+    },
+    {
+     "id": "ItemName_RoyalSlr",
+     "line": 65589,
+     "line_end": 65589,
+     "addr": "393A1",
+     "hex": "526f79616c20536c72fc",
+     "us": "Royal Slr",
+     "en": "Royal Slr"
+    },
+    {
+     "id": "ItemName_PlanarSlr",
+     "line": 65590,
+     "line_end": 65590,
+     "addr": "393AB",
+     "hex": "506c616e6172536c72fc",
+     "us": "PlanarSlr",
+     "en": "PlanarSlr"
+    },
+    {
+     "id": "ItemName_LuneSlr",
+     "line": 65591,
+     "line_end": 65591,
+     "addr": "393B5",
+     "hex": "4c756e652773536c72fc",
+     "us": "Lune'sSlr",
+     "en": "Lune'sSlr"
+    },
+    {
+     "id": "ItemName_NeiSlicr",
+     "line": 65592,
+     "line_end": 65592,
+     "addr": "393BF",
+     "hex": "4e656920536c696372fc",
+     "us": "Nei Slicr",
+     "en": "Nei Slicr"
+    },
+    {
+     "id": "ItemName_Claw",
+     "line": 65593,
+     "line_end": 65593,
+     "addr": "393C9",
+     "hex": "436c6177fc",
+     "us": "Claw",
+     "en": "Claw"
+    },
+    {
+     "id": "ItemName_HuntgClw",
+     "line": 65594,
+     "line_end": 65594,
+     "addr": "393CE",
+     "hex": "48756e746720436c77fc",
+     "us": "Huntg Clw",
+     "en": "Huntg Clw"
+    },
+    {
+     "id": "ItemName_SteelClw",
+     "line": 65595,
+     "line_end": 65595,
+     "addr": "393D8",
+     "hex": "537465656c20436c77fc",
+     "us": "Steel Clw",
+     "en": "Steel Clw"
+    },
+    {
+     "id": "ItemName_CeramClw",
+     "line": 65596,
+     "line_end": 65596,
+     "addr": "393E2",
+     "hex": "436572616d20436c77fc",
+     "us": "Ceram Clw",
+     "en": "Ceram Clw"
+    },
+    {
+     "id": "ItemName_LaserClw",
+     "line": 65597,
+     "line_end": 65597,
+     "addr": "393EC",
+     "hex": "4c6173657220436c77fc",
+     "us": "Laser Clw",
+     "en": "Laser Clw"
+    },
+    {
+     "id": "ItemName_ForceClw",
+     "line": 65598,
+     "line_end": 65598,
+     "addr": "393F6",
+     "hex": "466f72636520436c77fc",
+     "us": "Force Clw",
+     "en": "Force Clw"
+    },
+    {
+     "id": "ItemName_LaconClw",
+     "line": 65599,
+     "line_end": 65599,
+     "addr": "39400",
+     "hex": "4c61636f6e20436c77fc",
+     "us": "Lacon Clw",
+     "en": "Lacon Clw"
+    },
+    {
+     "id": "ItemName_RoyalClw",
+     "line": 65600,
+     "line_end": 65600,
+     "addr": "3940A",
+     "hex": "526f79616c20436c77fc",
+     "us": "Royal Clw",
+     "en": "Royal Clw"
+    },
+    {
+     "id": "ItemName_PlanarClw",
+     "line": 65601,
+     "line_end": 65601,
+     "addr": "39414",
+     "hex": "506c616e6172436c77fc",
+     "us": "PlanarClw",
+     "en": "PlanarClw"
+    },
+    {
+     "id": "ItemName_MiunClw",
+     "line": 65602,
+     "line_end": 65602,
+     "addr": "3941E",
+     "hex": "4d69756e2773436c77fc",
+     "us": "Miun'sClw",
+     "en": "Miun'sClw"
+    },
+    {
+     "id": "ItemName_NeiClaw",
+     "line": 65603,
+     "line_end": 65603,
+     "addr": "39428",
+     "hex": "4e656920436c6177fc",
+     "us": "Nei Claw",
+     "en": "Nei Claw"
+    },
+    {
+     "id": "ItemName_HuntgBow",
+     "line": 65604,
+     "line_end": 65604,
+     "addr": "39431",
+     "hex": "48756e746720426f77fc",
+     "us": "Huntg Bow",
+     "en": "Huntg Bow"
+    },
+    {
+     "id": "ItemName_CeramBow",
+     "line": 65605,
+     "line_end": 65605,
+     "addr": "3943B",
+     "hex": "436572616d20426f77fc",
+     "us": "Ceram Bow",
+     "en": "Ceram Bow"
+    },
+    {
+     "id": "ItemName_LaserBow",
+     "line": 65606,
+     "line_end": 65606,
+     "addr": "39445",
+     "hex": "4c6173657220426f77fc",
+     "us": "Laser Bow",
+     "en": "Laser Bow"
+    },
+    {
+     "id": "ItemName_ForceBow",
+     "line": 65607,
+     "line_end": 65607,
+     "addr": "3944F",
+     "hex": "466f72636520426f77fc",
+     "us": "Force Bow",
+     "en": "Force Bow"
+    },
+    {
+     "id": "ItemName_LaconBow",
+     "line": 65608,
+     "line_end": 65608,
+     "addr": "39459",
+     "hex": "4c61636f6e20426f77fc",
+     "us": "Lacon Bow",
+     "en": "Lacon Bow"
+    },
+    {
+     "id": "ItemName_RoyalBow",
+     "line": 65609,
+     "line_end": 65609,
+     "addr": "39463",
+     "hex": "526f79616c20426f77fc",
+     "us": "Royal Bow",
+     "en": "Royal Bow"
+    },
+    {
+     "id": "ItemName_LayaBow",
+     "line": 65610,
+     "line_end": 65610,
+     "addr": "3946D",
+     "hex": "4c6179612773426f77fc",
+     "us": "Laya'sBow",
+     "en": "Laya'sBow"
+    },
+    {
+     "id": "ItemName_NeiBow",
+     "line": 65611,
+     "line_end": 65611,
+     "addr": "39477",
+     "hex": "4e656920426f77fc",
+     "us": "Nei Bow",
+     "en": "Nei Bow"
+    },
+    {
+     "id": "ItemName_HuntgShot",
+     "line": 65612,
+     "line_end": 65612,
+     "addr": "3947F",
+     "hex": "48756e746753686f74fc",
+     "us": "HuntgShot",
+     "en": "HuntgShot"
+    },
+    {
+     "id": "ItemName_CeramShot",
+     "line": 65613,
+     "line_end": 65613,
+     "addr": "39489",
+     "hex": "436572616d53686f74fc",
+     "us": "CeramShot",
+     "en": "CeramShot"
+    },
+    {
+     "id": "ItemName_LaserShot",
+     "line": 65614,
+     "line_end": 65614,
+     "addr": "39493",
+     "hex": "4c6173657253686f74fc",
+     "us": "LaserShot",
+     "en": "LaserShot"
+    },
+    {
+     "id": "ItemName_LaconShot",
+     "line": 65615,
+     "line_end": 65615,
+     "addr": "3949D",
+     "hex": "4c61636f6e53686f74fc",
+     "us": "LaconShot",
+     "en": "LaconShot"
+    },
+    {
+     "id": "ItemName_Cannon",
+     "line": 65616,
+     "line_end": 65616,
+     "addr": "394A7",
+     "hex": "43616e6e6f6efc",
+     "us": "Cannon",
+     "en": "Cannon"
+    },
+    {
+     "id": "ItemName_PulseCann",
+     "line": 65617,
+     "line_end": 65617,
+     "addr": "394AE",
+     "hex": "50756c736543616e6efc",
+     "us": "PulseCann",
+     "en": "PulseCann"
+    },
+    {
+     "id": "ItemName_Vulcan",
+     "line": 65618,
+     "line_end": 65618,
+     "addr": "394B8",
+     "hex": "56756c63616efc",
+     "us": "Vulcan",
+     "en": "Vulcan"
+    },
+    {
+     "id": "ItemName_PulseVlcn",
+     "line": 65619,
+     "line_end": 65619,
+     "addr": "394BF",
+     "hex": "50756c7365566c636efc",
+     "us": "PulseVlcn",
+     "en": "PulseVlcn"
+    },
+    {
+     "id": "ItemName_SirenShot",
+     "line": 65620,
+     "line_end": 65620,
+     "addr": "394C9",
+     "hex": "536972656e53686f74fc",
+     "us": "SirenShot",
+     "en": "SirenShot"
+    },
+    {
+     "id": "ItemName_NeiShot",
+     "line": 65621,
+     "line_end": 65621,
+     "addr": "394D3",
+     "hex": "4e65692053686f74fc",
+     "us": "Nei Shot",
+     "en": "Nei Shot"
+    },
+    {
+     "id": "ItemName_HuntgHelm",
+     "line": 65622,
+     "line_end": 65622,
+     "addr": "394DC",
+     "hex": "48756e746748656c6dfc",
+     "us": "HuntgHelm",
+     "en": "HuntgHelm"
+    },
+    {
+     "id": "ItemName_SteelHelm",
+     "line": 65623,
+     "line_end": 65623,
+     "addr": "394E6",
+     "hex": "537465656c48656c6dfc",
+     "us": "SteelHelm",
+     "en": "SteelHelm"
+    },
+    {
+     "id": "ItemName_CeramHelm",
+     "line": 65624,
+     "line_end": 65624,
+     "addr": "394F0",
+     "hex": "436572616d48656c6dfc",
+     "us": "CeramHelm",
+     "en": "CeramHelm"
+    },
+    {
+     "id": "ItemName_ForceHelm",
+     "line": 65625,
+     "line_end": 65625,
+     "addr": "394FA",
+     "hex": "466f72636548656c6dfc",
+     "us": "ForceHelm",
+     "en": "ForceHelm"
+    },
+    {
+     "id": "ItemName_LaconHelm",
+     "line": 65626,
+     "line_end": 65626,
+     "addr": "39504",
+     "hex": "4c61636f6e48656c6dfc",
+     "us": "LaconHelm",
+     "en": "LaconHelm"
+    },
+    {
+     "id": "ItemName_RoyalHelm",
+     "line": 65627,
+     "line_end": 65627,
+     "addr": "3950E",
+     "hex": "526f79616c48656c6dfc",
+     "us": "RoyalHelm",
+     "en": "RoyalHelm"
+    },
+    {
+     "id": "ItemName_Bandanna",
+     "line": 65628,
+     "line_end": 65628,
+     "addr": "39518",
+     "hex": "42616e64616e6e61fc",
+     "us": "Bandanna",
+     "en": "Bandanna"
+    },
+    {
+     "id": "ItemName_HuntgBand",
+     "line": 65629,
+     "line_end": 65629,
+     "addr": "39521",
+     "hex": "48756e746742616e64fc",
+     "us": "HuntgBand",
+     "en": "HuntgBand"
+    },
+    {
+     "id": "ItemName_SteelBand",
+     "line": 65630,
+     "line_end": 65630,
+     "addr": "3952B",
+     "hex": "537465656c42616e64fc",
+     "us": "SteelBand",
+     "en": "SteelBand"
+    },
+    {
+     "id": "ItemName_CeramBand",
+     "line": 65631,
+     "line_end": 65631,
+     "addr": "39535",
+     "hex": "436572616d42616e64fc",
+     "us": "CeramBand",
+     "en": "CeramBand"
+    },
+    {
+     "id": "ItemName_ForceBand",
+     "line": 65632,
+     "line_end": 65632,
+     "addr": "3953F",
+     "hex": "466f72636542616e64fc",
+     "us": "ForceBand",
+     "en": "ForceBand"
+    },
+    {
+     "id": "ItemName_LaconBand",
+     "line": 65633,
+     "line_end": 65633,
+     "addr": "39549",
+     "hex": "4c61636f6e42616e64fc",
+     "us": "LaconBand",
+     "en": "LaconBand"
+    },
+    {
+     "id": "ItemName_RoyalBand",
+     "line": 65634,
+     "line_end": 65634,
+     "addr": "39553",
+     "hex": "526f79616c42616e64fc",
+     "us": "RoyalBand",
+     "en": "RoyalBand"
+    },
+    {
+     "id": "ItemName_Staff",
+     "line": 65635,
+     "line_end": 65635,
+     "addr": "3955D",
+     "hex": "5374616666fc",
+     "us": "Staff",
+     "en": "Staff"
+    },
+    {
+     "id": "ItemName_Garment",
+     "line": 65636,
+     "line_end": 65636,
+     "addr": "39563",
+     "hex": "4761726d656e74fc",
+     "us": "Garment",
+     "en": "Garment"
+    },
+    {
+     "id": "ItemName_Slicer",
+     "line": 65637,
+     "line_end": 65637,
+     "addr": "3956B",
+     "hex": "536c69636572fc",
+     "us": "Slicer",
+     "en": "Slicer"
+    },
+    {
+     "id": "ItemName_CeramCrwn",
+     "line": 65638,
+     "line_end": 65638,
+     "addr": "39572",
+     "hex": "436572616d4372776efc",
+     "us": "CeramCrwn",
+     "en": "CeramCrwn"
+    },
+    {
+     "id": "ItemName_ForceCrwn",
+     "line": 65639,
+     "line_end": 65639,
+     "addr": "3957C",
+     "hex": "466f7263654372776efc",
+     "us": "ForceCrwn",
+     "en": "ForceCrwn"
+    },
+    {
+     "id": "ItemName_LaconCrwn",
+     "line": 65640,
+     "line_end": 65640,
+     "addr": "39586",
+     "hex": "4c61636f6e4372776efc",
+     "us": "LaconCrwn",
+     "en": "LaconCrwn"
+    },
+    {
+     "id": "ItemName_RoyalCrwn",
+     "line": 65641,
+     "line_end": 65641,
+     "addr": "39590",
+     "hex": "526f79616c4372776efc",
+     "us": "RoyalCrwn",
+     "en": "RoyalCrwn"
+    },
+    {
+     "id": "ItemName_Ribbon",
+     "line": 65642,
+     "line_end": 65642,
+     "addr": "3959A",
+     "hex": "526962626f6efc",
+     "us": "Ribbon",
+     "en": "Ribbon"
+    },
+    {
+     "id": "ItemName_HuntgRibn",
+     "line": 65643,
+     "line_end": 65643,
+     "addr": "395A1",
+     "hex": "48756e74675269626efc",
+     "us": "HuntgRibn",
+     "en": "HuntgRibn"
+    },
+    {
+     "id": "ItemName_CeramRibn",
+     "line": 65644,
+     "line_end": 65644,
+     "addr": "395AB",
+     "hex": "436572616d5269626efc",
+     "us": "CeramRibn",
+     "en": "CeramRibn"
+    },
+    {
+     "id": "ItemName_ForceRibn",
+     "line": 65645,
+     "line_end": 65645,
+     "addr": "395B5",
+     "hex": "466f7263655269626efc",
+     "us": "ForceRibn",
+     "en": "ForceRibn"
+    },
+    {
+     "id": "ItemName_LaconRibn",
+     "line": 65646,
+     "line_end": 65646,
+     "addr": "395BF",
+     "hex": "4c61636f6e5269626efc",
+     "us": "LaconRibn",
+     "en": "LaconRibn"
+    },
+    {
+     "id": "ItemName_RoyalRibn",
+     "line": 65647,
+     "line_end": 65647,
+     "addr": "395C9",
+     "hex": "526f79616c5269626efc",
+     "us": "RoyalRibn",
+     "en": "RoyalRibn"
+    },
+    {
+     "id": "ItemName_HeadGear",
+     "line": 65648,
+     "line_end": 65648,
+     "addr": "395D3",
+     "hex": "486561642047656172fc",
+     "us": "Head Gear",
+     "en": "Head Gear"
+    },
+    {
+     "id": "ItemName_SteelGear",
+     "line": 65649,
+     "line_end": 65649,
+     "addr": "395DD",
+     "hex": "537465656c47656172fc",
+     "us": "SteelGear",
+     "en": "SteelGear"
+    },
+    {
+     "id": "ItemName_CeramGear",
+     "line": 65650,
+     "line_end": 65650,
+     "addr": "395E7",
+     "hex": "436572616d47656172fc",
+     "us": "CeramGear",
+     "en": "CeramGear"
+    },
+    {
+     "id": "ItemName_ForceGear",
+     "line": 65651,
+     "line_end": 65651,
+     "addr": "395F1",
+     "hex": "466f72636547656172fc",
+     "us": "ForceGear",
+     "en": "ForceGear"
+    },
+    {
+     "id": "ItemName_LaconGear",
+     "line": 65652,
+     "line_end": 65652,
+     "addr": "395FB",
+     "hex": "4c61636f6e47656172fc",
+     "us": "LaconGear",
+     "en": "LaconGear"
+    },
+    {
+     "id": "ItemName_RoyalGear",
+     "line": 65653,
+     "line_end": 65653,
+     "addr": "39605",
+     "hex": "526f79616c47656172fc",
+     "us": "RoyalGear",
+     "en": "RoyalGear"
+    },
+    {
+     "id": "ItemName_HuntgArmr",
+     "line": 65654,
+     "line_end": 65654,
+     "addr": "3960F",
+     "hex": "48756e746741726d72fc",
+     "us": "HuntgArmr",
+     "en": "HuntgArmr"
+    },
+    {
+     "id": "ItemName_SteelArmr",
+     "line": 65655,
+     "line_end": 65655,
+     "addr": "39619",
+     "hex": "537465656c41726d72fc",
+     "us": "SteelArmr",
+     "en": "SteelArmr"
+    },
+    {
+     "id": "ItemName_CeramArmr",
+     "line": 65656,
+     "line_end": 65656,
+     "addr": "39623",
+     "hex": "436572616d41726d72fc",
+     "us": "CeramArmr",
+     "en": "CeramArmr"
+    },
+    {
+     "id": "ItemName_ForceArmr",
+     "line": 65657,
+     "line_end": 65657,
+     "addr": "3962D",
+     "hex": "466f72636541726d72fc",
+     "us": "ForceArmr",
+     "en": "ForceArmr"
+    },
+    {
+     "id": "ItemName_LaconArmr",
+     "line": 65658,
+     "line_end": 65658,
+     "addr": "39637",
+     "hex": "4c61636f6e41726d72fc",
+     "us": "LaconArmr",
+     "en": "LaconArmr"
+    },
+    {
+     "id": "ItemName_RoyalArmr",
+     "line": 65659,
+     "line_end": 65659,
+     "addr": "39641",
+     "hex": "526f79616c41726d72fc",
+     "us": "RoyalArmr",
+     "en": "RoyalArmr"
+    },
+    {
+     "id": "ItemName_PlanarArm",
+     "line": 65660,
+     "line_end": 65660,
+     "addr": "3964B",
+     "hex": "506c616e617241726dfc",
+     "us": "PlanarArm",
+     "en": "PlanarArm"
+    },
+    {
+     "id": "ItemName_Cape",
+     "line": 65661,
+     "line_end": 65661,
+     "addr": "39655",
+     "hex": "43617065fc",
+     "us": "Cape",
+     "en": "Cape"
+    },
+    {
+     "id": "ItemName_SteelCape",
+     "line": 65662,
+     "line_end": 65662,
+     "addr": "3965A",
+     "hex": "537465656c43617065fc",
+     "us": "SteelCape",
+     "en": "SteelCape"
+    },
+    {
+     "id": "ItemName_LaconCape",
+     "line": 65663,
+     "line_end": 65663,
+     "addr": "39664",
+     "hex": "4c61636f6e43617065fc",
+     "us": "LaconCape",
+     "en": "LaconCape"
+    },
+    {
+     "id": "ItemName_RoyalCape",
+     "line": 65664,
+     "line_end": 65664,
+     "addr": "3966E",
+     "hex": "526f79616c43617065fc",
+     "us": "RoyalCape",
+     "en": "RoyalCape"
+    },
+    {
+     "id": "ItemName_Robe",
+     "line": 65665,
+     "line_end": 65665,
+     "addr": "39678",
+     "hex": "526f6265fc",
+     "us": "Robe",
+     "en": "Robe"
+    },
+    {
+     "id": "ItemName_SteelRobe",
+     "line": 65666,
+     "line_end": 65666,
+     "addr": "3967D",
+     "hex": "537465656c526f6265fc",
+     "us": "SteelRobe",
+     "en": "SteelRobe"
+    },
+    {
+     "id": "ItemName_LaconRobe",
+     "line": 65667,
+     "line_end": 65667,
+     "addr": "39687",
+     "hex": "4c61636f6e526f6265fc",
+     "us": "LaconRobe",
+     "en": "LaconRobe"
+    },
+    {
+     "id": "ItemName_RoyalRobe",
+     "line": 65668,
+     "line_end": 65668,
+     "addr": "39691",
+     "hex": "526f79616c526f6265fc",
+     "us": "RoyalRobe",
+     "en": "RoyalRobe"
+    },
+    {
+     "id": "ItemName_HuntgChst",
+     "line": 65669,
+     "line_end": 65669,
+     "addr": "3969B",
+     "hex": "48756e746743687374fc",
+     "us": "HuntgChst",
+     "en": "HuntgChst"
+    },
+    {
+     "id": "ItemName_SteelChst",
+     "line": 65670,
+     "line_end": 65670,
+     "addr": "396A5",
+     "hex": "537465656c43687374fc",
+     "us": "SteelChst",
+     "en": "SteelChst"
+    },
+    {
+     "id": "ItemName_LaconChst",
+     "line": 65671,
+     "line_end": 65671,
+     "addr": "396AF",
+     "hex": "4c61636f6e43687374fc",
+     "us": "LaconChst",
+     "en": "LaconChst"
+    },
+    {
+     "id": "ItemName_RoyalChst",
+     "line": 65672,
+     "line_end": 65672,
+     "addr": "396B9",
+     "hex": "526f79616c43687374fc",
+     "us": "RoyalChst",
+     "en": "RoyalChst"
+    },
+    {
+     "id": "ItemName_Fiblira",
+     "line": 65673,
+     "line_end": 65673,
+     "addr": "396C3",
+     "hex": "4669626c697261fc",
+     "us": "Fiblira",
+     "en": "Fiblira"
+    },
+    {
+     "id": "ItemName_SteelFib",
+     "line": 65674,
+     "line_end": 65674,
+     "addr": "396CB",
+     "hex": "537465656c20466962fc",
+     "us": "Steel Fib",
+     "en": "Steel Fib"
+    },
+    {
+     "id": "ItemName_LaconFib",
+     "line": 65675,
+     "line_end": 65675,
+     "addr": "396D5",
+     "hex": "4c61636f6e20466962fc",
+     "us": "Lacon Fib",
+     "en": "Lacon Fib"
+    },
+    {
+     "id": "ItemName_RoyalFib",
+     "line": 65676,
+     "line_end": 65676,
+     "addr": "396DF",
+     "hex": "526f79616c20466962fc",
+     "us": "Royal Fib",
+     "en": "Royal Fib"
+    },
+    {
+     "id": "ItemName_Vest",
+     "line": 65677,
+     "line_end": 65677,
+     "addr": "396E9",
+     "hex": "56657374fc",
+     "us": "Vest",
+     "en": "Vest"
+    },
+    {
+     "id": "ItemName_HuntgVest",
+     "line": 65678,
+     "line_end": 65678,
+     "addr": "396EE",
+     "hex": "48756e746756657374fc",
+     "us": "HuntgVest",
+     "en": "HuntgVest"
+    },
+    {
+     "id": "ItemName_SteelVest",
+     "line": 65679,
+     "line_end": 65679,
+     "addr": "396F8",
+     "hex": "537465656c56657374fc",
+     "us": "SteelVest",
+     "en": "SteelVest"
+    },
+    {
+     "id": "ItemName_CeramVest",
+     "line": 65680,
+     "line_end": 65680,
+     "addr": "39702",
+     "hex": "436572616d56657374fc",
+     "us": "CeramVest",
+     "en": "CeramVest"
+    },
+    {
+     "id": "ItemName_ForceVest",
+     "line": 65681,
+     "line_end": 65681,
+     "addr": "3970C",
+     "hex": "466f72636556657374fc",
+     "us": "ForceVest",
+     "en": "ForceVest"
+    },
+    {
+     "id": "ItemName_LaconVest",
+     "line": 65682,
+     "line_end": 65682,
+     "addr": "39716",
+     "hex": "4c61636f6e56657374fc",
+     "us": "LaconVest",
+     "en": "LaconVest"
+    },
+    {
+     "id": "ItemName_RoyalVest",
+     "line": 65683,
+     "line_end": 65683,
+     "addr": "39720",
+     "hex": "526f79616c56657374fc",
+     "us": "RoyalVest",
+     "en": "RoyalVest"
+    },
+    {
+     "id": "ItemName_Protector",
+     "line": 65684,
+     "line_end": 65684,
+     "addr": "3972A",
+     "hex": "50726f746563746f72fc",
+     "us": "Protector",
+     "en": "Protector"
+    },
+    {
+     "id": "ItemName_SteelPrtc",
+     "line": 65685,
+     "line_end": 65685,
+     "addr": "39734",
+     "hex": "537465656c50727463fc",
+     "us": "SteelPrtc",
+     "en": "SteelPrtc"
+    },
+    {
+     "id": "ItemName_CeramPrtc",
+     "line": 65686,
+     "line_end": 65686,
+     "addr": "3973E",
+     "hex": "436572616d50727463fc",
+     "us": "CeramPrtc",
+     "en": "CeramPrtc"
+    },
+    {
+     "id": "ItemName_ForcePrtc",
+     "line": 65687,
+     "line_end": 65687,
+     "addr": "39748",
+     "hex": "466f72636550727463fc",
+     "us": "ForcePrtc",
+     "en": "ForcePrtc"
+    },
+    {
+     "id": "ItemName_LaconPrtc",
+     "line": 65688,
+     "line_end": 65688,
+     "addr": "39752",
+     "hex": "4c61636f6e50727463fc",
+     "us": "LaconPrtc",
+     "en": "LaconPrtc"
+    },
+    {
+     "id": "ItemName_RoyalPrtc",
+     "line": 65689,
+     "line_end": 65689,
+     "addr": "3975C",
+     "hex": "526f79616c50727463fc",
+     "us": "RoyalPrtc",
+     "en": "RoyalPrtc"
+    },
+    {
+     "id": "ItemName_Boots",
+     "line": 65690,
+     "line_end": 65690,
+     "addr": "39766",
+     "hex": "426f6f7473fc",
+     "us": "Boots",
+     "en": "Boots"
+    },
+    {
+     "id": "ItemName_ForceBoot",
+     "line": 65691,
+     "line_end": 65691,
+     "addr": "3976C",
+     "hex": "466f726365426f6f74fc",
+     "us": "ForceBoot",
+     "en": "ForceBoot"
+    },
+    {
+     "id": "ItemName_RoyalBoot",
+     "line": 65692,
+     "line_end": 65692,
+     "addr": "39776",
+     "hex": "526f79616c426f6f74fc",
+     "us": "RoyalBoot",
+     "en": "RoyalBoot"
+    },
+    {
+     "id": "ItemName_Shield",
+     "line": 65693,
+     "line_end": 65693,
+     "addr": "39780",
+     "hex": "536869656c64fc",
+     "us": "Shield",
+     "en": "Shield"
+    },
+    {
+     "id": "ItemName_SteelShld",
+     "line": 65694,
+     "line_end": 65694,
+     "addr": "39787",
+     "hex": "537465656c53686c64fc",
+     "us": "SteelShld",
+     "en": "SteelShld"
+    },
+    {
+     "id": "ItemName_CeramShld",
+     "line": 65695,
+     "line_end": 65695,
+     "addr": "39791",
+     "hex": "436572616d53686c64fc",
+     "us": "CeramShld",
+     "en": "CeramShld"
+    },
+    {
+     "id": "ItemName_ForceShld",
+     "line": 65696,
+     "line_end": 65696,
+     "addr": "3979B",
+     "hex": "466f72636553686c64fc",
+     "us": "ForceShld",
+     "en": "ForceShld"
+    },
+    {
+     "id": "ItemName_LaconShld",
+     "line": 65697,
+     "line_end": 65697,
+     "addr": "397A5",
+     "hex": "4c61636f6e53686c64fc",
+     "us": "LaconShld",
+     "en": "LaconShld"
+    },
+    {
+     "id": "ItemName_RoyalShld",
+     "line": 65698,
+     "line_end": 65698,
+     "addr": "397AF",
+     "hex": "526f79616c53686c64fc",
+     "us": "RoyalShld",
+     "en": "RoyalShld"
+    },
+    {
+     "id": "ItemName_Emel",
+     "line": 65699,
+     "line_end": 65699,
+     "addr": "397B9",
+     "hex": "456d656cfc",
+     "us": "Emel",
+     "en": "Emel"
+    },
+    {
+     "id": "ItemName_SteelEmel",
+     "line": 65700,
+     "line_end": 65700,
+     "addr": "397BE",
+     "hex": "537465656c456d656cfc",
+     "us": "SteelEmel",
+     "en": "SteelEmel"
+    },
+    {
+     "id": "ItemName_CeramEmel",
+     "line": 65701,
+     "line_end": 65701,
+     "addr": "397C8",
+     "hex": "436572616d456d656cfc",
+     "us": "CeramEmel",
+     "en": "CeramEmel"
+    },
+    {
+     "id": "ItemName_ForceEmel",
+     "line": 65702,
+     "line_end": 65702,
+     "addr": "397D2",
+     "hex": "466f726365456d656cfc",
+     "us": "ForceEmel",
+     "en": "ForceEmel"
+    },
+    {
+     "id": "ItemName_LaconEmel",
+     "line": 65703,
+     "line_end": 65703,
+     "addr": "397DC",
+     "hex": "4c61636f6e456d656cfc",
+     "us": "LaconEmel",
+     "en": "LaconEmel"
+    },
+    {
+     "id": "ItemName_RoyalEmel",
+     "line": 65704,
+     "line_end": 65704,
+     "addr": "397E6",
+     "hex": "526f79616c456d656cfc",
+     "us": "RoyalEmel",
+     "en": "RoyalEmel"
+    },
+    {
+     "id": "ItemName_Needle",
+     "line": 65705,
+     "line_end": 65705,
+     "addr": "397F0",
+     "hex": "4e6565646c65fc",
+     "us": "Needle",
+     "en": "Needle"
+    },
+    {
+     "id": "ItemName_HuntgNdl",
+     "line": 65706,
+     "line_end": 65706,
+     "addr": "397F7",
+     "hex": "48756e7467204e646cfc",
+     "us": "Huntg Ndl",
+     "en": "Huntg Ndl"
+    },
+    {
+     "id": "ItemName_SteelNdl",
+     "line": 65707,
+     "line_end": 65707,
+     "addr": "39801",
+     "hex": "537465656c204e646cfc",
+     "us": "Steel Ndl",
+     "en": "Steel Ndl"
+    },
+    {
+     "id": "ItemName_CeramNdl",
+     "line": 65708,
+     "line_end": 65708,
+     "addr": "3980B",
+     "hex": "436572616d204e646cfc",
+     "us": "Ceram Ndl",
+     "en": "Ceram Ndl"
+    },
+    {
+     "id": "ItemName_LaserNdl",
+     "line": 65709,
+     "line_end": 65709,
+     "addr": "39815",
+     "hex": "4c61736572204e646cfc",
+     "us": "Laser Ndl",
+     "en": "Laser Ndl"
+    },
+    {
+     "id": "ItemName_ForceNdl",
+     "line": 65710,
+     "line_end": 65710,
+     "addr": "3981F",
+     "hex": "466f726365204e646cfc",
+     "us": "Force Ndl",
+     "en": "Force Ndl"
+    },
+    {
+     "id": "ItemName_LaconNdl",
+     "line": 65711,
+     "line_end": 65711,
+     "addr": "39829",
+     "hex": "4c61636f6e204e646cfc",
+     "us": "Lacon Ndl",
+     "en": "Lacon Ndl"
+    },
+    {
+     "id": "ItemName_RoyalNdl",
+     "line": 65712,
+     "line_end": 65712,
+     "addr": "39833",
+     "hex": "526f79616c204e646cfc",
+     "us": "Royal Ndl",
+     "en": "Royal Ndl"
+    },
+    {
+     "id": "ItemName_Sapphire",
+     "line": 65713,
+     "line_end": 65713,
+     "addr": "3983D",
+     "hex": "5361707068697265fc",
+     "us": "Sapphire",
+     "en": "Sapphire"
+    },
+    {
+     "id": "ItemName_MoonStone",
+     "line": 65714,
+     "line_end": 65714,
+     "addr": "39846",
+     "hex": "4d6f6f6e53746f6e65fc",
+     "us": "MoonStone",
+     "en": "MoonStone"
+    },
+    {
+     "id": "ItemName_MoonTear",
+     "line": 65715,
+     "line_end": 65715,
+     "addr": "39850",
+     "hex": "4d6f6f6e2054656172fc",
+     "us": "Moon Tear",
+     "en": "Moon Tear"
+    },
+    {
+     "id": "ItemName_DragnTear",
+     "line": 65716,
+     "line_end": 65716,
+     "addr": "3985A",
+     "hex": "447261676e54656172fc",
+     "us": "DragnTear",
+     "en": "DragnTear"
+    },
+    {
+     "id": "ItemName_Snow",
+     "line": 65717,
+     "line_end": 65717,
+     "addr": "39864",
+     "hex": "536e6f77fc",
+     "us": "Snow",
+     "en": "Snow"
+    },
+    {
+     "id": "ItemName_TwinsRuby",
+     "line": 65718,
+     "line_end": 65718,
+     "addr": "39869",
+     "hex": "5477696e7352756279fc",
+     "us": "TwinsRuby",
+     "en": "TwinsRuby"
+    },
+    {
+     "id": "ItemName_PowrTopaz",
+     "line": 65719,
+     "line_end": 65719,
+     "addr": "39873",
+     "hex": "506f7772546f70617afc",
+     "us": "PowrTopaz",
+     "en": "PowrTopaz"
+    },
+    {
+     "id": "ItemName_MstryStar",
+     "line": 65720,
+     "line_end": 65720,
+     "addr": "3987D",
+     "hex": "4d7374727953746172fc",
+     "us": "MstryStar",
+     "en": "MstryStar"
+    },
+    {
+     "id": "ItemName_AquaParts",
+     "line": 65721,
+     "line_end": 65721,
+     "addr": "39887",
+     "hex": "417175615061727473fc",
+     "us": "AquaParts",
+     "en": "AquaParts"
+    },
+    {
+     "id": "ItemName_SubParts",
+     "line": 65722,
+     "line_end": 65722,
+     "addr": "39891",
+     "hex": "537562205061727473fc",
+     "us": "Sub Parts",
+     "en": "Sub Parts"
+    },
+    {
+     "id": "ItemName_AeroParts",
+     "line": 65723,
+     "line_end": 65723,
+     "addr": "3989B",
+     "hex": "4165726f5061727473fc",
+     "us": "AeroParts",
+     "en": "AeroParts"
+    },
+    {
+     "id": "ItemName_LayaPndnt",
+     "line": 65724,
+     "line_end": 65724,
+     "addr": "398A5",
+     "hex": "4c617961506e646e74fc",
+     "us": "LayaPndnt",
+     "en": "LayaPndnt"
+    }
+   ]
+  },
+  "techs": {
+   "note": "technique names (inside the technique records)",
+   "start": "TechniqueData",
+   "end": "loc_39A30",
+   "runs": [
+    {
+     "id": "techs#000",
+     "line": 65733,
+     "line_end": 65733,
+     "addr": "398B0",
+     "hex": "466f69fc",
+     "us": "Foi",
+     "en": "Foi"
+    },
+    {
+     "id": "techs#001",
+     "line": 65741,
+     "line_end": 65741,
+     "addr": "398C0",
+     "hex": "5a616efc",
+     "us": "Zan",
+     "en": "Zan"
+    },
+    {
+     "id": "techs#002",
+     "line": 65749,
+     "line_end": 65749,
+     "addr": "398D0",
+     "hex": "477261fc",
+     "us": "Gra",
+     "en": "Gra"
+    },
+    {
+     "id": "techs#003",
+     "line": 65757,
+     "line_end": 65757,
+     "addr": "398E0",
+     "hex": "547375fc",
+     "us": "Tsu",
+     "en": "Tsu"
+    },
+    {
+     "id": "techs#004",
+     "line": 65765,
+     "line_end": 65765,
+     "addr": "398F0",
+     "hex": "526573fc",
+     "us": "Res",
+     "en": "Res"
+    },
+    {
+     "id": "techs#005",
+     "line": 65773,
+     "line_end": 65773,
+     "addr": "39900",
+     "hex": "4769726573fc",
+     "us": "Gires",
+     "en": "Gires"
+    },
+    {
+     "id": "techs#006",
+     "line": 65781,
+     "line_end": 65781,
+     "addr": "39910",
+     "hex": "5265766572fc",
+     "us": "Rever",
+     "en": "Rever"
+    },
+    {
+     "id": "techs#007",
+     "line": 65789,
+     "line_end": 65789,
+     "addr": "39920",
+     "hex": "416e7469fc",
+     "us": "Anti",
+     "en": "Anti"
+    },
+    {
+     "id": "techs#008",
+     "line": 65797,
+     "line_end": 65797,
+     "addr": "39930",
+     "hex": "4e6572fc",
+     "us": "Ner",
+     "en": "Ner"
+    },
+    {
+     "id": "techs#009",
+     "line": 65805,
+     "line_end": 65805,
+     "addr": "39940",
+     "hex": "52696d6974fc",
+     "us": "Rimit",
+     "en": "Rimit"
+    },
+    {
+     "id": "techs#010",
+     "line": 65813,
+     "line_end": 65813,
+     "addr": "39950",
+     "hex": "5368697a61fc",
+     "us": "Shiza",
+     "en": "Shiza"
+    },
+    {
+     "id": "techs#011",
+     "line": 65821,
+     "line_end": 65821,
+     "addr": "39960",
+     "hex": "446562616efc",
+     "us": "Deban",
+     "en": "Deban"
+    },
+    {
+     "id": "techs#012",
+     "line": 65829,
+     "line_end": 65829,
+     "addr": "39970",
+     "hex": "46616e6269fc",
+     "us": "Fanbi",
+     "en": "Fanbi"
+    },
+    {
+     "id": "techs#013",
+     "line": 65837,
+     "line_end": 65837,
+     "addr": "39980",
+     "hex": "466f727361fc",
+     "us": "Forsa",
+     "en": "Forsa"
+    },
+    {
+     "id": "techs#014",
+     "line": 65845,
+     "line_end": 65845,
+     "addr": "39990",
+     "hex": "4e6173616bfc",
+     "us": "Nasak",
+     "en": "Nasak"
+    },
+    {
+     "id": "techs#015",
+     "line": 65853,
+     "line_end": 65853,
+     "addr": "399A0",
+     "hex": "536875fc",
+     "us": "Shu",
+     "en": "Shu"
+    },
+    {
+     "id": "techs#016",
+     "line": 65861,
+     "line_end": 65861,
+     "addr": "399B0",
+     "hex": "4d656769646ffc",
+     "us": "Megido",
+     "en": "Megido"
+    },
+    {
+     "id": "techs#017",
+     "line": 65866,
+     "line_end": 65866,
+     "addr": "399C0",
+     "hex": "4772616e747afc",
+     "us": "Grantz",
+     "en": "Grantz"
+    },
+    {
+     "id": "techs#018",
+     "line": 65871,
+     "line_end": 65871,
+     "addr": "399D0",
+     "hex": "466f69fc",
+     "us": "Foi",
+     "en": "Foi"
+    },
+    {
+     "id": "techs#019",
+     "line": 65879,
+     "line_end": 65879,
+     "addr": "399E0",
+     "hex": "5a616efc",
+     "us": "Zan",
+     "en": "Zan"
+    },
+    {
+     "id": "techs#020",
+     "line": 65887,
+     "line_end": 65887,
+     "addr": "399F0",
+     "hex": "477261fc",
+     "us": "Gra",
+     "en": "Gra"
+    },
+    {
+     "id": "techs#021",
+     "line": 65895,
+     "line_end": 65895,
+     "addr": "39A00",
+     "hex": "547375fc",
+     "us": "Tsu",
+     "en": "Tsu"
+    },
+    {
+     "id": "techs#022",
+     "line": 65903,
+     "line_end": 65903,
+     "addr": "39A10",
+     "hex": "4769726573fc",
+     "us": "Gires",
+     "en": "Gires"
+    },
+    {
+     "id": "techs#023",
+     "line": 65911,
+     "line_end": 65911,
+     "addr": "39A20",
+     "hex": "506f69736f6efc",
+     "us": "Poison",
+     "en": "Poison"
+    }
+   ]
+  },
+  "enemies": {
+   "note": "enemy names",
+   "start": "EnemyNameData",
+   "end": "loc_3C36A",
+   "runs": [
+    {
+     "id": "EnemyName_Glop",
+     "line": 69150,
+     "line_end": 69150,
+     "addr": "3BE14",
+     "hex": "476c6f70fc",
+     "us": "Glop",
+     "en": "Glop"
+    },
+    {
+     "id": "EnemyName_Ooze",
+     "line": 69151,
+     "line_end": 69151,
+     "addr": "3BE19",
+     "hex": "4f6f7a65fc",
+     "us": "Ooze",
+     "en": "Ooze"
+    },
+    {
+     "id": "EnemyName_Slime",
+     "line": 69152,
+     "line_end": 69152,
+     "addr": "3BE1E",
+     "hex": "536c696d65fc",
+     "us": "Slime",
+     "en": "Slime"
+    },
+    {
+     "id": "EnemyName_Fire",
+     "line": 69153,
+     "line_end": 69153,
+     "addr": "3BE24",
+     "hex": "46697265fc",
+     "us": "Fire",
+     "en": "Fire"
+    },
+    {
+     "id": "EnemyName_Murafire",
+     "line": 69154,
+     "line_end": 69154,
+     "addr": "3BE29",
+     "hex": "4d75726166697265fc",
+     "us": "Murafire",
+     "en": "Murafire"
+    },
+    {
+     "id": "EnemyName_Azufire",
+     "line": 69155,
+     "line_end": 69155,
+     "addr": "3BE32",
+     "hex": "417a7566697265fc",
+     "us": "Azufire",
+     "en": "Azufire"
+    },
+    {
+     "id": "EnemyName_Nayl",
+     "line": 69156,
+     "line_end": 69156,
+     "addr": "3BE3A",
+     "hex": "4e61796cfc",
+     "us": "Nayl",
+     "en": "Nayl"
+    },
+    {
+     "id": "EnemyName_Flayl",
+     "line": 69157,
+     "line_end": 69157,
+     "addr": "3BE3F",
+     "hex": "466c61796cfc",
+     "us": "Flayl",
+     "en": "Flayl"
+    },
+    {
+     "id": "EnemyName_Slayl",
+     "line": 69158,
+     "line_end": 69158,
+     "addr": "3BE45",
+     "hex": "536c61796cfc",
+     "us": "Slayl",
+     "en": "Slayl"
+    },
+    {
+     "id": "EnemyName_Dryad",
+     "line": 69159,
+     "line_end": 69159,
+     "addr": "3BE4B",
+     "hex": "4472796164fc",
+     "us": "Dryad",
+     "en": "Dryad"
+    },
+    {
+     "id": "EnemyName_Nereid",
+     "line": 69160,
+     "line_end": 69160,
+     "addr": "3BE51",
+     "hex": "4e6572656964fc",
+     "us": "Nereid",
+     "en": "Nereid"
+    },
+    {
+     "id": "EnemyName_Sylph",
+     "line": 69161,
+     "line_end": 69161,
+     "addr": "3BE58",
+     "hex": "53796c7068fc",
+     "us": "Sylph",
+     "en": "Sylph"
+    },
+    {
+     "id": "EnemyName_Buzzgull",
+     "line": 69162,
+     "line_end": 69162,
+     "addr": "3BE5E",
+     "hex": "42757a7a67756c6cfc",
+     "us": "Buzzgull",
+     "en": "Buzzgull"
+    },
+    {
+     "id": "EnemyName_Lashgull",
+     "line": 69163,
+     "line_end": 69163,
+     "addr": "3BE67",
+     "hex": "4c61736867756c6cfc",
+     "us": "Lashgull",
+     "en": "Lashgull"
+    },
+    {
+     "id": "EnemyName_Hackgull",
+     "line": 69164,
+     "line_end": 69164,
+     "addr": "3BE70",
+     "hex": "4861636b67756c6cfc",
+     "us": "Hackgull",
+     "en": "Hackgull"
+    },
+    {
+     "id": "EnemyName_Eindon",
+     "line": 69165,
+     "line_end": 69165,
+     "addr": "3BE79",
+     "hex": "45696e646f6efc",
+     "us": "Eindon",
+     "en": "Eindon"
+    },
+    {
+     "id": "EnemyName_Tsveidon",
+     "line": 69166,
+     "line_end": 69166,
+     "addr": "3BE80",
+     "hex": "5473766569646f6efc",
+     "us": "Tsveidon",
+     "en": "Tsveidon"
+    },
+    {
+     "id": "EnemyName_Dreidon",
+     "line": 69167,
+     "line_end": 69167,
+     "addr": "3BE89",
+     "hex": "44726569646f6efc",
+     "us": "Dreidon",
+     "en": "Dreidon"
+    },
+    {
+     "id": "EnemyName_Clump",
+     "line": 69168,
+     "line_end": 69168,
+     "addr": "3BE91",
+     "hex": "436c756d70fc",
+     "us": "Clump",
+     "en": "Clump"
+    },
+    {
+     "id": "EnemyName_Cluster",
+     "line": 69169,
+     "line_end": 69169,
+     "addr": "3BE97",
+     "hex": "436c7573746572fc",
+     "us": "Cluster",
+     "en": "Cluster"
+    },
+    {
+     "id": "EnemyName_Clique",
+     "line": 69170,
+     "line_end": 69170,
+     "addr": "3BE9F",
+     "hex": "436c69717565fc",
+     "us": "Clique",
+     "en": "Clique"
+    },
+    {
+     "id": "EnemyName_Chirper",
+     "line": 69171,
+     "line_end": 69171,
+     "addr": "3BEA6",
+     "hex": "43686972706572fc",
+     "us": "Chirper",
+     "en": "Chirper"
+    },
+    {
+     "id": "EnemyName_Warbler",
+     "line": 69172,
+     "line_end": 69172,
+     "addr": "3BEAE",
+     "hex": "576172626c6572fc",
+     "us": "Warbler",
+     "en": "Warbler"
+    },
+    {
+     "id": "EnemyName_Squawker",
+     "line": 69173,
+     "line_end": 69173,
+     "addr": "3BEB6",
+     "hex": "53717561776b6572fc",
+     "us": "Squawker",
+     "en": "Squawker"
+    },
+    {
+     "id": "EnemyName_Lizrd",
+     "line": 69174,
+     "line_end": 69174,
+     "addr": "3BEBF",
+     "hex": "4c697a7264fc",
+     "us": "Lizrd",
+     "en": "Lizrd"
+    },
+    {
+     "id": "EnemyName_Blizrd",
+     "line": 69175,
+     "line_end": 69175,
+     "addr": "3BEC5",
+     "hex": "426c697a7264fc",
+     "us": "Blizrd",
+     "en": "Blizrd"
+    },
+    {
+     "id": "EnemyName_Grizrd",
+     "line": 69176,
+     "line_end": 69176,
+     "addr": "3BECC",
+     "hex": "4772697a7264fc",
+     "us": "Grizrd",
+     "en": "Grizrd"
+    },
+    {
+     "id": "EnemyName_Spinner",
+     "line": 69177,
+     "line_end": 69177,
+     "addr": "3BED3",
+     "hex": "5370696e6e6572fc",
+     "us": "Spinner",
+     "en": "Spinner"
+    },
+    {
+     "id": "EnemyName_Twirler",
+     "line": 69178,
+     "line_end": 69178,
+     "addr": "3BEDB",
+     "hex": "547769726c6572fc",
+     "us": "Twirler",
+     "en": "Twirler"
+    },
+    {
+     "id": "EnemyName_Wizzer",
+     "line": 69179,
+     "line_end": 69179,
+     "addr": "3BEE3",
+     "hex": "57697a7a6572fc",
+     "us": "Wizzer",
+     "en": "Wizzer"
+    },
+    {
+     "id": "EnemyName_Imp",
+     "line": 69180,
+     "line_end": 69180,
+     "addr": "3BEEA",
+     "hex": "496d70fc",
+     "us": "Imp",
+     "en": "Imp"
+    },
+    {
+     "id": "EnemyName_Impfoul",
+     "line": 69181,
+     "line_end": 69181,
+     "addr": "3BEEE",
+     "hex": "496d70666f756cfc",
+     "us": "Impfoul",
+     "en": "Impfoul"
+    },
+    {
+     "id": "EnemyName_Impvile",
+     "line": 69182,
+     "line_end": 69182,
+     "addr": "3BEF6",
+     "hex": "496d7076696c65fc",
+     "us": "Impvile",
+     "en": "Impvile"
+    },
+    {
+     "id": "EnemyName_Nova",
+     "line": 69183,
+     "line_end": 69183,
+     "addr": "3BEFE",
+     "hex": "4e6f7661fc",
+     "us": "Nova",
+     "en": "Nova"
+    },
+    {
+     "id": "EnemyName_Pulsar",
+     "line": 69184,
+     "line_end": 69184,
+     "addr": "3BF03",
+     "hex": "50756c736172fc",
+     "us": "Pulsar",
+     "en": "Pulsar"
+    },
+    {
+     "id": "EnemyName_Quasar",
+     "line": 69185,
+     "line_end": 69185,
+     "addr": "3BF0A",
+     "hex": "517561736172fc",
+     "us": "Quasar",
+     "en": "Quasar"
+    },
+    {
+     "id": "EnemyName_Chirpbot",
+     "line": 69186,
+     "line_end": 69186,
+     "addr": "3BF11",
+     "hex": "4368697270626f74fc",
+     "us": "Chirpbot",
+     "en": "Chirpbot"
+    },
+    {
+     "id": "EnemyName_Warblbot",
+     "line": 69187,
+     "line_end": 69187,
+     "addr": "3BF1A",
+     "hex": "576172626c626f74fc",
+     "us": "Warblbot",
+     "en": "Warblbot"
+    },
+    {
+     "id": "EnemyName_Squakbot",
+     "line": 69188,
+     "line_end": 69188,
+     "addr": "3BF23",
+     "hex": "537175616b626f74fc",
+     "us": "Squakbot",
+     "en": "Squakbot"
+    },
+    {
+     "id": "EnemyName_Commsat",
+     "line": 69189,
+     "line_end": 69189,
+     "addr": "3BF2C",
+     "hex": "436f6d6d736174fc",
+     "us": "Commsat",
+     "en": "Commsat"
+    },
+    {
+     "id": "EnemyName_Spysat",
+     "line": 69190,
+     "line_end": 69190,
+     "addr": "3BF34",
+     "hex": "537079736174fc",
+     "us": "Spysat",
+     "en": "Spysat"
+    },
+    {
+     "id": "EnemyName_Killsat",
+     "line": 69191,
+     "line_end": 69191,
+     "addr": "3BF3B",
+     "hex": "4b696c6c736174fc",
+     "us": "Killsat",
+     "en": "Killsat"
+    },
+    {
+     "id": "EnemyName_Arachne",
+     "line": 69192,
+     "line_end": 69192,
+     "addr": "3BF43",
+     "hex": "41726163686e65fc",
+     "us": "Arachne",
+     "en": "Arachne"
+    },
+    {
+     "id": "EnemyName_Darachne",
+     "line": 69193,
+     "line_end": 69193,
+     "addr": "3BF4B",
+     "hex": "4461726163686e65fc",
+     "us": "Darachne",
+     "en": "Darachne"
+    },
+    {
+     "id": "EnemyName_Zarachne",
+     "line": 69194,
+     "line_end": 69194,
+     "addr": "3BF54",
+     "hex": "5a61726163686e65fc",
+     "us": "Zarachne",
+     "en": "Zarachne"
+    },
+    {
+     "id": "EnemyName_Blink",
+     "line": 69195,
+     "line_end": 69195,
+     "addr": "3BF5D",
+     "hex": "426c696e6bfc",
+     "us": "Blink",
+     "en": "Blink"
+    },
+    {
+     "id": "EnemyName_Flash",
+     "line": 69196,
+     "line_end": 69196,
+     "addr": "3BF63",
+     "hex": "466c617368fc",
+     "us": "Flash",
+     "en": "Flash"
+    },
+    {
+     "id": "EnemyName_Strobe",
+     "line": 69197,
+     "line_end": 69197,
+     "addr": "3BF69",
+     "hex": "5374726f6265fc",
+     "us": "Strobe",
+     "en": "Strobe"
+    },
+    {
+     "id": "EnemyName_Minimech",
+     "line": 69198,
+     "line_end": 69198,
+     "addr": "3BF70",
+     "hex": "4d696e696d656368fc",
+     "us": "Minimech",
+     "en": "Minimech"
+    },
+    {
+     "id": "EnemyName_Mech",
+     "line": 69199,
+     "line_end": 69199,
+     "addr": "3BF79",
+     "hex": "4d656368fc",
+     "us": "Mech",
+     "en": "Mech"
+    },
+    {
+     "id": "EnemyName_Maxmech",
+     "line": 69200,
+     "line_end": 69200,
+     "addr": "3BF7E",
+     "hex": "4d61786d656368fc",
+     "us": "Maxmech",
+     "en": "Maxmech"
+    },
+    {
+     "id": "EnemyName_Lazrbot",
+     "line": 69201,
+     "line_end": 69201,
+     "addr": "3BF86",
+     "hex": "4c617a72626f74fc",
+     "us": "Lazrbot",
+     "en": "Lazrbot"
+    },
+    {
+     "id": "EnemyName_Mazrbot",
+     "line": 69202,
+     "line_end": 69202,
+     "addr": "3BF8E",
+     "hex": "4d617a72626f74fc",
+     "us": "Mazrbot",
+     "en": "Mazrbot"
+    },
+    {
+     "id": "EnemyName_Fazrbot",
+     "line": 69203,
+     "line_end": 69203,
+     "addr": "3BF96",
+     "hex": "46617a72626f74fc",
+     "us": "Fazrbot",
+     "en": "Fazrbot"
+    },
+    {
+     "id": "EnemyName_Emir",
+     "line": 69204,
+     "line_end": 69204,
+     "addr": "3BF9E",
+     "hex": "456d6972fc",
+     "us": "Emir",
+     "en": "Emir"
+    },
+    {
+     "id": "EnemyName_Sheik",
+     "line": 69205,
+     "line_end": 69205,
+     "addr": "3BFA3",
+     "hex": "536865696bfc",
+     "us": "Sheik",
+     "en": "Sheik"
+    },
+    {
+     "id": "EnemyName_Caliph",
+     "line": 69206,
+     "line_end": 69206,
+     "addr": "3BFA9",
+     "hex": "43616c697068fc",
+     "us": "Caliph",
+     "en": "Caliph"
+    },
+    {
+     "id": "EnemyName_Harpy",
+     "line": 69207,
+     "line_end": 69207,
+     "addr": "3BFB0",
+     "hex": "4861727079fc",
+     "us": "Harpy",
+     "en": "Harpy"
+    },
+    {
+     "id": "EnemyName_Griffin",
+     "line": 69208,
+     "line_end": 69208,
+     "addr": "3BFB6",
+     "hex": "4772696666696efc",
+     "us": "Griffin",
+     "en": "Griffin"
+    },
+    {
+     "id": "EnemyName_Gryphon",
+     "line": 69209,
+     "line_end": 69209,
+     "addr": "3BFBE",
+     "hex": "47727970686f6efc",
+     "us": "Gryphon",
+     "en": "Gryphon"
+    },
+    {
+     "id": "EnemyName_Banshee",
+     "line": 69210,
+     "line_end": 69210,
+     "addr": "3BFC6",
+     "hex": "42616e73686565fc",
+     "us": "Banshee",
+     "en": "Banshee"
+    },
+    {
+     "id": "EnemyName_Ghost",
+     "line": 69211,
+     "line_end": 69211,
+     "addr": "3BFCE",
+     "hex": "47686f7374fc",
+     "us": "Ghost",
+     "en": "Ghost"
+    },
+    {
+     "id": "EnemyName_Haunt",
+     "line": 69212,
+     "line_end": 69212,
+     "addr": "3BFD4",
+     "hex": "4861756e74fc",
+     "us": "Haunt",
+     "en": "Haunt"
+    },
+    {
+     "id": "EnemyName_Beastess",
+     "line": 69213,
+     "line_end": 69213,
+     "addr": "3BFDA",
+     "hex": "4265617374657373fc",
+     "us": "Beastess",
+     "en": "Beastess"
+    },
+    {
+     "id": "EnemyName_Trogess",
+     "line": 69214,
+     "line_end": 69214,
+     "addr": "3BFE3",
+     "hex": "54726f67657373fc",
+     "us": "Trogess",
+     "en": "Trogess"
+    },
+    {
+     "id": "EnemyName_Demoness",
+     "line": 69215,
+     "line_end": 69215,
+     "addr": "3BFEB",
+     "hex": "44656d6f6e657373fc",
+     "us": "Demoness",
+     "en": "Demoness"
+    },
+    {
+     "id": "EnemyName_Bushi",
+     "line": 69216,
+     "line_end": 69216,
+     "addr": "3BFF4",
+     "hex": "4275736869fc",
+     "us": "Bushi",
+     "en": "Bushi"
+    },
+    {
+     "id": "EnemyName_Kensai",
+     "line": 69217,
+     "line_end": 69217,
+     "addr": "3BFFA",
+     "hex": "4b656e736169fc",
+     "us": "Kensai",
+     "en": "Kensai"
+    },
+    {
+     "id": "EnemyName_Samurai",
+     "line": 69218,
+     "line_end": 69218,
+     "addr": "3C001",
+     "hex": "53616d75726169fc",
+     "us": "Samurai",
+     "en": "Samurai"
+    },
+    {
+     "id": "EnemyName_Irisa",
+     "line": 69219,
+     "line_end": 69219,
+     "addr": "3C009",
+     "hex": "4972697361fc",
+     "us": "Irisa",
+     "en": "Irisa"
+    },
+    {
+     "id": "EnemyName_Rosa",
+     "line": 69220,
+     "line_end": 69220,
+     "addr": "3C00F",
+     "hex": "526f7361fc",
+     "us": "Rosa",
+     "en": "Rosa"
+    },
+    {
+     "id": "EnemyName_Viola",
+     "line": 69221,
+     "line_end": 69221,
+     "addr": "3C014",
+     "hex": "56696f6c61fc",
+     "us": "Viola",
+     "en": "Viola"
+    },
+    {
+     "id": "EnemyName_Moos",
+     "line": 69222,
+     "line_end": 69222,
+     "addr": "3C01A",
+     "hex": "4d6f6f73fc",
+     "us": "Moos",
+     "en": "Moos"
+    },
+    {
+     "id": "EnemyName_Fearmoos",
+     "line": 69223,
+     "line_end": 69223,
+     "addr": "3C01F",
+     "hex": "466561726d6f6f73fc",
+     "us": "Fearmoos",
+     "en": "Fearmoos"
+    },
+    {
+     "id": "EnemyName_Diremoos",
+     "line": 69224,
+     "line_end": 69224,
+     "addr": "3C028",
+     "hex": "446972656d6f6f73fc",
+     "us": "Diremoos",
+     "en": "Diremoos"
+    },
+    {
+     "id": "EnemyName_Blueroot",
+     "line": 69225,
+     "line_end": 69225,
+     "addr": "3C031",
+     "hex": "426c7565726f6f74fc",
+     "us": "Blueroot",
+     "en": "Blueroot"
+    },
+    {
+     "id": "EnemyName_Pinkroot",
+     "line": 69226,
+     "line_end": 69226,
+     "addr": "3C03A",
+     "hex": "50696e6b726f6f74fc",
+     "us": "Pinkroot",
+     "en": "Pinkroot"
+    },
+    {
+     "id": "EnemyName_Goldroot",
+     "line": 69227,
+     "line_end": 69227,
+     "addr": "3C043",
+     "hex": "476f6c64726f6f74fc",
+     "us": "Goldroot",
+     "en": "Goldroot"
+    },
+    {
+     "id": "EnemyName_Catwoman",
+     "line": 69228,
+     "line_end": 69228,
+     "addr": "3C04C",
+     "hex": "436174776f6d616efc",
+     "us": "Catwoman",
+     "en": "Catwoman"
+    },
+    {
+     "id": "EnemyName_Tigress",
+     "line": 69229,
+     "line_end": 69229,
+     "addr": "3C055",
+     "hex": "54696772657373fc",
+     "us": "Tigress",
+     "en": "Tigress"
+    },
+    {
+     "id": "EnemyName_Lioness",
+     "line": 69230,
+     "line_end": 69230,
+     "addr": "3C05D",
+     "hex": "4c696f6e657373fc",
+     "us": "Lioness",
+     "en": "Lioness"
+    },
+    {
+     "id": "EnemyName_Lobowing",
+     "line": 69231,
+     "line_end": 69231,
+     "addr": "3C065",
+     "hex": "4c6f626f77696e67fc",
+     "us": "Lobowing",
+     "en": "Lobowing"
+    },
+    {
+     "id": "EnemyName_Lobobat",
+     "line": 69232,
+     "line_end": 69232,
+     "addr": "3C06E",
+     "hex": "4c6f626f626174fc",
+     "us": "Lobobat",
+     "en": "Lobobat"
+    },
+    {
+     "id": "EnemyName_Lobohawk",
+     "line": 69233,
+     "line_end": 69233,
+     "addr": "3C076",
+     "hex": "4c6f626f6861776bfc",
+     "us": "Lobohawk",
+     "en": "Lobohawk"
+    },
+    {
+     "id": "EnemyName_Hopliz",
+     "line": 69234,
+     "line_end": 69234,
+     "addr": "3C07F",
+     "hex": "486f706c697afc",
+     "us": "Hopliz",
+     "en": "Hopliz"
+    },
+    {
+     "id": "EnemyName_Leapliz",
+     "line": 69235,
+     "line_end": 69235,
+     "addr": "3C086",
+     "hex": "4c6561706c697afc",
+     "us": "Leapliz",
+     "en": "Leapliz"
+    },
+    {
+     "id": "EnemyName_Jumpliz",
+     "line": 69236,
+     "line_end": 69236,
+     "addr": "3C08E",
+     "hex": "4a756d706c697afc",
+     "us": "Jumpliz",
+     "en": "Jumpliz"
+    },
+    {
+     "id": "EnemyName_Glowtoad",
+     "line": 69237,
+     "line_end": 69237,
+     "addr": "3C096",
+     "hex": "476c6f77746f6164fc",
+     "us": "Glowtoad",
+     "en": "Glowtoad"
+    },
+    {
+     "id": "EnemyName_Gilatoad",
+     "line": 69238,
+     "line_end": 69238,
+     "addr": "3C09F",
+     "hex": "47696c61746f6164fc",
+     "us": "Gilatoad",
+     "en": "Gilatoad"
+    },
+    {
+     "id": "EnemyName_Megatoad",
+     "line": 69239,
+     "line_end": 69239,
+     "addr": "3C0A8",
+     "hex": "4d656761746f6164fc",
+     "us": "Megatoad",
+     "en": "Megatoad"
+    },
+    {
+     "id": "EnemyName_Seeker",
+     "line": 69240,
+     "line_end": 69240,
+     "addr": "3C0B1",
+     "hex": "5365656b6572fc",
+     "us": "Seeker",
+     "en": "Seeker"
+    },
+    {
+     "id": "EnemyName_Hunter",
+     "line": 69241,
+     "line_end": 69241,
+     "addr": "3C0B8",
+     "hex": "48756e746572fc",
+     "us": "Hunter",
+     "en": "Hunter"
+    },
+    {
+     "id": "EnemyName_Killer",
+     "line": 69242,
+     "line_end": 69242,
+     "addr": "3C0BF",
+     "hex": "4b696c6c6572fc",
+     "us": "Killer",
+     "en": "Killer"
+    },
+    {
+     "id": "EnemyName_Roboman",
+     "line": 69243,
+     "line_end": 69243,
+     "addr": "3C0C6",
+     "hex": "526f626f6d616efc",
+     "us": "Roboman",
+     "en": "Roboman"
+    },
+    {
+     "id": "EnemyName_Mechman",
+     "line": 69244,
+     "line_end": 69244,
+     "addr": "3C0CE",
+     "hex": "4d6563686d616efc",
+     "us": "Mechman",
+     "en": "Mechman"
+    },
+    {
+     "id": "EnemyName_Droidman",
+     "line": 69245,
+     "line_end": 69245,
+     "addr": "3C0D6",
+     "hex": "44726f69646d616efc",
+     "us": "Droidman",
+     "en": "Droidman"
+    },
+    {
+     "id": "EnemyName_Fatale",
+     "line": 69246,
+     "line_end": 69246,
+     "addr": "3C0DF",
+     "hex": "466174616c65fc",
+     "us": "Fatale",
+     "en": "Fatale"
+    },
+    {
+     "id": "EnemyName_Morte",
+     "line": 69247,
+     "line_end": 69247,
+     "addr": "3C0E6",
+     "hex": "4d6f727465fc",
+     "us": "Morte",
+     "en": "Morte"
+    },
+    {
+     "id": "EnemyName_Finis",
+     "line": 69248,
+     "line_end": 69248,
+     "addr": "3C0EC",
+     "hex": "46696e6973fc",
+     "us": "Finis",
+     "en": "Finis"
+    },
+    {
+     "id": "EnemyName_Stickle",
+     "line": 69249,
+     "line_end": 69249,
+     "addr": "3C0F2",
+     "hex": "537469636b6c65fc",
+     "us": "Stickle",
+     "en": "Stickle"
+    },
+    {
+     "id": "EnemyName_Twig",
+     "line": 69250,
+     "line_end": 69250,
+     "addr": "3C0FA",
+     "hex": "54776967fc",
+     "us": "Twig",
+     "en": "Twig"
+    },
+    {
+     "id": "EnemyName_Mantis",
+     "line": 69251,
+     "line_end": 69251,
+     "addr": "3C0FF",
+     "hex": "4d616e746973fc",
+     "us": "Mantis",
+     "en": "Mantis"
+    },
+    {
+     "id": "EnemyName_Stix",
+     "line": 69252,
+     "line_end": 69252,
+     "addr": "3C106",
+     "hex": "53746978fc",
+     "us": "Stix",
+     "en": "Stix"
+    },
+    {
+     "id": "EnemyName_Glazstix",
+     "line": 69253,
+     "line_end": 69253,
+     "addr": "3C10B",
+     "hex": "476c617a73746978fc",
+     "us": "Glazstix",
+     "en": "Glazstix"
+    },
+    {
+     "id": "EnemyName_Metlstix",
+     "line": 69254,
+     "line_end": 69254,
+     "addr": "3C114",
+     "hex": "4d65746c73746978fc",
+     "us": "Metlstix",
+     "en": "Metlstix"
+    },
+    {
+     "id": "EnemyName_Twistbot",
+     "line": 69255,
+     "line_end": 69255,
+     "addr": "3C11D",
+     "hex": "5477697374626f74fc",
+     "us": "Twistbot",
+     "en": "Twistbot"
+    },
+    {
+     "id": "EnemyName_Swivlbot",
+     "line": 69256,
+     "line_end": 69256,
+     "addr": "3C126",
+     "hex": "537769766c626f74fc",
+     "us": "Swivlbot",
+     "en": "Swivlbot"
+    },
+    {
+     "id": "EnemyName_Rotabot",
+     "line": 69257,
+     "line_end": 69257,
+     "addr": "3C12F",
+     "hex": "526f7461626f74fc",
+     "us": "Rotabot",
+     "en": "Rotabot"
+    },
+    {
+     "id": "EnemyName_Orb",
+     "line": 69258,
+     "line_end": 69258,
+     "addr": "3C137",
+     "hex": "4f7262fc",
+     "us": "Orb",
+     "en": "Orb"
+    },
+    {
+     "id": "EnemyName_Globe",
+     "line": 69259,
+     "line_end": 69259,
+     "addr": "3C13B",
+     "hex": "476c6f6265fc",
+     "us": "Globe",
+     "en": "Globe"
+    },
+    {
+     "id": "EnemyName_Sphere",
+     "line": 69260,
+     "line_end": 69260,
+     "addr": "3C141",
+     "hex": "537068657265fc",
+     "us": "Sphere",
+     "en": "Sphere"
+    },
+    {
+     "id": "EnemyName_Drake",
+     "line": 69261,
+     "line_end": 69261,
+     "addr": "3C148",
+     "hex": "4472616b65fc",
+     "us": "Drake",
+     "en": "Drake"
+    },
+    {
+     "id": "EnemyName_Dragon",
+     "line": 69262,
+     "line_end": 69262,
+     "addr": "3C14E",
+     "hex": "447261676f6efc",
+     "us": "Dragon",
+     "en": "Dragon"
+    },
+    {
+     "id": "EnemyName_Wyrm",
+     "line": 69263,
+     "line_end": 69263,
+     "addr": "3C155",
+     "hex": "5779726dfc",
+     "us": "Wyrm",
+     "en": "Wyrm"
+    },
+    {
+     "id": "EnemyName_Skeleton",
+     "line": 69264,
+     "line_end": 69264,
+     "addr": "3C15A",
+     "hex": "536b656c65746f6efc",
+     "us": "Skeleton",
+     "en": "Skeleton"
+    },
+    {
+     "id": "EnemyName_Spectre",
+     "line": 69265,
+     "line_end": 69265,
+     "addr": "3C163",
+     "hex": "53706563747265fc",
+     "us": "Spectre",
+     "en": "Spectre"
+    },
+    {
+     "id": "EnemyName_Wraith",
+     "line": 69266,
+     "line_end": 69266,
+     "addr": "3C16B",
+     "hex": "577261697468fc",
+     "us": "Wraith",
+     "en": "Wraith"
+    },
+    {
+     "id": "EnemyName_Grinder",
+     "line": 69267,
+     "line_end": 69267,
+     "addr": "3C172",
+     "hex": "4772696e646572fc",
+     "us": "Grinder",
+     "en": "Grinder"
+    },
+    {
+     "id": "EnemyName_Smasher",
+     "line": 69268,
+     "line_end": 69268,
+     "addr": "3C17A",
+     "hex": "536d6173686572fc",
+     "us": "Smasher",
+     "en": "Smasher"
+    },
+    {
+     "id": "EnemyName_Crusher",
+     "line": 69269,
+     "line_end": 69269,
+     "addr": "3C182",
+     "hex": "43727573686572fc",
+     "us": "Crusher",
+     "en": "Crusher"
+    },
+    {
+     "id": "EnemyName_Clops",
+     "line": 69270,
+     "line_end": 69270,
+     "addr": "3C18A",
+     "hex": "436c6f7073fc",
+     "us": "Clops",
+     "en": "Clops"
+    },
+    {
+     "id": "EnemyName_Biclops",
+     "line": 69271,
+     "line_end": 69271,
+     "addr": "3C190",
+     "hex": "4269636c6f7073fc",
+     "us": "Biclops",
+     "en": "Biclops"
+    },
+    {
+     "id": "EnemyName_Triclops",
+     "line": 69272,
+     "line_end": 69272,
+     "addr": "3C198",
+     "hex": "547269636c6f7073fc",
+     "us": "Triclops",
+     "en": "Triclops"
+    },
+    {
+     "id": "EnemyName_Dogbot",
+     "line": 69273,
+     "line_end": 69273,
+     "addr": "3C1A1",
+     "hex": "446f67626f74fc",
+     "us": "Dogbot",
+     "en": "Dogbot"
+    },
+    {
+     "id": "EnemyName_Feralbot",
+     "line": 69274,
+     "line_end": 69274,
+     "addr": "3C1A8",
+     "hex": "466572616c626f74fc",
+     "us": "Feralbot",
+     "en": "Feralbot"
+    },
+    {
+     "id": "EnemyName_Wolfbot",
+     "line": 69275,
+     "line_end": 69275,
+     "addr": "3C1B1",
+     "hex": "576f6c66626f74fc",
+     "us": "Wolfbot",
+     "en": "Wolfbot"
+    },
+    {
+     "id": "EnemyName_Amazon",
+     "line": 69276,
+     "line_end": 69276,
+     "addr": "3C1B9",
+     "hex": "416d617a6f6efc",
+     "us": "Amazon",
+     "en": "Amazon"
+    },
+    {
+     "id": "EnemyName_Erinye",
+     "line": 69277,
+     "line_end": 69277,
+     "addr": "3C1C0",
+     "hex": "4572696e7965fc",
+     "us": "Erinye",
+     "en": "Erinye"
+    },
+    {
+     "id": "EnemyName_Valkyrie",
+     "line": 69278,
+     "line_end": 69278,
+     "addr": "3C1C7",
+     "hex": "56616c6b79726965fc",
+     "us": "Valkyrie",
+     "en": "Valkyrie"
+    },
+    {
+     "id": "EnemyName_Giant",
+     "line": 69279,
+     "line_end": 69279,
+     "addr": "3C1D0",
+     "hex": "4769616e74fc",
+     "us": "Giant",
+     "en": "Giant"
+    },
+    {
+     "id": "EnemyName_Titan",
+     "line": 69280,
+     "line_end": 69280,
+     "addr": "3C1D6",
+     "hex": "546974616efc",
+     "us": "Titan",
+     "en": "Titan"
+    },
+    {
+     "id": "EnemyName_Colossus",
+     "line": 69281,
+     "line_end": 69281,
+     "addr": "3C1DC",
+     "hex": "436f6c6f73737573fc",
+     "us": "Colossus",
+     "en": "Colossus"
+    },
+    {
+     "id": "EnemyName_Primus",
+     "line": 69282,
+     "line_end": 69282,
+     "addr": "3C1E5",
+     "hex": "5072696d7573fc",
+     "us": "Primus",
+     "en": "Primus"
+    },
+    {
+     "id": "EnemyName_Secundus",
+     "line": 69283,
+     "line_end": 69283,
+     "addr": "3C1EC",
+     "hex": "536563756e647573fc",
+     "us": "Secundus",
+     "en": "Secundus"
+    },
+    {
+     "id": "EnemyName_Tertius",
+     "line": 69284,
+     "line_end": 69284,
+     "addr": "3C1F5",
+     "hex": "54657274697573fc",
+     "us": "Tertius",
+     "en": "Tertius"
+    },
+    {
+     "id": "EnemyName_Lasher",
+     "line": 69285,
+     "line_end": 69285,
+     "addr": "3C1FD",
+     "hex": "4c6173686572fc",
+     "us": "Lasher",
+     "en": "Lasher"
+    },
+    {
+     "id": "EnemyName_Slasher",
+     "line": 69286,
+     "line_end": 69286,
+     "addr": "3C204",
+     "hex": "536c6173686572fc",
+     "us": "Slasher",
+     "en": "Slasher"
+    },
+    {
+     "id": "EnemyName_Gnasher",
+     "line": 69287,
+     "line_end": 69287,
+     "addr": "3C20C",
+     "hex": "476e6173686572fc",
+     "us": "Gnasher",
+     "en": "Gnasher"
+    },
+    {
+     "id": "EnemyName_Doomfly",
+     "line": 69288,
+     "line_end": 69288,
+     "addr": "3C214",
+     "hex": "446f6f6d666c79fc",
+     "us": "Doomfly",
+     "en": "Doomfly"
+    },
+    {
+     "id": "EnemyName_Demonfly",
+     "line": 69289,
+     "line_end": 69289,
+     "addr": "3C21C",
+     "hex": "44656d6f6e666c79fc",
+     "us": "Demonfly",
+     "en": "Demonfly"
+    },
+    {
+     "id": "EnemyName_Deathfly",
+     "line": 69290,
+     "line_end": 69290,
+     "addr": "3C225",
+     "hex": "4465617468666c79fc",
+     "us": "Deathfly",
+     "en": "Deathfly"
+    },
+    {
+     "id": "EnemyName_Blotter",
+     "line": 69291,
+     "line_end": 69291,
+     "addr": "3C22E",
+     "hex": "426c6f74746572fc",
+     "us": "Blotter",
+     "en": "Blotter"
+    },
+    {
+     "id": "EnemyName_Flutter",
+     "line": 69292,
+     "line_end": 69292,
+     "addr": "3C236",
+     "hex": "466c7574746572fc",
+     "us": "Flutter",
+     "en": "Flutter"
+    },
+    {
+     "id": "EnemyName_Splatter",
+     "line": 69293,
+     "line_end": 69293,
+     "addr": "3C23E",
+     "hex": "53706c6174746572fc",
+     "us": "Splatter",
+     "en": "Splatter"
+    },
+    {
+     "id": "EnemyName_Polebot",
+     "line": 69294,
+     "line_end": 69294,
+     "addr": "3C247",
+     "hex": "506f6c65626f74fc",
+     "us": "Polebot",
+     "en": "Polebot"
+    },
+    {
+     "id": "EnemyName_Stickbot",
+     "line": 69295,
+     "line_end": 69295,
+     "addr": "3C24F",
+     "hex": "537469636b626f74fc",
+     "us": "Stickbot",
+     "en": "Stickbot"
+    },
+    {
+     "id": "EnemyName_Wirebot",
+     "line": 69296,
+     "line_end": 69296,
+     "addr": "3C258",
+     "hex": "57697265626f74fc",
+     "us": "Wirebot",
+     "en": "Wirebot"
+    },
+    {
+     "id": "EnemyName_Agribot",
+     "line": 69297,
+     "line_end": 69297,
+     "addr": "3C260",
+     "hex": "41677269626f74fc",
+     "us": "Agribot",
+     "en": "Agribot"
+    },
+    {
+     "id": "EnemyName_Guardbot",
+     "line": 69298,
+     "line_end": 69298,
+     "addr": "3C268",
+     "hex": "4775617264626f74fc",
+     "us": "Guardbot",
+     "en": "Guardbot"
+    },
+    {
+     "id": "EnemyName_Warbot",
+     "line": 69299,
+     "line_end": 69299,
+     "addr": "3C271",
+     "hex": "576172626f74fc",
+     "us": "Warbot",
+     "en": "Warbot"
+    },
+    {
+     "id": "EnemyName_Flopper",
+     "line": 69300,
+     "line_end": 69300,
+     "addr": "3C278",
+     "hex": "466c6f70706572fc",
+     "us": "Flopper",
+     "en": "Flopper"
+    },
+    {
+     "id": "EnemyName_Disker",
+     "line": 69301,
+     "line_end": 69301,
+     "addr": "3C280",
+     "hex": "4469736b6572fc",
+     "us": "Disker",
+     "en": "Disker"
+    },
+    {
+     "id": "EnemyName_Carder",
+     "line": 69302,
+     "line_end": 69302,
+     "addr": "3C287",
+     "hex": "436172646572fc",
+     "us": "Carder",
+     "en": "Carder"
+    },
+    {
+     "id": "EnemyName_Punisher",
+     "line": 69303,
+     "line_end": 69303,
+     "addr": "3C28E",
+     "hex": "50756e6973686572fc",
+     "us": "Punisher",
+     "en": "Punisher"
+    },
+    {
+     "id": "EnemyName_Torturer",
+     "line": 69304,
+     "line_end": 69304,
+     "addr": "3C297",
+     "hex": "546f727475726572fc",
+     "us": "Torturer",
+     "en": "Torturer"
+    },
+    {
+     "id": "EnemyName_Executer",
+     "line": 69305,
+     "line_end": 69305,
+     "addr": "3C2A0",
+     "hex": "4578656375746572fc",
+     "us": "Executer",
+     "en": "Executer"
+    },
+    {
+     "id": "EnemyName_Fatima",
+     "line": 69306,
+     "line_end": 69306,
+     "addr": "3C2A9",
+     "hex": "466174696d61fc",
+     "us": "Fatima",
+     "en": "Fatima"
+    },
+    {
+     "id": "EnemyName_Zafirah",
+     "line": 69307,
+     "line_end": 69307,
+     "addr": "3C2B0",
+     "hex": "5a616669726168fc",
+     "us": "Zafirah",
+     "en": "Zafirah"
+    },
+    {
+     "id": "EnemyName_Khalidah",
+     "line": 69308,
+     "line_end": 69308,
+     "addr": "3C2B8",
+     "hex": "4b68616c69646168fc",
+     "us": "Khalidah",
+     "en": "Khalidah"
+    },
+    {
+     "id": "EnemyName_Watcher",
+     "line": 69309,
+     "line_end": 69309,
+     "addr": "3C2C1",
+     "hex": "57617463686572fc",
+     "us": "Watcher",
+     "en": "Watcher"
+    },
+    {
+     "id": "EnemyName_Defender",
+     "line": 69310,
+     "line_end": 69310,
+     "addr": "3C2C9",
+     "hex": "446566656e646572fc",
+     "us": "Defender",
+     "en": "Defender"
+    },
+    {
+     "id": "EnemyName_Guardian",
+     "line": 69311,
+     "line_end": 69311,
+     "addr": "3C2D2",
+     "hex": "477561726469616efc",
+     "us": "Guardian",
+     "en": "Guardian"
+    },
+    {
+     "id": "EnemyName_Dire",
+     "line": 69312,
+     "line_end": 69312,
+     "addr": "3C2DB",
+     "hex": "44697265fc",
+     "us": "Dire",
+     "en": "Dire"
+    },
+    {
+     "id": "EnemyName_Baneful",
+     "line": 69313,
+     "line_end": 69313,
+     "addr": "3C2E0",
+     "hex": "42616e6566756cfc",
+     "us": "Baneful",
+     "en": "Baneful"
+    },
+    {
+     "id": "EnemyName_Malific",
+     "line": 69314,
+     "line_end": 69314,
+     "addr": "3C2E8",
+     "hex": "4d616c69666963fc",
+     "us": "Malific",
+     "en": "Malific"
+    },
+    {
+     "id": "EnemyName_Conjurer",
+     "line": 69315,
+     "line_end": 69315,
+     "addr": "3C2F0",
+     "hex": "436f6e6a75726572fc",
+     "us": "Conjurer",
+     "en": "Conjurer"
+    },
+    {
+     "id": "EnemyName_Wizard",
+     "line": 69316,
+     "line_end": 69316,
+     "addr": "3C2F9",
+     "hex": "57697a617264fc",
+     "us": "Wizard",
+     "en": "Wizard"
+    },
+    {
+     "id": "EnemyName_Sorcerer",
+     "line": 69317,
+     "line_end": 69317,
+     "addr": "3C300",
+     "hex": "536f726365726572fc",
+     "us": "Sorcerer",
+     "en": "Sorcerer"
+    },
+    {
+     "id": "EnemyName_Goatman",
+     "line": 69318,
+     "line_end": 69318,
+     "addr": "3C309",
+     "hex": "476f61746d616efc",
+     "us": "Goatman",
+     "en": "Goatman"
+    },
+    {
+     "id": "EnemyName_Goatduke",
+     "line": 69319,
+     "line_end": 69319,
+     "addr": "3C311",
+     "hex": "476f617464756b65fc",
+     "us": "Goatduke",
+     "en": "Goatduke"
+    },
+    {
+     "id": "EnemyName_Goatking",
+     "line": 69320,
+     "line_end": 69320,
+     "addr": "3C31A",
+     "hex": "476f61746b696e67fc",
+     "us": "Goatking",
+     "en": "Goatking"
+    },
+    {
+     "id": "EnemyName_Lyle",
+     "line": 69321,
+     "line_end": 69321,
+     "addr": "3C323",
+     "hex": "4c796c65fc",
+     "us": "Lyle",
+     "en": "Lyle"
+    },
+    {
+     "id": "EnemyName_Sari",
+     "line": 69322,
+     "line_end": 69322,
+     "addr": "3C328",
+     "hex": "53617269fc",
+     "us": "Sari",
+     "en": "Sari"
+    },
+    {
+     "id": "EnemyName_Lune",
+     "line": 69323,
+     "line_end": 69323,
+     "addr": "3C32D",
+     "hex": "4c756e65fc",
+     "us": "Lune",
+     "en": "Lune"
+    },
+    {
+     "id": "EnemyName_Kara",
+     "line": 69324,
+     "line_end": 69324,
+     "addr": "3C332",
+     "hex": "4b617261fc",
+     "us": "Kara",
+     "en": "Kara"
+    },
+    {
+     "id": "EnemyName_Siren",
+     "line": 69325,
+     "line_end": 69325,
+     "addr": "3C337",
+     "hex": "536972656efc",
+     "us": "Siren",
+     "en": "Siren"
+    },
+    {
+     "id": "EnemyName_Rulakir",
+     "line": 69326,
+     "line_end": 69326,
+     "addr": "3C33D",
+     "hex": "52756c616b6972fc",
+     "us": "Rulakir",
+     "en": "Rulakir"
+    },
+    {
+     "id": "EnemyName_KingCille",
+     "line": 69327,
+     "line_end": 69327,
+     "addr": "3C345",
+     "hex": "4b696e672043696c6c65fc",
+     "us": "King Cille",
+     "en": "King Cille"
+    },
+    {
+     "id": "EnemyName_RightHand",
+     "line": 69328,
+     "line_end": 69328,
+     "addr": "3C350",
+     "hex": "526967687448616e64fc",
+     "us": "RightHand",
+     "en": "RightHand"
+    },
+    {
+     "id": "EnemyName_LeftHand",
+     "line": 69329,
+     "line_end": 69329,
+     "addr": "3C35A",
+     "hex": "4c6566742048616e64fc",
+     "us": "Left Hand",
+     "en": "Left Hand"
+    },
+    {
+     "id": "EnemyName_Body",
+     "line": 69330,
+     "line_end": 69330,
+     "addr": "3C364",
+     "hex": "426f6479fc",
+     "us": "Body",
+     "en": "Body"
+    }
+   ]
+  },
+  "battle": {
+   "note": "battle messages",
+   "start": "loc_3D8E6",
+   "end": "loc_3DAE0",
+   "runs": [
+    {
+     "id": "battle#000",
+     "line": 70264,
+     "line_end": 70265,
+     "addr": "3D8F2",
+     "hex": "e80020e400fc",
+     "us": "{NAME:00} {NUM:00}",
+     "en": "{NAME:00} {NUM:00}"
+    },
+    {
+     "id": "battle#001",
+     "line": 70267,
+     "line_end": 70268,
+     "addr": "3D8F8",
+     "hex": "e80420e404fc",
+     "us": "{NAME:04} {NUM:04}",
+     "en": "{NAME:04} {NUM:04}"
+    },
+    {
+     "id": "battle#002",
+     "line": 70270,
+     "line_end": 70271,
+     "addr": "3D8FE",
+     "hex": "e80820e408fc",
+     "us": "{NAME:08} {NUM:08}",
+     "en": "{NAME:08} {NUM:08}"
+    },
+    {
+     "id": "battle#003",
+     "line": 70273,
+     "line_end": 70274,
+     "addr": "3D904",
+     "hex": "e80c20e40cfc",
+     "us": "{NAME:0C} {NUM:0C}",
+     "en": "{NAME:0C} {NUM:0C}"
+    },
+    {
+     "id": "battle#004",
+     "line": 70277,
+     "line_end": 70278,
+     "addr": "3D90A",
+     "hex": "596f75277665206265656e20616d62757368656421fc",
+     "us": "You've been ambushed!",
+     "en": "You've been ambushed!"
+    },
+    {
+     "id": "battle#005",
+     "line": 70281,
+     "line_end": 70282,
+     "addr": "3D920",
+     "hex": "596f7520737572707269736520746865206d6f6e73746572fc",
+     "us": "You surprise the monster",
+     "en": "You surprise the monster"
+    },
+    {
+     "id": "battle#006",
+     "line": 70285,
+     "line_end": 70286,
+     "addr": "3D939",
+     "hex": "596f752074727920746f206573636170652e2e2efc",
+     "us": "You try to escape...",
+     "en": "You try to escape..."
+    },
+    {
+     "id": "battle#007",
+     "line": 70289,
+     "line_end": 70290,
+     "addr": "3D94E",
+     "hex": "42757420796f752063616e277420676574206177617921fc",
+     "us": "But you can't get away!",
+     "en": "But you can't get away!"
+    },
+    {
+     "id": "battle#008",
+     "line": 70293,
+     "line_end": 70294,
+     "addr": "3D966",
+     "hex": "e8002061747461636b7321fc",
+     "us": "{NAME:00} attacks!",
+     "en": "{NAME:00} attacks!"
+    },
+    {
+     "id": "battle#009",
+     "line": 70297,
+     "line_end": 70298,
+     "addr": "3D972",
+     "hex": "44616d61676520e400fc",
+     "us": "Damage {NUM:00}",
+     "en": "Damage {NUM:00}"
+    },
+    {
+     "id": "battle#010",
+     "line": 70301,
+     "line_end": 70306,
+     "addr": "3D97C",
+     "hex": "e800277320706172747920776f6e2ef84561726e656420e400205850f8616e6420e404206d65736574612efc",
+     "us": "{NAME:00}'s party won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta.",
+     "en": "{NAME:00}'s party won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta."
+    },
+    {
+     "id": "battle#011",
+     "line": 70309,
+     "line_end": 70314,
+     "addr": "3D9A8",
+     "hex": "e80020776f6e2ef84561726e656420e400205850f8616e6420e404206d65736574612efc",
+     "us": "{NAME:00} won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta.",
+     "en": "{NAME:00} won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta."
+    },
+    {
+     "id": "battle#012",
+     "line": 70317,
+     "line_end": 70318,
+     "addr": "3D9CC",
+     "hex": "e800206761696e65642061206c6576656c21fc",
+     "us": "{NAME:00} gained a level!",
+     "en": "{NAME:00} gained a level!"
+    },
+    {
+     "id": "battle#013",
+     "line": 70321,
+     "line_end": 70322,
+     "addr": "3D9DF",
+     "hex": "e80020686173206e6f20776561706f6e21fc",
+     "us": "{NAME:00} has no weapon!",
+     "en": "{NAME:00} has no weapon!"
+    },
+    {
+     "id": "battle#014",
+     "line": 70325,
+     "line_end": 70326,
+     "addr": "3D9F1",
+     "hex": "e80020646566656e64656420e8042efc",
+     "us": "{NAME:00} defended {NAME:04}.",
+     "en": "{NAME:00} defended {NAME:04}."
+    },
+    {
+     "id": "battle#015",
+     "line": 70329,
+     "line_end": 70330,
+     "addr": "3DA01",
+     "hex": "e800277320646566656e736520696e6372656173642efc",
+     "us": "{NAME:00}'s defense increasd.",
+     "en": "{NAME:00}'s defense increasd."
+    },
+    {
+     "id": "battle#016",
+     "line": 70333,
+     "line_end": 70334,
+     "addr": "3DA18",
+     "hex": "e80020686173206e6f20746563686e69717565732efc",
+     "us": "{NAME:00} has no techniques.",
+     "en": "{NAME:00} has no techniques."
+    },
+    {
+     "id": "battle#017",
+     "line": 70337,
+     "line_end": 70338,
+     "addr": "3DA2E",
+     "hex": "4e6f7420656e6f7567682054656368205074732efc",
+     "us": "Not enough Tech Pts.",
+     "en": "Not enough Tech Pts."
+    },
+    {
+     "id": "battle#018",
+     "line": 70341,
+     "line_end": 70342,
+     "addr": "3DA43",
+     "hex": "596f752063616e27742075736520746861742efc",
+     "us": "You can't use that.",
+     "en": "You can't use that."
+    },
+    {
+     "id": "battle#019",
+     "line": 70345,
+     "line_end": 70346,
+     "addr": "3DA57",
+     "hex": "e800207573656420e8042efc",
+     "us": "{NAME:00} used {NAME:04}.",
+     "en": "{NAME:00} used {NAME:04}."
+    },
+    {
+     "id": "battle#020",
+     "line": 70349,
+     "line_end": 70350,
+     "addr": "3DA63",
+     "hex": "4566666563746976656e65737320697320e4002efc",
+     "us": "Effectiveness is {NUM:00}.",
+     "en": "Effectiveness is {NUM:00}."
+    },
+    {
+     "id": "battle#021",
+     "line": 70353,
+     "line_end": 70354,
+     "addr": "3DA78",
+     "hex": "e8002063616e206e6f206c6f6e676572206669676874fc",
+     "us": "{NAME:00} can no longer fight",
+     "en": "{NAME:00} can no longer fight"
+    },
+    {
+     "id": "battle#022",
+     "line": 70357,
+     "line_end": 70358,
+     "addr": "3DA8F",
+     "hex": "596f752068617665206265656e2064656665617465642efc",
+     "us": "You have been defeated.",
+     "en": "You have been defeated."
+    },
+    {
+     "id": "battle#023",
+     "line": 70361,
+     "line_end": 70362,
+     "addr": "3DAA7",
+     "hex": "e80020686173206265656e20706f69736f6e65642efc",
+     "us": "{NAME:00} has been poisoned.",
+     "en": "{NAME:00} has been poisoned."
+    },
+    {
+     "id": "battle#024",
+     "line": 70365,
+     "line_end": 70366,
+     "addr": "3DABD",
+     "hex": "53756363656564656421fc",
+     "us": "Succeeded!",
+     "en": "Succeeded!"
+    },
+    {
+     "id": "battle#025",
+     "line": 70369,
+     "line_end": 70370,
+     "addr": "3DAC8",
+     "hex": "4661696c656421fc",
+     "us": "Failed!",
+     "en": "Failed!"
+    }
+   ]
+  },
+  "shops": {
+   "note": "shop, inn, church and game-select text",
+   "start": "loc_3DD8A",
+   "end": "loc_3E690",
+   "runs": [
+    {
+     "id": "shops#000",
+     "line": 70525,
+     "line_end": 70526,
+     "addr": "3DD8A",
+     "hex": "4d656c656520546563682efc",
+     "us": "Melee Tech.",
+     "en": "Melee Tech."
+    },
+    {
+     "id": "shops#001",
+     "line": 70529,
+     "line_end": 70530,
+     "addr": "3DD96",
+     "hex": "4f7264657220546563682efc",
+     "us": "Order Tech.",
+     "en": "Order Tech."
+    },
+    {
+     "id": "shops#002",
+     "line": 70533,
+     "line_end": 70534,
+     "addr": "3DDA2",
+     "hex": "4865616c20546563682efc",
+     "us": "Heal Tech.",
+     "en": "Heal Tech."
+    },
+    {
+     "id": "shops#003",
+     "line": 70537,
+     "line_end": 70538,
+     "addr": "3DDAD",
+     "hex": "54696d6520546563682efc",
+     "us": "Time Tech.",
+     "en": "Time Tech."
+    },
+    {
+     "id": "shops#004",
+     "line": 70554,
+     "line_end": 70557,
+     "addr": "3DDC8",
+     "hex": "57656c636f6d6520746f2074686520537570706c79f853686f702e204d617920492068656c7020796f753ffc",
+     "us": "Welcome to the Supply{BR}Shop. May I help you?",
+     "en": "Welcome to the Supply{BR}Shop. May I help you?"
+    },
+    {
+     "id": "shops#005",
+     "line": 70562,
+     "line_end": 70565,
+     "addr": "3DDF4",
+     "hex": "57656c636f6d6520746f2074686520576561706f6ef853686f702e204d617920492068656c7020796f753ffc",
+     "us": "Welcome to the Weapon{BR}Shop. May I help you?",
+     "en": "Welcome to the Weapon{BR}Shop. May I help you?"
+    },
+    {
+     "id": "shops#006",
+     "line": 70570,
+     "line_end": 70573,
+     "addr": "3DE20",
+     "hex": "57656c636f6d6520746f207468652041726d6f72f853686f702e204d617920492068656c7020796f753ffc",
+     "us": "Welcome to the Armor{BR}Shop. May I help you?",
+     "en": "Welcome to the Armor{BR}Shop. May I help you?"
+    },
+    {
+     "id": "shops#007",
+     "line": 70578,
+     "line_end": 70580,
+     "addr": "3DE4C",
+     "hex": "57686f2773206265656e20706f69736f6e65643ff8fc",
+     "us": "Who's been poisoned?{BR}",
+     "en": "Who's been poisoned?{BR}"
+    },
+    {
+     "id": "shops#008",
+     "line": 70585,
+     "line_end": 70588,
+     "addr": "3DE62",
+     "hex": "57686f206e6565647320746f2072656761696e20746865f877696c6c20746f2066696768743ffc",
+     "us": "Who needs to regain the{BR}will to fight?",
+     "en": "Who needs to regain the{BR}will to fight?"
+    },
+    {
+     "id": "shops#009",
+     "line": 70593,
+     "line_end": 70596,
+     "addr": "3DE8A",
+     "hex": "546563686e6971756520646973747269627574696f6ef8636f73747320e400206d65736574612efc",
+     "us": "Technique distribution{BR}costs {NUM:00} meseta.",
+     "en": "Technique distribution{BR}costs {NUM:00} meseta."
+    },
+    {
+     "id": "shops#010",
+     "line": 70601,
+     "line_end": 70604,
+     "addr": "3DEB2",
+     "hex": "537465702072696768742075702120466f7274756e6573f8746f6c6420666f7220e400206d657365746121fc",
+     "us": "Step right up! Fortunes{BR}told for {NUM:00} meseta!",
+     "en": "Step right up! Fortunes{BR}told for {NUM:00} meseta!"
+    },
+    {
+     "id": "shops#011",
+     "line": 70613,
+     "line_end": 70616,
+     "addr": "3DEDF",
+     "hex": "425559f853454cfc",
+     "us": "BUY{BR}SEL",
+     "en": "BUY{BR}SEL"
+    },
+    {
+     "id": "shops#012",
+     "line": 70619,
+     "line_end": 70620,
+     "addr": "3DEE7",
+     "hex": "4d4553fc",
+     "us": "MES",
+     "en": "MES"
+    },
+    {
+     "id": "shops#013",
+     "line": 70623,
+     "line_end": 70626,
+     "addr": "3DEEB",
+     "hex": "5768696368206f66206d79207761726573206d6f7374f8696e7465726573747320796f752c20667269656e64733ffc",
+     "us": "Which of my wares most{BR}interests you, friends?",
+     "en": "Which of my wares most{BR}interests you, friends?"
+    },
+    {
+     "id": "shops#014",
+     "line": 70629,
+     "line_end": 70631,
+     "addr": "3DF1A",
+     "hex": "57686f2077616e747320746f2073656c6c3ff8fc",
+     "us": "Who wants to sell?{BR}",
+     "en": "Who wants to sell?{BR}"
+    },
+    {
+     "id": "shops#015",
+     "line": 70634,
+     "line_end": 70636,
+     "addr": "3DF2E",
+     "hex": "57686174277320666f722073616c653ff8fc",
+     "us": "What's for sale?{BR}",
+     "en": "What's for sale?{BR}"
+    },
+    {
+     "id": "shops#016",
+     "line": 70639,
+     "line_end": 70641,
+     "addr": "3DF40",
+     "hex": "57686f277320676f696e6720746f2063617272792069743ff8fc",
+     "us": "Who's going to carry it?{BR}",
+     "en": "Who's going to carry it?{BR}"
+    },
+    {
+     "id": "shops#017",
+     "line": 70644,
+     "line_end": 70647,
+     "addr": "3DF5A",
+     "hex": "5468616e6b20796f752e204973207468657265f8616e797468696e6720656c73653ffc",
+     "us": "Thank you. Is there{BR}anything else?",
+     "en": "Thank you. Is there{BR}anything else?"
+    },
+    {
+     "id": "shops#018",
+     "line": 70650,
+     "line_end": 70653,
+     "addr": "3DF7D",
+     "hex": "594553f84e4f20fc",
+     "us": "YES{BR}NO ",
+     "en": "YES{BR}NO "
+    },
+    {
+     "id": "shops#019",
+     "line": 70656,
+     "line_end": 70659,
+     "addr": "3DF85",
+     "hex": "536f7272792c20796f7520646f6e27742068617665f8656e6f756768206d65736574612efc",
+     "us": "Sorry, you don't have{BR}enough meseta.",
+     "en": "Sorry, you don't have{BR}enough meseta."
+    },
+    {
+     "id": "shops#020",
+     "line": 70662,
+     "line_end": 70665,
+     "addr": "3DFAA",
+     "hex": "536f7272792c20796f752063616e2774206361727279f8616e79206d6f7265206974656d732efc",
+     "us": "Sorry, you can't carry{BR}any more items.",
+     "en": "Sorry, you can't carry{BR}any more items."
+    },
+    {
+     "id": "shops#021",
+     "line": 70668,
+     "line_end": 70671,
+     "addr": "3DFD1",
+     "hex": "596f752063616e27742075736520746869732e20446ff8796f75207374696c6c2077616e742069743ffc",
+     "us": "You can't use this. Do{BR}you still want it?",
+     "en": "You can't use this. Do{BR}you still want it?"
+    },
+    {
+     "id": "shops#022",
+     "line": 70682,
+     "line_end": 70685,
+     "addr": "3E005",
+     "hex": "54686174277320e400206d65736574612cf84f4b3ffc",
+     "us": "That's {NUM:00} meseta,{BR}OK?",
+     "en": "That's {NUM:00} meseta,{BR}OK?"
+    },
+    {
+     "id": "shops#023",
+     "line": 70688,
+     "line_end": 70690,
+     "addr": "3E01B",
+     "hex": "5468616e6b732c20627574206e6f207468616e6b732ef8fc",
+     "us": "Thanks, but no thanks.{BR}",
+     "en": "Thanks, but no thanks.{BR}"
+    },
+    {
+     "id": "shops#024",
+     "line": 70693,
+     "line_end": 70696,
+     "addr": "3E033",
+     "hex": "536f7272792c2062757420e80020646f65736e2774f86861766520616e797468696e6720746f2073656c6c2efc",
+     "us": "Sorry, but {NAME:00} doesn't{BR}have anything to sell.",
+     "en": "Sorry, but {NAME:00} doesn't{BR}have anything to sell."
+    },
+    {
+     "id": "shops#025",
+     "line": 70699,
+     "line_end": 70702,
+     "addr": "3E060",
+     "hex": "476f20617761793b20796f75277265207374617274696e67f8746f20676574206f6e206d79206e657276657321fc",
+     "us": "Go away; you're starting{BR}to get on my nerves!",
+     "en": "Go away; you're starting{BR}to get on my nerves!"
+    },
+    {
+     "id": "shops#026",
+     "line": 70705,
+     "line_end": 70708,
+     "addr": "3E08E",
+     "hex": "5468617427732077686174204920736565206f66f8796f7572206675747572652e2054616b65206865656421fc",
+     "us": "That's what I see of{BR}your future. Take heed!",
+     "en": "That's what I see of{BR}your future. Take heed!"
+    },
+    {
+     "id": "shops#027",
+     "line": 70711,
+     "line_end": 70714,
+     "addr": "3E0BB",
+     "hex": "4120676f6f64206e6967687427732072657374f8636f73747320e400206d65736574612efc",
+     "us": "A good night's rest{BR}costs {NUM:00} meseta.",
+     "en": "A good night's rest{BR}costs {NUM:00} meseta."
+    },
+    {
+     "id": "shops#028",
+     "line": 70717,
+     "line_end": 70719,
+     "addr": "3E0E0",
+     "hex": "536f7272792c206e6f20667265656269657321f8fc",
+     "us": "Sorry, no freebies!{BR}",
+     "en": "Sorry, no freebies!{BR}"
+    },
+    {
+     "id": "shops#029",
+     "line": 70722,
+     "line_end": 70724,
+     "addr": "3E0F5",
+     "hex": "4f4b20746f207361766520746869732067616d653ff8fc",
+     "us": "OK to save this game?{BR}",
+     "en": "OK to save this game?{BR}"
+    },
+    {
+     "id": "shops#030",
+     "line": 70727,
+     "line_end": 70729,
+     "addr": "3E10C",
+     "hex": "4265206361726566756c206f75742074686572652ef8fc",
+     "us": "Be careful out there.{BR}",
+     "en": "Be careful out there.{BR}"
+    },
+    {
+     "id": "shops#031",
+     "line": 70732,
+     "line_end": 70735,
+     "addr": "3E123",
+     "hex": "e80020686173206e6f74206265656ef8706f69736f6e65642efc",
+     "us": "{NAME:00} has not been{BR}poisoned.",
+     "en": "{NAME:00} has not been{BR}poisoned."
+    },
+    {
+     "id": "shops#032",
+     "line": 70738,
+     "line_end": 70741,
+     "addr": "3E13D",
+     "hex": "492063616e206375726520796f7520666f7220f8e400206d65736574612efc",
+     "us": "I can cure you for {BR}{NUM:00} meseta.",
+     "en": "I can cure you for {BR}{NUM:00} meseta."
+    },
+    {
+     "id": "shops#033",
+     "line": 70744,
+     "line_end": 70747,
+     "addr": "3E15C",
+     "hex": "536f727279204920636f756c646e2774206265206f66f86d6f72652068656c7020746f20796f752efc",
+     "us": "Sorry I couldn't be of{BR}more help to you.",
+     "en": "Sorry I couldn't be of{BR}more help to you."
+    },
+    {
+     "id": "shops#034",
+     "line": 70750,
+     "line_end": 70752,
+     "addr": "3E185",
+     "hex": "536f7272792c20492063616e27742068656c7020796f752ef8fc",
+     "us": "Sorry, I can't help you.{BR}",
+     "en": "Sorry, I can't help you.{BR}"
+    },
+    {
+     "id": "shops#035",
+     "line": 70755,
+     "line_end": 70758,
+     "addr": "3E19F",
+     "hex": "4265206361726566756c2d2d64616e676572206c75726b73f86576657279776865726521fc",
+     "us": "Be careful--danger lurks{BR}everywhere!",
+     "en": "Be careful--danger lurks{BR}everywhere!"
+    },
+    {
+     "id": "shops#036",
+     "line": 70761,
+     "line_end": 70764,
+     "addr": "3E1C4",
+     "hex": "e80020646f6573206e6f74206e656564206d79f873657276696365732efc",
+     "us": "{NAME:00} does not need my{BR}services.",
+     "en": "{NAME:00} does not need my{BR}services."
+    },
+    {
+     "id": "shops#037",
+     "line": 70767,
+     "line_end": 70770,
+     "addr": "3E1E2",
+     "hex": "4d7920736572766963657320636f737420f8e400206d65736574612efc",
+     "us": "My services cost {BR}{NUM:00} meseta.",
+     "en": "My services cost {BR}{NUM:00} meseta."
+    },
+    {
+     "id": "shops#038",
+     "line": 70771,
+     "line_end": 70774,
+     "addr": "3E1FF",
+     "hex": "57686f7365205465636820446973747269627574696f6ef86e6565647320746f20626520616c74657265643ffc",
+     "us": "Whose Tech Distribution{BR}needs to be altered?",
+     "en": "Whose Tech Distribution{BR}needs to be altered?"
+    },
+    {
+     "id": "shops#039",
+     "line": 70777,
+     "line_end": 70780,
+     "addr": "3E22C",
+     "hex": "536f7272792c2062757420796f7520646f6e2774f86861766520656e6f756768206d65736574612efc",
+     "us": "Sorry, but you don't{BR}have enough meseta.",
+     "en": "Sorry, but you don't{BR}have enough meseta."
+    },
+    {
+     "id": "shops#040",
+     "line": 70783,
+     "line_end": 70786,
+     "addr": "3E255",
+     "hex": "57686f7365205465636820446973747269627574696f6ef86e6565647320746f20626520616c74657265643ffc",
+     "us": "Whose Tech Distribution{BR}needs to be altered?",
+     "en": "Whose Tech Distribution{BR}needs to be altered?"
+    },
+    {
+     "id": "shops#041",
+     "line": 70789,
+     "line_end": 70792,
+     "addr": "3E282",
+     "hex": "e8002063616e27742075736520616e79f8746563686e69717565732efc",
+     "us": "{NAME:00} can't use any{BR}techniques.",
+     "en": "{NAME:00} can't use any{BR}techniques."
+    },
+    {
+     "id": "shops#042",
+     "line": 70795,
+     "line_end": 70797,
+     "addr": "3E29F",
+     "hex": "576869636820746563686e697175653ff8fc",
+     "us": "Which technique?{BR}",
+     "en": "Which technique?{BR}"
+    },
+    {
+     "id": "shops#043",
+     "line": 70800,
+     "line_end": 70802,
+     "addr": "3E2B1",
+     "hex": "506c65617365206265206361726566756c2ef8fc",
+     "us": "Please be careful.{BR}",
+     "en": "Please be careful.{BR}"
+    },
+    {
+     "id": "shops#044",
+     "line": 70805,
+     "line_end": 70808,
+     "addr": "3E2C5",
+     "hex": "446f20796f75207769736820746f207361766520796f7572f867616d6520696e20706f736974696f6e2031206f7220323ffc",
+     "us": "Do you wish to save your{BR}game in position 1 or 2?",
+     "en": "Do you wish to save your{BR}game in position 1 or 2?"
+    },
+    {
+     "id": "shops#045",
+     "line": 70811,
+     "line_end": 70814,
+     "addr": "3E2F7",
+     "hex": "4973206974204f4b20746f20657261736520746865f870726576696f75732067616d6520696e20e4003ffc",
+     "us": "Is it OK to erase the{BR}previous game in {NUM:00}?",
+     "en": "Is it OK to erase the{BR}previous game in {NUM:00}?"
+    },
+    {
+     "id": "shops#046",
+     "line": 70817,
+     "line_end": 70819,
+     "addr": "3E322",
+     "hex": "536176656420e8002c204c56e40020696e20e4082ef8fc",
+     "us": "Saved {NAME:00}, LV{NUM:00} in {NUM:08}.{BR}",
+     "en": "Saved {NAME:00}, LV{NUM:00} in {NUM:08}.{BR}"
+    },
+    {
+     "id": "shops#047",
+     "line": 70822,
+     "line_end": 70824,
+     "addr": "3E339",
+     "hex": "536176656420e8042c204c56e40420696e20e4082ef8fc",
+     "us": "Saved {NAME:04}, LV{NUM:04} in {NUM:08}.{BR}",
+     "en": "Saved {NAME:04}, LV{NUM:04} in {NUM:08}.{BR}"
+    },
+    {
+     "id": "shops#048",
+     "line": 70827,
+     "line_end": 70829,
+     "addr": "3E350",
+     "hex": "436865636b696e672073617665642067616d65732ef8fc",
+     "us": "Checking saved games.{BR}",
+     "en": "Checking saved games.{BR}"
+    },
+    {
+     "id": "shops#049",
+     "line": 70832,
+     "line_end": 70835,
+     "addr": "3E367",
+     "hex": "4e6f2067616d6520736176656420696ef8706f736974696f6e20e4002efc",
+     "us": "No game saved in{BR}position {NUM:00}.",
+     "en": "No game saved in{BR}position {NUM:00}."
+    },
+    {
+     "id": "shops#050",
+     "line": 70838,
+     "line_end": 70840,
+     "addr": "3E385",
+     "hex": "53617665642067616d6520e4002069732066696e652ef8fc",
+     "us": "Saved game {NUM:00} is fine.{BR}",
+     "en": "Saved game {NUM:00} is fine.{BR}"
+    },
+    {
+     "id": "shops#051",
+     "line": 70843,
+     "line_end": 70846,
+     "addr": "3E39D",
+     "hex": "547279696e6720746f207265706169722061f864656665637420696e2067616d6520e4002efc",
+     "us": "Trying to repair a{BR}defect in game {NUM:00}.",
+     "en": "Trying to repair a{BR}defect in game {NUM:00}."
+    },
+    {
+     "id": "shops#052",
+     "line": 70849,
+     "line_end": 70852,
+     "addr": "3E3C3",
+     "hex": "5375636365737366756c6c79207265706169726564f873617665642067616d652efc",
+     "us": "Successfully repaired{BR}saved game.",
+     "en": "Successfully repaired{BR}saved game."
+    },
+    {
+     "id": "shops#053",
+     "line": 70855,
+     "line_end": 70858,
+     "addr": "3E3E5",
+     "hex": "4661696c656420746f20726570616972f873617665642067616d652efc",
+     "us": "Failed to repair{BR}saved game.",
+     "en": "Failed to repair{BR}saved game."
+    },
+    {
+     "id": "shops#054",
+     "line": 70861,
+     "line_end": 70866,
+     "addr": "3E402",
+     "hex": "436f6e74696e75652067616d65f85374617274206e65772067616d65f845726173652073617665642067616d65fc",
+     "us": "Continue game{BR}Start new game{BR}Erase saved game",
+     "en": "Continue game{BR}Start new game{BR}Erase saved game"
+    },
+    {
+     "id": "shops#055",
+     "line": 70869,
+     "line_end": 70871,
+     "addr": "3E430",
+     "hex": "45726173652077686963682067616d653ff8fc",
+     "us": "Erase which game?{BR}",
+     "en": "Erase which game?{BR}"
+    },
+    {
+     "id": "shops#056",
+     "line": 70874,
+     "line_end": 70877,
+     "addr": "3E443",
+     "hex": "312ee800204c56e400f8322ee804204c56e404fc",
+     "us": "1.{NAME:00} LV{NUM:00}{BR}2.{NAME:04} LV{NUM:04}",
+     "en": "1.{NAME:00} LV{NUM:00}{BR}2.{NAME:04} LV{NUM:04}"
+    },
+    {
+     "id": "shops#057",
+     "line": 70880,
+     "line_end": 70883,
+     "addr": "3E457",
+     "hex": "446f20796f75207265616c6c792077616e7420f8e8002c204c56e400206572617365643ffc",
+     "us": "Do you really want {BR}{NAME:00}, LV{NUM:00} erased?",
+     "en": "Do you really want {BR}{NAME:00}, LV{NUM:00} erased?"
+    },
+    {
+     "id": "shops#058",
+     "line": 70886,
+     "line_end": 70889,
+     "addr": "3E47C",
+     "hex": "e8002c204c56e40020686173206265656ef86572617365642efc",
+     "us": "{NAME:00}, LV{NUM:00} has been{BR}erased.",
+     "en": "{NAME:00}, LV{NUM:00} has been{BR}erased."
+    },
+    {
+     "id": "shops#059",
+     "line": 70892,
+     "line_end": 70895,
+     "addr": "3E496",
+     "hex": "446f20796f75207265616c6c792077616e7420f8e8042c204c56e404206572617365643ffc",
+     "us": "Do you really want {BR}{NAME:04}, LV{NUM:04} erased?",
+     "en": "Do you really want {BR}{NAME:04}, LV{NUM:04} erased?"
+    },
+    {
+     "id": "shops#060",
+     "line": 70898,
+     "line_end": 70901,
+     "addr": "3E4BB",
+     "hex": "e8042c204c56e40420686173206265656ef86572617365642efc",
+     "us": "{NAME:04}, LV{NUM:04} has been{BR}erased.",
+     "en": "{NAME:04}, LV{NUM:04} has been{BR}erased."
+    },
+    {
+     "id": "shops#061",
+     "line": 70904,
+     "line_end": 70907,
+     "addr": "3E4D5",
+     "hex": "536176696e672061206e65772067616d65206d65616e73f865726173696e6720616e206f6c642067616d652e204f4b3ffc",
+     "us": "Saving a new game means{BR}erasing an old game. OK?",
+     "en": "Saving a new game means{BR}erasing an old game. OK?"
+    },
+    {
+     "id": "shops#062",
+     "line": 70910,
+     "line_end": 70913,
+     "addr": "3E506",
+     "hex": "57686963682067616d6520646f20796f752077697368f8746f20636f6e74696e75653ffc",
+     "us": "Which game do you wish{BR}to continue?",
+     "en": "Which game do you wish{BR}to continue?"
+    },
+    {
+     "id": "shops#063",
+     "line": 70916,
+     "line_end": 70919,
+     "addr": "3E52A",
+     "hex": "53656c656374206d657373616765207363726f6c6c696e67f873706565642efc",
+     "us": "Select message scrolling{BR}speed.",
+     "en": "Select message scrolling{BR}speed."
+    },
+    {
+     "id": "shops#064",
+     "line": 70922,
+     "line_end": 70923,
+     "addr": "3E54A",
+     "hex": "536c6f772031203220332034203520362037203820392046617374fc",
+     "us": "Slow 1 2 3 4 5 6 7 8 9 Fast",
+     "en": "Slow 1 2 3 4 5 6 7 8 9 Fast"
+    },
+    {
+     "id": "shops#065",
+     "line": 70926,
+     "line_end": 70927,
+     "addr": "3E566",
+     "hex": "312ee800204c56e400fc",
+     "us": "1.{NAME:00} LV{NUM:00}",
+     "en": "1.{NAME:00} LV{NUM:00}"
+    },
+    {
+     "id": "shops#066",
+     "line": 70930,
+     "line_end": 70931,
+     "addr": "3E570",
+     "hex": "322ee804204c56e404fc",
+     "us": "2.{NAME:04} LV{NUM:04}",
+     "en": "2.{NAME:04} LV{NUM:04}"
+    },
+    {
+     "id": "shops#067",
+     "line": 70934,
+     "line_end": 70935,
+     "addr": "3E57A",
+     "hex": "312efc",
+     "us": "1.",
+     "en": "1."
+    },
+    {
+     "id": "shops#068",
+     "line": 70938,
+     "line_end": 70939,
+     "addr": "3E57D",
+     "hex": "322efc",
+     "us": "2.",
+     "en": "2."
+    }
+   ]
+  }
+ }
+}

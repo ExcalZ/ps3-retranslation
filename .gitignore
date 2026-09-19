@@ -1,0 +1,48 @@
+# ---- Never commit game data ------------------------------------------
+# ROM images, in any wrapper. The JP dump in this folder is named .md (Mega Drive),
+# so that extension is excluded here too - keep Markdown in docs/ and work/ as *.markdown
+# is not used; the README is whitelisted below.
+*.bin
+*.gen
+*.smd
+*.SMD
+*.md
+!README.md
+!docs/*.md
+!work/*.md
+*.bps
+*.ips
+PSIII_Disasm/ps3original.bin
+PSIII_Disasm/ps3built.bin
+PSIII_Disasm/ps3built.prev.bin
+
+# Generated tables the assembler includes are kept (they are small and the
+# build compares them against a fresh generation).
+!PSIII_Disasm/vwf/*.bin
+
+# Emulator savestates and memory dumps contain the game's RAM/VRAM.
+*.state
+*.exs
+work/state/
+work/analysis/*.png
+
+# ---- Third-party binaries: link to them, do not vendor them ------------
+blastem-win32-*/
+flips/
+Exodus_*/
+
+# ---- Build products ---------------------------------------------------
+PSIII_Disasm/ps3.p
+PSIII_Disasm/ps3.h
+PSIII_Disasm/ps3.log
+*.lst
+release/PS3_Retranslation_v*/
+release/*.zip
+
+# ---- Editor and interpreter litter ------------------------------------
+__pycache__/
+*.pyc
+*.bak
+Thumbs.db
+.DS_Store
+.claude/
