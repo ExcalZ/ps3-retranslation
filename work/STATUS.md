@@ -12,10 +12,10 @@ the three requested extras are in and verified, and the tests, the
 proofreader and the release packaging exist. **No line has been translated
 yet**: every `en` equals the US text. The translation pass is the next job.
 
-Canonical experimental ROM `ps3en.bin` (all options on except
-`four_save_slots`): 789,632 bytes; the SHA-256 is printed by
-`tools/checkbuild.py` and recorded in the git log of each build.
-Stock US ROM (every option 0 reproduces it): 786,432 bytes, SHA-256
+Canonical experimental ROM `ps3en.bin` (every option on): 790,666 bytes;
+`tools/checkbuild.py` prints its SHA-256 after each build.
+Stock US ROM (every option 0 and every `en` equal to `us` reproduces it -
+verified 2026-09-19 after the save-slot work): 786,432 bytes, SHA-256
 `CB837A2B10B8D219D844A55D8EC25581A57152F5EE8361AB62389354170A21D5`, CRC32
 `C6B42B0F`, internal checksum `3A33`.
 
@@ -98,7 +98,9 @@ python work/scripts/saveslots.py           # BlastEm: inn save into slot 3, rese
 python work/scripts/saveslots2.py          # BlastEm: two saves, continue/erase lists
 ```
 
-To reproduce the stock ROM: set every option in `ps3.options.asm` to 0,
+To reproduce the stock ROM: set every option in `ps3.options.asm` to 0 and
+every `en` to its `us` (three `en` fields differ today: the two re-flowed
+battle "won" messages and the save-position prompt),
 `python tools/sourcebuild.py stock.bin`, compare with `PSIII_Disasm/ps3original.bin`.
 
 `work/scripts/battle.py` leaves Landen through its real exit (`teleport`
