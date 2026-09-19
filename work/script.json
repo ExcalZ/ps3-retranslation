@@ -643,7 +643,8 @@
      "addr": "1E039",
      "hex": "4d696575fc",
      "us": "Mieu",
-     "en": "Mieu"
+     "en": "Mieu",
+     "jp": "ミュー"
     },
     {
      "id": "charnames#001",
@@ -652,7 +653,8 @@
      "addr": "1E073",
      "hex": "5772656efc",
      "us": "Wren",
-     "en": "Wren"
+     "en": "Wren",
+     "jp": "シーレン"
     },
     {
      "id": "charnames#002",
@@ -661,7 +663,8 @@
      "addr": "1E0D3",
      "hex": "52687973fc",
      "us": "Rhys",
-     "en": "Rhys"
+     "en": "Rhys",
+     "jp": "ケイン"
     },
     {
      "id": "charnames#003",
@@ -670,7 +673,8 @@
      "addr": "1E10B",
      "hex": "4c796c65fc",
      "us": "Lyle",
-     "en": "Lyle"
+     "en": "Lyle",
+     "jp": "ライル"
     },
     {
      "id": "charnames#004",
@@ -679,7 +683,8 @@
      "addr": "1E147",
      "hex": "4c656e61fc",
      "us": "Lena",
-     "en": "Lena"
+     "en": "Lena",
+     "jp": "リナ"
     },
     {
      "id": "charnames#005",
@@ -688,7 +693,8 @@
      "addr": "1E183",
      "hex": "4e69616cfc",
      "us": "Nial",
-     "en": "Nial"
+     "en": "Nial",
+     "jp": "レイン"
     },
     {
      "id": "charnames#006",
@@ -697,7 +703,8 @@
      "addr": "1E1C5",
      "hex": "4c617961fc",
      "us": "Laya",
-     "en": "Laya"
+     "en": "Laya",
+     "jp": "ライア"
     },
     {
      "id": "charnames#007",
@@ -706,7 +713,8 @@
      "addr": "1E201",
      "hex": "4777796efc",
      "us": "Gwyn",
-     "en": "Gwyn"
+     "en": "Gwyn",
+     "jp": "ライア"
     },
     {
      "id": "charnames#008",
@@ -715,7 +723,8 @@
      "addr": "1E23F",
      "hex": "5279616efc",
      "us": "Ryan",
-     "en": "Ryan"
+     "en": "Ryan",
+     "jp": "ダン"
     },
     {
      "id": "charnames#009",
@@ -724,7 +733,8 @@
      "addr": "1E2BD",
      "hex": "53617269fc",
      "us": "Sari",
-     "en": "Sari"
+     "en": "Sari",
+     "jp": "リン"
     },
     {
      "id": "charnames#010",
@@ -733,7 +743,8 @@
      "addr": "1E2FB",
      "hex": "54686561fc",
      "us": "Thea",
-     "en": "Thea"
+     "en": "Thea",
+     "jp": "ラン"
     },
     {
      "id": "charnames#011",
@@ -742,7 +753,8 @@
      "addr": "1E337",
      "hex": "4164616efc",
      "us": "Adan",
-     "en": "Adan"
+     "en": "Adan",
+     "jp": "フイン"
     },
     {
      "id": "charnames#012",
@@ -751,7 +763,8 @@
      "addr": "1E37F",
      "hex": "4b617261fc",
      "us": "Kara",
-     "en": "Kara"
+     "en": "Kara",
+     "jp": "ルナ"
     },
     {
      "id": "charnames#013",
@@ -760,7 +773,8 @@
      "addr": "1E3BB",
      "hex": "4b617261fc",
      "us": "Kara",
-     "en": "Kara"
+     "en": "Kara",
+     "jp": "ルナ"
     },
     {
      "id": "charnames#014",
@@ -769,7 +783,8 @@
      "addr": "1E3F7",
      "hex": "41726f6efc",
      "us": "Aron",
-     "en": "Aron"
+     "en": "Aron",
+     "jp": "ルイン"
     },
     {
      "id": "charnames#015",
@@ -778,7 +793,8 @@
      "addr": "1E441",
      "hex": "43727973fc",
      "us": "Crys",
-     "en": "Crys"
+     "en": "Crys",
+     "jp": "ノイン"
     },
     {
      "id": "charnames#016",
@@ -787,7 +803,8 @@
      "addr": "1E487",
      "hex": "5365616efc",
      "us": "Sean",
-     "en": "Sean"
+     "en": "Sean",
+     "jp": "シーン"
     }
    ]
   },
@@ -803,7 +820,8 @@
      "addr": "1F6CE",
      "hex": "204974656df820546563686e6971f8205374617473f8204571756970fc",
      "us": " Item{BR} Techniq{BR} Stats{BR} Equip",
-     "en": " Item{BR} Techniq{BR} Stats{BR} Equip"
+     "en": " Item{BR} Techniq{BR} Stats{BR} Equip",
+     "jp": "アイテム{BR} テクニック{BR} つよさ{BR} そうび"
     },
     {
      "id": "menus#001",
@@ -812,7 +830,8 @@
      "addr": "1F6EB",
      "hex": "20537769746368fc",
      "us": " Switch",
-     "en": " Switch"
+     "en": " Switch",
+     "jp": "ならびかえ"
     },
     {
      "id": "menus#002",
@@ -821,7 +840,8 @@
      "addr": "1F732",
      "hex": "57686f73653ffc",
      "us": "Whose?",
-     "en": "Whose?"
+     "en": "Whose?",
+     "jp": "お{FF}{FF}{27}7{FF}{FF}HU{FF}{FF}Hメ　　0　1　2　3　4　　A6H6き69　W　ヤ　！　、　5　3　ろ0CH　だれの ？"
     },
     {
      "id": "menus#003",
@@ -830,7 +850,8 @@
      "addr": "1F73E",
      "hex": "57686f3ffc",
      "us": "Who?",
-     "en": "Who?"
+     "en": "Who?",
+     "jp": "だれが ？"
     },
     {
      "id": "menus#004",
@@ -839,7 +860,8 @@
      "addr": "1F748",
      "hex": "2020576861743ffc",
      "us": "  What?",
-     "en": "  What?"
+     "en": "  What?",
+     "jp": "なにを ？"
     },
     {
      "id": "menus#005",
@@ -848,7 +870,8 @@
      "addr": "1F754",
      "hex": "20546f57686f6d3ff8f8fc",
      "us": " ToWhom?{BR}{BR}",
-     "en": " ToWhom?{BR}{BR}"
+     "en": " ToWhom?{BR}{BR}",
+     "jp": "だれに ？{BR}{BR}"
     },
     {
      "id": "menus#006",
@@ -857,7 +880,8 @@
      "addr": "1F764",
      "hex": "20557365f82047697665f82044697363617264fc",
      "us": " Use{BR} Give{BR} Discard",
-     "en": " Use{BR} Give{BR} Discard"
+     "en": " Use{BR} Give{BR} Discard",
+     "jp": "つかう{BR} わたす{BR} すてる"
     },
     {
      "id": "menus#007",
@@ -866,7 +890,8 @@
      "addr": "1F77C",
      "hex": "f8f8fc",
      "us": "{BR}{BR}",
-     "en": "{BR}{BR}"
+     "en": "{BR}{BR}",
+     "jp": "{BR}{BR}"
     },
     {
      "id": "menus#008",
@@ -875,7 +900,8 @@
      "addr": "1F78E",
      "hex": "4669727374fc",
      "us": "First",
-     "en": "First"
+     "en": "First",
+     "jp": "いちばんめ"
     },
     {
      "id": "menus#009",
@@ -884,7 +910,8 @@
      "addr": "1F798",
      "hex": "5365636f6e64fc",
      "us": "Second",
-     "en": "Second"
+     "en": "Second",
+     "jp": "にばんめ"
     },
     {
      "id": "menus#010",
@@ -893,7 +920,8 @@
      "addr": "1F7A4",
      "hex": "5468697264fc",
      "us": "Third",
-     "en": "Third"
+     "en": "Third",
+     "jp": "さんばんめ"
     },
     {
      "id": "menus#011",
@@ -902,7 +930,8 @@
      "addr": "1F7AE",
      "hex": "466f75727468fc",
      "us": "Fourth",
-     "en": "Fourth"
+     "en": "Fourth",
+     "jp": "よんばんめ"
     },
     {
      "id": "menus#012",
@@ -911,7 +940,8 @@
      "addr": "1F7BA",
      "hex": "4669667468fc",
      "us": "Fifth",
-     "en": "Fifth"
+     "en": "Fifth",
+     "jp": "ごばんめ"
     },
     {
      "id": "menus#013",
@@ -920,7 +950,8 @@
      "addr": "1F7C4",
      "hex": "48656164f8f8522048616e64f8f84c2048616e64fc",
      "us": "Head{BR}{BR}R Hand{BR}{BR}L Hand",
-     "en": "Head{BR}{BR}R Hand{BR}{BR}L Hand"
+     "en": "Head{BR}{BR}R Hand{BR}{BR}L Hand",
+     "jp": "あたま{BR}{BR}みぎて{BR}{BR}ひだりて"
     },
     {
      "id": "menus#014",
@@ -929,7 +960,8 @@
      "addr": "1F7DE",
      "hex": "546f72736ff8f846656574f8f84275636b6c65fc",
      "us": "Torso{BR}{BR}Feet{BR}{BR}Buckle",
-     "en": "Torso{BR}{BR}Feet{BR}{BR}Buckle"
+     "en": "Torso{BR}{BR}Feet{BR}{BR}Buckle",
+     "jp": "むね{BR}{BR}あし{BR}{BR}うでわ"
     },
     {
      "id": "menus#015",
@@ -938,7 +970,8 @@
      "addr": "1F7F6",
      "hex": "44616d616765f8f8446566656e7365f8f85370656564fc",
      "us": "Damage{BR}{BR}Defense{BR}{BR}Speed",
-     "en": "Damage{BR}{BR}Defense{BR}{BR}Speed"
+     "en": "Damage{BR}{BR}Defense{BR}{BR}Speed",
+     "jp": "こうげきりょく{BR}{BR}しゅびりょく{BR}{BR}すばやさ"
     },
     {
      "id": "menus#016",
@@ -947,7 +980,8 @@
      "addr": "1F81A",
      "hex": "4c6576656cf8f85850f8f852657164205850fc",
      "us": "Level{BR}{BR}XP{BR}{BR}Reqd XP",
-     "en": "Level{BR}{BR}XP{BR}{BR}Reqd XP"
+     "en": "Level{BR}{BR}XP{BR}{BR}Reqd XP",
+     "jp": "レベル{BR}{BR}けいけんち{BR}{BR}レベルアップ"
     },
     {
      "id": "menus#017",
@@ -956,7 +990,8 @@
      "addr": "1F832",
      "hex": "5370656564f8f844616d616765f8f8446566656e7365fc",
      "us": "Speed{BR}{BR}Damage{BR}{BR}Defense",
-     "en": "Speed{BR}{BR}Damage{BR}{BR}Defense"
+     "en": "Speed{BR}{BR}Damage{BR}{BR}Defense",
+     "jp": "すばやさ{BR}{BR}こうげきりょく{BR}{BR}しゅびりょく"
     },
     {
      "id": "menus#018",
@@ -965,7 +1000,8 @@
      "addr": "1F84E",
      "hex": "496e74656cf8f85374616d696e61f8fc",
      "us": "Intel{BR}{BR}Stamina{BR}",
-     "en": "Intel{BR}{BR}Stamina{BR}"
+     "en": "Intel{BR}{BR}Stamina{BR}",
+     "jp": "かしこさ{BR}{BR}たいりょく{BR}"
     },
     {
      "id": "menus#019",
@@ -974,7 +1010,8 @@
      "addr": "1F862",
      "hex": "4c75636bf8f8536b696c6cfc",
      "us": "Luck{BR}{BR}Skill",
-     "en": "Luck{BR}{BR}Skill"
+     "en": "Luck{BR}{BR}Skill",
+     "jp": "こううん{BR}{BR}きようさ"
     },
     {
      "id": "menus#020",
@@ -983,7 +1020,8 @@
      "addr": "1F892",
      "hex": "466f69fc",
      "us": "Foi",
-     "en": "Foi"
+     "en": "Foi",
+     "jp": "イ　シ　ツ　ハ　ミ　ヨ　ィ　{9E}　ヤ　　フォイエ"
     },
     {
      "id": "menus#021",
@@ -992,7 +1030,8 @@
      "addr": "1F89A",
      "hex": "5a616efc",
      "us": "Zan",
-     "en": "Zan"
+     "en": "Zan",
+     "jp": "ザン"
     },
     {
      "id": "menus#022",
@@ -1001,7 +1040,8 @@
      "addr": "1F8A2",
      "hex": "477261fc",
      "us": "Gra",
-     "en": "Gra"
+     "en": "Gra",
+     "jp": "グラブト"
     },
     {
      "id": "menus#023",
@@ -1010,7 +1050,8 @@
      "addr": "1F8AA",
      "hex": "547375fc",
      "us": "Tsu",
-     "en": "Tsu"
+     "en": "Tsu",
+     "jp": "バータ"
     },
     {
      "id": "menus#024",
@@ -1019,7 +1060,8 @@
      "addr": "1F8B2",
      "hex": "526573fc",
      "us": "Res",
-     "en": "Res"
+     "en": "Res",
+     "jp": "サンフォース"
     },
     {
      "id": "menus#025",
@@ -1028,7 +1070,8 @@
      "addr": "1F8BA",
      "hex": "4769726573fc",
      "us": "Gires",
-     "en": "Gires"
+     "en": "Gires",
+     "jp": "スターフォース"
     },
     {
      "id": "menus#026",
@@ -1037,7 +1080,8 @@
      "addr": "1F8C4",
      "hex": "5265766572fc",
      "us": "Rever",
-     "en": "Rever"
+     "en": "Rever",
+     "jp": "ムーンフォース"
     },
     {
      "id": "menus#027",
@@ -1046,7 +1090,8 @@
      "addr": "1F8CE",
      "hex": "416e7469fc",
      "us": "Anti",
-     "en": "Anti"
+     "en": "Anti",
+     "jp": "シーフォース"
     },
     {
      "id": "menus#028",
@@ -1055,7 +1100,8 @@
      "addr": "1F8D8",
      "hex": "4e6572fc",
      "us": "Ner",
-     "en": "Ner"
+     "en": "Ner",
+     "jp": "ライジング"
     },
     {
      "id": "menus#029",
@@ -1064,7 +1110,8 @@
      "addr": "1F8E0",
      "hex": "52696d6974fc",
      "us": "Rimit",
-     "en": "Rimit"
+     "en": "Rimit",
+     "jp": "ヌーン"
     },
     {
      "id": "menus#030",
@@ -1073,7 +1120,8 @@
      "addr": "1F8EA",
      "hex": "5368697a61fc",
      "us": "Shiza",
-     "en": "Shiza"
+     "en": "Shiza",
+     "jp": "フォール"
     },
     {
      "id": "menus#031",
@@ -1082,7 +1130,8 @@
      "addr": "1F8F4",
      "hex": "446562616efc",
      "us": "Deban",
-     "en": "Deban"
+     "en": "Deban",
+     "jp": "ナイト"
     },
     {
      "id": "menus#032",
@@ -1091,7 +1140,8 @@
      "addr": "1F8FE",
      "hex": "46616e6269fc",
      "us": "Fanbi",
-     "en": "Fanbi"
+     "en": "Fanbi",
+     "jp": "ロー"
     },
     {
      "id": "menus#033",
@@ -1100,7 +1150,8 @@
      "addr": "1F908",
      "hex": "466f727361fc",
      "us": "Forsa",
-     "en": "Forsa"
+     "en": "Forsa",
+     "jp": "アンバランス"
     },
     {
      "id": "menus#034",
@@ -1109,7 +1160,8 @@
      "addr": "1F912",
      "hex": "4e6173616bfc",
      "us": "Nasak",
-     "en": "Nasak"
+     "en": "Nasak",
+     "jp": "バランス"
     },
     {
      "id": "menus#035",
@@ -1118,7 +1170,8 @@
      "addr": "1F91C",
      "hex": "536875fc",
      "us": "Shu",
-     "en": "Shu"
+     "en": "Shu",
+     "jp": "カオス"
     }
    ]
   },
@@ -1575,6 +1628,51 @@
      "us": "Over and out.",
      "en": "Over and out."
     }
+   ],
+   "jp_extra": [
+    "{FF}　きくがよい！{BR}われらは パルマという ほしの まつえい。。。{PAGE}400せきの うちゅうせんは{PAGE}「じゃあくな ちから」から のがれようとした。{PAGE}しかし、「じゃあくな ちから」の いちぶは{PAGE}すでに われらの ふねに はいりこんでいた。{PAGE}そのため、1せき、また1せきと ほろんでゆき{PAGE}「オラキオとライアの じだい」には{PAGE}この 「アリサ3せい」と、「ネオパルマ」の{PAGE}2せきだけに なってしまった。。。",
+    "{FF}　わっ{BR}ひかりの たばが、こちらに！{PAGE}うちゅうせんから ビームこうげきです！{PAGE}サテライトの エネルギーろに めいちゅう！{PAGE}サテライトが、ばくはつします！{PAGE}はやく だっしゅつを！",
+    "0",
+    "。。。1000ねんの あいだ はなればなれだった",
+    "「アリサ3せい」へ。。。。。。",
+    "。。こちらは、うちゅうせん 「ネオパルマ」の",
+    "パイロット ルーム。。。。。",
+    "。。。。うちゅうに かがやく ばくはつを みて",
+    "それを たよりに ちかづいた。。。。",
+    "。。。サテライトが ひとつ きえているが、",
+    "その ばくはつだったのか。。。。。。。。。",
+    "。。。ともかくも、ひろい うちゅうで、ふたたび",
+    "ともを えたことを よろこんでいる。",
+    "。。。ともに、さらなる 1000ねんの たびを",
+    "いきのびよう。",
+    "。。。パイロッタから えいゆうたちへ。。。",
+    "",
+    "。。。しんろへんこうを じゃまする ちからを",
+    "うちたおしてくれたことを かんしゃする。。。",
+    "。。。この たいようけいには、いくつかの",
+    "わくせいがあることが、わかった。。。",
+    "。。。そのうちの ひとつは、どうやら",
+    "われわれが、うつりすめそうな わくせいだ。。。",
+    "。。。いま、そこに むかっている。",
+    "そちらからも みえるだろう！。。。",
+    "。。。2000ねんの たびは、おわりそうだ。。。",
+    "。。。われわれは、いきのびた。。。",
+    "。。。パイロッタから えいゆうたちへ。。。",
+    "",
+    "。。。しんろへんこうを じゃまする ちからを",
+    "うちたおしてくれたことを かんしゃする。。。",
+    "。。。じゃあくな ちからは、さった。。。",
+    "",
+    "。。。われわれは、この 「アリサ3せい」の",
+    "あらたなる フインおうを かんげいする。。。",
+    "。。。さらなる 1000ねんの たびを",
+    "みちびいてほしい。。。。",
+    "。。。こうふくを ねたむ かみの いない",
+    "ファンタシースターへ。。。",
+    "。。。どこから きたのかは しりませんが、",
+    "こちらに むかっている うちゅうせんへ。。。",
+    "。。。わたしたちは、あなたたち うちゅうのかたを",
+    "かんげいします。どうか おうとうしてください。"
    ]
   },
   "items": {
@@ -1589,7 +1687,8 @@
      "addr": "39242",
      "hex": "4d6f6e6f6d617465fc",
      "us": "Monomate",
-     "en": "Monomate"
+     "en": "Monomate",
+     "jp": "モノメイト"
     },
     {
      "id": "ItemName_Dimate",
@@ -1598,7 +1697,8 @@
      "addr": "3924B",
      "hex": "44696d617465fc",
      "us": "Dimate",
-     "en": "Dimate"
+     "en": "Dimate",
+     "jp": "ディメイト"
     },
     {
      "id": "ItemName_Trimate",
@@ -1607,7 +1707,8 @@
      "addr": "39252",
      "hex": "5472696d617465fc",
      "us": "Trimate",
-     "en": "Trimate"
+     "en": "Trimate",
+     "jp": "トリメイト"
     },
     {
      "id": "ItemName_Antidote",
@@ -1616,7 +1717,8 @@
      "addr": "3925A",
      "hex": "416e7469646f7465fc",
      "us": "Antidote",
-     "en": "Antidote"
+     "en": "Antidote",
+     "jp": "アンティポイズン"
     },
     {
      "id": "ItemName_StarMist",
@@ -1625,7 +1727,8 @@
      "addr": "39263",
      "hex": "53746172204d697374fc",
      "us": "Star Mist",
-     "en": "Star Mist"
+     "en": "Star Mist",
+     "jp": "スターアトマイザー"
     },
     {
      "id": "ItemName_MoonDew",
@@ -1634,7 +1737,8 @@
      "addr": "3926D",
      "hex": "4d6f6f6e20446577fc",
      "us": "Moon Dew",
-     "en": "Moon Dew"
+     "en": "Moon Dew",
+     "jp": "ムーンアトマイザー"
     },
     {
      "id": "ItemName_Escapipe",
@@ -1643,7 +1747,8 @@
      "addr": "39276",
      "hex": "4573636170697065fc",
      "us": "Escapipe",
-     "en": "Escapipe"
+     "en": "Escapipe",
+     "jp": "イグザオカリナ"
     },
     {
      "id": "ItemName_Monitor",
@@ -1652,7 +1757,8 @@
      "addr": "3927F",
      "hex": "4d6f6e69746f72fc",
      "us": "Monitor",
-     "en": "Monitor"
+     "en": "Monitor",
+     "jp": "モニター"
     },
     {
      "id": "ItemName_ShortSwd",
@@ -1661,7 +1767,8 @@
      "addr": "39287",
      "hex": "53686f727420537764fc",
      "us": "Short Swd",
-     "en": "Short Swd"
+     "en": "Short Swd",
+     "jp": "へいしのけん"
     },
     {
      "id": "ItemName_Sword",
@@ -1670,7 +1777,8 @@
      "addr": "39291",
      "hex": "53776f7264fc",
      "us": "Sword",
-     "en": "Sword"
+     "en": "Sword",
+     "jp": "きしのつるぎ"
     },
     {
      "id": "ItemName_SteelSwd",
@@ -1679,7 +1787,8 @@
      "addr": "39297",
      "hex": "537465656c20537764fc",
      "us": "Steel Swd",
-     "en": "Steel Swd"
+     "en": "Steel Swd",
+     "jp": "せいきしのつるぎ"
     },
     {
      "id": "ItemName_CeramSwd",
@@ -1688,7 +1797,8 @@
      "addr": "392A1",
      "hex": "436572616d20537764fc",
      "us": "Ceram Swd",
-     "en": "Ceram Swd"
+     "en": "Ceram Swd",
+     "jp": "セラミックソード"
     },
     {
      "id": "ItemName_LaserSwd",
@@ -1697,7 +1807,8 @@
      "addr": "392AB",
      "hex": "4c6173657220537764fc",
      "us": "Laser Swd",
-     "en": "Laser Swd"
+     "en": "Laser Swd",
+     "jp": "レーザーソード"
     },
     {
      "id": "ItemName_ForceSwd",
@@ -1706,7 +1817,8 @@
      "addr": "392B5",
      "hex": "466f72636520537764fc",
      "us": "Force Swd",
-     "en": "Force Swd"
+     "en": "Force Swd",
+     "jp": "いかりのつるぎ"
     },
     {
      "id": "ItemName_LaconSwd",
@@ -1715,7 +1827,8 @@
      "addr": "392BF",
      "hex": "4c61636f6e20537764fc",
      "us": "Lacon Swd",
-     "en": "Lacon Swd"
+     "en": "Lacon Swd",
+     "jp": "ラコニアソード"
     },
     {
      "id": "ItemName_RoyalSwd",
@@ -1724,7 +1837,8 @@
      "addr": "392C9",
      "hex": "526f79616c20537764fc",
      "us": "Royal Swd",
-     "en": "Royal Swd"
+     "en": "Royal Swd",
+     "jp": "ていおうのつるぎ"
     },
     {
      "id": "ItemName_PlanarSwd",
@@ -1733,7 +1847,8 @@
      "addr": "392D3",
      "hex": "506c616e6172537764fc",
      "us": "PlanarSwd",
-     "en": "PlanarSwd"
+     "en": "PlanarSwd",
+     "jp": "じげんのけん"
     },
     {
      "id": "ItemName_OrakioSwd",
@@ -1742,7 +1857,8 @@
      "addr": "392DD",
      "hex": "4f72616b696f537764fc",
      "us": "OrakioSwd",
-     "en": "OrakioSwd"
+     "en": "OrakioSwd",
+     "jp": "オラキオのつるぎ"
     },
     {
      "id": "ItemName_NeiSword",
@@ -1751,7 +1867,8 @@
      "addr": "392E7",
      "hex": "4e65692053776f7264fc",
      "us": "Nei Sword",
-     "en": "Nei Sword"
+     "en": "Nei Sword",
+     "jp": "ネイソード"
     },
     {
      "id": "ItemName_Knife",
@@ -1760,7 +1877,8 @@
      "addr": "392F1",
      "hex": "4b6e696665fc",
      "us": "Knife",
-     "en": "Knife"
+     "en": "Knife",
+     "jp": "ナイフ"
     },
     {
      "id": "ItemName_HuntgKnf",
@@ -1769,7 +1887,8 @@
      "addr": "392F7",
      "hex": "48756e7467204b6e66fc",
      "us": "Huntg Knf",
-     "en": "Huntg Knf"
+     "en": "Huntg Knf",
+     "jp": "りょうしのナイフ"
     },
     {
      "id": "ItemName_SteelKnf",
@@ -1778,7 +1897,8 @@
      "addr": "39301",
      "hex": "537465656c204b6e66fc",
      "us": "Steel Knf",
-     "en": "Steel Knf"
+     "en": "Steel Knf",
+     "jp": "まもりのナイフ"
     },
     {
      "id": "ItemName_CeramKnf",
@@ -1787,7 +1907,8 @@
      "addr": "3930B",
      "hex": "436572616d204b6e66fc",
      "us": "Ceram Knf",
-     "en": "Ceram Knf"
+     "en": "Ceram Knf",
+     "jp": "セラミックナイフ"
     },
     {
      "id": "ItemName_LaserKnf",
@@ -1796,7 +1917,8 @@
      "addr": "39315",
      "hex": "4c61736572204b6e66fc",
      "us": "Laser Knf",
-     "en": "Laser Knf"
+     "en": "Laser Knf",
+     "jp": "レーザーナイフ"
     },
     {
      "id": "ItemName_ForceKnf",
@@ -1805,7 +1927,8 @@
      "addr": "3931F",
      "hex": "466f726365204b6e66fc",
      "us": "Force Knf",
-     "en": "Force Knf"
+     "en": "Force Knf",
+     "jp": "あわれみのナイフ"
     },
     {
      "id": "ItemName_LaconKnf",
@@ -1814,7 +1937,8 @@
      "addr": "39329",
      "hex": "4c61636f6e204b6e66fc",
      "us": "Lacon Knf",
-     "en": "Lacon Knf"
+     "en": "Lacon Knf",
+     "jp": "ラコニアナイフ"
     },
     {
      "id": "ItemName_RoyalKnf",
@@ -1823,7 +1947,8 @@
      "addr": "39333",
      "hex": "526f79616c204b6e66fc",
      "us": "Royal Knf",
-     "en": "Royal Knf"
+     "en": "Royal Knf",
+     "jp": "おうじょのナイフ"
     },
     {
      "id": "ItemName_HuntgStf",
@@ -1832,7 +1957,8 @@
      "addr": "3933D",
      "hex": "48756e746720537466fc",
      "us": "Huntg Stf",
-     "en": "Huntg Stf"
+     "en": "Huntg Stf",
+     "jp": "たびびとのつえ"
     },
     {
      "id": "ItemName_SteelStf",
@@ -1841,7 +1967,8 @@
      "addr": "39347",
      "hex": "537465656c20537466fc",
      "us": "Steel Stf",
-     "en": "Steel Stf"
+     "en": "Steel Stf",
+     "jp": "まじゅつしのつえ"
     },
     {
      "id": "ItemName_CeramStf",
@@ -1850,7 +1977,8 @@
      "addr": "39351",
      "hex": "436572616d20537466fc",
      "us": "Ceram Stf",
-     "en": "Ceram Stf"
+     "en": "Ceram Stf",
+     "jp": "セラミックのつえ"
     },
     {
      "id": "ItemName_LaserStf",
@@ -1859,7 +1987,8 @@
      "addr": "3935B",
      "hex": "4c6173657220537466fc",
      "us": "Laser Stf",
-     "en": "Laser Stf"
+     "en": "Laser Stf",
+     "jp": "えいがのつえ"
     },
     {
      "id": "ItemName_ForceStf",
@@ -1868,7 +1997,8 @@
      "addr": "39365",
      "hex": "466f72636520537466fc",
      "us": "Force Stf",
-     "en": "Force Stf"
+     "en": "Force Stf",
+     "jp": "よそおいのつえ"
     },
     {
      "id": "ItemName_LaconStf",
@@ -1877,7 +2007,8 @@
      "addr": "3936F",
      "hex": "4c61636f6e20537466fc",
      "us": "Lacon Stf",
-     "en": "Lacon Stf"
+     "en": "Lacon Stf",
+     "jp": "ラコニアのつえ"
     },
     {
      "id": "ItemName_CeramSlr",
@@ -1886,7 +2017,8 @@
      "addr": "39379",
      "hex": "436572616d20536c72fc",
      "us": "Ceram Slr",
-     "en": "Ceram Slr"
+     "en": "Ceram Slr",
+     "jp": "セラミックスライサ"
     },
     {
      "id": "ItemName_LaserSlr",
@@ -1895,7 +2027,8 @@
      "addr": "39383",
      "hex": "4c6173657220536c72fc",
      "us": "Laser Slr",
-     "en": "Laser Slr"
+     "en": "Laser Slr",
+     "jp": "レーザースライサー"
     },
     {
      "id": "ItemName_ForceSlr",
@@ -1904,7 +2037,8 @@
      "addr": "3938D",
      "hex": "466f72636520536c72fc",
      "us": "Force Slr",
-     "en": "Force Slr"
+     "en": "Force Slr",
+     "jp": "かなしみのスライサ"
     },
     {
      "id": "ItemName_LaconSlr",
@@ -1913,7 +2047,8 @@
      "addr": "39397",
      "hex": "4c61636f6e20536c72fc",
      "us": "Lacon Slr",
-     "en": "Lacon Slr"
+     "en": "Lacon Slr",
+     "jp": "ラコニアスライサー"
     },
     {
      "id": "ItemName_RoyalSlr",
@@ -1922,7 +2057,8 @@
      "addr": "393A1",
      "hex": "526f79616c20536c72fc",
      "us": "Royal Slr",
-     "en": "Royal Slr"
+     "en": "Royal Slr",
+     "jp": "プリンセススライサ"
     },
     {
      "id": "ItemName_PlanarSlr",
@@ -1931,7 +2067,8 @@
      "addr": "393AB",
      "hex": "506c616e6172536c72fc",
      "us": "PlanarSlr",
-     "en": "PlanarSlr"
+     "en": "PlanarSlr",
+     "jp": "ときのスライサー"
     },
     {
      "id": "ItemName_LuneSlr",
@@ -1940,7 +2077,8 @@
      "addr": "393B5",
      "hex": "4c756e652773536c72fc",
      "us": "Lune'sSlr",
-     "en": "Lune'sSlr"
+     "en": "Lune'sSlr",
+     "jp": "ルーンスライサー"
     },
     {
      "id": "ItemName_NeiSlicr",
@@ -1949,7 +2087,8 @@
      "addr": "393BF",
      "hex": "4e656920536c696372fc",
      "us": "Nei Slicr",
-     "en": "Nei Slicr"
+     "en": "Nei Slicr",
+     "jp": "ネイスライサー"
     },
     {
      "id": "ItemName_Claw",
@@ -1958,7 +2097,8 @@
      "addr": "393C9",
      "hex": "436c6177fc",
      "us": "Claw",
-     "en": "Claw"
+     "en": "Claw",
+     "jp": "クロー"
     },
     {
      "id": "ItemName_HuntgClw",
@@ -1967,7 +2107,8 @@
      "addr": "393CE",
      "hex": "48756e746720436c77fc",
      "us": "Huntg Clw",
-     "en": "Huntg Clw"
+     "en": "Huntg Clw",
+     "jp": "アイルーロスのつめ"
     },
     {
      "id": "ItemName_SteelClw",
@@ -1976,7 +2117,8 @@
      "addr": "393D8",
      "hex": "537465656c20436c77fc",
      "us": "Steel Clw",
-     "en": "Steel Clw"
+     "en": "Steel Clw",
+     "jp": "リュンクスのつめ"
     },
     {
      "id": "ItemName_CeramClw",
@@ -1985,7 +2127,8 @@
      "addr": "393E2",
      "hex": "436572616d20436c77fc",
      "us": "Ceram Clw",
-     "en": "Ceram Clw"
+     "en": "Ceram Clw",
+     "jp": "セラミッククロー"
     },
     {
      "id": "ItemName_LaserClw",
@@ -1994,7 +2137,8 @@
      "addr": "393EC",
      "hex": "4c6173657220436c77fc",
      "us": "Laser Clw",
-     "en": "Laser Clw"
+     "en": "Laser Clw",
+     "jp": "レーザークロー"
     },
     {
      "id": "ItemName_ForceClw",
@@ -2003,7 +2147,8 @@
      "addr": "393F6",
      "hex": "466f72636520436c77fc",
      "us": "Force Clw",
-     "en": "Force Clw"
+     "en": "Force Clw",
+     "jp": "なげきのつめ"
     },
     {
      "id": "ItemName_LaconClw",
@@ -2012,7 +2157,8 @@
      "addr": "39400",
      "hex": "4c61636f6e20436c77fc",
      "us": "Lacon Clw",
-     "en": "Lacon Clw"
+     "en": "Lacon Clw",
+     "jp": "ラコニアクロー"
     },
     {
      "id": "ItemName_RoyalClw",
@@ -2021,7 +2167,8 @@
      "addr": "3940A",
      "hex": "526f79616c20436c77fc",
      "us": "Royal Clw",
-     "en": "Royal Clw"
+     "en": "Royal Clw",
+     "jp": "バンテーラのつめ"
     },
     {
      "id": "ItemName_PlanarClw",
@@ -2030,7 +2177,8 @@
      "addr": "39414",
      "hex": "506c616e6172436c77fc",
      "us": "PlanarClw",
-     "en": "PlanarClw"
+     "en": "PlanarClw",
+     "jp": "こんとんのつめ"
     },
     {
      "id": "ItemName_MiunClw",
@@ -2039,7 +2187,8 @@
      "addr": "3941E",
      "hex": "4d69756e2773436c77fc",
      "us": "Miun'sClw",
-     "en": "Miun'sClw"
+     "en": "Miun'sClw",
+     "jp": "ミューンクロー"
     },
     {
      "id": "ItemName_NeiClaw",
@@ -2048,7 +2197,8 @@
      "addr": "39428",
      "hex": "4e656920436c6177fc",
      "us": "Nei Claw",
-     "en": "Nei Claw"
+     "en": "Nei Claw",
+     "jp": "ネイクロー"
     },
     {
      "id": "ItemName_HuntgBow",
@@ -2057,7 +2207,8 @@
      "addr": "39431",
      "hex": "48756e746720426f77fc",
      "us": "Huntg Bow",
-     "en": "Huntg Bow"
+     "en": "Huntg Bow",
+     "jp": "きふじんのゆみ"
     },
     {
      "id": "ItemName_CeramBow",
@@ -2066,7 +2217,8 @@
      "addr": "3943B",
      "hex": "436572616d20426f77fc",
      "us": "Ceram Bow",
-     "en": "Ceram Bow"
+     "en": "Ceram Bow",
+     "jp": "レーザーボウ"
     },
     {
      "id": "ItemName_LaserBow",
@@ -2075,7 +2227,8 @@
      "addr": "39445",
      "hex": "4c6173657220426f77fc",
      "us": "Laser Bow",
-     "en": "Laser Bow"
+     "en": "Laser Bow",
+     "jp": "かんきのゆみ"
     },
     {
      "id": "ItemName_ForceBow",
@@ -2084,7 +2237,8 @@
      "addr": "3944F",
      "hex": "466f72636520426f77fc",
      "us": "Force Bow",
-     "en": "Force Bow"
+     "en": "Force Bow",
+     "jp": "しゃくねつのゆみ"
     },
     {
      "id": "ItemName_LaconBow",
@@ -2093,7 +2247,8 @@
      "addr": "39459",
      "hex": "4c61636f6e20426f77fc",
      "us": "Lacon Bow",
-     "en": "Lacon Bow"
+     "en": "Lacon Bow",
+     "jp": "じょおうのゆみ"
     },
     {
      "id": "ItemName_RoyalBow",
@@ -2102,7 +2257,8 @@
      "addr": "39463",
      "hex": "526f79616c20426f77fc",
      "us": "Royal Bow",
-     "en": "Royal Bow"
+     "en": "Royal Bow",
+     "jp": "ちつじょのゆみ"
     },
     {
      "id": "ItemName_LayaBow",
@@ -2111,7 +2267,8 @@
      "addr": "3946D",
      "hex": "4c6179612773426f77fc",
      "us": "Laya'sBow",
-     "en": "Laya'sBow"
+     "en": "Laya'sBow",
+     "jp": "ライアのゆみ"
     },
     {
      "id": "ItemName_NeiBow",
@@ -2120,7 +2277,8 @@
      "addr": "39477",
      "hex": "4e656920426f77fc",
      "us": "Nei Bow",
-     "en": "Nei Bow"
+     "en": "Nei Bow",
+     "jp": "ネイボウ"
     },
     {
      "id": "ItemName_HuntgShot",
@@ -2129,7 +2287,8 @@
      "addr": "3947F",
      "hex": "48756e746753686f74fc",
      "us": "HuntgShot",
-     "en": "HuntgShot"
+     "en": "HuntgShot",
+     "jp": "ハンドガン"
     },
     {
      "id": "ItemName_CeramShot",
@@ -2138,7 +2297,8 @@
      "addr": "39489",
      "hex": "436572616d53686f74fc",
      "us": "CeramShot",
-     "en": "CeramShot"
+     "en": "CeramShot",
+     "jp": "ショットガン"
     },
     {
      "id": "ItemName_LaserShot",
@@ -2147,7 +2307,8 @@
      "addr": "39493",
      "hex": "4c6173657253686f74fc",
      "us": "LaserShot",
-     "en": "LaserShot"
+     "en": "LaserShot",
+     "jp": "カノン"
     },
     {
      "id": "ItemName_LaconShot",
@@ -2156,7 +2317,8 @@
      "addr": "3949D",
      "hex": "4c61636f6e53686f74fc",
      "us": "LaconShot",
-     "en": "LaconShot"
+     "en": "LaconShot",
+     "jp": "グレネードランチャ"
     },
     {
      "id": "ItemName_Cannon",
@@ -2165,7 +2327,8 @@
      "addr": "394A7",
      "hex": "43616e6e6f6efc",
      "us": "Cannon",
-     "en": "Cannon"
+     "en": "Cannon",
+     "jp": "レーザーショット"
     },
     {
      "id": "ItemName_PulseCann",
@@ -2174,7 +2337,8 @@
      "addr": "394AE",
      "hex": "50756c736543616e6efc",
      "us": "PulseCann",
-     "en": "PulseCann"
+     "en": "PulseCann",
+     "jp": "レーザーキャノン"
     },
     {
      "id": "ItemName_Vulcan",
@@ -2183,7 +2347,8 @@
      "addr": "394B8",
      "hex": "56756c63616efc",
      "us": "Vulcan",
-     "en": "Vulcan"
+     "en": "Vulcan",
+     "jp": "パルスショット"
     },
     {
      "id": "ItemName_PulseVlcn",
@@ -2192,7 +2357,8 @@
      "addr": "394BF",
      "hex": "50756c7365566c636efc",
      "us": "PulseVlcn",
-     "en": "PulseVlcn"
+     "en": "PulseVlcn",
+     "jp": "パルスバルカン"
     },
     {
      "id": "ItemName_SirenShot",
@@ -2201,7 +2367,8 @@
      "addr": "394C9",
      "hex": "536972656e53686f74fc",
      "us": "SirenShot",
-     "en": "SirenShot"
+     "en": "SirenShot",
+     "jp": "サイレンショット"
     },
     {
      "id": "ItemName_NeiShot",
@@ -2210,7 +2377,8 @@
      "addr": "394D3",
      "hex": "4e65692053686f74fc",
      "us": "Nei Shot",
-     "en": "Nei Shot"
+     "en": "Nei Shot",
+     "jp": "ネイショット"
     },
     {
      "id": "ItemName_HuntgHelm",
@@ -2219,7 +2387,8 @@
      "addr": "394DC",
      "hex": "48756e746748656c6dfc",
      "us": "HuntgHelm",
-     "en": "HuntgHelm"
+     "en": "HuntgHelm",
+     "jp": "かわのぼうし"
     },
     {
      "id": "ItemName_SteelHelm",
@@ -2228,7 +2397,8 @@
      "addr": "394E6",
      "hex": "537465656c48656c6dfc",
      "us": "SteelHelm",
-     "en": "SteelHelm"
+     "en": "SteelHelm",
+     "jp": "きしのかぶと"
     },
     {
      "id": "ItemName_CeramHelm",
@@ -2237,7 +2407,8 @@
      "addr": "394F0",
      "hex": "436572616d48656c6dfc",
      "us": "CeramHelm",
-     "en": "CeramHelm"
+     "en": "CeramHelm",
+     "jp": "セラミックメット"
     },
     {
      "id": "ItemName_ForceHelm",
@@ -2246,7 +2417,8 @@
      "addr": "394FA",
      "hex": "466f72636548656c6dfc",
      "us": "ForceHelm",
-     "en": "ForceHelm"
+     "en": "ForceHelm",
+     "jp": "あさやけのかぶと"
     },
     {
      "id": "ItemName_LaconHelm",
@@ -2255,7 +2427,8 @@
      "addr": "39504",
      "hex": "4c61636f6e48656c6dfc",
      "us": "LaconHelm",
-     "en": "LaconHelm"
+     "en": "LaconHelm",
+     "jp": "ラコニアメット"
     },
     {
      "id": "ItemName_RoyalHelm",
@@ -2264,7 +2437,8 @@
      "addr": "3950E",
      "hex": "526f79616c48656c6dfc",
      "us": "RoyalHelm",
-     "en": "RoyalHelm"
+     "en": "RoyalHelm",
+     "jp": "ていおうのかぶと"
     },
     {
      "id": "ItemName_Bandanna",
@@ -2273,7 +2447,8 @@
      "addr": "39518",
      "hex": "42616e64616e6e61fc",
      "us": "Bandanna",
-     "en": "Bandanna"
+     "en": "Bandanna",
+     "jp": "ヘッドバンド"
     },
     {
      "id": "ItemName_HuntgBand",
@@ -2282,7 +2457,8 @@
      "addr": "39521",
      "hex": "48756e746742616e64fc",
      "us": "HuntgBand",
-     "en": "HuntgBand"
+     "en": "HuntgBand",
+     "jp": "セラミックバンド"
     },
     {
      "id": "ItemName_SteelBand",
@@ -2291,7 +2467,8 @@
      "addr": "3952B",
      "hex": "537465656c42616e64fc",
      "us": "SteelBand",
-     "en": "SteelBand"
+     "en": "SteelBand",
+     "jp": "フォッグバンド"
     },
     {
      "id": "ItemName_CeramBand",
@@ -2300,7 +2477,8 @@
      "addr": "39535",
      "hex": "436572616d42616e64fc",
      "us": "CeramBand",
-     "en": "CeramBand"
+     "en": "CeramBand",
+     "jp": "バンダナ"
     },
     {
      "id": "ItemName_ForceBand",
@@ -2309,7 +2487,8 @@
      "addr": "3953F",
      "hex": "466f72636542616e64fc",
      "us": "ForceBand",
-     "en": "ForceBand"
+     "en": "ForceBand",
+     "jp": "ぎんのバンダナ"
     },
     {
      "id": "ItemName_LaconBand",
@@ -2318,7 +2497,8 @@
      "addr": "39549",
      "hex": "4c61636f6e42616e64fc",
      "us": "LaconBand",
-     "en": "LaconBand"
+     "en": "LaconBand",
+     "jp": "ラコニアのバンダナ"
     },
     {
      "id": "ItemName_RoyalBand",
@@ -2327,7 +2507,8 @@
      "addr": "39553",
      "hex": "526f79616c42616e64fc",
      "us": "RoyalBand",
-     "en": "RoyalBand"
+     "en": "RoyalBand",
+     "jp": "にじのバンダナ"
     },
     {
      "id": "ItemName_Staff",
@@ -2336,7 +2517,8 @@
      "addr": "3955D",
      "hex": "5374616666fc",
      "us": "Staff",
-     "en": "Staff"
+     "en": "Staff",
+     "jp": "つえ"
     },
     {
      "id": "ItemName_Garment",
@@ -2345,7 +2527,8 @@
      "addr": "39563",
      "hex": "4761726d656e74fc",
      "us": "Garment",
-     "en": "Garment"
+     "en": "Garment",
+     "jp": "ふく"
     },
     {
      "id": "ItemName_Slicer",
@@ -2354,7 +2537,8 @@
      "addr": "3956B",
      "hex": "536c69636572fc",
      "us": "Slicer",
-     "en": "Slicer"
+     "en": "Slicer",
+     "jp": "スライサー"
     },
     {
      "id": "ItemName_CeramCrwn",
@@ -2363,7 +2547,8 @@
      "addr": "39572",
      "hex": "436572616d4372776efc",
      "us": "CeramCrwn",
-     "en": "CeramCrwn"
+     "en": "CeramCrwn",
+     "jp": "ぎんのかんむり"
     },
     {
      "id": "ItemName_ForceCrwn",
@@ -2372,7 +2557,8 @@
      "addr": "3957C",
      "hex": "466f7263654372776efc",
      "us": "ForceCrwn",
-     "en": "ForceCrwn"
+     "en": "ForceCrwn",
+     "jp": "ゆきのかんむり"
     },
     {
      "id": "ItemName_LaconCrwn",
@@ -2381,7 +2567,8 @@
      "addr": "39586",
      "hex": "4c61636f6e4372776efc",
      "us": "LaconCrwn",
-     "en": "LaconCrwn"
+     "en": "LaconCrwn",
+     "jp": "ラコニアクラウン"
     },
     {
      "id": "ItemName_RoyalCrwn",
@@ -2390,7 +2577,8 @@
      "addr": "39590",
      "hex": "526f79616c4372776efc",
      "us": "RoyalCrwn",
-     "en": "RoyalCrwn"
+     "en": "RoyalCrwn",
+     "jp": "クィーンクラウン"
     },
     {
      "id": "ItemName_Ribbon",
@@ -2399,7 +2587,8 @@
      "addr": "3959A",
      "hex": "526962626f6efc",
      "us": "Ribbon",
-     "en": "Ribbon"
+     "en": "Ribbon",
+     "jp": "リボン"
     },
     {
      "id": "ItemName_HuntgRibn",
@@ -2408,7 +2597,8 @@
      "addr": "395A1",
      "hex": "48756e74675269626efc",
      "us": "HuntgRibn",
-     "en": "HuntgRibn"
+     "en": "HuntgRibn",
+     "jp": "きふじんのリボン"
     },
     {
      "id": "ItemName_CeramRibn",
@@ -2417,7 +2607,8 @@
      "addr": "395AB",
      "hex": "436572616d5269626efc",
      "us": "CeramRibn",
-     "en": "CeramRibn"
+     "en": "CeramRibn",
+     "jp": "あさつゆのリボン"
     },
     {
      "id": "ItemName_ForceRibn",
@@ -2426,7 +2617,8 @@
      "addr": "395B5",
      "hex": "466f7263655269626efc",
      "us": "ForceRibn",
-     "en": "ForceRibn"
+     "en": "ForceRibn",
+     "jp": "かぜのリボン"
     },
     {
      "id": "ItemName_LaconRibn",
@@ -2435,7 +2627,8 @@
      "addr": "395BF",
      "hex": "4c61636f6e5269626efc",
      "us": "LaconRibn",
-     "en": "LaconRibn"
+     "en": "LaconRibn",
+     "jp": "ラコニアリボン"
     },
     {
      "id": "ItemName_RoyalRibn",
@@ -2444,7 +2637,8 @@
      "addr": "395C9",
      "hex": "526f79616c5269626efc",
      "us": "RoyalRibn",
-     "en": "RoyalRibn"
+     "en": "RoyalRibn",
+     "jp": "いにしえのリボン"
     },
     {
      "id": "ItemName_HeadGear",
@@ -2453,7 +2647,8 @@
      "addr": "395D3",
      "hex": "486561642047656172fc",
      "us": "Head Gear",
-     "en": "Head Gear"
+     "en": "Head Gear",
+     "jp": "ヘッドギア"
     },
     {
      "id": "ItemName_SteelGear",
@@ -2462,7 +2657,8 @@
      "addr": "395DD",
      "hex": "537465656c47656172fc",
      "us": "SteelGear",
-     "en": "SteelGear"
+     "en": "SteelGear",
+     "jp": "スチールギア"
     },
     {
      "id": "ItemName_CeramGear",
@@ -2471,7 +2667,8 @@
      "addr": "395E7",
      "hex": "436572616d47656172fc",
      "us": "CeramGear",
-     "en": "CeramGear"
+     "en": "CeramGear",
+     "jp": "セラミックギア"
     },
     {
      "id": "ItemName_ForceGear",
@@ -2480,7 +2677,8 @@
      "addr": "395F1",
      "hex": "466f72636547656172fc",
      "us": "ForceGear",
-     "en": "ForceGear"
+     "en": "ForceGear",
+     "jp": "ストームギア"
     },
     {
      "id": "ItemName_LaconGear",
@@ -2489,7 +2687,8 @@
      "addr": "395FB",
      "hex": "4c61636f6e47656172fc",
      "us": "LaconGear",
-     "en": "LaconGear"
+     "en": "LaconGear",
+     "jp": "ラコニアギア"
     },
     {
      "id": "ItemName_RoyalGear",
@@ -2498,7 +2697,8 @@
      "addr": "39605",
      "hex": "526f79616c47656172fc",
      "us": "RoyalGear",
-     "en": "RoyalGear"
+     "en": "RoyalGear",
+     "jp": "マキシマムギア"
     },
     {
      "id": "ItemName_HuntgArmr",
@@ -2507,7 +2707,8 @@
      "addr": "3960F",
      "hex": "48756e746741726d72fc",
      "us": "HuntgArmr",
-     "en": "HuntgArmr"
+     "en": "HuntgArmr",
+     "jp": "かわのむねあて"
     },
     {
      "id": "ItemName_SteelArmr",
@@ -2516,7 +2717,8 @@
      "addr": "39619",
      "hex": "537465656c41726d72fc",
      "us": "SteelArmr",
-     "en": "SteelArmr"
+     "en": "SteelArmr",
+     "jp": "くさりかたびら"
     },
     {
      "id": "ItemName_CeramArmr",
@@ -2525,7 +2727,8 @@
      "addr": "39623",
      "hex": "436572616d41726d72fc",
      "us": "CeramArmr",
-     "en": "CeramArmr"
+     "en": "CeramArmr",
+     "jp": "プレートアーマー"
     },
     {
      "id": "ItemName_ForceArmr",
@@ -2534,7 +2737,8 @@
      "addr": "3962D",
      "hex": "466f72636541726d72fc",
      "us": "ForceArmr",
-     "en": "ForceArmr"
+     "en": "ForceArmr",
+     "jp": "セラミックアーマー"
     },
     {
      "id": "ItemName_LaconArmr",
@@ -2543,7 +2747,8 @@
      "addr": "39637",
      "hex": "4c61636f6e41726d72fc",
      "us": "LaconArmr",
-     "en": "LaconArmr"
+     "en": "LaconArmr",
+     "jp": "にっしょくのよろい"
     },
     {
      "id": "ItemName_RoyalArmr",
@@ -2552,7 +2757,8 @@
      "addr": "39641",
      "hex": "526f79616c41726d72fc",
      "us": "RoyalArmr",
-     "en": "RoyalArmr"
+     "en": "RoyalArmr",
+     "jp": "ラコニアアーマー"
     },
     {
      "id": "ItemName_PlanarArm",
@@ -2561,7 +2767,8 @@
      "addr": "3964B",
      "hex": "506c616e617241726dfc",
      "us": "PlanarArm",
-     "en": "PlanarArm"
+     "en": "PlanarArm",
+     "jp": "ていおうのよろい"
     },
     {
      "id": "ItemName_Cape",
@@ -2570,7 +2777,8 @@
      "addr": "39655",
      "hex": "43617065fc",
      "us": "Cape",
-     "en": "Cape"
+     "en": "Cape",
+     "jp": "マント"
     },
     {
      "id": "ItemName_SteelCape",
@@ -2579,7 +2787,8 @@
      "addr": "3965A",
      "hex": "537465656c43617065fc",
      "us": "SteelCape",
-     "en": "SteelCape"
+     "en": "SteelCape",
+     "jp": "シルバーマント"
     },
     {
      "id": "ItemName_LaconCape",
@@ -2588,7 +2797,8 @@
      "addr": "39664",
      "hex": "4c61636f6e43617065fc",
      "us": "LaconCape",
-     "en": "LaconCape"
+     "en": "LaconCape",
+     "jp": "こはくのほうい"
     },
     {
      "id": "ItemName_RoyalCape",
@@ -2597,7 +2807,8 @@
      "addr": "3966E",
      "hex": "526f79616c43617065fc",
      "us": "RoyalCape",
-     "en": "RoyalCape"
+     "en": "RoyalCape",
+     "jp": "ぎんがのマント"
     },
     {
      "id": "ItemName_Robe",
@@ -2606,7 +2817,8 @@
      "addr": "39678",
      "hex": "526f6265fc",
      "us": "Robe",
-     "en": "Robe"
+     "en": "Robe",
+     "jp": "ローブ"
     },
     {
      "id": "ItemName_SteelRobe",
@@ -2615,7 +2827,8 @@
      "addr": "3967D",
      "hex": "537465656c526f6265fc",
      "us": "SteelRobe",
-     "en": "SteelRobe"
+     "en": "SteelRobe",
+     "jp": "げっしょくのローブ"
     },
     {
      "id": "ItemName_LaconRobe",
@@ -2624,7 +2837,8 @@
      "addr": "39687",
      "hex": "4c61636f6e526f6265fc",
      "us": "LaconRobe",
-     "en": "LaconRobe"
+     "en": "LaconRobe",
+     "jp": "ラコニアローブ"
     },
     {
      "id": "ItemName_RoyalRobe",
@@ -2633,7 +2847,8 @@
      "addr": "39691",
      "hex": "526f79616c526f6265fc",
      "us": "RoyalRobe",
-     "en": "RoyalRobe"
+     "en": "RoyalRobe",
+     "jp": "プリンセスローブ"
     },
     {
      "id": "ItemName_HuntgChst",
@@ -2642,7 +2857,8 @@
      "addr": "3969B",
      "hex": "48756e746743687374fc",
      "us": "HuntgChst",
-     "en": "HuntgChst"
+     "en": "HuntgChst",
+     "jp": "レザーチェスト"
     },
     {
      "id": "ItemName_SteelChst",
@@ -2651,7 +2867,8 @@
      "addr": "396A5",
      "hex": "537465656c43687374fc",
      "us": "SteelChst",
-     "en": "SteelChst"
+     "en": "SteelChst",
+     "jp": "スチールチェスト"
     },
     {
      "id": "ItemName_LaconChst",
@@ -2660,7 +2877,8 @@
      "addr": "396AF",
      "hex": "4c61636f6e43687374fc",
      "us": "LaconChst",
-     "en": "LaconChst"
+     "en": "LaconChst",
+     "jp": "セラミックチェスト"
     },
     {
      "id": "ItemName_RoyalChst",
@@ -2669,7 +2887,8 @@
      "addr": "396B9",
      "hex": "526f79616c43687374fc",
      "us": "RoyalChst",
-     "en": "RoyalChst"
+     "en": "RoyalChst",
+     "jp": "コメットチェスト"
     },
     {
      "id": "ItemName_Fiblira",
@@ -2678,7 +2897,8 @@
      "addr": "396C3",
      "hex": "4669626c697261fc",
      "us": "Fiblira",
-     "en": "Fiblira"
+     "en": "Fiblira",
+     "jp": "フィブリラ"
     },
     {
      "id": "ItemName_SteelFib",
@@ -2687,7 +2907,8 @@
      "addr": "396CB",
      "hex": "537465656c20466962fc",
      "us": "Steel Fib",
-     "en": "Steel Fib"
+     "en": "Steel Fib",
+     "jp": "ほしのフィブリラ"
     },
     {
      "id": "ItemName_LaconFib",
@@ -2696,7 +2917,8 @@
      "addr": "396D5",
      "hex": "4c61636f6e20466962fc",
      "us": "Lacon Fib",
-     "en": "Lacon Fib"
+     "en": "Lacon Fib",
+     "jp": "ラコニアフィブリラ"
     },
     {
      "id": "ItemName_RoyalFib",
@@ -2705,7 +2927,8 @@
      "addr": "396DF",
      "hex": "526f79616c20466962fc",
      "us": "Royal Fib",
-     "en": "Royal Fib"
+     "en": "Royal Fib",
+     "jp": "クイーンフィブリラ"
     },
     {
      "id": "ItemName_Vest",
@@ -2714,7 +2937,8 @@
      "addr": "396E9",
      "hex": "56657374fc",
      "us": "Vest",
-     "en": "Vest"
+     "en": "Vest",
+     "jp": "ウールのベスト"
     },
     {
      "id": "ItemName_HuntgVest",
@@ -2723,7 +2947,8 @@
      "addr": "396EE",
      "hex": "48756e746756657374fc",
      "us": "HuntgVest",
-     "en": "HuntgVest"
+     "en": "HuntgVest",
+     "jp": "かわのベスト"
     },
     {
      "id": "ItemName_SteelVest",
@@ -2732,7 +2957,8 @@
      "addr": "396F8",
      "hex": "537465656c56657374fc",
      "us": "SteelVest",
-     "en": "SteelVest"
+     "en": "SteelVest",
+     "jp": "チェーンベスト"
     },
     {
      "id": "ItemName_CeramVest",
@@ -2741,7 +2967,8 @@
      "addr": "39702",
      "hex": "436572616d56657374fc",
      "us": "CeramVest",
-     "en": "CeramVest"
+     "en": "CeramVest",
+     "jp": "セラミックベスト"
     },
     {
      "id": "ItemName_ForceVest",
@@ -2750,7 +2977,8 @@
      "addr": "3970C",
      "hex": "466f72636556657374fc",
      "us": "ForceVest",
-     "en": "ForceVest"
+     "en": "ForceVest",
+     "jp": "せいざのベスト"
     },
     {
      "id": "ItemName_LaconVest",
@@ -2759,7 +2987,8 @@
      "addr": "39716",
      "hex": "4c61636f6e56657374fc",
      "us": "LaconVest",
-     "en": "LaconVest"
+     "en": "LaconVest",
+     "jp": "ラコニアベスト"
     },
     {
      "id": "ItemName_RoyalVest",
@@ -2768,7 +2997,8 @@
      "addr": "39720",
      "hex": "526f79616c56657374fc",
      "us": "RoyalVest",
-     "en": "RoyalVest"
+     "en": "RoyalVest",
+     "jp": "いにしえのベスト"
     },
     {
      "id": "ItemName_Protector",
@@ -2777,7 +3007,8 @@
      "addr": "3972A",
      "hex": "50726f746563746f72fc",
      "us": "Protector",
-     "en": "Protector"
+     "en": "Protector",
+     "jp": "プロテクタ"
     },
     {
      "id": "ItemName_SteelPrtc",
@@ -2786,7 +3017,8 @@
      "addr": "39734",
      "hex": "537465656c50727463fc",
      "us": "SteelPrtc",
-     "en": "SteelPrtc"
+     "en": "SteelPrtc",
+     "jp": "スチールプロテクタ"
     },
     {
      "id": "ItemName_CeramPrtc",
@@ -2795,7 +3027,8 @@
      "addr": "3973E",
      "hex": "436572616d50727463fc",
      "us": "CeramPrtc",
-     "en": "CeramPrtc"
+     "en": "CeramPrtc",
+     "jp": "セラミックガード"
     },
     {
      "id": "ItemName_ForcePrtc",
@@ -2804,7 +3037,8 @@
      "addr": "39748",
      "hex": "466f72636550727463fc",
      "us": "ForcePrtc",
-     "en": "ForcePrtc"
+     "en": "ForcePrtc",
+     "jp": "コメットプロテクタ"
     },
     {
      "id": "ItemName_LaconPrtc",
@@ -2813,7 +3047,8 @@
      "addr": "39752",
      "hex": "4c61636f6e50727463fc",
      "us": "LaconPrtc",
-     "en": "LaconPrtc"
+     "en": "LaconPrtc",
+     "jp": "ラコニアプロテクタ"
     },
     {
      "id": "ItemName_RoyalPrtc",
@@ -2822,7 +3057,8 @@
      "addr": "3975C",
      "hex": "526f79616c50727463fc",
      "us": "RoyalPrtc",
-     "en": "RoyalPrtc"
+     "en": "RoyalPrtc",
+     "jp": "マキシマプロテクタ"
     },
     {
      "id": "ItemName_Boots",
@@ -2831,7 +3067,8 @@
      "addr": "39766",
      "hex": "426f6f7473fc",
      "us": "Boots",
-     "en": "Boots"
+     "en": "Boots",
+     "jp": "レザーブーツ"
     },
     {
      "id": "ItemName_ForceBoot",
@@ -2840,7 +3077,8 @@
      "addr": "3976C",
      "hex": "466f726365426f6f74fc",
      "us": "ForceBoot",
-     "en": "ForceBoot"
+     "en": "ForceBoot",
+     "jp": "ロングブーツ"
     },
     {
      "id": "ItemName_RoyalBoot",
@@ -2849,7 +3087,8 @@
      "addr": "39776",
      "hex": "526f79616c426f6f74fc",
      "us": "RoyalBoot",
-     "en": "RoyalBoot"
+     "en": "RoyalBoot",
+     "jp": "ガードブーツ"
     },
     {
      "id": "ItemName_Shield",
@@ -2858,7 +3097,8 @@
      "addr": "39780",
      "hex": "536869656c64fc",
      "us": "Shield",
-     "en": "Shield"
+     "en": "Shield",
+     "jp": "かわのたて"
     },
     {
      "id": "ItemName_SteelShld",
@@ -2867,7 +3107,8 @@
      "addr": "39787",
      "hex": "537465656c53686c64fc",
      "us": "SteelShld",
-     "en": "SteelShld"
+     "en": "SteelShld",
+     "jp": "きしのたて"
     },
     {
      "id": "ItemName_CeramShld",
@@ -2876,7 +3117,8 @@
      "addr": "39791",
      "hex": "436572616d53686c64fc",
      "us": "CeramShld",
-     "en": "CeramShld"
+     "en": "CeramShld",
+     "jp": "セラミックシールド"
     },
     {
      "id": "ItemName_ForceShld",
@@ -2885,7 +3127,8 @@
      "addr": "3979B",
      "hex": "466f72636553686c64fc",
      "us": "ForceShld",
-     "en": "ForceShld"
+     "en": "ForceShld",
+     "jp": "せいひつのたて"
     },
     {
      "id": "ItemName_LaconShld",
@@ -2894,7 +3137,8 @@
      "addr": "397A5",
      "hex": "4c61636f6e53686c64fc",
      "us": "LaconShld",
-     "en": "LaconShld"
+     "en": "LaconShld",
+     "jp": "ラコニアシールド"
     },
     {
      "id": "ItemName_RoyalShld",
@@ -2903,7 +3147,8 @@
      "addr": "397AF",
      "hex": "526f79616c53686c64fc",
      "us": "RoyalShld",
-     "en": "RoyalShld"
+     "en": "RoyalShld",
+     "jp": "ていおうのたて"
     },
     {
      "id": "ItemName_Emel",
@@ -2912,7 +3157,8 @@
      "addr": "397B9",
      "hex": "456d656cfc",
      "us": "Emel",
-     "en": "Emel"
+     "en": "Emel",
+     "jp": "エーメル"
     },
     {
      "id": "ItemName_SteelEmel",
@@ -2921,7 +3167,8 @@
      "addr": "397BE",
      "hex": "537465656c456d656cfc",
      "us": "SteelEmel",
-     "en": "SteelEmel"
+     "en": "SteelEmel",
+     "jp": "レザーエーメル"
     },
     {
      "id": "ItemName_CeramEmel",
@@ -2930,7 +3177,8 @@
      "addr": "397C8",
      "hex": "436572616d456d656cfc",
      "us": "CeramEmel",
-     "en": "CeramEmel"
+     "en": "CeramEmel",
+     "jp": "セラミックエーメル"
     },
     {
      "id": "ItemName_ForceEmel",
@@ -2939,7 +3187,8 @@
      "addr": "397D2",
      "hex": "466f726365456d656cfc",
      "us": "ForceEmel",
-     "en": "ForceEmel"
+     "en": "ForceEmel",
+     "jp": "せいいのそで"
     },
     {
      "id": "ItemName_LaconEmel",
@@ -2948,7 +3197,8 @@
      "addr": "397DC",
      "hex": "4c61636f6e456d656cfc",
      "us": "LaconEmel",
-     "en": "LaconEmel"
+     "en": "LaconEmel",
+     "jp": "ラコニアエーメル"
     },
     {
      "id": "ItemName_RoyalEmel",
@@ -2957,7 +3207,8 @@
      "addr": "397E6",
      "hex": "526f79616c456d656cfc",
      "us": "RoyalEmel",
-     "en": "RoyalEmel"
+     "en": "RoyalEmel",
+     "jp": "グリーンスリーブ"
     },
     {
      "id": "ItemName_Needle",
@@ -2966,7 +3217,8 @@
      "addr": "397F0",
      "hex": "4e6565646c65fc",
      "us": "Needle",
-     "en": "Needle"
+     "en": "Needle",
+     "jp": "はり"
     },
     {
      "id": "ItemName_HuntgNdl",
@@ -2975,7 +3227,8 @@
      "addr": "397F7",
      "hex": "48756e7467204e646cfc",
      "us": "Huntg Ndl",
-     "en": "Huntg Ndl"
+     "en": "Huntg Ndl",
+     "jp": "とりうちバリ"
     },
     {
      "id": "ItemName_SteelNdl",
@@ -2984,7 +3237,8 @@
      "addr": "39801",
      "hex": "537465656c204e646cfc",
      "us": "Steel Ndl",
-     "en": "Steel Ndl"
+     "en": "Steel Ndl",
+     "jp": "しゅりけん"
     },
     {
      "id": "ItemName_CeramNdl",
@@ -2993,7 +3247,8 @@
      "addr": "3980B",
      "hex": "436572616d204e646cfc",
      "us": "Ceram Ndl",
-     "en": "Ceram Ndl"
+     "en": "Ceram Ndl",
+     "jp": "とうぞくのはり"
     },
     {
      "id": "ItemName_LaserNdl",
@@ -3002,7 +3257,8 @@
      "addr": "39815",
      "hex": "4c61736572204e646cfc",
      "us": "Laser Ndl",
-     "en": "Laser Ndl"
+     "en": "Laser Ndl",
+     "jp": "あんさつしゃのハリ"
     },
     {
      "id": "ItemName_ForceNdl",
@@ -3011,7 +3267,8 @@
      "addr": "3981F",
      "hex": "466f726365204e646cfc",
      "us": "Force Ndl",
-     "en": "Force Ndl"
+     "en": "Force Ndl",
+     "jp": "セラミックニードル"
     },
     {
      "id": "ItemName_LaconNdl",
@@ -3020,7 +3277,8 @@
      "addr": "39829",
      "hex": "4c61636f6e204e646cfc",
      "us": "Lacon Ndl",
-     "en": "Lacon Ndl"
+     "en": "Lacon Ndl",
+     "jp": "レーザーニードル"
     },
     {
      "id": "ItemName_RoyalNdl",
@@ -3029,7 +3287,8 @@
      "addr": "39833",
      "hex": "526f79616c204e646cfc",
      "us": "Royal Ndl",
-     "en": "Royal Ndl"
+     "en": "Royal Ndl",
+     "jp": "ラコニアニードル"
     },
     {
      "id": "ItemName_Sapphire",
@@ -3038,7 +3297,8 @@
      "addr": "3983D",
      "hex": "5361707068697265fc",
      "us": "Sapphire",
-     "en": "Sapphire"
+     "en": "Sapphire",
+     "jp": "もりのサファイア"
     },
     {
      "id": "ItemName_MoonStone",
@@ -3047,7 +3307,8 @@
      "addr": "39846",
      "hex": "4d6f6f6e53746f6e65fc",
      "us": "MoonStone",
-     "en": "MoonStone"
+     "en": "MoonStone",
+     "jp": "つきのいし"
     },
     {
      "id": "ItemName_MoonTear",
@@ -3056,7 +3317,8 @@
      "addr": "39850",
      "hex": "4d6f6f6e2054656172fc",
      "us": "Moon Tear",
-     "en": "Moon Tear"
+     "en": "Moon Tear",
+     "jp": "つきのなみだ"
     },
     {
      "id": "ItemName_DragnTear",
@@ -3065,7 +3327,8 @@
      "addr": "3985A",
      "hex": "447261676e54656172fc",
      "us": "DragnTear",
-     "en": "DragnTear"
+     "en": "DragnTear",
+     "jp": "りゅうのなみだ"
     },
     {
      "id": "ItemName_Snow",
@@ -3074,7 +3337,8 @@
      "addr": "39864",
      "hex": "536e6f77fc",
      "us": "Snow",
-     "en": "Snow"
+     "en": "Snow",
+     "jp": "ゆきのけっしょう"
     },
     {
      "id": "ItemName_TwinsRuby",
@@ -3083,7 +3347,8 @@
      "addr": "39869",
      "hex": "5477696e7352756279fc",
      "us": "TwinsRuby",
-     "en": "TwinsRuby"
+     "en": "TwinsRuby",
+     "jp": "ふたごのルビー"
     },
     {
      "id": "ItemName_PowrTopaz",
@@ -3092,7 +3357,8 @@
      "addr": "39873",
      "hex": "506f7772546f70617afc",
      "us": "PowrTopaz",
-     "en": "PowrTopaz"
+     "en": "PowrTopaz",
+     "jp": "ちからのトパーズ"
     },
     {
      "id": "ItemName_MstryStar",
@@ -3101,7 +3367,8 @@
      "addr": "3987D",
      "hex": "4d7374727953746172fc",
      "us": "MstryStar",
-     "en": "MstryStar"
+     "en": "MstryStar",
+     "jp": "しんぴのほし"
     },
     {
      "id": "ItemName_AquaParts",
@@ -3110,7 +3377,8 @@
      "addr": "39887",
      "hex": "417175615061727473fc",
      "us": "AquaParts",
-     "en": "AquaParts"
+     "en": "AquaParts",
+     "jp": "マリンパーツ"
     },
     {
      "id": "ItemName_SubParts",
@@ -3119,7 +3387,8 @@
      "addr": "39891",
      "hex": "537562205061727473fc",
      "us": "Sub Parts",
-     "en": "Sub Parts"
+     "en": "Sub Parts",
+     "jp": "サブマリンパーツ"
     },
     {
      "id": "ItemName_AeroParts",
@@ -3128,7 +3397,8 @@
      "addr": "3989B",
      "hex": "4165726f5061727473fc",
      "us": "AeroParts",
-     "en": "AeroParts"
+     "en": "AeroParts",
+     "jp": "スカイパーツ"
     },
     {
      "id": "ItemName_LayaPndnt",
@@ -3137,7 +3407,8 @@
      "addr": "398A5",
      "hex": "4c617961506e646e74fc",
      "us": "LayaPndnt",
-     "en": "LayaPndnt"
+     "en": "LayaPndnt",
+     "jp": "ライアペンダント"
     }
    ]
   },
@@ -3153,7 +3424,8 @@
      "addr": "398B0",
      "hex": "466f69fc",
      "us": "Foi",
-     "en": "Foi"
+     "en": "Foi",
+     "jp": "フォイエ"
     },
     {
      "id": "techs#001",
@@ -3162,7 +3434,8 @@
      "addr": "398C0",
      "hex": "5a616efc",
      "us": "Zan",
-     "en": "Zan"
+     "en": "Zan",
+     "jp": "ザン"
     },
     {
      "id": "techs#002",
@@ -3171,7 +3444,8 @@
      "addr": "398D0",
      "hex": "477261fc",
      "us": "Gra",
-     "en": "Gra"
+     "en": "Gra",
+     "jp": "グラブト"
     },
     {
      "id": "techs#003",
@@ -3180,7 +3454,8 @@
      "addr": "398E0",
      "hex": "547375fc",
      "us": "Tsu",
-     "en": "Tsu"
+     "en": "Tsu",
+     "jp": "バータ"
     },
     {
      "id": "techs#004",
@@ -3189,7 +3464,8 @@
      "addr": "398F0",
      "hex": "526573fc",
      "us": "Res",
-     "en": "Res"
+     "en": "Res",
+     "jp": "サンフォース"
     },
     {
      "id": "techs#005",
@@ -3198,7 +3474,8 @@
      "addr": "39900",
      "hex": "4769726573fc",
      "us": "Gires",
-     "en": "Gires"
+     "en": "Gires",
+     "jp": "スターフォース"
     },
     {
      "id": "techs#006",
@@ -3207,7 +3484,8 @@
      "addr": "39910",
      "hex": "5265766572fc",
      "us": "Rever",
-     "en": "Rever"
+     "en": "Rever",
+     "jp": "ムーンフォース"
     },
     {
      "id": "techs#007",
@@ -3216,7 +3494,8 @@
      "addr": "39920",
      "hex": "416e7469fc",
      "us": "Anti",
-     "en": "Anti"
+     "en": "Anti",
+     "jp": "シーフォース"
     },
     {
      "id": "techs#008",
@@ -3225,7 +3504,8 @@
      "addr": "39930",
      "hex": "4e6572fc",
      "us": "Ner",
-     "en": "Ner"
+     "en": "Ner",
+     "jp": "ライジング"
     },
     {
      "id": "techs#009",
@@ -3234,7 +3514,8 @@
      "addr": "39940",
      "hex": "52696d6974fc",
      "us": "Rimit",
-     "en": "Rimit"
+     "en": "Rimit",
+     "jp": "ヌーン"
     },
     {
      "id": "techs#010",
@@ -3243,7 +3524,8 @@
      "addr": "39950",
      "hex": "5368697a61fc",
      "us": "Shiza",
-     "en": "Shiza"
+     "en": "Shiza",
+     "jp": "フォール"
     },
     {
      "id": "techs#011",
@@ -3252,7 +3534,8 @@
      "addr": "39960",
      "hex": "446562616efc",
      "us": "Deban",
-     "en": "Deban"
+     "en": "Deban",
+     "jp": "ナイト"
     },
     {
      "id": "techs#012",
@@ -3261,7 +3544,8 @@
      "addr": "39970",
      "hex": "46616e6269fc",
      "us": "Fanbi",
-     "en": "Fanbi"
+     "en": "Fanbi",
+     "jp": "ロー"
     },
     {
      "id": "techs#013",
@@ -3270,7 +3554,8 @@
      "addr": "39980",
      "hex": "466f727361fc",
      "us": "Forsa",
-     "en": "Forsa"
+     "en": "Forsa",
+     "jp": "アンバランス"
     },
     {
      "id": "techs#014",
@@ -3279,7 +3564,8 @@
      "addr": "39990",
      "hex": "4e6173616bfc",
      "us": "Nasak",
-     "en": "Nasak"
+     "en": "Nasak",
+     "jp": "バランス"
     },
     {
      "id": "techs#015",
@@ -3288,7 +3574,8 @@
      "addr": "399A0",
      "hex": "536875fc",
      "us": "Shu",
-     "en": "Shu"
+     "en": "Shu",
+     "jp": "カオス"
     },
     {
      "id": "techs#016",
@@ -3297,7 +3584,8 @@
      "addr": "399B0",
      "hex": "4d656769646ffc",
      "us": "Megido",
-     "en": "Megido"
+     "en": "Megido",
+     "jp": "メギド"
     },
     {
      "id": "techs#017",
@@ -3306,7 +3594,8 @@
      "addr": "399C0",
      "hex": "4772616e747afc",
      "us": "Grantz",
-     "en": "Grantz"
+     "en": "Grantz",
+     "jp": "グランツ"
     },
     {
      "id": "techs#018",
@@ -3315,7 +3604,8 @@
      "addr": "399D0",
      "hex": "466f69fc",
      "us": "Foi",
-     "en": "Foi"
+     "en": "Foi",
+     "jp": "フォイエ"
     },
     {
      "id": "techs#019",
@@ -3324,7 +3614,8 @@
      "addr": "399E0",
      "hex": "5a616efc",
      "us": "Zan",
-     "en": "Zan"
+     "en": "Zan",
+     "jp": "ザン"
     },
     {
      "id": "techs#020",
@@ -3333,7 +3624,8 @@
      "addr": "399F0",
      "hex": "477261fc",
      "us": "Gra",
-     "en": "Gra"
+     "en": "Gra",
+     "jp": "グラブト"
     },
     {
      "id": "techs#021",
@@ -3342,7 +3634,8 @@
      "addr": "39A00",
      "hex": "547375fc",
      "us": "Tsu",
-     "en": "Tsu"
+     "en": "Tsu",
+     "jp": "バータ"
     },
     {
      "id": "techs#022",
@@ -3351,7 +3644,8 @@
      "addr": "39A10",
      "hex": "4769726573fc",
      "us": "Gires",
-     "en": "Gires"
+     "en": "Gires",
+     "jp": "スターフォース"
     },
     {
      "id": "techs#023",
@@ -3360,7 +3654,8 @@
      "addr": "39A20",
      "hex": "506f69736f6efc",
      "us": "Poison",
-     "en": "Poison"
+     "en": "Poison",
+     "jp": "ドク"
     }
    ]
   },
@@ -3376,7 +3671,8 @@
      "addr": "3BE14",
      "hex": "476c6f70fc",
      "us": "Glop",
-     "en": "Glop"
+     "en": "Glop",
+     "jp": "ジェリー"
     },
     {
      "id": "EnemyName_Ooze",
@@ -3385,7 +3681,8 @@
      "addr": "3BE19",
      "hex": "4f6f7a65fc",
      "us": "Ooze",
-     "en": "Ooze"
+     "en": "Ooze",
+     "jp": "ライトジェリー"
     },
     {
      "id": "EnemyName_Slime",
@@ -3394,7 +3691,8 @@
      "addr": "3BE1E",
      "hex": "536c696d65fc",
      "us": "Slime",
-     "en": "Slime"
+     "en": "Slime",
+     "jp": "ダークジェリー"
     },
     {
      "id": "EnemyName_Fire",
@@ -3403,7 +3701,8 @@
      "addr": "3BE24",
      "hex": "46697265fc",
      "us": "Fire",
-     "en": "Fire"
+     "en": "Fire",
+     "jp": "フィアル"
     },
     {
      "id": "EnemyName_Murafire",
@@ -3412,7 +3711,8 @@
      "addr": "3BE29",
      "hex": "4d75726166697265fc",
      "us": "Murafire",
-     "en": "Murafire"
+     "en": "Murafire",
+     "jp": "フィアルマ"
     },
     {
      "id": "EnemyName_Azufire",
@@ -3421,7 +3721,8 @@
      "addr": "3BE32",
      "hex": "417a7566697265fc",
      "us": "Azufire",
-     "en": "Azufire"
+     "en": "Azufire",
+     "jp": "ブルーフィアル"
     },
     {
      "id": "EnemyName_Nayl",
@@ -3430,7 +3731,8 @@
      "addr": "3BE3A",
      "hex": "4e61796cfc",
      "us": "Nayl",
-     "en": "Nayl"
+     "en": "Nayl",
+     "jp": "チャム"
     },
     {
      "id": "EnemyName_Flayl",
@@ -3439,7 +3741,8 @@
      "addr": "3BE3F",
      "hex": "466c61796cfc",
      "us": "Flayl",
-     "en": "Flayl"
+     "en": "Flayl",
+     "jp": "ドルチャム"
     },
     {
      "id": "EnemyName_Slayl",
@@ -3448,7 +3751,8 @@
      "addr": "3BE45",
      "hex": "536c61796cfc",
      "us": "Slayl",
-     "en": "Slayl"
+     "en": "Slayl",
+     "jp": "グルーチャム"
     },
     {
      "id": "EnemyName_Dryad",
@@ -3457,7 +3761,8 @@
      "addr": "3BE4B",
      "hex": "4472796164fc",
      "us": "Dryad",
-     "en": "Dryad"
+     "en": "Dryad",
+     "jp": "バタフライ"
     },
     {
      "id": "EnemyName_Nereid",
@@ -3466,7 +3771,8 @@
      "addr": "3BE51",
      "hex": "4e6572656964fc",
      "us": "Nereid",
-     "en": "Nereid"
+     "en": "Nereid",
+     "jp": "ミスバタフライ"
     },
     {
      "id": "EnemyName_Sylph",
@@ -3475,7 +3781,8 @@
      "addr": "3BE58",
      "hex": "53796c7068fc",
      "us": "Sylph",
-     "en": "Sylph"
+     "en": "Sylph",
+     "jp": "マダムバタフライ"
     },
     {
      "id": "EnemyName_Buzzgull",
@@ -3484,7 +3791,8 @@
      "addr": "3BE5E",
      "hex": "42757a7a67756c6cfc",
      "us": "Buzzgull",
-     "en": "Buzzgull"
+     "en": "Buzzgull",
+     "jp": "チープコック"
     },
     {
      "id": "EnemyName_Lashgull",
@@ -3493,7 +3801,8 @@
      "addr": "3BE67",
      "hex": "4c61736867756c6cfc",
      "us": "Lashgull",
-     "en": "Lashgull"
+     "en": "Lashgull",
+     "jp": "ラチープコック"
     },
     {
      "id": "EnemyName_Hackgull",
@@ -3502,7 +3811,8 @@
      "addr": "3BE70",
      "hex": "4861636b67756c6cfc",
      "us": "Hackgull",
-     "en": "Hackgull"
+     "en": "Hackgull",
+     "jp": "ドチープコック"
     },
     {
      "id": "EnemyName_Eindon",
@@ -3511,7 +3821,8 @@
      "addr": "3BE79",
      "hex": "45696e646f6efc",
      "us": "Eindon",
-     "en": "Eindon"
+     "en": "Eindon",
+     "jp": "シーラ"
     },
     {
      "id": "EnemyName_Tsveidon",
@@ -3520,7 +3831,8 @@
      "addr": "3BE80",
      "hex": "5473766569646f6efc",
      "us": "Tsveidon",
-     "en": "Tsveidon"
+     "en": "Tsveidon",
+     "jp": "ラシーラ"
     },
     {
      "id": "EnemyName_Dreidon",
@@ -3529,7 +3841,8 @@
      "addr": "3BE89",
      "hex": "44726569646f6efc",
      "us": "Dreidon",
-     "en": "Dreidon"
+     "en": "Dreidon",
+     "jp": "プシーラ"
     },
     {
      "id": "EnemyName_Clump",
@@ -3538,7 +3851,8 @@
      "addr": "3BE91",
      "hex": "436c756d70fc",
      "us": "Clump",
-     "en": "Clump"
+     "en": "Clump",
+     "jp": "グラン"
     },
     {
      "id": "EnemyName_Cluster",
@@ -3547,7 +3861,8 @@
      "addr": "3BE97",
      "hex": "436c7573746572fc",
      "us": "Cluster",
-     "en": "Cluster"
+     "en": "Cluster",
+     "jp": "グレアー"
     },
     {
      "id": "EnemyName_Clique",
@@ -3556,7 +3871,8 @@
      "addr": "3BE9F",
      "hex": "436c69717565fc",
      "us": "Clique",
-     "en": "Clique"
+     "en": "Clique",
+     "jp": "グレロス"
     },
     {
      "id": "EnemyName_Chirper",
@@ -3565,7 +3881,8 @@
      "addr": "3BEA6",
      "hex": "43686972706572fc",
      "us": "Chirper",
-     "en": "Chirper"
+     "en": "Chirper",
+     "jp": "ラッピー"
     },
     {
      "id": "EnemyName_Warbler",
@@ -3574,7 +3891,8 @@
      "addr": "3BEAE",
      "hex": "576172626c6572fc",
      "us": "Warbler",
-     "en": "Warbler"
+     "en": "Warbler",
+     "jp": "パープルラッピー"
     },
     {
      "id": "EnemyName_Squawker",
@@ -3583,7 +3901,8 @@
      "addr": "3BEB6",
      "hex": "53717561776b6572fc",
      "us": "Squawker",
-     "en": "Squawker"
+     "en": "Squawker",
+     "jp": "スノーラッピー"
     },
     {
      "id": "EnemyName_Lizrd",
@@ -3592,7 +3911,8 @@
      "addr": "3BEBF",
      "hex": "4c697a7264fc",
      "us": "Lizrd",
-     "en": "Lizrd"
+     "en": "Lizrd",
+     "jp": "リザード"
     },
     {
      "id": "EnemyName_Blizrd",
@@ -3601,7 +3921,8 @@
      "addr": "3BEC5",
      "hex": "426c697a7264fc",
      "us": "Blizrd",
-     "en": "Blizrd"
+     "en": "Blizrd",
+     "jp": "デスリザード"
     },
     {
      "id": "EnemyName_Grizrd",
@@ -3610,7 +3931,8 @@
      "addr": "3BECC",
      "hex": "4772697a7264fc",
      "us": "Grizrd",
-     "en": "Grizrd"
+     "en": "Grizrd",
+     "jp": "ゲルリザード"
     },
     {
      "id": "EnemyName_Spinner",
@@ -3619,7 +3941,8 @@
      "addr": "3BED3",
      "hex": "5370696e6e6572fc",
      "us": "Spinner",
-     "en": "Spinner"
+     "en": "Spinner",
+     "jp": "オルトクラゲ"
     },
     {
      "id": "EnemyName_Twirler",
@@ -3628,7 +3951,8 @@
      "addr": "3BEDB",
      "hex": "547769726c6572fc",
      "us": "Twirler",
-     "en": "Twirler"
+     "en": "Twirler",
+     "jp": "メタクラゲ"
     },
     {
      "id": "EnemyName_Wizzer",
@@ -3637,7 +3961,8 @@
      "addr": "3BEE3",
      "hex": "57697a7a6572fc",
      "us": "Wizzer",
-     "en": "Wizzer"
+     "en": "Wizzer",
+     "jp": "パラクラゲ"
     },
     {
      "id": "EnemyName_Imp",
@@ -3646,7 +3971,8 @@
      "addr": "3BEEA",
      "hex": "496d70fc",
      "us": "Imp",
-     "en": "Imp"
+     "en": "Imp",
+     "jp": "キュール"
     },
     {
      "id": "EnemyName_Impfoul",
@@ -3655,7 +3981,8 @@
      "addr": "3BEEE",
      "hex": "496d70666f756cfc",
      "us": "Impfoul",
-     "en": "Impfoul"
+     "en": "Impfoul",
+     "jp": "ラキュール"
     },
     {
      "id": "EnemyName_Impvile",
@@ -3664,7 +3991,8 @@
      "addr": "3BEF6",
      "hex": "496d7076696c65fc",
      "us": "Impvile",
-     "en": "Impvile"
+     "en": "Impvile",
+     "jp": "ドラキュル"
     },
     {
      "id": "EnemyName_Nova",
@@ -3673,7 +4001,8 @@
      "addr": "3BEFE",
      "hex": "4e6f7661fc",
      "us": "Nova",
-     "en": "Nova"
+     "en": "Nova",
+     "jp": "スターアイ"
     },
     {
      "id": "EnemyName_Pulsar",
@@ -3682,7 +4011,8 @@
      "addr": "3BF03",
      "hex": "50756c736172fc",
      "us": "Pulsar",
-     "en": "Pulsar"
+     "en": "Pulsar",
+     "jp": "イエローアイ"
     },
     {
      "id": "EnemyName_Quasar",
@@ -3691,7 +4021,8 @@
      "addr": "3BF0A",
      "hex": "517561736172fc",
      "us": "Quasar",
-     "en": "Quasar"
+     "en": "Quasar",
+     "jp": "レッドアイ"
     },
     {
      "id": "EnemyName_Chirpbot",
@@ -3700,7 +4031,8 @@
      "addr": "3BF11",
      "hex": "4368697270626f74fc",
      "us": "Chirpbot",
-     "en": "Chirpbot"
+     "en": "Chirpbot",
+     "jp": "ピポラ"
     },
     {
      "id": "EnemyName_Warblbot",
@@ -3709,7 +4041,8 @@
      "addr": "3BF1A",
      "hex": "576172626c626f74fc",
      "us": "Warblbot",
-     "en": "Warblbot"
+     "en": "Warblbot",
+     "jp": "ラポラ"
     },
     {
      "id": "EnemyName_Squakbot",
@@ -3718,7 +4051,8 @@
      "addr": "3BF23",
      "hex": "537175616b626f74fc",
      "us": "Squakbot",
-     "en": "Squakbot"
+     "en": "Squakbot",
+     "jp": "ロポラ"
     },
     {
      "id": "EnemyName_Commsat",
@@ -3727,7 +4061,8 @@
      "addr": "3BF2C",
      "hex": "436f6d6d736174fc",
      "us": "Commsat",
-     "en": "Commsat"
+     "en": "Commsat",
+     "jp": "ディバイド"
     },
     {
      "id": "EnemyName_Spysat",
@@ -3736,7 +4071,8 @@
      "addr": "3BF34",
      "hex": "537079736174fc",
      "us": "Spysat",
-     "en": "Spysat"
+     "en": "Spysat",
+     "jp": "レッドディバイド"
     },
     {
      "id": "EnemyName_Killsat",
@@ -3745,7 +4081,8 @@
      "addr": "3BF3B",
      "hex": "4b696c6c736174fc",
      "us": "Killsat",
-     "en": "Killsat"
+     "en": "Killsat",
+     "jp": "ラストディバイド"
     },
     {
      "id": "EnemyName_Arachne",
@@ -3754,7 +4091,8 @@
      "addr": "3BF43",
      "hex": "41726163686e65fc",
      "us": "Arachne",
-     "en": "Arachne"
+     "en": "Arachne",
+     "jp": "オクトレグ"
     },
     {
      "id": "EnemyName_Darachne",
@@ -3763,7 +4101,8 @@
      "addr": "3BF4B",
      "hex": "4461726163686e65fc",
      "us": "Darachne",
-     "en": "Darachne"
+     "en": "Darachne",
+     "jp": "アイスオクトレグ"
     },
     {
      "id": "EnemyName_Zarachne",
@@ -3772,7 +4111,8 @@
      "addr": "3BF54",
      "hex": "5a61726163686e65fc",
      "us": "Zarachne",
-     "en": "Zarachne"
+     "en": "Zarachne",
+     "jp": "レィドオクトレグ"
     },
     {
      "id": "EnemyName_Blink",
@@ -3781,7 +4121,8 @@
      "addr": "3BF5D",
      "hex": "426c696e6bfc",
      "us": "Blink",
-     "en": "Blink"
+     "en": "Blink",
+     "jp": "ナルーガ"
     },
     {
      "id": "EnemyName_Flash",
@@ -3790,7 +4131,8 @@
      "addr": "3BF63",
      "hex": "466c617368fc",
      "us": "Flash",
-     "en": "Flash"
+     "en": "Flash",
+     "jp": "ビーロルーガ"
     },
     {
      "id": "EnemyName_Strobe",
@@ -3799,7 +4141,8 @@
      "addr": "3BF69",
      "hex": "5374726f6265fc",
      "us": "Strobe",
-     "en": "Strobe"
+     "en": "Strobe",
+     "jp": "バームルーガ"
     },
     {
      "id": "EnemyName_Minimech",
@@ -3808,7 +4151,8 @@
      "addr": "3BF70",
      "hex": "4d696e696d656368fc",
      "us": "Minimech",
-     "en": "Minimech"
+     "en": "Minimech",
+     "jp": "ウェザール"
     },
     {
      "id": "EnemyName_Mech",
@@ -3817,7 +4161,8 @@
      "addr": "3BF79",
      "hex": "4d656368fc",
      "us": "Mech",
-     "en": "Mech"
+     "en": "Mech",
+     "jp": "ウェザール2"
     },
     {
      "id": "EnemyName_Maxmech",
@@ -3826,7 +4171,8 @@
      "addr": "3BF7E",
      "hex": "4d61786d656368fc",
      "us": "Maxmech",
-     "en": "Maxmech"
+     "en": "Maxmech",
+     "jp": "ウェザール12"
     },
     {
      "id": "EnemyName_Lazrbot",
@@ -3835,7 +4181,8 @@
      "addr": "3BF86",
      "hex": "4c617a72626f74fc",
      "us": "Lazrbot",
-     "en": "Lazrbot"
+     "en": "Lazrbot",
+     "jp": "ハンドウォーカー"
     },
     {
      "id": "EnemyName_Mazrbot",
@@ -3844,7 +4191,8 @@
      "addr": "3BF8E",
      "hex": "4d617a72626f74fc",
      "us": "Mazrbot",
-     "en": "Mazrbot"
+     "en": "Mazrbot",
+     "jp": "エビルウォーカー"
     },
     {
      "id": "EnemyName_Fazrbot",
@@ -3853,7 +4201,8 @@
      "addr": "3BF96",
      "hex": "46617a72626f74fc",
      "us": "Fazrbot",
-     "en": "Fazrbot"
+     "en": "Fazrbot",
+     "jp": "デスウォーカー"
     },
     {
      "id": "EnemyName_Emir",
@@ -3862,7 +4211,8 @@
      "addr": "3BF9E",
      "hex": "456d6972fc",
      "us": "Emir",
-     "en": "Emir"
+     "en": "Emir",
+     "jp": "クライオン"
     },
     {
      "id": "EnemyName_Sheik",
@@ -3871,7 +4221,8 @@
      "addr": "3BFA3",
      "hex": "536865696bfc",
      "us": "Sheik",
-     "en": "Sheik"
+     "en": "Sheik",
+     "jp": "ショルディーム"
     },
     {
      "id": "EnemyName_Caliph",
@@ -3880,7 +4231,8 @@
      "addr": "3BFA9",
      "hex": "43616c697068fc",
      "us": "Caliph",
-     "en": "Caliph"
+     "en": "Caliph",
+     "jp": "ムハーディム"
     },
     {
      "id": "EnemyName_Harpy",
@@ -3889,7 +4241,8 @@
      "addr": "3BFB0",
      "hex": "4861727079fc",
      "us": "Harpy",
-     "en": "Harpy"
+     "en": "Harpy",
+     "jp": "ナルヒ"
     },
     {
      "id": "EnemyName_Griffin",
@@ -3898,7 +4251,8 @@
      "addr": "3BFB6",
      "hex": "4772696666696efc",
      "us": "Griffin",
-     "en": "Griffin"
+     "en": "Griffin",
+     "jp": "ナルヒム"
     },
     {
      "id": "EnemyName_Gryphon",
@@ -3907,7 +4261,8 @@
      "addr": "3BFBE",
      "hex": "47727970686f6efc",
      "us": "Gryphon",
-     "en": "Gryphon"
+     "en": "Gryphon",
+     "jp": "ガルヒム"
     },
     {
      "id": "EnemyName_Banshee",
@@ -3916,7 +4271,8 @@
      "addr": "3BFC6",
      "hex": "42616e73686565fc",
      "us": "Banshee",
-     "en": "Banshee"
+     "en": "Banshee",
+     "jp": "フラム"
     },
     {
      "id": "EnemyName_Ghost",
@@ -3925,7 +4281,8 @@
      "addr": "3BFCE",
      "hex": "47686f7374fc",
      "us": "Ghost",
-     "en": "Ghost"
+     "en": "Ghost",
+     "jp": "テラフラム"
     },
     {
      "id": "EnemyName_Haunt",
@@ -3934,7 +4291,8 @@
      "addr": "3BFD4",
      "hex": "4861756e74fc",
      "us": "Haunt",
-     "en": "Haunt"
+     "en": "Haunt",
+     "jp": "ネローミンク"
     },
     {
      "id": "EnemyName_Beastess",
@@ -3943,7 +4301,8 @@
      "addr": "3BFDA",
      "hex": "4265617374657373fc",
      "us": "Beastess",
-     "en": "Beastess"
+     "en": "Beastess",
+     "jp": "ウェルズ"
     },
     {
      "id": "EnemyName_Trogess",
@@ -3952,7 +4311,8 @@
      "addr": "3BFE3",
      "hex": "54726f67657373fc",
      "us": "Trogess",
-     "en": "Trogess"
+     "en": "Trogess",
+     "jp": "ガウェルズ"
     },
     {
      "id": "EnemyName_Demoness",
@@ -3961,7 +4321,8 @@
      "addr": "3BFEB",
      "hex": "44656d6f6e657373fc",
      "us": "Demoness",
-     "en": "Demoness"
+     "en": "Demoness",
+     "jp": "ダスウェルズ"
     },
     {
      "id": "EnemyName_Bushi",
@@ -3970,7 +4331,8 @@
      "addr": "3BFF4",
      "hex": "4275736869fc",
      "us": "Bushi",
-     "en": "Bushi"
+     "en": "Bushi",
+     "jp": "バルキリー"
     },
     {
      "id": "EnemyName_Kensai",
@@ -3979,7 +4341,8 @@
      "addr": "3BFFA",
      "hex": "4b656e736169fc",
      "us": "Kensai",
-     "en": "Kensai"
+     "en": "Kensai",
+     "jp": "ファラバルキリー"
     },
     {
      "id": "EnemyName_Samurai",
@@ -3988,7 +4351,8 @@
      "addr": "3C001",
      "hex": "53616d75726169fc",
      "us": "Samurai",
-     "en": "Samurai"
+     "en": "Samurai",
+     "jp": "オメガバルキリー"
     },
     {
      "id": "EnemyName_Irisa",
@@ -3997,7 +4361,8 @@
      "addr": "3C009",
      "hex": "4972697361fc",
      "us": "Irisa",
-     "en": "Irisa"
+     "en": "Irisa",
+     "jp": "フラニー"
     },
     {
      "id": "EnemyName_Rosa",
@@ -4006,7 +4371,8 @@
      "addr": "3C00F",
      "hex": "526f7361fc",
      "us": "Rosa",
-     "en": "Rosa"
+     "en": "Rosa",
+     "jp": "メギフラニー"
     },
     {
      "id": "EnemyName_Viola",
@@ -4015,7 +4381,8 @@
      "addr": "3C014",
      "hex": "56696f6c61fc",
      "us": "Viola",
-     "en": "Viola"
+     "en": "Viola",
+     "jp": "ダイマフラニー"
     },
     {
      "id": "EnemyName_Moos",
@@ -4024,7 +4391,8 @@
      "addr": "3C01A",
      "hex": "4d6f6f73fc",
      "us": "Moos",
-     "en": "Moos"
+     "en": "Moos",
+     "jp": "モルモス"
     },
     {
      "id": "EnemyName_Fearmoos",
@@ -4033,7 +4401,8 @@
      "addr": "3C01F",
      "hex": "466561726d6f6f73fc",
      "us": "Fearmoos",
-     "en": "Fearmoos"
+     "en": "Fearmoos",
+     "jp": "ラルモス"
     },
     {
      "id": "EnemyName_Diremoos",
@@ -4042,7 +4411,8 @@
      "addr": "3C028",
      "hex": "446972656d6f6f73fc",
      "us": "Diremoos",
-     "en": "Diremoos"
+     "en": "Diremoos",
+     "jp": "ドモルモス"
     },
     {
      "id": "EnemyName_Blueroot",
@@ -4051,7 +4421,8 @@
      "addr": "3C031",
      "hex": "426c7565726f6f74fc",
      "us": "Blueroot",
-     "en": "Blueroot"
+     "en": "Blueroot",
+     "jp": "ぼうれいのき"
     },
     {
      "id": "EnemyName_Pinkroot",
@@ -4060,7 +4431,8 @@
      "addr": "3C03A",
      "hex": "50696e6b726f6f74fc",
      "us": "Pinkroot",
-     "en": "Pinkroot"
+     "en": "Pinkroot",
+     "jp": "ゆうしゃのき"
     },
     {
      "id": "EnemyName_Goldroot",
@@ -4069,7 +4441,8 @@
      "addr": "3C043",
      "hex": "476f6c64726f6f74fc",
      "us": "Goldroot",
-     "en": "Goldroot"
+     "en": "Goldroot",
+     "jp": "なげきのき"
     },
     {
      "id": "EnemyName_Catwoman",
@@ -4078,7 +4451,8 @@
      "addr": "3C04C",
      "hex": "436174776f6d616efc",
      "us": "Catwoman",
-     "en": "Catwoman"
+     "en": "Catwoman",
+     "jp": "テイキ"
     },
     {
      "id": "EnemyName_Tigress",
@@ -4087,7 +4461,8 @@
      "addr": "3C055",
      "hex": "54696772657373fc",
      "us": "Tigress",
-     "en": "Tigress"
+     "en": "Tigress",
+     "jp": "モアテイキ"
     },
     {
      "id": "EnemyName_Lioness",
@@ -4096,7 +4471,8 @@
      "addr": "3C05D",
      "hex": "4c696f6e657373fc",
      "us": "Lioness",
-     "en": "Lioness"
+     "en": "Lioness",
+     "jp": "デラテイキ"
     },
     {
      "id": "EnemyName_Lobowing",
@@ -4105,7 +4481,8 @@
      "addr": "3C065",
      "hex": "4c6f626f77696e67fc",
      "us": "Lobowing",
-     "en": "Lobowing"
+     "en": "Lobowing",
+     "jp": "ケイブウォルフ"
     },
     {
      "id": "EnemyName_Lobobat",
@@ -4114,7 +4491,8 @@
      "addr": "3C06E",
      "hex": "4c6f626f626174fc",
      "us": "Lobobat",
-     "en": "Lobobat"
+     "en": "Lobobat",
+     "jp": "ウルファイズ"
     },
     {
      "id": "EnemyName_Lobohawk",
@@ -4123,7 +4501,8 @@
      "addr": "3C076",
      "hex": "4c6f626f6861776bfc",
      "us": "Lobohawk",
-     "en": "Lobohawk"
+     "en": "Lobohawk",
+     "jp": "ケルベロス"
     },
     {
      "id": "EnemyName_Hopliz",
@@ -4132,7 +4511,8 @@
      "addr": "3C07F",
      "hex": "486f706c697afc",
      "us": "Hopliz",
-     "en": "Hopliz"
+     "en": "Hopliz",
+     "jp": "ドラコニアン"
     },
     {
      "id": "EnemyName_Leapliz",
@@ -4141,7 +4521,8 @@
      "addr": "3C086",
      "hex": "4c6561706c697afc",
      "us": "Leapliz",
-     "en": "Leapliz"
+     "en": "Leapliz",
+     "jp": "ヘルザード"
     },
     {
      "id": "EnemyName_Jumpliz",
@@ -4150,7 +4531,8 @@
      "addr": "3C08E",
      "hex": "4a756d706c697afc",
      "us": "Jumpliz",
-     "en": "Jumpliz"
+     "en": "Jumpliz",
+     "jp": "ザーヂィーン"
     },
     {
      "id": "EnemyName_Glowtoad",
@@ -4159,7 +4541,8 @@
      "addr": "3C096",
      "hex": "476c6f77746f6164fc",
      "us": "Glowtoad",
-     "en": "Glowtoad"
+     "en": "Glowtoad",
+     "jp": "ナノフログ"
     },
     {
      "id": "EnemyName_Gilatoad",
@@ -4168,7 +4551,8 @@
      "addr": "3C09F",
      "hex": "47696c61746f6164fc",
      "us": "Gilatoad",
-     "en": "Gilatoad"
+     "en": "Gilatoad",
+     "jp": "メガフログ"
     },
     {
      "id": "EnemyName_Megatoad",
@@ -4177,7 +4561,8 @@
      "addr": "3C0A8",
      "hex": "4d656761746f6164fc",
      "us": "Megatoad",
-     "en": "Megatoad"
+     "en": "Megatoad",
+     "jp": "ギガフログ"
     },
     {
      "id": "EnemyName_Seeker",
@@ -4186,7 +4571,8 @@
      "addr": "3C0B1",
      "hex": "5365656b6572fc",
      "us": "Seeker",
-     "en": "Seeker"
+     "en": "Seeker",
+     "jp": "ランキード"
     },
     {
      "id": "EnemyName_Hunter",
@@ -4195,7 +4581,8 @@
      "addr": "3C0B8",
      "hex": "48756e746572fc",
      "us": "Hunter",
-     "en": "Hunter"
+     "en": "Hunter",
+     "jp": "キードロード"
     },
     {
      "id": "EnemyName_Killer",
@@ -4204,7 +4591,8 @@
      "addr": "3C0BF",
      "hex": "4b696c6c6572fc",
      "us": "Killer",
-     "en": "Killer"
+     "en": "Killer",
+     "jp": "キードスター"
     },
     {
      "id": "EnemyName_Roboman",
@@ -4213,7 +4601,8 @@
      "addr": "3C0C6",
      "hex": "526f626f6d616efc",
      "us": "Roboman",
-     "en": "Roboman"
+     "en": "Roboman",
+     "jp": "バスタード"
     },
     {
      "id": "EnemyName_Mechman",
@@ -4222,7 +4611,8 @@
      "addr": "3C0CE",
      "hex": "4d6563686d616efc",
      "us": "Mechman",
-     "en": "Mechman"
+     "en": "Mechman",
+     "jp": "ダストーム"
     },
     {
      "id": "EnemyName_Droidman",
@@ -4231,7 +4621,8 @@
      "addr": "3C0D6",
      "hex": "44726f69646d616efc",
      "us": "Droidman",
-     "en": "Droidman"
+     "en": "Droidman",
+     "jp": "レムバスタード"
     },
     {
      "id": "EnemyName_Fatale",
@@ -4240,7 +4631,8 @@
      "addr": "3C0DF",
      "hex": "466174616c65fc",
      "us": "Fatale",
-     "en": "Fatale"
+     "en": "Fatale",
+     "jp": "アスチルス"
     },
     {
      "id": "EnemyName_Morte",
@@ -4249,7 +4641,8 @@
      "addr": "3C0E6",
      "hex": "4d6f727465fc",
      "us": "Morte",
-     "en": "Morte"
+     "en": "Morte",
+     "jp": "デルアスチルス"
     },
     {
      "id": "EnemyName_Finis",
@@ -4258,7 +4651,8 @@
      "addr": "3C0EC",
      "hex": "46696e6973fc",
      "us": "Finis",
-     "en": "Finis"
+     "en": "Finis",
+     "jp": "ミデリアスチルス"
     },
     {
      "id": "EnemyName_Stickle",
@@ -4267,7 +4661,8 @@
      "addr": "3C0F2",
      "hex": "537469636b6c65fc",
      "us": "Stickle",
-     "en": "Stickle"
+     "en": "Stickle",
+     "jp": "ナンウェイター"
     },
     {
      "id": "EnemyName_Twig",
@@ -4276,7 +4671,8 @@
      "addr": "3C0FA",
      "hex": "54776967fc",
      "us": "Twig",
-     "en": "Twig"
+     "en": "Twig",
+     "jp": "ザンウェイター"
     },
     {
      "id": "EnemyName_Mantis",
@@ -4285,7 +4681,8 @@
      "addr": "3C0FF",
      "hex": "4d616e746973fc",
      "us": "Mantis",
-     "en": "Mantis"
+     "en": "Mantis",
+     "jp": "ガルウェイター"
     },
     {
      "id": "EnemyName_Stix",
@@ -4294,7 +4691,8 @@
      "addr": "3C106",
      "hex": "53746978fc",
      "us": "Stix",
-     "en": "Stix"
+     "en": "Stix",
+     "jp": "ビット"
     },
     {
      "id": "EnemyName_Glazstix",
@@ -4303,7 +4701,8 @@
      "addr": "3C10B",
      "hex": "476c617a73746978fc",
      "us": "Glazstix",
-     "en": "Glazstix"
+     "en": "Glazstix",
+     "jp": "バイト"
     },
     {
      "id": "EnemyName_Metlstix",
@@ -4312,7 +4711,8 @@
      "addr": "3C114",
      "hex": "4d65746c73746978fc",
      "us": "Metlstix",
-     "en": "Metlstix"
+     "en": "Metlstix",
+     "jp": "メガバイト"
     },
     {
      "id": "EnemyName_Twistbot",
@@ -4321,7 +4721,8 @@
      "addr": "3C11D",
      "hex": "5477697374626f74fc",
      "us": "Twistbot",
-     "en": "Twistbot"
+     "en": "Twistbot",
+     "jp": "リュートン"
     },
     {
      "id": "EnemyName_Swivlbot",
@@ -4330,7 +4731,8 @@
      "addr": "3C126",
      "hex": "537769766c626f74fc",
      "us": "Swivlbot",
-     "en": "Swivlbot"
+     "en": "Swivlbot",
+     "jp": "リュートリーニ"
     },
     {
      "id": "EnemyName_Rotabot",
@@ -4339,7 +4741,8 @@
      "addr": "3C12F",
      "hex": "526f7461626f74fc",
      "us": "Rotabot",
-     "en": "Rotabot"
+     "en": "Rotabot",
+     "jp": "テムドリョート"
     },
     {
      "id": "EnemyName_Orb",
@@ -4348,7 +4751,8 @@
      "addr": "3C137",
      "hex": "4f7262fc",
      "us": "Orb",
-     "en": "Orb"
+     "en": "Orb",
+     "jp": "オーラボール"
     },
     {
      "id": "EnemyName_Globe",
@@ -4357,7 +4761,8 @@
      "addr": "3C13B",
      "hex": "476c6f6265fc",
      "us": "Globe",
-     "en": "Globe"
+     "en": "Globe",
+     "jp": "オーラバルン"
     },
     {
      "id": "EnemyName_Sphere",
@@ -4366,7 +4771,8 @@
      "addr": "3C141",
      "hex": "537068657265fc",
      "us": "Sphere",
-     "en": "Sphere"
+     "en": "Sphere",
+     "jp": "オーラクリスタル"
     },
     {
      "id": "EnemyName_Drake",
@@ -4375,7 +4781,8 @@
      "addr": "3C148",
      "hex": "4472616b65fc",
      "us": "Drake",
-     "en": "Drake"
+     "en": "Drake",
+     "jp": "リュウオウ"
     },
     {
      "id": "EnemyName_Dragon",
@@ -4384,7 +4791,8 @@
      "addr": "3C14E",
      "hex": "447261676f6efc",
      "us": "Dragon",
-     "en": "Dragon"
+     "en": "Dragon",
+     "jp": "ソウリュウオウ"
     },
     {
      "id": "EnemyName_Wyrm",
@@ -4393,7 +4801,8 @@
      "addr": "3C155",
      "hex": "5779726dfc",
      "us": "Wyrm",
-     "en": "Wyrm"
+     "en": "Wyrm",
+     "jp": "セキリュウオウ"
     },
     {
      "id": "EnemyName_Skeleton",
@@ -4402,7 +4811,8 @@
      "addr": "3C15A",
      "hex": "536b656c65746f6efc",
      "us": "Skeleton",
-     "en": "Skeleton"
+     "en": "Skeleton",
+     "jp": "スケルトン"
     },
     {
      "id": "EnemyName_Spectre",
@@ -4411,7 +4821,8 @@
      "addr": "3C163",
      "hex": "53706563747265fc",
      "us": "Spectre",
-     "en": "Spectre"
+     "en": "Spectre",
+     "jp": "スケルトマスター"
     },
     {
      "id": "EnemyName_Wraith",
@@ -4420,7 +4831,8 @@
      "addr": "3C16B",
      "hex": "577261697468fc",
      "us": "Wraith",
-     "en": "Wraith"
+     "en": "Wraith",
+     "jp": "スケルトナイト"
     },
     {
      "id": "EnemyName_Grinder",
@@ -4429,7 +4841,8 @@
      "addr": "3C172",
      "hex": "4772696e646572fc",
      "us": "Grinder",
-     "en": "Grinder"
+     "en": "Grinder",
+     "jp": "バズール"
     },
     {
      "id": "EnemyName_Smasher",
@@ -4438,7 +4851,8 @@
      "addr": "3C17A",
      "hex": "536d6173686572fc",
      "us": "Smasher",
-     "en": "Smasher"
+     "en": "Smasher",
+     "jp": "ゲフバズール"
     },
     {
      "id": "EnemyName_Crusher",
@@ -4447,7 +4861,8 @@
      "addr": "3C182",
      "hex": "43727573686572fc",
      "us": "Crusher",
-     "en": "Crusher"
+     "en": "Crusher",
+     "jp": "ダストバズール"
     },
     {
      "id": "EnemyName_Clops",
@@ -4456,7 +4871,8 @@
      "addr": "3C18A",
      "hex": "436c6f7073fc",
      "us": "Clops",
-     "en": "Clops"
+     "en": "Clops",
+     "jp": "ルーテラ"
     },
     {
      "id": "EnemyName_Biclops",
@@ -4465,7 +4881,8 @@
      "addr": "3C190",
      "hex": "4269636c6f7073fc",
      "us": "Biclops",
-     "en": "Biclops"
+     "en": "Biclops",
+     "jp": "デスルーテラ"
     },
     {
      "id": "EnemyName_Triclops",
@@ -4474,7 +4891,8 @@
      "addr": "3C198",
      "hex": "547269636c6f7073fc",
      "us": "Triclops",
-     "en": "Triclops"
+     "en": "Triclops",
+     "jp": "ブルールレラ"
     },
     {
      "id": "EnemyName_Dogbot",
@@ -4483,7 +4901,8 @@
      "addr": "3C1A1",
      "hex": "446f67626f74fc",
      "us": "Dogbot",
-     "en": "Dogbot"
+     "en": "Dogbot",
+     "jp": "ヘルアーマー"
     },
     {
      "id": "EnemyName_Feralbot",
@@ -4492,7 +4911,8 @@
      "addr": "3C1A8",
      "hex": "466572616c626f74fc",
      "us": "Feralbot",
-     "en": "Feralbot"
+     "en": "Feralbot",
+     "jp": "ゲルアーマー"
     },
     {
      "id": "EnemyName_Wolfbot",
@@ -4501,7 +4921,8 @@
      "addr": "3C1B1",
      "hex": "576f6c66626f74fc",
      "us": "Wolfbot",
-     "en": "Wolfbot"
+     "en": "Wolfbot",
+     "jp": "デスアーマー"
     },
     {
      "id": "EnemyName_Amazon",
@@ -4510,7 +4931,8 @@
      "addr": "3C1B9",
      "hex": "416d617a6f6efc",
      "us": "Amazon",
-     "en": "Amazon"
+     "en": "Amazon",
+     "jp": "ナスカ"
     },
     {
      "id": "EnemyName_Erinye",
@@ -4519,7 +4941,8 @@
      "addr": "3C1C0",
      "hex": "4572696e7965fc",
      "us": "Erinye",
-     "en": "Erinye"
+     "en": "Erinye",
+     "jp": "ブラッディナスカ"
     },
     {
      "id": "EnemyName_Valkyrie",
@@ -4528,7 +4951,8 @@
      "addr": "3C1C7",
      "hex": "56616c6b79726965fc",
      "us": "Valkyrie",
-     "en": "Valkyrie"
+     "en": "Valkyrie",
+     "jp": "ゴーディンナスカ"
     },
     {
      "id": "EnemyName_Giant",
@@ -4537,7 +4961,8 @@
      "addr": "3C1D0",
      "hex": "4769616e74fc",
      "us": "Giant",
-     "en": "Giant"
+     "en": "Giant",
+     "jp": "ディムール"
     },
     {
      "id": "EnemyName_Titan",
@@ -4546,7 +4971,8 @@
      "addr": "3C1D6",
      "hex": "546974616efc",
      "us": "Titan",
-     "en": "Titan"
+     "en": "Titan",
+     "jp": "レザムール"
     },
     {
      "id": "EnemyName_Colossus",
@@ -4555,7 +4981,8 @@
      "addr": "3C1DC",
      "hex": "436f6c6f73737573fc",
      "us": "Colossus",
-     "en": "Colossus"
+     "en": "Colossus",
+     "jp": "ギドザスゲドラ"
     },
     {
      "id": "EnemyName_Primus",
@@ -4564,7 +4991,8 @@
      "addr": "3C1E5",
      "hex": "5072696d7573fc",
      "us": "Primus",
-     "en": "Primus"
+     "en": "Primus",
+     "jp": "フロウ"
     },
     {
      "id": "EnemyName_Secundus",
@@ -4573,7 +5001,8 @@
      "addr": "3C1EC",
      "hex": "536563756e647573fc",
      "us": "Secundus",
-     "en": "Secundus"
+     "en": "Secundus",
+     "jp": "ナルフロウ"
     },
     {
      "id": "EnemyName_Tertius",
@@ -4582,7 +5011,8 @@
      "addr": "3C1F5",
      "hex": "54657274697573fc",
      "us": "Tertius",
-     "en": "Tertius"
+     "en": "Tertius",
+     "jp": "デルフロウ"
     },
     {
      "id": "EnemyName_Lasher",
@@ -4591,7 +5021,8 @@
      "addr": "3C1FD",
      "hex": "4c6173686572fc",
      "us": "Lasher",
-     "en": "Lasher"
+     "en": "Lasher",
+     "jp": "ピッ゚クテイル"
     },
     {
      "id": "EnemyName_Slasher",
@@ -4600,7 +5031,8 @@
      "addr": "3C204",
      "hex": "536c6173686572fc",
      "us": "Slasher",
-     "en": "Slasher"
+     "en": "Slasher",
+     "jp": "メタルテイル"
     },
     {
      "id": "EnemyName_Gnasher",
@@ -4609,7 +5041,8 @@
      "addr": "3C20C",
      "hex": "476e6173686572fc",
      "us": "Gnasher",
-     "en": "Gnasher"
+     "en": "Gnasher",
+     "jp": "フッジーテイル"
     },
     {
      "id": "EnemyName_Doomfly",
@@ -4618,7 +5051,8 @@
      "addr": "3C214",
      "hex": "446f6f6d666c79fc",
      "us": "Doomfly",
-     "en": "Doomfly"
+     "en": "Doomfly",
+     "jp": "キラービード"
     },
     {
      "id": "EnemyName_Demonfly",
@@ -4627,7 +5061,8 @@
      "addr": "3C21C",
      "hex": "44656d6f6e666c79fc",
      "us": "Demonfly",
-     "en": "Demonfly"
+     "en": "Demonfly",
+     "jp": "アンドビード"
     },
     {
      "id": "EnemyName_Deathfly",
@@ -4636,7 +5071,8 @@
      "addr": "3C225",
      "hex": "4465617468666c79fc",
      "us": "Deathfly",
-     "en": "Deathfly"
+     "en": "Deathfly",
+     "jp": "ピボットショット"
     },
     {
      "id": "EnemyName_Blotter",
@@ -4645,7 +5081,8 @@
      "addr": "3C22E",
      "hex": "426c6f74746572fc",
      "us": "Blotter",
-     "en": "Blotter"
+     "en": "Blotter",
+     "jp": "ビヨンナーギ"
     },
     {
      "id": "EnemyName_Flutter",
@@ -4654,7 +5091,8 @@
      "addr": "3C236",
      "hex": "466c7574746572fc",
      "us": "Flutter",
-     "en": "Flutter"
+     "en": "Flutter",
+     "jp": "メイトナーギ"
     },
     {
      "id": "EnemyName_Splatter",
@@ -4663,7 +5101,8 @@
      "addr": "3C23E",
      "hex": "53706c6174746572fc",
      "us": "Splatter",
-     "en": "Splatter"
+     "en": "Splatter",
+     "jp": "ノームナーギ"
     },
     {
      "id": "EnemyName_Polebot",
@@ -4672,7 +5111,8 @@
      "addr": "3C247",
      "hex": "506f6c65626f74fc",
      "us": "Polebot",
-     "en": "Polebot"
+     "en": "Polebot",
+     "jp": "ウィンカー"
     },
     {
      "id": "EnemyName_Stickbot",
@@ -4681,7 +5121,8 @@
      "addr": "3C24F",
      "hex": "537469636b626f74fc",
      "us": "Stickbot",
-     "en": "Stickbot"
+     "en": "Stickbot",
+     "jp": "ネオウィンカー"
     },
     {
      "id": "EnemyName_Wirebot",
@@ -4690,7 +5131,8 @@
      "addr": "3C258",
      "hex": "57697265626f74fc",
      "us": "Wirebot",
-     "en": "Wirebot"
+     "en": "Wirebot",
+     "jp": "デラウィンカー"
     },
     {
      "id": "EnemyName_Agribot",
@@ -4699,7 +5141,8 @@
      "addr": "3C260",
      "hex": "41677269626f74fc",
      "us": "Agribot",
-     "en": "Agribot"
+     "en": "Agribot",
+     "jp": "ウラル"
     },
     {
      "id": "EnemyName_Guardbot",
@@ -4708,7 +5151,8 @@
      "addr": "3C268",
      "hex": "4775617264626f74fc",
      "us": "Guardbot",
-     "en": "Guardbot"
+     "en": "Guardbot",
+     "jp": "ガウラル"
     },
     {
      "id": "EnemyName_Warbot",
@@ -4717,7 +5161,8 @@
      "addr": "3C271",
      "hex": "576172626f74fc",
      "us": "Warbot",
-     "en": "Warbot"
+     "en": "Warbot",
+     "jp": "ベギウラル"
     },
     {
      "id": "EnemyName_Flopper",
@@ -4726,7 +5171,8 @@
      "addr": "3C278",
      "hex": "466c6f70706572fc",
      "us": "Flopper",
-     "en": "Flopper"
+     "en": "Flopper",
+     "jp": "パネル"
     },
     {
      "id": "EnemyName_Disker",
@@ -4735,7 +5181,8 @@
      "addr": "3C280",
      "hex": "4469736b6572fc",
      "us": "Disker",
-     "en": "Disker"
+     "en": "Disker",
+     "jp": "ファンネル"
     },
     {
      "id": "EnemyName_Carder",
@@ -4744,7 +5191,8 @@
      "addr": "3C287",
      "hex": "436172646572fc",
      "us": "Carder",
-     "en": "Carder"
+     "en": "Carder",
+     "jp": "ウォールカード"
     },
     {
      "id": "EnemyName_Punisher",
@@ -4753,7 +5201,8 @@
      "addr": "3C28E",
      "hex": "50756e6973686572fc",
      "us": "Punisher",
-     "en": "Punisher"
+     "en": "Punisher",
+     "jp": "ブラックマダー"
     },
     {
      "id": "EnemyName_Torturer",
@@ -4762,7 +5211,8 @@
      "addr": "3C297",
      "hex": "546f727475726572fc",
      "us": "Torturer",
-     "en": "Torturer"
+     "en": "Torturer",
+     "jp": "ネオマダー"
     },
     {
      "id": "EnemyName_Executer",
@@ -4771,7 +5221,8 @@
      "addr": "3C2A0",
      "hex": "4578656375746572fc",
      "us": "Executer",
-     "en": "Executer"
+     "en": "Executer",
+     "jp": "デスマダー"
     },
     {
      "id": "EnemyName_Fatima",
@@ -4780,7 +5231,8 @@
      "addr": "3C2A9",
      "hex": "466174696d61fc",
      "us": "Fatima",
-     "en": "Fatima"
+     "en": "Fatima",
+     "jp": "キトアーハ"
     },
     {
      "id": "EnemyName_Zafirah",
@@ -4789,7 +5241,8 @@
      "addr": "3C2B0",
      "hex": "5a616669726168fc",
      "us": "Zafirah",
-     "en": "Zafirah"
+     "en": "Zafirah",
+     "jp": "ライトアーハ"
     },
     {
      "id": "EnemyName_Khalidah",
@@ -4798,7 +5251,8 @@
      "addr": "3C2B8",
      "hex": "4b68616c69646168fc",
      "us": "Khalidah",
-     "en": "Khalidah"
+     "en": "Khalidah",
+     "jp": "トラハイトアーハ"
     },
     {
      "id": "EnemyName_Watcher",
@@ -4807,7 +5261,8 @@
      "addr": "3C2C1",
      "hex": "57617463686572fc",
      "us": "Watcher",
-     "en": "Watcher"
+     "en": "Watcher",
+     "jp": "ダークサイド"
     },
     {
      "id": "EnemyName_Defender",
@@ -4816,7 +5271,8 @@
      "addr": "3C2C9",
      "hex": "446566656e646572fc",
      "us": "Defender",
-     "en": "Defender"
+     "en": "Defender",
+     "jp": "エビルサイド"
     },
     {
      "id": "EnemyName_Guardian",
@@ -4825,7 +5281,8 @@
      "addr": "3C2D2",
      "hex": "477561726469616efc",
      "us": "Guardian",
-     "en": "Guardian"
+     "en": "Guardian",
+     "jp": "メギドサイド"
     },
     {
      "id": "EnemyName_Dire",
@@ -4834,7 +5291,8 @@
      "addr": "3C2DB",
      "hex": "44697265fc",
      "us": "Dire",
-     "en": "Dire"
+     "en": "Dire",
+     "jp": "カオスソーサラー"
     },
     {
      "id": "EnemyName_Baneful",
@@ -4843,7 +5301,8 @@
      "addr": "3C2E0",
      "hex": "42616e6566756cfc",
      "us": "Baneful",
-     "en": "Baneful"
+     "en": "Baneful",
+     "jp": "イリュージョニスト"
     },
     {
      "id": "EnemyName_Malific",
@@ -4852,7 +5311,8 @@
      "addr": "3C2E8",
      "hex": "4d616c69666963fc",
      "us": "Malific",
-     "en": "Malific"
+     "en": "Malific",
+     "jp": "イマジオメイジ"
     },
     {
      "id": "EnemyName_Conjurer",
@@ -4861,7 +5321,8 @@
      "addr": "3C2F0",
      "hex": "436f6e6a75726572fc",
      "us": "Conjurer",
-     "en": "Conjurer"
+     "en": "Conjurer",
+     "jp": "グ。ラン。ガ"
     },
     {
      "id": "EnemyName_Wizard",
@@ -4870,7 +5331,8 @@
      "addr": "3C2F9",
      "hex": "57697a617264fc",
      "us": "Wizard",
-     "en": "Wizard"
+     "en": "Wizard",
+     "jp": "リル。ハ。マ"
     },
     {
      "id": "EnemyName_Sorcerer",
@@ -4879,7 +5341,8 @@
      "addr": "3C300",
      "hex": "536f726365726572fc",
      "us": "Sorcerer",
-     "en": "Sorcerer"
+     "en": "Sorcerer",
+     "jp": "ギガ。ラ。ルグ"
     },
     {
      "id": "EnemyName_Goatman",
@@ -4888,7 +5351,8 @@
      "addr": "3C309",
      "hex": "476f61746d616efc",
      "us": "Goatman",
-     "en": "Goatman"
+     "en": "Goatman",
+     "jp": "ゴートマン"
     },
     {
      "id": "EnemyName_Goatduke",
@@ -4897,7 +5361,8 @@
      "addr": "3C311",
      "hex": "476f617464756b65fc",
      "us": "Goatduke",
-     "en": "Goatduke"
+     "en": "Goatduke",
+     "jp": "ゴートナイト"
     },
     {
      "id": "EnemyName_Goatking",
@@ -4906,7 +5371,8 @@
      "addr": "3C31A",
      "hex": "476f61746b696e67fc",
      "us": "Goatking",
-     "en": "Goatking"
+     "en": "Goatking",
+     "jp": "ゴートキング"
     },
     {
      "id": "EnemyName_Lyle",
@@ -4915,7 +5381,8 @@
      "addr": "3C323",
      "hex": "4c796c65fc",
      "us": "Lyle",
-     "en": "Lyle"
+     "en": "Lyle",
+     "jp": "ライル"
     },
     {
      "id": "EnemyName_Sari",
@@ -4924,7 +5391,8 @@
      "addr": "3C328",
      "hex": "53617269fc",
      "us": "Sari",
-     "en": "Sari"
+     "en": "Sari",
+     "jp": "リン"
     },
     {
      "id": "EnemyName_Lune",
@@ -4933,7 +5401,8 @@
      "addr": "3C32D",
      "hex": "4c756e65fc",
      "us": "Lune",
-     "en": "Lune"
+     "en": "Lune",
+     "jp": "ルーン"
     },
     {
      "id": "EnemyName_Kara",
@@ -4942,7 +5411,8 @@
      "addr": "3C332",
      "hex": "4b617261fc",
      "us": "Kara",
-     "en": "Kara"
+     "en": "Kara",
+     "jp": "ルナ"
     },
     {
      "id": "EnemyName_Siren",
@@ -4951,7 +5421,8 @@
      "addr": "3C337",
      "hex": "536972656efc",
      "us": "Siren",
-     "en": "Siren"
+     "en": "Siren",
+     "jp": "サイレン"
     },
     {
      "id": "EnemyName_Rulakir",
@@ -4960,7 +5431,8 @@
      "addr": "3C33D",
      "hex": "52756c616b6972fc",
      "us": "Rulakir",
-     "en": "Rulakir"
+     "en": "Rulakir",
+     "jp": "ルラキル"
     },
     {
      "id": "EnemyName_KingCille",
@@ -4969,7 +5441,8 @@
      "addr": "3C345",
      "hex": "4b696e672043696c6c65fc",
      "us": "King Cille",
-     "en": "King Cille"
+     "en": "King Cille",
+     "jp": "シールおう"
     },
     {
      "id": "EnemyName_RightHand",
@@ -4978,7 +5451,8 @@
      "addr": "3C350",
      "hex": "526967687448616e64fc",
      "us": "RightHand",
-     "en": "RightHand"
+     "en": "RightHand",
+     "jp": "みぎて"
     },
     {
      "id": "EnemyName_LeftHand",
@@ -4987,7 +5461,8 @@
      "addr": "3C35A",
      "hex": "4c6566742048616e64fc",
      "us": "Left Hand",
-     "en": "Left Hand"
+     "en": "Left Hand",
+     "jp": "ひだりて"
     },
     {
      "id": "EnemyName_Body",
@@ -4996,7 +5471,8 @@
      "addr": "3C364",
      "hex": "426f6479fc",
      "us": "Body",
-     "en": "Body"
+     "en": "Body",
+     "jp": "ボディー"
     }
    ]
   },
@@ -5012,7 +5488,8 @@
      "addr": "3D8F2",
      "hex": "e80020e400fc",
      "us": "{NAME:00} {NUM:00}",
-     "en": "{NAME:00} {NUM:00}"
+     "en": "{NAME:00} {NUM:00}",
+     "jp": "{NAME:00} {NUM:00}"
     },
     {
      "id": "battle#001",
@@ -5021,7 +5498,8 @@
      "addr": "3D8F8",
      "hex": "e80420e404fc",
      "us": "{NAME:04} {NUM:04}",
-     "en": "{NAME:04} {NUM:04}"
+     "en": "{NAME:04} {NUM:04}",
+     "jp": "{NAME:04} {NUM:04}"
     },
     {
      "id": "battle#002",
@@ -5030,7 +5508,8 @@
      "addr": "3D8FE",
      "hex": "e80820e408fc",
      "us": "{NAME:08} {NUM:08}",
-     "en": "{NAME:08} {NUM:08}"
+     "en": "{NAME:08} {NUM:08}",
+     "jp": "{NAME:08} {NUM:08}"
     },
     {
      "id": "battle#003",
@@ -5039,7 +5518,8 @@
      "addr": "3D904",
      "hex": "e80c20e40cfc",
      "us": "{NAME:0C} {NUM:0C}",
-     "en": "{NAME:0C} {NUM:0C}"
+     "en": "{NAME:0C} {NUM:0C}",
+     "jp": "{NAME:0C} {NUM:0C}"
     },
     {
      "id": "battle#004",
@@ -5048,7 +5528,8 @@
      "addr": "3D90A",
      "hex": "596f75277665206265656e20616d62757368656421fc",
      "us": "You've been ambushed!",
-     "en": "You've been ambushed!"
+     "en": "You've been ambushed!",
+     "jp": "{NAME:00}たちは おくれを とった ！ / {NAME:00}は おくれを とった ！"
     },
     {
      "id": "battle#005",
@@ -5057,7 +5538,8 @@
      "addr": "3D920",
      "hex": "596f7520737572707269736520746865206d6f6e73746572fc",
      "us": "You surprise the monster",
-     "en": "You surprise the monster"
+     "en": "You surprise the monster",
+     "jp": "{NAME:00}たちは せんてを とった ！ / {NAME:00}は せんてを とった ！"
     },
     {
      "id": "battle#006",
@@ -5066,7 +5548,8 @@
      "addr": "3D939",
      "hex": "596f752074727920746f206573636170652e2e2efc",
      "us": "You try to escape...",
-     "en": "You try to escape..."
+     "en": "You try to escape...",
+     "jp": "{NAME:00}たちは にげだした。 / {NAME:00}は にげだした。"
     },
     {
      "id": "battle#007",
@@ -5075,7 +5558,8 @@
      "addr": "3D94E",
      "hex": "42757420796f752063616e277420676574206177617921fc",
      "us": "But you can't get away!",
-     "en": "But you can't get away!"
+     "en": "But you can't get away!",
+     "jp": "しかし、にげられない ！"
     },
     {
      "id": "battle#008",
@@ -5084,7 +5568,8 @@
      "addr": "3D966",
      "hex": "e8002061747461636b7321fc",
      "us": "{NAME:00} attacks!",
-     "en": "{NAME:00} attacks!"
+     "en": "{NAME:00} attacks!",
+     "jp": "{NAME:00} の こうげき ！"
     },
     {
      "id": "battle#009",
@@ -5093,7 +5578,8 @@
      "addr": "3D972",
      "hex": "44616d61676520e400fc",
      "us": "Damage {NUM:00}",
-     "en": "Damage {NUM:00}"
+     "en": "Damage {NUM:00}",
+     "jp": "ダメージ {NUM:00}"
     },
     {
      "id": "battle#010",
@@ -5102,7 +5588,8 @@
      "addr": "3D97C",
      "hex": "e800277320706172747920776f6e2ef84561726e656420e400205850f8616e6420e404206d65736574612efc",
      "us": "{NAME:00}'s party won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta.",
-     "en": "{NAME:00}'s party won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta."
+     "en": "{NAME:00}'s party won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta.",
+     "jp": "{NAME:00}たちは たたかいに かった。{BR}けいけんち {NUM:00} と{BR}{NUM:04} メセタを えた。"
     },
     {
      "id": "battle#011",
@@ -5111,7 +5598,8 @@
      "addr": "3D9A8",
      "hex": "e80020776f6e2ef84561726e656420e400205850f8616e6420e404206d65736574612efc",
      "us": "{NAME:00} won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta.",
-     "en": "{NAME:00} won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta."
+     "en": "{NAME:00} won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta.",
+     "jp": "{NAME:00}は たたかいに かった。{BR}けいけんち {NUM:00} と{BR}{NUM:04} メセタを えた。"
     },
     {
      "id": "battle#012",
@@ -5120,7 +5608,8 @@
      "addr": "3D9CC",
      "hex": "e800206761696e65642061206c6576656c21fc",
      "us": "{NAME:00} gained a level!",
-     "en": "{NAME:00} gained a level!"
+     "en": "{NAME:00} gained a level!",
+     "jp": "{NAME:00}は レベルアップした。"
     },
     {
      "id": "battle#013",
@@ -5129,7 +5618,8 @@
      "addr": "3D9DF",
      "hex": "e80020686173206e6f20776561706f6e21fc",
      "us": "{NAME:00} has no weapon!",
-     "en": "{NAME:00} has no weapon!"
+     "en": "{NAME:00} has no weapon!",
+     "jp": "{NAME:00}は たたかえない ！"
     },
     {
      "id": "battle#014",
@@ -5138,7 +5628,8 @@
      "addr": "3D9F1",
      "hex": "e80020646566656e64656420e8042efc",
      "us": "{NAME:00} defended {NAME:04}.",
-     "en": "{NAME:00} defended {NAME:04}."
+     "en": "{NAME:00} defended {NAME:04}.",
+     "jp": "{NAME:00}は {NAME:04}を まもった。"
     },
     {
      "id": "battle#015",
@@ -5147,7 +5638,8 @@
      "addr": "3DA01",
      "hex": "e800277320646566656e736520696e6372656173642efc",
      "us": "{NAME:00}'s defense increasd.",
-     "en": "{NAME:00}'s defense increasd."
+     "en": "{NAME:00}'s defense increasd.",
+     "jp": "{NAME:00}は まもりを かためた。"
     },
     {
      "id": "battle#016",
@@ -5156,7 +5648,8 @@
      "addr": "3DA18",
      "hex": "e80020686173206e6f20746563686e69717565732efc",
      "us": "{NAME:00} has no techniques.",
-     "en": "{NAME:00} has no techniques."
+     "en": "{NAME:00} has no techniques.",
+     "jp": "{NAME:00}は テクニックを しらない ！"
     },
     {
      "id": "battle#017",
@@ -5165,7 +5658,8 @@
      "addr": "3DA2E",
      "hex": "4e6f7420656e6f7567682054656368205074732efc",
      "us": "Not enough Tech Pts.",
-     "en": "Not enough Tech Pts."
+     "en": "Not enough Tech Pts.",
+     "jp": "TP が たりない ！"
     },
     {
      "id": "battle#018",
@@ -5174,7 +5668,8 @@
      "addr": "3DA43",
      "hex": "596f752063616e27742075736520746861742efc",
      "us": "You can't use that.",
-     "en": "You can't use that."
+     "en": "You can't use that.",
+     "jp": "アイテムとしては つかえない ！"
     },
     {
      "id": "battle#019",
@@ -5183,7 +5678,8 @@
      "addr": "3DA57",
      "hex": "e800207573656420e8042efc",
      "us": "{NAME:00} used {NAME:04}.",
-     "en": "{NAME:00} used {NAME:04}."
+     "en": "{NAME:00} used {NAME:04}.",
+     "jp": "{NAME:00}は {NAME:04}を つかった。"
     },
     {
      "id": "battle#020",
@@ -5192,7 +5688,8 @@
      "addr": "3DA63",
      "hex": "4566666563746976656e65737320697320e4002efc",
      "us": "Effectiveness is {NUM:00}.",
-     "en": "Effectiveness is {NUM:00}."
+     "en": "Effectiveness is {NUM:00}.",
+     "jp": "こうか {NUM:00}"
     },
     {
      "id": "battle#021",
@@ -5201,7 +5698,8 @@
      "addr": "3DA78",
      "hex": "e8002063616e206e6f206c6f6e676572206669676874fc",
      "us": "{NAME:00} can no longer fight",
-     "en": "{NAME:00} can no longer fight"
+     "en": "{NAME:00} can no longer fight",
+     "jp": "{NAME:00}は たたかえなくなった。"
     },
     {
      "id": "battle#022",
@@ -5210,7 +5708,8 @@
      "addr": "3DA8F",
      "hex": "596f752068617665206265656e2064656665617465642efc",
      "us": "You have been defeated.",
-     "en": "You have been defeated."
+     "en": "You have been defeated.",
+     "jp": "{NAME:00}たちは ちからつきた。 / {NAME:00}は ちからつきた。"
     },
     {
      "id": "battle#023",
@@ -5219,7 +5718,8 @@
      "addr": "3DAA7",
      "hex": "e80020686173206265656e20706f69736f6e65642efc",
      "us": "{NAME:00} has been poisoned.",
-     "en": "{NAME:00} has been poisoned."
+     "en": "{NAME:00} has been poisoned.",
+     "jp": "{NAME:00}は どくに おかされた ！"
     },
     {
      "id": "battle#024",
@@ -5228,7 +5728,8 @@
      "addr": "3DABD",
      "hex": "53756363656564656421fc",
      "us": "Succeeded!",
-     "en": "Succeeded!"
+     "en": "Succeeded!",
+     "jp": "せいこう ！"
     },
     {
      "id": "battle#025",
@@ -5237,7 +5738,8 @@
      "addr": "3DAC8",
      "hex": "4661696c656421fc",
      "us": "Failed!",
-     "en": "Failed!"
+     "en": "Failed!",
+     "jp": "しっぱい ！"
     }
    ]
   },
@@ -5253,7 +5755,8 @@
      "addr": "3DD8A",
      "hex": "4d656c656520546563682efc",
      "us": "Melee Tech.",
-     "en": "Melee Tech."
+     "en": "Melee Tech.",
+     "jp": "こうげきの テクニック"
     },
     {
      "id": "shops#001",
@@ -5262,7 +5765,8 @@
      "addr": "3DD96",
      "hex": "4f7264657220546563682efc",
      "us": "Order Tech.",
-     "en": "Order Tech."
+     "en": "Order Tech.",
+     "jp": "バランスの テクニック"
     },
     {
      "id": "shops#002",
@@ -5271,7 +5775,8 @@
      "addr": "3DDA2",
      "hex": "4865616c20546563682efc",
      "us": "Heal Tech.",
-     "en": "Heal Tech."
+     "en": "Heal Tech.",
+     "jp": "かいふくの テクニック"
     },
     {
      "id": "shops#003",
@@ -5280,7 +5785,8 @@
      "addr": "3DDAD",
      "hex": "54696d6520546563682efc",
      "us": "Time Tech.",
-     "en": "Time Tech."
+     "en": "Time Tech.",
+     "jp": "じかんの テクニック"
     },
     {
      "id": "shops#004",
@@ -5289,7 +5795,8 @@
      "addr": "3DDC8",
      "hex": "57656c636f6d6520746f2074686520537570706c79f853686f702e204d617920492068656c7020796f753ffc",
      "us": "Welcome to the Supply{BR}Shop. May I help you?",
-     "en": "Welcome to the Supply{BR}Shop. May I help you?"
+     "en": "Welcome to the Supply{BR}Shop. May I help you?",
+     "jp": "どうぐやに なんの ようですか ？"
     },
     {
      "id": "shops#005",
@@ -5298,7 +5805,8 @@
      "addr": "3DDF4",
      "hex": "57656c636f6d6520746f2074686520576561706f6ef853686f702e204d617920492068656c7020796f753ffc",
      "us": "Welcome to the Weapon{BR}Shop. May I help you?",
-     "en": "Welcome to the Weapon{BR}Shop. May I help you?"
+     "en": "Welcome to the Weapon{BR}Shop. May I help you?",
+     "jp": "ぶきやに なんの ようですか ？"
     },
     {
      "id": "shops#006",
@@ -5307,7 +5815,8 @@
      "addr": "3DE20",
      "hex": "57656c636f6d6520746f207468652041726d6f72f853686f702e204d617920492068656c7020796f753ffc",
      "us": "Welcome to the Armor{BR}Shop. May I help you?",
-     "en": "Welcome to the Armor{BR}Shop. May I help you?"
+     "en": "Welcome to the Armor{BR}Shop. May I help you?",
+     "jp": "ぼうぐやに なんの ようですか ？"
     },
     {
      "id": "shops#007",
@@ -5316,7 +5825,8 @@
      "addr": "3DE4C",
      "hex": "57686f2773206265656e20706f69736f6e65643ff8fc",
      "us": "Who's been poisoned?{BR}",
-     "en": "Who's been poisoned?{BR}"
+     "en": "Who's been poisoned?{BR}",
+     "jp": "どなたが どくの ちりょうを ？{BR}"
     },
     {
      "id": "shops#008",
@@ -5325,7 +5835,8 @@
      "addr": "3DE62",
      "hex": "57686f206e6565647320746f2072656761696e20746865f877696c6c20746f2066696768743ffc",
      "us": "Who needs to regain the{BR}will to fight?",
-     "en": "Who needs to regain the{BR}will to fight?"
+     "en": "Who needs to regain the{BR}will to fight?",
+     "jp": "たたかういしを うしなった かたは、{BR}どなたかな ？"
     },
     {
      "id": "shops#009",
@@ -5334,7 +5845,8 @@
      "addr": "3DE8A",
      "hex": "546563686e6971756520646973747269627574696f6ef8636f73747320e400206d65736574612efc",
      "us": "Technique distribution{BR}costs {NUM:00} meseta.",
-     "en": "Technique distribution{BR}costs {NUM:00} meseta."
+     "en": "Technique distribution{BR}costs {NUM:00} meseta.",
+     "jp": "ちからの はいぶんには{BR}{NUM:00} メセタ かかるが、よいのか ？"
     },
     {
      "id": "shops#010",
@@ -5343,7 +5855,8 @@
      "addr": "3DEB2",
      "hex": "537465702072696768742075702120466f7274756e6573f8746f6c6420666f7220e400206d657365746121fc",
      "us": "Step right up! Fortunes{BR}told for {NUM:00} meseta!",
-     "en": "Step right up! Fortunes{BR}told for {NUM:00} meseta!"
+     "en": "Step right up! Fortunes{BR}told for {NUM:00} meseta!",
+     "jp": "わしの うらないが ききたいのかい ？{BR}{NUM:00} メセタ かかるが いいかい ？"
     },
     {
      "id": "shops#011",
@@ -5352,7 +5865,8 @@
      "addr": "3DEDF",
      "hex": "425559f853454cfc",
      "us": "BUY{BR}SEL",
-     "en": "BUY{BR}SEL"
+     "en": "BUY{BR}SEL",
+     "jp": " かう{BR} うる"
     },
     {
      "id": "shops#012",
@@ -5361,7 +5875,8 @@
      "addr": "3DEE7",
      "hex": "4d4553fc",
      "us": "MES",
-     "en": "MES"
+     "en": "MES",
+     "jp": "メセタ"
     },
     {
      "id": "shops#013",
@@ -5370,7 +5885,8 @@
      "addr": "3DEEB",
      "hex": "5768696368206f66206d79207761726573206d6f7374f8696e7465726573747320796f752c20667269656e64733ffc",
      "us": "Which of my wares most{BR}interests you, friends?",
-     "en": "Which of my wares most{BR}interests you, friends?"
+     "en": "Which of my wares most{BR}interests you, friends?",
+     "jp": "どちらを おもとめですか ？{BR}"
     },
     {
      "id": "shops#014",
@@ -5379,7 +5895,8 @@
      "addr": "3DF1A",
      "hex": "57686f2077616e747320746f2073656c6c3ff8fc",
      "us": "Who wants to sell?{BR}",
-     "en": "Who wants to sell?{BR}"
+     "en": "Who wants to sell?{BR}",
+     "jp": "どなたの もちものを うっていただけますか ？{BR}"
     },
     {
      "id": "shops#015",
@@ -5388,7 +5905,8 @@
      "addr": "3DF2E",
      "hex": "57686174277320666f722073616c653ff8fc",
      "us": "What's for sale?{BR}",
-     "en": "What's for sale?{BR}"
+     "en": "What's for sale?{BR}",
+     "jp": "なにを うっていただけますか ？{BR}"
     },
     {
      "id": "shops#016",
@@ -5397,7 +5915,8 @@
      "addr": "3DF40",
      "hex": "57686f277320676f696e6720746f2063617272792069743ff8fc",
      "us": "Who's going to carry it?{BR}",
-     "en": "Who's going to carry it?{BR}"
+     "en": "Who's going to carry it?{BR}",
+     "jp": "だれが もちますか ？{BR}"
     },
     {
      "id": "shops#017",
@@ -5406,7 +5925,8 @@
      "addr": "3DF5A",
      "hex": "5468616e6b20796f752e204973207468657265f8616e797468696e6720656c73653ffc",
      "us": "Thank you. Is there{BR}anything else?",
-     "en": "Thank you. Is there{BR}anything else?"
+     "en": "Thank you. Is there{BR}anything else?",
+     "jp": "ありがとうございました。{BR}ほかに なにか ごようは ありますか ？"
     },
     {
      "id": "shops#018",
@@ -5415,7 +5935,8 @@
      "addr": "3DF7D",
      "hex": "594553f84e4f20fc",
      "us": "YES{BR}NO ",
-     "en": "YES{BR}NO "
+     "en": "YES{BR}NO ",
+     "jp": "はい{BR}いいえ"
     },
     {
      "id": "shops#019",
@@ -5424,7 +5945,8 @@
      "addr": "3DF85",
      "hex": "536f7272792c20796f7520646f6e27742068617665f8656e6f756768206d65736574612efc",
      "us": "Sorry, you don't have{BR}enough meseta.",
-     "en": "Sorry, you don't have{BR}enough meseta."
+     "en": "Sorry, you don't have{BR}enough meseta.",
+     "jp": "おかねが たりません ！{BR}"
     },
     {
      "id": "shops#020",
@@ -5433,7 +5955,8 @@
      "addr": "3DFAA",
      "hex": "536f7272792c20796f752063616e2774206361727279f8616e79206d6f7265206974656d732efc",
      "us": "Sorry, you can't carry{BR}any more items.",
-     "en": "Sorry, you can't carry{BR}any more items."
+     "en": "Sorry, you can't carry{BR}any more items.",
+     "jp": "もう、もちきれませんね。{BR}"
     },
     {
      "id": "shops#021",
@@ -5442,7 +5965,8 @@
      "addr": "3DFD1",
      "hex": "596f752063616e27742075736520746869732e20446ff8796f75207374696c6c2077616e742069743ffc",
      "us": "You can't use this. Do{BR}you still want it?",
-     "en": "You can't use this. Do{BR}you still want it?"
+     "en": "You can't use this. Do{BR}you still want it?",
+     "jp": "そうびできませんが よろしいですか ？{BR}"
     },
     {
      "id": "shops#022",
@@ -5451,7 +5975,8 @@
      "addr": "3E005",
      "hex": "54686174277320e400206d65736574612cf84f4b3ffc",
      "us": "That's {NUM:00} meseta,{BR}OK?",
-     "en": "That's {NUM:00} meseta,{BR}OK?"
+     "en": "That's {NUM:00} meseta,{BR}OK?",
+     "jp": "{NUM:00} メセタ ですが、よろしいですか ？{BR}"
     },
     {
      "id": "shops#023",
@@ -5460,7 +5985,8 @@
      "addr": "3E01B",
      "hex": "5468616e6b732c20627574206e6f207468616e6b732ef8fc",
      "us": "Thanks, but no thanks.{BR}",
-     "en": "Thanks, but no thanks.{BR}"
+     "en": "Thanks, but no thanks.{BR}",
+     "jp": "うらないほうが いいですよ。{BR}"
     },
     {
      "id": "shops#024",
@@ -5469,7 +5995,8 @@
      "addr": "3E033",
      "hex": "536f7272792c2062757420e80020646f65736e2774f86861766520616e797468696e6720746f2073656c6c2efc",
      "us": "Sorry, but {NAME:00} doesn't{BR}have anything to sell.",
-     "en": "Sorry, but {NAME:00} doesn't{BR}have anything to sell."
+     "en": "Sorry, but {NAME:00} doesn't{BR}have anything to sell.",
+     "jp": "{NAME:00}さんは うるものを{BR}おもちでないようですが。。。"
     },
     {
      "id": "shops#025",
@@ -5478,7 +6005,8 @@
      "addr": "3E060",
      "hex": "476f20617761793b20796f75277265207374617274696e67f8746f20676574206f6e206d79206e657276657321fc",
      "us": "Go away; you're starting{BR}to get on my nerves!",
-     "en": "Go away; you're starting{BR}to get on my nerves!"
+     "en": "Go away; you're starting{BR}to get on my nerves!",
+     "jp": "おばばを からかわんでおくれ ！{BR}"
     },
     {
      "id": "shops#026",
@@ -5487,7 +6015,8 @@
      "addr": "3E08E",
      "hex": "5468617427732077686174204920736565206f66f8796f7572206675747572652e2054616b65206865656421fc",
      "us": "That's what I see of{BR}your future. Take heed!",
-     "en": "That's what I see of{BR}your future. Take heed!"
+     "en": "That's what I see of{BR}your future. Take heed!",
+     "jp": "おばばの はなしは これで おわりじゃ。{BR}きをつけて いくんじゃぞ。"
     },
     {
      "id": "shops#027",
@@ -5496,7 +6025,8 @@
      "addr": "3E0BB",
      "hex": "4120676f6f64206e6967687427732072657374f8636f73747320e400206d65736574612efc",
      "us": "A good night's rest{BR}costs {NUM:00} meseta.",
-     "en": "A good night's rest{BR}costs {NUM:00} meseta."
+     "en": "A good night's rest{BR}costs {NUM:00} meseta.",
+     "jp": "やどだいは {NUM:00} メセタ ですが、{BR}よろしいですか ？"
     },
     {
      "id": "shops#028",
@@ -5505,7 +6035,8 @@
      "addr": "3E0E0",
      "hex": "536f7272792c206e6f20667265656269657321f8fc",
      "us": "Sorry, no freebies!{BR}",
-     "en": "Sorry, no freebies!{BR}"
+     "en": "Sorry, no freebies!{BR}",
+     "jp": "おたわむれを。{BR}"
     },
     {
      "id": "shops#029",
@@ -5514,7 +6045,8 @@
      "addr": "3E0F5",
      "hex": "4f4b20746f207361766520746869732067616d653ff8fc",
      "us": "OK to save this game?{BR}",
-     "en": "OK to save this game?{BR}"
+     "en": "OK to save this game?{BR}",
+     "jp": "セーブしますか ？{BR}"
     },
     {
      "id": "shops#030",
@@ -5523,7 +6055,8 @@
      "addr": "3E10C",
      "hex": "4265206361726566756c206f75742074686572652ef8fc",
      "us": "Be careful out there.{BR}",
-     "en": "Be careful out there.{BR}"
+     "en": "Be careful out there.{BR}",
+     "jp": "おきをつけて。{BR}"
     },
     {
      "id": "shops#031",
@@ -5532,7 +6065,8 @@
      "addr": "3E123",
      "hex": "e80020686173206e6f74206265656ef8706f69736f6e65642efc",
      "us": "{NAME:00} has not been{BR}poisoned.",
-     "en": "{NAME:00} has not been{BR}poisoned."
+     "en": "{NAME:00} has not been{BR}poisoned.",
+     "jp": "{NAME:00}さんは、どくに おかされて{BR}いないようですが。。。"
     },
     {
      "id": "shops#032",
@@ -5541,7 +6075,8 @@
      "addr": "3E13D",
      "hex": "492063616e206375726520796f7520666f7220f8e400206d65736574612efc",
      "us": "I can cure you for {BR}{NUM:00} meseta.",
-     "en": "I can cure you for {BR}{NUM:00} meseta."
+     "en": "I can cure you for {BR}{NUM:00} meseta.",
+     "jp": "どくの ちりょうには {NUM:00} メセタ{BR}ひつようですが、よろしいですか ？"
     },
     {
      "id": "shops#033",
@@ -5550,7 +6085,8 @@
      "addr": "3E15C",
      "hex": "536f727279204920636f756c646e2774206265206f66f86d6f72652068656c7020746f20796f752efc",
      "us": "Sorry I couldn't be of{BR}more help to you.",
-     "en": "Sorry I couldn't be of{BR}more help to you."
+     "en": "Sorry I couldn't be of{BR}more help to you.",
+     "jp": "ごめんなさい、なにもできなくて。。。{BR}"
     },
     {
      "id": "shops#034",
@@ -5559,7 +6095,8 @@
      "addr": "3E185",
      "hex": "536f7272792c20492063616e27742068656c7020796f752ef8fc",
      "us": "Sorry, I can't help you.{BR}",
-     "en": "Sorry, I can't help you.{BR}"
+     "en": "Sorry, I can't help you.{BR}",
+     "jp": "かわいそうじゃが なにもしてやれぬ。{BR}"
     },
     {
      "id": "shops#035",
@@ -5568,7 +6105,8 @@
      "addr": "3E19F",
      "hex": "4265206361726566756c2d2d64616e676572206c75726b73f86576657279776865726521fc",
      "us": "Be careful--danger lurks{BR}everywhere!",
-     "en": "Be careful--danger lurks{BR}everywhere!"
+     "en": "Be careful--danger lurks{BR}everywhere!",
+     "jp": "おきをつけて。{BR}"
     },
     {
      "id": "shops#036",
@@ -5577,7 +6115,8 @@
      "addr": "3E1C4",
      "hex": "e80020646f6573206e6f74206e656564206d79f873657276696365732efc",
      "us": "{NAME:00} does not need my{BR}services.",
-     "en": "{NAME:00} does not need my{BR}services."
+     "en": "{NAME:00} does not need my{BR}services.",
+     "jp": "{NAME:00}は たたかういしを もっておる ！{BR}"
     },
     {
      "id": "shops#037",
@@ -5586,7 +6125,8 @@
      "addr": "3E1E2",
      "hex": "4d7920736572766963657320636f737420f8e400206d65736574612efc",
      "us": "My services cost {BR}{NUM:00} meseta.",
-     "en": "My services cost {BR}{NUM:00} meseta."
+     "en": "My services cost {BR}{NUM:00} meseta.",
+     "jp": "ふっかつには {NUM:00} メセタ{BR}ひつようじゃが よろしいか ？"
     },
     {
      "id": "shops#038",
@@ -5595,7 +6135,8 @@
      "addr": "3E1FF",
      "hex": "57686f7365205465636820446973747269627574696f6ef86e6565647320746f20626520616c74657265643ffc",
      "us": "Whose Tech Distribution{BR}needs to be altered?",
-     "en": "Whose Tech Distribution{BR}needs to be altered?"
+     "en": "Whose Tech Distribution{BR}needs to be altered?",
+     "jp": "だれが ちからを かえたいのか ？{BR}"
     },
     {
      "id": "shops#039",
@@ -5604,7 +6145,8 @@
      "addr": "3E22C",
      "hex": "536f7272792c2062757420796f7520646f6e2774f86861766520656e6f756768206d65736574612efc",
      "us": "Sorry, but you don't{BR}have enough meseta.",
-     "en": "Sorry, but you don't{BR}have enough meseta."
+     "en": "Sorry, but you don't{BR}have enough meseta.",
+     "jp": "かねが たりんようだな。もういちど{BR}しゅぎょう してくるがいい。"
     },
     {
      "id": "shops#040",
@@ -5613,7 +6155,8 @@
      "addr": "3E255",
      "hex": "57686f7365205465636820446973747269627574696f6ef86e6565647320746f20626520616c74657265643ffc",
      "us": "Whose Tech Distribution{BR}needs to be altered?",
-     "en": "Whose Tech Distribution{BR}needs to be altered?"
+     "en": "Whose Tech Distribution{BR}needs to be altered?",
+     "jp": "だれの ちからを かえたいのだ ？{BR}"
     },
     {
      "id": "shops#041",
@@ -5622,7 +6165,8 @@
      "addr": "3E282",
      "hex": "e8002063616e27742075736520616e79f8746563686e69717565732efc",
      "us": "{NAME:00} can't use any{BR}techniques.",
-     "en": "{NAME:00} can't use any{BR}techniques."
+     "en": "{NAME:00} can't use any{BR}techniques.",
+     "jp": "{NAME:00}には かえるべき ちからは ない ！{BR}"
     },
     {
      "id": "shops#042",
@@ -5631,7 +6175,8 @@
      "addr": "3E29F",
      "hex": "576869636820746563686e697175653ff8fc",
      "us": "Which technique?{BR}",
-     "en": "Which technique?{BR}"
+     "en": "Which technique?{BR}",
+     "jp": "どのちからを かえたいのだ ？{BR}"
     },
     {
      "id": "shops#043",
@@ -5640,7 +6185,8 @@
      "addr": "3E2B1",
      "hex": "506c65617365206265206361726566756c2ef8fc",
      "us": "Please be careful.{BR}",
-     "en": "Please be careful.{BR}"
+     "en": "Please be careful.{BR}",
+     "jp": "きをつけて いかれよ。{BR}"
     },
     {
      "id": "shops#044",
@@ -5649,7 +6195,8 @@
      "addr": "3E2C5",
      "hex": "446f20796f75207769736820746f207361766520796f7572f867616d6520696e20706f736974696f6e2031206f7220323ffc",
      "us": "Do you wish to save your{BR}game in position 1 or 2?",
-     "en": "Do you wish to save your{BR}game in position 1 or 2?"
+     "en": "Do you wish to save your{BR}game in position 1 or 2?",
+     "jp": "どちらに セーブしますか ？{BR}"
     },
     {
      "id": "shops#045",
@@ -5658,7 +6205,8 @@
      "addr": "3E2F7",
      "hex": "4973206974204f4b20746f20657261736520746865f870726576696f75732067616d6520696e20e4003ffc",
      "us": "Is it OK to erase the{BR}previous game in {NUM:00}?",
-     "en": "Is it OK to erase the{BR}previous game in {NUM:00}?"
+     "en": "Is it OK to erase the{BR}previous game in {NUM:00}?",
+     "jp": "{NUM:00}ばんには データが はいってますが{BR}きえてもいいですか ？"
     },
     {
      "id": "shops#046",
@@ -5667,7 +6215,8 @@
      "addr": "3E322",
      "hex": "536176656420e8002c204c56e40020696e20e4082ef8fc",
      "us": "Saved {NAME:00}, LV{NUM:00} in {NUM:08}.{BR}",
-     "en": "Saved {NAME:00}, LV{NUM:00} in {NUM:08}.{BR}"
+     "en": "Saved {NAME:00}, LV{NUM:00} in {NUM:08}.{BR}",
+     "jp": "「{NAME:00}LV{NUM:00}」を {NUM:08}ばんに セーブしました。{BR}"
     },
     {
      "id": "shops#047",
@@ -5676,7 +6225,8 @@
      "addr": "3E339",
      "hex": "536176656420e8042c204c56e40420696e20e4082ef8fc",
      "us": "Saved {NAME:04}, LV{NUM:04} in {NUM:08}.{BR}",
-     "en": "Saved {NAME:04}, LV{NUM:04} in {NUM:08}.{BR}"
+     "en": "Saved {NAME:04}, LV{NUM:04} in {NUM:08}.{BR}",
+     "jp": "「{NAME:04}LV{NUM:04}」を {NUM:08}ばんに セーブしました。{BR}"
     },
     {
      "id": "shops#048",
@@ -5685,7 +6235,8 @@
      "addr": "3E350",
      "hex": "436865636b696e672073617665642067616d65732ef8fc",
      "us": "Checking saved games.{BR}",
-     "en": "Checking saved games.{BR}"
+     "en": "Checking saved games.{BR}",
+     "jp": "バックアップデータの チェックを おこないます。{BR}"
     },
     {
      "id": "shops#049",
@@ -5694,7 +6245,8 @@
      "addr": "3E367",
      "hex": "4e6f2067616d6520736176656420696ef8706f736974696f6e20e4002efc",
      "us": "No game saved in{BR}position {NUM:00}.",
-     "en": "No game saved in{BR}position {NUM:00}."
+     "en": "No game saved in{BR}position {NUM:00}.",
+     "jp": "{NUM:00}ばんには データが ありません。{BR}"
     },
     {
      "id": "shops#050",
@@ -5703,7 +6255,8 @@
      "addr": "3E385",
      "hex": "53617665642067616d6520e4002069732066696e652ef8fc",
      "us": "Saved game {NUM:00} is fine.{BR}",
-     "en": "Saved game {NUM:00} is fine.{BR}"
+     "en": "Saved game {NUM:00} is fine.{BR}",
+     "jp": "{NUM:00}ばんの データは せいじょうです。{BR}"
     },
     {
      "id": "shops#051",
@@ -5712,7 +6265,8 @@
      "addr": "3E39D",
      "hex": "547279696e6720746f207265706169722061f864656665637420696e2067616d6520e4002efc",
      "us": "Trying to repair a{BR}defect in game {NUM:00}.",
-     "en": "Trying to repair a{BR}defect in game {NUM:00}."
+     "en": "Trying to repair a{BR}defect in game {NUM:00}.",
+     "jp": "{NUM:00}ばんの データに いじょうがみとめられます。{BR}データの しゅうふくを おこないます。"
     },
     {
      "id": "shops#052",
@@ -5721,7 +6275,8 @@
      "addr": "3E3C3",
      "hex": "5375636365737366756c6c79207265706169726564f873617665642067616d652efc",
      "us": "Successfully repaired{BR}saved game.",
-     "en": "Successfully repaired{BR}saved game."
+     "en": "Successfully repaired{BR}saved game.",
+     "jp": "しゅうふくに せいこうしました。{BR}"
     },
     {
      "id": "shops#053",
@@ -5730,7 +6285,8 @@
      "addr": "3E3E5",
      "hex": "4661696c656420746f20726570616972f873617665642067616d652efc",
      "us": "Failed to repair{BR}saved game.",
-     "en": "Failed to repair{BR}saved game."
+     "en": "Failed to repair{BR}saved game.",
+     "jp": "しゅうふくに しっぱいしました。{BR}"
     },
     {
      "id": "shops#054",
@@ -5739,7 +6295,8 @@
      "addr": "3E402",
      "hex": "436f6e74696e75652067616d65f85374617274206e65772067616d65f845726173652073617665642067616d65fc",
      "us": "Continue game{BR}Start new game{BR}Erase saved game",
-     "en": "Continue game{BR}Start new game{BR}Erase saved game"
+     "en": "Continue game{BR}Start new game{BR}Erase saved game",
+     "jp": "ゲームの つづきを する。{BR}あたらしく ゲームを はじめる。{BR}データを けす。"
     },
     {
      "id": "shops#055",
@@ -5748,7 +6305,8 @@
      "addr": "3E430",
      "hex": "45726173652077686963682067616d653ff8fc",
      "us": "Erase which game?{BR}",
-     "en": "Erase which game?{BR}"
+     "en": "Erase which game?{BR}",
+     "jp": "どちらの データを けしますか ？{BR}"
     },
     {
      "id": "shops#056",
@@ -5757,7 +6315,8 @@
      "addr": "3E443",
      "hex": "312ee800204c56e400f8322ee804204c56e404fc",
      "us": "1.{NAME:00} LV{NUM:00}{BR}2.{NAME:04} LV{NUM:04}",
-     "en": "1.{NAME:00} LV{NUM:00}{BR}2.{NAME:04} LV{NUM:04}"
+     "en": "1.{NAME:00} LV{NUM:00}{BR}2.{NAME:04} LV{NUM:04}",
+     "jp": "1。{NAME:00} LV{NUM:00}{BR}2。{NAME:04} LV{NUM:04}"
     },
     {
      "id": "shops#057",
@@ -5766,7 +6325,8 @@
      "addr": "3E457",
      "hex": "446f20796f75207265616c6c792077616e7420f8e8002c204c56e400206572617365643ffc",
      "us": "Do you really want {BR}{NAME:00}, LV{NUM:00} erased?",
-     "en": "Do you really want {BR}{NAME:00}, LV{NUM:00} erased?"
+     "en": "Do you really want {BR}{NAME:00}, LV{NUM:00} erased?",
+     "jp": "ほんとうに 「{NAME:00} LV{NUM:00}」を けしても{BR}いいのですね ？"
     },
     {
      "id": "shops#058",
@@ -5775,7 +6335,8 @@
      "addr": "3E47C",
      "hex": "e8002c204c56e40020686173206265656ef86572617365642efc",
      "us": "{NAME:00}, LV{NUM:00} has been{BR}erased.",
-     "en": "{NAME:00}, LV{NUM:00} has been{BR}erased."
+     "en": "{NAME:00}, LV{NUM:00} has been{BR}erased.",
+     "jp": "「{NAME:00} LV{NUM:00}」は きえてしまいました。{BR}"
     },
     {
      "id": "shops#059",
@@ -5784,7 +6345,8 @@
      "addr": "3E496",
      "hex": "446f20796f75207265616c6c792077616e7420f8e8042c204c56e404206572617365643ffc",
      "us": "Do you really want {BR}{NAME:04}, LV{NUM:04} erased?",
-     "en": "Do you really want {BR}{NAME:04}, LV{NUM:04} erased?"
+     "en": "Do you really want {BR}{NAME:04}, LV{NUM:04} erased?",
+     "jp": "ほんとうに 「{NAME:04} LV{NUM:04}」を けしても{BR}いいのですね ？"
     },
     {
      "id": "shops#060",
@@ -5793,7 +6355,8 @@
      "addr": "3E4BB",
      "hex": "e8042c204c56e40420686173206265656ef86572617365642efc",
      "us": "{NAME:04}, LV{NUM:04} has been{BR}erased.",
-     "en": "{NAME:04}, LV{NUM:04} has been{BR}erased."
+     "en": "{NAME:04}, LV{NUM:04} has been{BR}erased.",
+     "jp": "「{NAME:04} LV{NUM:04}」は きえてしまいました。{BR}"
     },
     {
      "id": "shops#061",
@@ -5802,7 +6365,8 @@
      "addr": "3E4D5",
      "hex": "536176696e672061206e65772067616d65206d65616e73f865726173696e6720616e206f6c642067616d652e204f4b3ffc",
      "us": "Saving a new game means{BR}erasing an old game. OK?",
-     "en": "Saving a new game means{BR}erasing an old game. OK?"
+     "en": "Saving a new game means{BR}erasing an old game. OK?",
+     "jp": "セーブするところが いっぱいですが{BR}かまいませんか ？"
     },
     {
      "id": "shops#062",
@@ -5811,7 +6375,8 @@
      "addr": "3E506",
      "hex": "57686963682067616d6520646f20796f752077697368f8746f20636f6e74696e75653ffc",
      "us": "Which game do you wish{BR}to continue?",
-     "en": "Which game do you wish{BR}to continue?"
+     "en": "Which game do you wish{BR}to continue?",
+     "jp": "どちらの ゲームの つづきを しますか ？{BR}"
     },
     {
      "id": "shops#063",
@@ -5820,7 +6385,8 @@
      "addr": "3E52A",
      "hex": "53656c656374206d657373616765207363726f6c6c696e67f873706565642efc",
      "us": "Select message scrolling{BR}speed.",
-     "en": "Select message scrolling{BR}speed."
+     "en": "Select message scrolling{BR}speed.",
+     "jp": "メッセージスピードを えらんでください。{BR}"
     },
     {
      "id": "shops#064",
@@ -5829,7 +6395,8 @@
      "addr": "3E54A",
      "hex": "536c6f772031203220332034203520362037203820392046617374fc",
      "us": "Slow 1 2 3 4 5 6 7 8 9 Fast",
-     "en": "Slow 1 2 3 4 5 6 7 8 9 Fast"
+     "en": "Slow 1 2 3 4 5 6 7 8 9 Fast",
+     "jp": " おそい 1 2 3 4 5 6 7 8 9 はやい"
     },
     {
      "id": "shops#065",
@@ -5838,7 +6405,8 @@
      "addr": "3E566",
      "hex": "312ee800204c56e400fc",
      "us": "1.{NAME:00} LV{NUM:00}",
-     "en": "1.{NAME:00} LV{NUM:00}"
+     "en": "1.{NAME:00} LV{NUM:00}",
+     "jp": "1。{NAME:00} LV{NUM:00}"
     },
     {
      "id": "shops#066",
@@ -5847,7 +6415,8 @@
      "addr": "3E570",
      "hex": "322ee804204c56e404fc",
      "us": "2.{NAME:04} LV{NUM:04}",
-     "en": "2.{NAME:04} LV{NUM:04}"
+     "en": "2.{NAME:04} LV{NUM:04}",
+     "jp": "2。{NAME:04} LV{NUM:04}"
     },
     {
      "id": "shops#067",
@@ -5856,7 +6425,8 @@
      "addr": "3E57A",
      "hex": "312efc",
      "us": "1.",
-     "en": "1."
+     "en": "1.",
+     "jp": "1。"
     },
     {
      "id": "shops#068",
@@ -5865,8 +6435,13 @@
      "addr": "3E57D",
      "hex": "322efc",
      "us": "2.",
-     "en": "2."
+     "en": "2.",
+     "jp": "2。"
     }
+   ],
+   "jp_extra": [
+    "おとまりですか ？ おしゃべりですか ？",
+    "とまり{BR}しゃべり"
    ]
   }
  }
