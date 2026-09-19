@@ -125,12 +125,19 @@ def boot_to_field(em, saves=0):
     em.frames(60); em.press('S')
     while em.word(0xFFFFD012) != SCREEN_GAMESEL:
         em.frames(1)
-    em.frames(150)
-    for _ in range(4):
-        em.press('C'); em.frames(60)
+    new_game_intro(em)
     while not (em.word(0xFFFFD012) == SCREEN_MAIN and em.word(0xFFFFD022) == 0x5A):
         em.press('C', hold=2, release=6)
     em.frames(30)
+
+
+def new_game_intro(em):
+    """From the game-select screen with no saves: press through the slot checks and the
+    text-speed prompt until the opening (map $3AE) starts. State-driven, so a press that
+    lands during a transition is simply repeated."""
+    em.frames(150)
+    while em.word(0xFFFFD022) != 0x3AE:
+        em.press('C', hold=2, release=30)
 
 
 def teleport(em, map_id, x, y, facing=0x1018):
@@ -150,3 +157,34 @@ def objects(em, base=0xFFFFC300, n=26, size=0x40):
         if o[0]:
             out.append((i, o))
     return out
+
+
+def npc_list(em):
+    """(slot, x, y, script_offset) of the NPC objects on the current map."""
+    out = []
+    for i, o in objects(em):
+        if int.from_bytes(o[4:8], 'big') == 0x1D9A:
+            out.append((i, int.from_bytes(o[8:10], 'big'), int.from_bytes(o[10:12], 'big'),
+                        int.from_bytes(o[0x26:0x28], 'big')))
+    return out
+
+
+def walk_to(em, x, y, tries=4):
+    """Walk Rhys to (x, y) with the d-pad (16 px per tile, 1 px per frame)."""
+    for _ in range(tries):
+        px, py = em.word(0xFFFFC008), em.word(0xFFFFC00A)
+        dx, dy = x - px, y - py
+        if not dx and not dy:
+            return True
+        if dx:
+            em.pad = BUTTON['R' if dx > 0 else 'L']; em.frames(abs(dx)); em.pad = 0; em.frames(8)
+        if dy:
+            em.pad = BUTTON['D' if dy > 0 else 'U']; em.frames(abs(dy)); em.pad = 0; em.frames(8)
+    return (em.word(0xFFFFC008), em.word(0xFFFFC00A)) == (x, y)
+
+
+def talk(em, npc_x, npc_y):
+    """Stand above an NPC, face it and press A (A = talk, C = menu)."""
+    walk_to(em, npc_x, npc_y - 16)
+    em.pad = BUTTON['D']; em.frames(2); em.pad = 0; em.frames(8)
+    em.press('A', hold=2, release=2)

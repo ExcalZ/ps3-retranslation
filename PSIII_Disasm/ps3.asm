@@ -13561,7 +13561,11 @@ loc_A368:
 	beq.s	loc_A3B2
 	lea	$FFFF9AB6.w, a1
 	lea	$68(a1), a0
+	if vwf_dialogue
+	jsr	(VWFDia_ScrollUp).l	; scroll the composed line's tiles up with its words
+	else
 	bsr.w	loc_A3BA
+	endif
 	bclr	#5, $1(a6)
 	movea.l	$3E(a6), a0
 	lea	$FFFF9B1E.w, a1
@@ -21356,6 +21360,10 @@ loc_10036:
 	
 
 loc_10038:
+	if vwf_dialogue
+	jmp	(VWFDia_Entry).l	; proportional text for the dialogue window (ext/vwf.asm)
+loc_10038_Fixed:
+	endif
 	move.w	$42(a6), d2
 	lea	loc_10226(pc), a3
 loc_10040:

@@ -17,4 +17,4 @@ four_save_slots = 1
 fix_tech_distributor = 1
 
 ; Proportional (variable-width) text in the dialogue window.
-vwf_dialogue = 0
+vwf_dialogue = 1
