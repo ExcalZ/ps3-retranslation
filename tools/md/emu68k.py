@@ -503,6 +503,49 @@ class CPU:
             self.a[(op >> 9) & 7] = (self.a[op & 7] + d) & 0xFFFFFF
             return False
 
+        # ext.w Dn / neg.w Dn  (the stock text renderer's control-code dispatch)
+        if (op & 0xFFF8) == 0x4880:
+            v = self.d[op & 7] & 0xFF
+            v = v | 0xFF00 if v & 0x80 else v
+            self.setd_w(op & 7, v)
+            self.Z = (v == 0); self.N = bool(v & 0x8000); self.C = False
+            return False
+        if (op & 0xFFF8) == 0x4440:
+            v = (-(self.d[op & 7] & 0xFFFF)) & 0xFFFF
+            self.setd_w(op & 7, v)
+            self.Z = (v == 0); self.N = bool(v & 0x8000); self.C = (v != 0)
+            return False
+
+        # divu.w Dm,Dn  (TechDist_Scale)
+        if (op & 0xF1F8) == 0x80C0:
+            n, mreg = (op >> 9) & 7, op & 7
+            div = self.d[mreg] & 0xFFFF
+            if div == 0:
+                raise Trap(f'{pc0:06X}: divide by zero')
+            q, r = divmod(self.d[n] & 0xFFFFFFFF, div)
+            if q > 0xFFFF:
+                self.C = False               # overflow: destination unchanged
+                return False
+            self.d[n] = ((r & 0xFFFF) << 16) | q
+            self.Z = (q == 0); self.N = bool(q & 0x8000); self.C = False
+            return False
+
+        # lea (An),Am
+        if (op & 0xF1F8) == 0x41D0:
+            self.a[(op >> 9) & 7] = self.a[op & 7] & 0xFFFFFF
+            return False
+
+        # lea (d16,PC),An
+        if (op & 0xF1FF) == 0x41FA:
+            d = self._s16(self.fetch())
+            self.a[(op >> 9) & 7] = (pc0 + 2 + d) & 0xFFFFFF
+            return False
+
+        # lea (d8,An,Xn),Am  (PS3: the dialogue VWF indexes its font this way)
+        if (op & 0xF1F8) == 0x41F0:
+            self.a[(op >> 9) & 7] = self._ea_mem(6, op & 7, 4, pc0)
+            return False
+
         # adda.w Dn,An
         if (op & 0xF1F8) == 0xD0C0:
             self.a[(op >> 9) & 7] = (self.a[(op >> 9) & 7]
@@ -828,6 +871,57 @@ class CPU:
             self.N = bool(v & 0x8000)
             return False
 
+        # rol/ror .b/.w/.l #n,Dn and Dm,Dn  (PS3: VDP command building, BCD digits)
+        if (op & 0xF018) == 0xE018 and ((op >> 6) & 3) != 3:
+            r = op & 7
+            size = (op >> 6) & 3
+            bits = (8, 16, 32)[size]
+            mask = (1 << bits) - 1
+            left = bool(op & 0x0100)
+            byreg = bool(op & 0x0020)
+            cnt = (self.d[(op >> 9) & 7] & 63) if byreg else (((op >> 9) & 7) or 8)
+            cnt %= bits
+            v = self.d[r] & mask
+            if cnt:
+                v = ((v << cnt) | (v >> (bits - cnt))) & mask if left else ((v >> cnt) | (v << (bits - cnt))) & mask
+            if size == 0:
+                self.setd_b(r, v)
+            elif size == 1:
+                self.setd_w(r, v)
+            else:
+                self.d[r] = v
+            self.Z = (v == 0)
+            self.N = bool(v & (1 << (bits - 1)))
+            self.C = False
+            return False
+
+        # move #imm,ccr  and  abcd Dy,Dx  (PS3: loc_FA16 binary -> BCD for {NUM} inserts)
+        if op == 0x44FC:
+            imm = self.fetch()
+            self.Z = bool(imm & 4)
+            self.N = bool(imm & 8)
+            self.C = bool(imm & 1)
+            self.X = bool(imm & 16)
+            return False
+        if (op & 0xF1F8) == 0xC100:
+            x, y = (op >> 9) & 7, op & 7
+            a, b = self.d[x] & 0xFF, self.d[y] & 0xFF
+            lo = (a & 15) + (b & 15) + (1 if getattr(self, 'X', False) else 0)
+            carry = 0
+            if lo > 9:
+                lo -= 10; carry = 1
+            hi = (a >> 4) + (b >> 4) + carry
+            c = False
+            if hi > 9:
+                hi -= 10; c = True
+            v = (hi << 4) | lo
+            self.setd_b(x, v)
+            if v:
+                self.Z = False           # abcd clears Z on a nonzero result, leaves it otherwise
+            self.C = c
+            self.X = c
+            return False
+
         # or.b Dn,(An) / or.b Dn,(d16,An)
         if (op & 0xF1C0) == 0x8100:
             mode, reg = (op >> 3) & 7, op & 7
@@ -897,7 +991,7 @@ class CPU:
             return False
 
         # addq.l / subq.l #n,An   (full 32-bit, no flags either way)
-        if (op & 0xF1F8) in (0x5088, 0x5188):
+        if (op & 0xF1F8) in (0x5088, 0x5188, 0x5048, 0x5148):   # .w on An is also a full 32-bit op
             n = (op >> 9) & 7 or 8
             r = op & 7
             d = n if (op & 0x0100) == 0 else -n

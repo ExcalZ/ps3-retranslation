@@ -138,10 +138,11 @@ VWFDia_Newline:				; $F8
 	moveq	#1, d1			; a third line has nowhere to go: overwrite the second
 +
 	move.w	d1, (VWFDia_Line).w
-	moveq	#0, d2
 	move.w	$42(a6), d2
 	add.w	d2, d2
-	add.l	d2, (VWFDia_Row).w
+	movea.l	(VWFDia_Row).w, a1
+	adda.w	d2, a1
+	move.l	a1, (VWFDia_Row).w
 	bsr.w	VWFDia_StartLine
 	bra.w	VWFDia_Loop
 
@@ -201,6 +202,7 @@ VWFDia_CanvasPtr:
 ; Glyphs that would cross the right edge are dropped.
 ; ---------------------------------------------------------------------------
 VWFDia_Draw:
+	movem.l	d4-d7/a2/a5, -(sp)	; the number loop keeps its digits in d6/d7
 	moveq	#0, d4
 	move.b	(a3,d1.w), d4		; advance
 	beq.s	VWFDia_Draw_Done
@@ -233,6 +235,7 @@ VWFDia_Draw:
 	add.w	d4, d2
 	move.w	d2, (VWFDia_X).w
 VWFDia_Draw_Done:
+	movem.l	(sp)+, d4-d7/a2/a5
 	rts
 
 ; ---------------------------------------------------------------------------
