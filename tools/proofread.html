@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PS3 Script Proofreader</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --panel:#fff; --ink:#14171a; --muted:#5b6570;
+    --line:#dfe3e8; --accent:#2f6feb; --ok:#1a7f4b; --warn:#9a6700; --bad:#b3261e;
+    --chip:#eef1f5;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#14171a; --panel:#1c2024; --ink:#e8eaed; --muted:#9aa4af;
+    --line:#2c3238; --accent:#7aa2f7; --ok:#5dd39e; --warn:#e3b341; --bad:#f2776a;
+    --chip:#252b31;
+  }}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+  header{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line);
+         padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  h1{font-size:15px;margin:0 12px 0 0;font-weight:650;white-space:nowrap}
+  button,select,input[type=search]{font:inherit;color:var(--ink);background:var(--chip);
+    border:1px solid var(--line);border-radius:6px;padding:5px 10px}
+  button{cursor:pointer}
+  button.primary{background:var(--accent);color:#fff;border-color:transparent}
+  button:disabled{opacity:.5;cursor:default}
+  .grow{flex:1}
+  .stats{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+  main{padding:12px 16px 80px;max-width:1200px;margin:0 auto}
+  .row{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px}
+  .row.sel{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 25%,transparent)}
+  .meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-bottom:6px}
+  .id{font-family:ui-monospace,Menlo,Consolas,monospace}
+  .jp{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:var(--chip);border-radius:6px;
+      padding:7px 9px;white-space:pre-wrap;word-break:break-all;margin-bottom:7px}
+  .jp .ctl{color:var(--accent);font-size:11px}
+  textarea{width:100%;min-height:52px;resize:vertical;font:inherit;color:var(--ink);background:transparent;
+    border:1px solid var(--line);border-radius:6px;padding:7px 9px}
+  textarea:focus{outline:2px solid var(--accent);outline-offset:-1px}
+  .us{font-size:12.5px;margin-top:3px;padding-left:7px;font-style:italic;color:var(--warn);border-left:2px solid var(--warn);opacity:.85}
+  .us::before{content:"US localization: ";font-style:normal;font-weight:650}
+  .note{width:100%;margin-top:5px;font-size:12.5px}
+  .tag{background:var(--chip);border-radius:99px;padding:1px 8px;font-size:11px}
+  .tag.done{color:var(--ok)} .tag.over{color:var(--bad)} .tag.anchor{color:var(--muted)}
+  .seghdr{margin:16px 0 8px;padding:7px 11px;border-radius:7px;background:var(--chip);border:1px solid var(--line);
+    font-size:12.5px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+  .seghdr span{color:var(--muted);font-variant-numeric:tabular-nums}
+  .seghdr.bad span{color:var(--bad);font-weight:600}
+  .empty{padding:40px;text-align:center;color:var(--muted)}
+  kbd{background:var(--chip);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;font:11px ui-monospace,monospace}
+  .preview{margin-top:7px;border:1px solid var(--line);border-radius:6px;padding:7px 8px;background:var(--chip);overflow-x:auto}
+  .preview>.label{font-size:11px;color:var(--muted);margin-bottom:5px}
+  .page{display:inline-block;vertical-align:top;margin:0 7px 5px 0}
+  .page canvas{display:block;image-rendering:pixelated;border:1px solid var(--line);border-radius:4px}
+  .page.bad canvas{border-color:var(--bad);box-shadow:0 0 0 1px var(--bad)}
+  .page .w{font:11px ui-monospace,monospace;color:var(--muted);margin-top:2px}
+  .page .w.bad{color:var(--bad);font-weight:600}
+  .controls{display:flex;gap:5px;flex-wrap:wrap;margin:5px 0;color:var(--muted);font-size:11px}
+  .controls .ctl{background:var(--chip);border:1px solid var(--line);border-radius:4px;padding:1px 6px}
+</style>
+</head>
+<body>
+<header>
+  <h1>PS3 Script Proofreader</h1>
+  <button id="loadScript">Load JSON</button>
+  <button id="save" class="primary" disabled>Save JSON</button>
+  <span class="grow"></span>
+  <input type="search" id="q" placeholder="search text / id...">
+  <select id="filter">
+    <option value="all">All</option>
+    <option value="todo">Untranslated (en = US)</option>
+    <option value="done">Translated</option>
+    <option value="over">Over budget</option>
+    <option value="nojp">No JP match</option>
+    <option value="flag">Has note</option>
+  </select>
+  <span class="stats" id="stats">no file</span>
+</header>
+<main><div class="empty" id="list">
+  Load <code>work/dialogue.json</code> (the story script) or <code>work/script.json</code> (names, menus, battle and shop text).<br>
+  The dialogue face and the stock 8x8 font are embedded: every line is drawn as the game will draw it.<br><br>
+  Dialogue lines are proportional: <b>192 px per line</b>. The window shows two lines; {BR} starts the second,
+  and each {PAGE} waits for a button, scrolls the window up one line and draws one more line - so only the text before the first {PAGE} may hold a {BR}.<br>
+  Everything else is still fixed-width 8x8 cells, one cell per character, with the stock table's cell budget.<br>
+  <kbd>Ctrl</kbd>+<kbd>S</kbd> saves. Edit only the English; the JP and US columns are the originals.
+</div></main>
+<script>
+const FONT_B64="AAAAAAAAAABgkJCQkJBgAEDAQEBAQOAAYJAQIECA8ADgEBBgEBDgAJCQkPAQEBAA8ICA4BAQ4ABggIDgkJBgAPAQECBAQEAAYJCQYJCQYABgkJBwEBBgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAECAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgICAgIAAgACgoAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQECAgQICQAECgoECgkGAAgIAAAAAAAABAgICAgIBAAIBAQEBAQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAECAAAAA4AAAAAAAAAAAAACAACAgQEBAgIAAYJCQkJCQYABAwEBAQEDgAGCQECBAgPAA4BAQYBAQ4ACQkJDwEBAQAPCAgOAQEOAAYICA4JCQYADwEBAgQEBAAGCQkGCQkGAAYJCQcBAQYAAAAACAAIAAAAAAAEAAQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYJAQIEAAQAAAAAAAAAAAAGCQkPCQkJAA4JCQ4JCQ4ABgkICAgJBgAOCQkJCQkOAA8ICA4ICA8ADwgIDggICAAGCQgLCQkGAAkJCQ8JCQkADgQEBAQEDgACAgICAgoEAAkJCgwKCQkACAgICAgIDwAIjYqKiIiIgAiMjIqJiYiABgkJCQkJBgAOCQkOCAgIAAYJCQkJCwcADgkJDgoJCQAGCQgGAQkGAA4EBAQEBAQACQkJCQkJBgAIiIiIiIUCAAiIiIqKioUACIiFAgUIiIAIiIUCAgICAA8BAQYICA8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAQcJBwAICA4JCQkOAAAABgkICQYAAQEHCQkJBwAAAAYJDwgHAAYIDggICAgAAAAHCQkHAQYICA4JCQkJAAgACAgICAgABAAEBAQEBAgICAkKDAoJAAgICAgICAQAAAANCoqKioAAAA4JCQkJAAAABgkJCQYAAAAOCQkOCAgAAAcJCQcBAQAACgwICAgAAAAHCAYBDgAACA4ICAgGAAAACQkJCQcAAAAKCgoEBAAAAAqKioqFAAAACQkGCQkAAAAJCQkHAQYAAA8BBggPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACoqKioqKioAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+const WIDTH_B64="CAUEBQUFBQUFBQUICAgICAQICAIDCAgICAgICAgICAMDAgQICAUFAgMDCAgDBAIEBQQFBQUFBQUFBQIDCAgIBQgFBQUFBQUFBQQEBQUGBgUFBQUFBAUGBgYGBQgICAgICAUFBQUFBAUFAgMFAwYFBQUFBAUEBQQGBQUFCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAYACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA==";
+const STOCK_B64="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIiIiIhEREiESIhEhEiERIRISESERIhEhEiIRIhEREiIiIiIiIhEiIiERIiIiESIiIhEiIiIRIiIiESIiIRESIiIiIiIRERIhEiIRIRIiESIiIRIiIhEiIhEiIiEREREiIiIiIhEREiESIhEiIiIRIiIRIiIiIhEhEiIRIhEREiIiIiIiIhEiIiERIiIRISIhEiEiIRERESIiESIiIhEiIiIiIiERERIhEiIiIRIiIiERERIiIiIRIRIiESIRERIiIiIiIhEREiESIhEhEiIiIREREiESIhEhEiIRIhEREiIiIiIhERERIRIiESESIhEiIiESIiIRIiIiESIiIhEiIiIiIiIRERIhEiIRIRIiESIRERIhEiIRIRIiESIRERIiIiIiIhEREiESIhEhEiIRIhERESIiIhEhEiIRIhEREiIRESIhIiISEiESIRISIiESEiIhEiESISEiIhIiEREiIiIiIiIRERIhEiIRIRIiIiIRERIiIiIRIRIiESIRERIiIiIiIhERESESIiIhEiIiIREREiESIiIhEiIiIhERESIiIiIiERESIRIiESESIiIhEiERIRIiESESIhEiERESIiIiIiIRERIhEiIRIRIiESEREREhEiIRIRIiESESIhEiIiIiIiIiIiIiIiIiIiIiIREREiIiIiIiIiIiIiIiIhERIiISIiIiEiIiIhIiIiISIiIiEiIiIiIiIiIiIiIiIiIiIiIiIiIiIiISIiIiEiIiIhIiIiISIiIiEiIhERIiIiIiIiIiIiIiIiIiIiIiIiIiIiIhEiIiIRIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiEiIiIiEiIiIhIiIiIiIiIRESIhIiISISIiEiIiISIiIhIiIiIiIiIhEiIiIiIiIiESIiIhEiIiIRIiIiESIiIhEiIiIiIiIiESIiIiIiISISISISEhIiIhIiIREhESIiEiIiEhISISISISIiIiIiIRERIiERESIhIiEiISIhIiEiISIhIiEhEiESIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIhIiIiISIiIiIiIiIiIiIiIiIiIiIiIiIiISIiIiISIiIiEiIiISIiIiIiIiIiIiIiIiIiIiIiIiIhIiIiIhIiISISIiEhIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiEiIhIhIiISIiIiIiIiIiIiIiIiIiIiIiIiIiISIiIhISIiEiEiIhISIiIhIiIiISIiIhIiIiEiIiISIiIhIiIiEiIiISIiIhIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIiESIiIhEiIiIRIiIiESIiIhEiIiIiIiIiESIiIhEiIiEhIiIhISIiISEiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiESIiIhEiIiIhIiIiEiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIRIiIiESIiIiEiIiISIiIiIiIiIiIiIiIiIiIREREiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIhEiIiIRIiIiIiIiIiIiEiIiISIiIhIiIiEiIiISIiIhIiIiEiIiISIiIiIiIiIiIRERIhEiIRIRIhESESEhEhESIRIRIiESIRERIiIiIiIiIRIiIhESIiIhEiIiIRIiIiESIiIhEiIiEREiIiIiIiERESIRIiESESIhEiIiESIiIRIiIRIiIhERERIiIiIiIRERIhEiIRIiIiESIiESIiIiIRIRIiESIRERIiIiIiIiIRIiIhESIiESEiIRIhIiEREREiIhEiIiIRIiIiIiIhERESIRIiIiESIiIhERESIiIiESESIhEiERESIiIiIiIRERIhEiIRIRIiIiERERIhEiIRIRIiESIRERIiIiIiIRERESESIhEhEiIRIiIhEiIiESIiIhEiIiIRIiIiIiIiERESIRIiESESIhEiERESIRIiESESIhEiERESIiIiIiIRERIhEiIRIRIiESIREREiIiIRIRIiESIRERIiIiIiIiIiIiIhIiIiIiIiIiIiIiIiIiIiISIiIiIiIiIiIiIiIiIiIiISIiIiIiIiIiIiIiISIiIhIiIiIiIiIiIiIiIiIRIiIRIiIRIiIhIiIiIhEiIiIiESIiIiIRIiIiIiIiIiIiIiIiIhERESIiIiIiERERIiIiIiIiIiIiIiIiIhEiIiIiESIiIiIRIiIiIhIiIhEiIhEiIhEiIiIiIiIiIRESIhIiISISIiEiIiISIiIhIiIiIiIiIhEiIiIiIiIiERIiISIhIhIREhISEhISEiERIiEiIiIiERIiIiIiIiIhIiIiEhIiIhISIiEiISIhEREiEiIiEhIiIhIiIiIiERESIhIiISISIiEiERESIhIiISISIiEiERESIiIiIiIhERIiEiIhIhIiISISIiIiEiIhIhIiISIhERIiIiIiIiEREiIhIiEiISIiEiEiIhIhIiISISIhIiEREiIiIiIiIRERIiEiIiIhIiIiIRESIiEiIiIhIiIiIRERIiIiIiIhEREiISIiIiEiIiIhERIiISIiIiEiIiIhIiIiIiIiIiEREiISIiEiEiIiIhIhESISIiEiEiIhIiEREiIiIiIiEiIhIhIiISISIiEiERERIhIiISISIiEiEiIhIiIiIiIiERIiIiEiIiIhIiIiISIiIiEiIiIhIiIiERIiIiIiIiIRESIiIhIiIiISIiIiEiISIhIiEiISIiERIiIiIiIiEiIhIhIiEiISISIiERIiIhISIiISISIiEiIRIiIiIiISIiIiEiIiIhIiIiISIiIiEiIiIhIiIiIREREiIiIiIhIiIhIRIiESEhISEhIhIhISIiISEiIiEhIiIhIiIiIiEiIhIhEiISISEiEiEiEhIhIiESISIiEiEiIhIiIiIiIhERIiEiIhIhIiISISIiEiEiIhIhIiISIhERIiIiIiIhEREiISIiEiEiIhIhEREiISIiIiEiIiIhIiIiIiIiIiIRESIhIiISISIiEiEiIhIhIhISISIhEiIRESEiIiIiIRERIiEiIhIhIiISIRERIiEiISIhIiISISIiEiIiIiIiEREiISIiEiEiIiIiEREiIiIiEiEiIhIiEREiIiIiIiIRERIiIhIiIiISIiIiEiIiIhIiIiISIiIiEiIiIiIiISIiEiEiIhIhIiISISIiEiEiIhIhIiISIhERIiIiIiIhIiISISIiEiEiIhIhIiISISIiEiISISIiIRIiIiIiIiEiIhIhIiISISIiEiEhEhIhIRISIRIhEiEiIhIiIiIiIhIiEiISIhIiISEiIiISIiIhISIiEiISIhIiEiIiIiIhIiEiISIhIiEiISIiERIiIiEiIiIhIiIiISIiIiIiIiERERIiIiEiIiISIiIRESIiISIiIhIiIiERERIiIiIiIiESIiIhIiIiISIiIiEiIiIhIiIiISIiIiESIiIiIiIiEiISIiEhIiIiEiIiIREiIiISIiIhESIiIhIiIiIiIiIhEiIiIhIiIiISIiIiEiIiIhIiIiISIiIhEiIiIiIiIiISIiIhISIiISEiIhIiEiISIhIhIiIhISIiISIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIhERERIiIiIiIhIiIiISIiIiISIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIhEiIiIiEiIiERIiISISIiEiEiIiESEiIiIiIiIiIiIhIiIiISIiIiERIiIhIhIiISISIiERIiIiIiIiIiIiIiIiIiIiERIiISIhIiEiIiIhIiEiIhESIiIiIiIiIiIiIiISIiIiEiIiERIiISISIiEiEiIiERIiIiIiIiIiIiIiIiIiIREiIhIiEiIRERIiEiIiIiERIiIiIiIiIiEiIiISEiIiEiIiIREiIiISIiIiEiIiIhIiIiIiIiIiIiIiIhESIiEiEiIhIhIiIhESIiIiEiIiESIiIiIiIiEiIiIhIiIiISIiIiERIiIhIhIiISISIiEiEiIiIiIiIiEiIiIiIiIiISIiIiEiIiIhIiIiISIiIiEiIiIiIiIiIhIiIiIiIiIiEiIiIhIiIiISIiEiEiIiESIiIiIiIiEiIiIhIiIiISISIiEhIiIhEiIiISEiIiEiEiIiIiIiIiEiIiIhIiIiISIiIiEiIiIhIiIiISIiIiEiIiIiIiIiIiIiIiIiIiESEiIhISEiISEhIiEhISIhISEiIiIiIiIiIiIiIiIiIREiIiEiEiIhIhIiISISIiEiEiIiIiIiIiIiIiIiIiIiESIiISISIiEiEiIhIhIiIhEiIiIiIiIhIiIiIREiIiEiEiIhIhIiIREiIiEiIiIhIiIiIiIiIiIiEiIiERIiISISIiEiEiIiERIiIiISIiIiEiIiIiIiIiIiIiIiIiIhIRIiIhIhIiISIiIiEiIiIhIiIiIiIiIiIiIiIiIiIiIREiIhIiIiIhEiIiIiEiIhESIiIiIiIiISIiIiEiIiIRESIiISIiIiEiIiIhIiIiIhEiIiIiIiIiIiIiIiIiIhIhIiISISIiEiEiIhIhIiIhESIiIiIiIiIiIiIiIiIiEiISIhIiEiIhISIiISEiIiISIiIiIiIiIiIiIiIiIiISEhIiEhISIhISEiISEhIiIRESIiIiIiIiIiIiIiIiISIhIiISEiIiISIiIhISIiEiISIiIiIiIiIiIiIiIiIiEiEiIhIhIiIhESIiIiEiIiESIiIiIiIiIiIiIiIiIiIRERIiIiEiIiISIiIhIiIiERESIiIhIiIiISIhERERIiIhIiIiISIiIiEiIiISIiERIiIiIiIiIiIiIiIRERIiIiIiIiIiIiIiIiIiIiIiIRERESIiIiIiERERIiIiISIiIiEiIhISIiIhIiIiEhIiESIiIiISIiIiEiIhERERIiIiEiIiISIiIRISIRISISIiEiIiIiIiIiIiISIiIiEiIiIhIiIiISIiIhIiIhEiIREiIiIiIiIiISEiIiEhIiIhIhIiISISIhIiISISIiEhIiIhIiIiIiEiIiIhIiISISIRIiERIiIhIiIiIhIiIiIhERIiIiIiIRERESIiIiEiIiIhIiIiISIiIhIiIhEiIREiIiIiIiIiIiIiIhEiIiEiEiIiIiEiIiIiEiIiIiEiIiIiIiISIiIiEiIhERERIiISIiIiEiIhIhIhISISISEiEiEiIiIiIRERESIiIiEiIiIhIhIiEiIhISIiIhIiIiIhIiIiIiIiEREiIiIiESIREiIiIiERIiIiIiIRIiIiIhERIiIiIiIiEiIiISIiIiEiIiISIiIiEiISISIiISEREREiIiIiIiIiISIiIiEiISISIiISEiIiISIiIRISIRIiISIiIiIhERERIiEiIiIhIiIhERERIiEiIiIhIiIiIhERIiEiIiIhIiIhERERIiEiISIhIhIiISEiIiEiIiIhIiIiIiIiIhERIiIiISIiIiEiIiIhIiIiISIiIiEiIRERESIiIiIhERESIiIiEiIiIhIhERESIiIiEiIiIhIhERESIiIiIiIRERIiIiIiIRERESIiIiEiIiIhIiIhEiEREiIiIiIiISIhIiEiISIhIiEiISIhIiIiISIiIhIiIREiIiIiIiIiEhIiIhISIiISEiIiEhIiIhISISISEhIhIhEiIiIiIiESIhEhEiIRIRIiESEREREhEiIRIRIiESESIhEiIiIiIRIiIiESIiIhEiIiIRIiIiESIiIhEiIiIREREiIiIiIhIiIhIRIiESERIREhEhIRIRIiESESIhEhEiIRIiIiIiERERIhEiIRIRIiESERERIhEiIiIRIiIiESIiIiIiIiIREREiIhEiIiIRIiIiESIiIhEiIiIRIiIiESIiIiIiIhIiIhIRIiESESIhEiEiISIhEhEiIhESIiIhIiAAAAAAAAAAAAAAAAAAAAAAMzMzMxERERMRERETETMzMAAAAAAAAAAAAAAAAAAAAAMzMzMxERERERERERMzMzMzETIiIxEyIiMRMiIjETIiIxEyIiMRMiIjETIiIxEyIiMRMiIjETIiIxEyIiMRMiIjETMzMxERERMRERESMzMzMiIiIiIiIiIiIiIiIiIiIiMzMzMxERERERERERMzMzMwAAIiIAIjMzAjMzMwIzMzMjMzMiIzMyIiMzIiIjMyIiIiIiIjMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIyIzIjIyIiMiIyIyIyIzIjMiMyIyIyIyIjIiIyMiMyIzIiIiMjIiIyIjIjIiIjMiIiIzIiIjIjIiMiIjIyIiIjIzMzMiMzMzIjMzMyIzMzMiMzMzIjMzMyIzMzMiMzMzIiIiIiIiERIiIRIRIhEiIRIRIiESEREREhEiIRIRIiESIiIiIhERESIRIiESESIhEhEREiIRIiESESIhEhERESIiIiIiIRERIhEiIRIRIiIiESIiIhEiIiIRIiESIRERIiIiIiIREREiIRIhEiESIRIhEiESIRIhEiESIRIREREiIiIiIhERERIhEiISIRIiIiERESIhEiIiIRIiEhERERIiIiIiEREREiESIhIhEiIiIRESIiESIiIhEiIiEREiIiIiIiIhEREiESIhEhEiIiIRIRESESIhEhEiIRIhERISIiIiIhEiIRIRIiESESIhEhERERIRIiESESIhEhEiIRIiIiIiIhERIiIhEiIiIRIiIiESIiIhEiIiIRIiIhERIiIiIiIiERESIiIRIiIiESIiIhEiESIRIhEiESIhERIiIiIiIhEiIRIRIhEiESESIhERIiIRERIiESERIhEiERIiIiIiESIiIhEiIiIRIiIiESIiIhEiIiIRIiIiEREREiIiIiIRIiESERIREhERERIRISESESIhEhEiIRIRIiESIiIiIhEiIRIREiESEREhEhEhERIRIhESESIhEhEiIRIiIiIiIRERIhEiIRIRIiESESIhEhEiIRIRIiESIRERIiIiIiIREREiESIhEhEiIRIREREiESIiIhEiIiIRIiIiIiIiIiERESIRIiESESIhEhEhIRIRIREiESIREiEREhIiIiIiERERIhEiIRIRIiESERERIhEiIRIRIiESESIhEiIiIiIhEREiESIhEhEiIiIhEREiIiIhEhEiIRIhEREiIiIiIhERESIiESIiIhEiIiIRIiIiESIiIhEiIiIRIiIiIiIiESIhEhEiIRIRIiESESIhEhEiIRIRIiESIRERIiIiIiIRIiESESIhEhEiIRIRIiESESIhEiESESIiERIiIiIiIhEiIRIRIiESESIhEhEhIRIRERESERIREhEiIRIiIiIiESIhEhEiIRIhEhEiIhESIiESESIRIiESESIhEiIiIiIRIhEiESIRIhEiESIhERIiIhEiIiIRIiIiESIiIiIiIhERERISIhEiIiESIiERESIiESIiIRIiEhERERAAAAAAAAAAAAAAAAAAAAABEREREREREREREREREREREAABERAAAREQAAEREAABERAAAREQAAEREAABERAAAREQAAAAAAAAAAAAAAAAAAAAAAAAERAAAREQAAEREAABERIiIiIiIiIiIiIiIiIiIiIiIiIiIiIRIiIiISIiIhIiIAAAAAAREREQAQAQAAEAEAABABAAAQAQAAEAEAAREREQAAAAARAAAAEAAAABAAAAAQAAAAEAAAABAAAAARAAAA//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8=";
+function b64(s){const b=atob(s);const a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a;}
+const FONT=b64(FONT_B64), WIDTH=b64(WIDTH_B64), STOCK=b64(STOCK_B64);
+
+/* ---- text encoding: markup -> game bytes (US charset) ---- */
+const CTRL={BR:0xF8,PAGE:0xEC,END:0xFC,III:null};
+function encode(text){
+  const out=[]; let i=0;
+  while(i<text.length){
+    const ch=text[i];
+    if(ch==='{'){
+      const j=text.indexOf('}',i); if(j<0){out.push(0x3F);i++;continue;}
+      const tok=text.slice(i+1,j); i=j+1;
+      if(tok==='BR')out.push(0xF8); else if(tok==='PAGE')out.push(0xEC); else if(tok==='END')out.push(0xFC);
+      else if(tok==='III')out.push(0xBE,0xBF);
+      else if(tok.startsWith('NAME:'))out.push(0xE8,parseInt(tok.slice(5),16));
+      else if(tok.startsWith('NUM:'))out.push(0xE4,parseInt(tok.slice(4),16));
+      else if(/^[0-9A-F]{2}$/i.test(tok))out.push(parseInt(tok,16));
+      else out.push(0x3F);
+      continue;
+    }
+    const c=ch.charCodeAt(0);
+    if(c>=0x20&&c<0x7F)out.push(c);
+    else if(c>=0xFF21&&c<=0xFF3A)out.push(0xA0+c-0xFF21);
+    else if(ch===' ')out.push(0x20);
+    else out.push(-1);           // unencodable: flagged
+    i++;
+  }
+  return out;
+}
+/* placeholder widths for inserted names/numbers: a 6-letter name, a 3-digit number */
+const INSERT_PX={NAME:34,NUM:15};
+function lines(bytes){
+  /* split into pages (max 2 lines each) of lines: [[line,line],[line],...]; each line is a byte array */
+  const pages=[[]]; let line=[];
+  for(let i=0;i<bytes.length;i++){
+    const b=bytes[i];
+    if(b===0xF8){pages[pages.length-1].push(line);line=[];}
+    else if(b===0xEC||b===0xFC){pages[pages.length-1].push(line);line=[];pages.push([]);}
+    else if(b===0xE8||b===0xE4){line.push([b,bytes[++i]]);}
+    else line.push(b);
+  }
+  pages[pages.length-1].push(line);
+  return pages.filter((p,k)=>p.some(l=>l.length)||k===0);
+}
+function linePx(line){
+  let x=0;
+  for(const b of line){
+    if(Array.isArray(b))x+=b[0]===0xE8?INSERT_PX.NAME:INSERT_PX.NUM;
+    else if(b<0)x+=8; else x+=WIDTH[b];
+  }
+  return x;
+}
+function lineCells(line){let n=0;for(const b of line){if(Array.isArray(b))n+=b[0]===0xE8?6:3;else n++;}return n;}
+
+/* ---- drawing ---- */
+const INK='#e8eaed', PAPER='#3b4f7a', BAD='#b3261e';
+function drawVWF(canvas,line,scale){
+  const W=192,H=8; canvas.width=W*scale; canvas.height=H*scale;
+  const g=canvas.getContext('2d'); g.fillStyle=PAPER; g.fillRect(0,0,canvas.width,canvas.height);
+  let x=0;
+  for(const b of line){
+    if(Array.isArray(b)){const w=b[0]===0xE8?INSERT_PX.NAME:INSERT_PX.NUM;g.fillStyle='#7aa2f7';g.fillRect(x*scale,scale,(w-1)*scale,6*scale);x+=w;continue;}
+    if(b<0){g.fillStyle=BAD;g.fillRect(x*scale,0,7*scale,8*scale);x+=8;continue;}
+    const w=WIDTH[b];
+    if(x+w-1>W){g.fillStyle=BAD;g.fillRect(W*scale-2,0,2,H*scale);break;}
+    g.fillStyle=INK;
+    for(let r=0;r<8;r++){const row=FONT[b*8+r];for(let c=0;c<8;c++)if(row&(0x80>>c))g.fillRect((x+c)*scale,r*scale,scale,scale);}
+    x+=w;
+  }
+}
+function drawFixed(canvas,line,scale,budget){
+  const cells=Math.max(budget||0,lineCells(line),1); canvas.width=cells*8*scale; canvas.height=8*scale;
+  const g=canvas.getContext('2d'); g.fillStyle=PAPER; g.fillRect(0,0,canvas.width,canvas.height);
+  let cx=0;
+  const put=(t)=>{ // draw stock tile t (4bpp, colour 1 = ink)
+    for(let r=0;r<8;r++)for(let c=0;c<8;c++){const byte=STOCK[t*32+r*4+(c>>1)];const v=(c&1)?byte&15:byte>>4;
+      if(v===1){g.fillStyle=INK;g.fillRect((cx*8+c)*scale,r*scale,scale,scale);}}
+    cx++;
+  };
+  for(const b of line){
+    if(Array.isArray(b)){const n=b[0]===0xE8?6:3;g.fillStyle='#7aa2f7';g.fillRect(cx*8*scale,scale,(n*8-1)*scale,6*scale);cx+=n;continue;}
+    if(b<0){g.fillStyle=BAD;g.fillRect(cx*8*scale,0,8*scale,8*scale);cx++;continue;}
+    put(b);
+  }
+  if(budget&&lineCells(line)>budget){g.fillStyle=BAD;g.fillRect(budget*8*scale-1,0,2,8*scale);}
+}
+
+/* ---- document model ---- */
+let doc=null, kind=null, fileName='script.json', dirty=false;
+function allEntries(){
+  if(kind==='dialogue')return doc.entries.map(e=>({e,seg:'dialogue'}));
+  const out=[];for(const [s,seg] of Object.entries(doc.segments))for(const r of seg.runs)out.push({e:r,seg:s});return out;
+}
+function budgetOf(seg,e){ // fixed-width segments: the widest US line of the segment is the cell budget
+  const seginfo=doc.segments[seg]; if(seginfo._budget===undefined){
+    let w=0;for(const r of seginfo.runs)for(const p of lines(encode(r.us)))for(const l of p)w=Math.max(w,lineCells(l));
+    seginfo._budget=w;
+  }
+  return seginfo._budget;
+}
+function over(seg,e){
+  const pages=lines(encode(e.en));
+  if(kind==='dialogue'||seg==='battle'||seg==='shops'||seg==='namestrings'){
+    for(const [k,p] of pages.entries()){if(p.length>(k?1:2))return true;for(const l of p)if(linePx(l)>192)return true;}
+    return encode(e.en).includes(-1);
+  }
+  const b=budgetOf(seg,e);
+  for(const p of pages)for(const l of p)if(lineCells(l)>b)return true;
+  return encode(e.en).includes(-1);
+}
+function isVWF(seg){return kind==='dialogue'||seg==='battle'||seg==='shops'||seg==='namestrings';}
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function fmtJP(s){return esc(s).replace(/\{([^}]*)\}/g,'<span class="ctl">{$1}</span>');}
+
+function render(){
+  const list=document.getElementById('list'); list.className=''; list.innerHTML='';
+  const q=document.getElementById('q').value.trim().toLowerCase(), f=document.getElementById('filter').value;
+  let shown=0, lastSeg=null, overCount=0, done=0, total=0;
+  for(const {e,seg} of allEntries()){
+    total++;
+    const isOver=over(seg,e); if(isOver)overCount++;
+    const translated=e.en!==e.us; if(translated)done++;
+    if(q&&!((e.en||'')+(e.us||'')+(e.jp||'')+e.id).toLowerCase().includes(q))continue;
+    if(f==='todo'&&translated)continue; if(f==='done'&&!translated)continue;
+    if(f==='over'&&!isOver)continue; if(f==='nojp'&&e.jp)continue; if(f==='flag'&&!e.note)continue;
+    if(seg!==lastSeg){const h=document.createElement('div');h.className='seghdr';
+      h.innerHTML=`<b>${esc(seg)}</b><span>${kind==='dialogue'?'':esc(doc.segments[seg].note||'')}</span>`;list.appendChild(h);lastSeg=seg;}
+    shown++;
+    const row=document.createElement('div'); row.className='row'; row.dataset.id=e.id;
+    const tags=[]; if(translated)tags.push('<span class="tag done">translated</span>'); if(isOver)tags.push('<span class="tag over">over budget</span>');
+    if(e.header_only)tags.push('<span class="tag">header only (no text)</span>'); if(e.anchor)tags.push('<span class="tag anchor">NPC-anchored</span>');
+    row.innerHTML=`<div class="meta"><span class="id">${esc(e.id)}</span>${e.addr?'<span>$'+esc(e.addr)+'</span>':''}${e.flags?'<span>flags '+esc(e.flags)+'</span>':''}${tags.join('')}</div>`
+      +(e.jp?`<div class="jp">${fmtJP(e.jp)}</div>`:(kind==='dialogue'&&!e.header_only?'<div class="jp" style="color:var(--bad)">no Japanese counterpart aligned - check work/dialogue.json jp_unmatched</div>':''))
+      +(e.header_only?'':`<textarea spellcheck="true">${esc(e.en)}</textarea><div class="preview"><div class="label"></div><div class="pages"></div></div>`
+      +`<div class="us">${esc(e.us)}</div><input class="note" placeholder="note for the proofreader" value="${esc(e.note||'')}">`);
+    list.appendChild(row);
+    if(!e.header_only){
+      const ta=row.querySelector('textarea');
+      const upd=()=>{e.en=ta.value;preview(row,seg,e);};
+      ta.addEventListener('input',()=>{upd();markDirty();});
+      row.querySelector('.note').addEventListener('input',ev=>{e.note=ev.target.value;markDirty();});
+      preview(row,seg,e);
+    }
+  }
+  if(!shown)list.innerHTML='<div class="empty">nothing matches</div>';
+  document.getElementById('stats').textContent=`${fileName}: ${total} entries, ${done} translated, ${overCount} over budget, ${shown} shown`;
+}
+function preview(row,seg,e){
+  const host=row.querySelector('.pages'), label=row.querySelector('.preview .label'); host.innerHTML='';
+  const bytes=encode(e.en), pages=lines(bytes), vwf=isVWF(seg), budget=vwf?null:budgetOf(seg,e);
+  label.textContent=vwf?'dialogue window: 192 px per line; two lines, then one new line per {PAGE}':`fixed 8x8 cells, budget ${budget} cells (widest stock line)`;
+  pages.forEach((p,k)=>{
+    const pg=document.createElement('div'); pg.className='page'; let bad=p.length>(k?1:2);
+    p.forEach(l=>{const c=document.createElement('canvas'); if(vwf)drawVWF(c,l,2); else drawFixed(c,l,2,budget); pg.appendChild(c);
+      const w=document.createElement('div'); w.className='w'; const px=vwf?linePx(l):lineCells(l);
+      const lim=vwf?192:budget; if(px>lim){bad=true;w.classList.add('bad');}
+      w.textContent=vwf?`${px} / 192 px`:`${px} / ${budget} cells`; pg.appendChild(w);});
+    if(bad)pg.classList.add('bad'); host.appendChild(pg);
+  });
+  if(bytes.includes(-1)){const s=document.createElement('div');s.className='w bad';s.textContent='contains a character the font cannot draw';host.appendChild(s);}
+}
+function markDirty(){dirty=true;document.getElementById('save').disabled=false;}
+function pick(accept,cb){const i=document.createElement('input');i.type='file';i.accept=accept;i.onchange=()=>{const f=i.files[0];const r=new FileReader();r.onload=()=>cb(r.result,f.name);r.readAsText(f);};i.click();}
+document.getElementById('loadScript').onclick=()=>pick('.json',(txt,name)=>{
+  doc=JSON.parse(txt); fileName=name; kind=doc.entries?'dialogue':'script'; dirty=false; document.getElementById('save').disabled=true; render();
+});
+function save(){
+  if(!doc)return;
+  const copy=JSON.parse(JSON.stringify(doc)); if(copy.segments)for(const s of Object.values(copy.segments))delete s._budget;
+  const blob=new Blob([JSON.stringify(copy,null,1)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fileName;a.click();
+  dirty=false;document.getElementById('save').disabled=true;
+}
+document.getElementById('save').onclick=save;
+document.addEventListener('keydown',ev=>{if((ev.ctrlKey||ev.metaKey)&&ev.key==='s'){ev.preventDefault();save();}});
+document.getElementById('q').addEventListener('input',()=>{if(doc)render();});
+document.getElementById('filter').addEventListener('change',()=>{if(doc)render();});
+/* served over http (python -m http.server from the repo root): ?file=work/dialogue.json loads directly */
+const params=new URLSearchParams(location.search);
+if(params.get('file'))fetch('/'+params.get('file')).then(r=>r.text()).then(txt=>{doc=JSON.parse(txt);fileName=params.get('file').split('/').pop();kind=doc.entries?'dialogue':'script';render();});
+window.addEventListener('beforeunload',ev=>{if(dirty){ev.preventDefault();ev.returnValue='';}});
+</script>
+</body>
+</html>

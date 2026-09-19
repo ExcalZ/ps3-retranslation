@@ -1,0 +1,9 @@
+::1 - - [19/Sep/2026 09:31:56] "GET /tools/proofread.html HTTP/1.1" 200 -
+::1 - - [19/Sep/2026 09:32:01] "GET /tools/proofread.html?file=work/dialogue.json HTTP/1.1" 200 -
+::1 - - [19/Sep/2026 09:32:01] "GET /work/dialogue.json HTTP/1.1" 200 -
+::1 - - [19/Sep/2026 09:32:01] code 404, message File not found
+::1 - - [19/Sep/2026 09:32:01] "GET /favicon.ico HTTP/1.1" 404 -
+::1 - - [19/Sep/2026 09:32:17] "GET /tools/proofread.html?file=work/script.json HTTP/1.1" 200 -
+::1 - - [19/Sep/2026 09:32:17] "GET /work/script.json HTTP/1.1" 200 -
+::1 - - [19/Sep/2026 09:32:17] code 404, message File not found
+::1 - - [19/Sep/2026 09:32:17] "GET /favicon.ico HTTP/1.1" 404 -
