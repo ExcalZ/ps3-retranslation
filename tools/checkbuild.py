@@ -8,8 +8,9 @@ Reads the last assembly (PSIII_Disasm/ps3built.bin and ps3.lst) and the sources:
  2. the generated font binaries match a fresh generation (diafont.py);
  3. tools/proofread.html is in sync with its template and the font binaries;
  4. the ROM's header end address and checksum match the file;
- 5. the VWF RAM block stays inside the boot-only SEGA-screen area ($FFFFE400-$FFFFFBFF)
-    and its pool tiles stay inside the font block's blank tiles ($C0-$FF);
+ 5. the VWF RAM block stays inside the boot-only SEGA-screen area ($FFFFE400-$FFFFFBFF),
+    the dialogue pool stays inside the font block's blank tiles ($C0-$FF), and the menu
+    pool stays below the sprite table at tile $540;
  6. no extension routine sits below the original end of ROM ($C0000): the retranslation
     adds code past it so nothing in the original image moves;
  7. the option flags are all 0 or 1 and vwf_dialogue implies the diafont binaries exist.
@@ -100,14 +101,25 @@ def main():
             fail('pool tiles $%X-$%X leave the blank font tiles $C0-$FF' % (pool, pool + 2 * cells - 1))
         else:
             ok('pool tiles $%X-$%X' % (pool, pool + 2 * cells - 1))
+        if opts.get('vwf_menu') == '1':
+            menu_pool = int(re.search(r'^VWFMENU_POOL\s*=\s*\$([0-9A-F]+)', src, re.M).group(1), 16)
+            menu_rows = int(re.search(r'^VWFMENU_ROWS\s*=\s*(\d+)', src, re.M).group(1))
+            menu_cols = int(re.search(r'^VWFMENU_COLS\s*=\s*(\d+)', src, re.M).group(1))
+            menu_end = menu_pool + menu_rows * menu_cols
+            if menu_end > 0x540:
+                fail('menu pool tiles $%X-$%X reach the sprite table at $540' % (menu_pool, menu_end - 1))
+            else:
+                ok('menu pool tiles $%X-$%X below the sprite table at $540' % (menu_pool, menu_end - 1))
         for name in ('VWFDia_Entry', 'VWFDia_ScrollUp', 'VWFDia_Font'):
             if sym[name] < 0xC0000:
                 fail('%s at $%X is below the original end of ROM' % (name, sym[name]))
         ok('extension routines sit past $C0000')
     # 7. options
-    for k in ('scrolling_ground', 'four_save_slots', 'fix_tech_distributor', 'vwf_dialogue', 'vwf_scroll_shadow'):
+    for k in ('scrolling_ground', 'four_save_slots', 'fix_tech_distributor', 'vwf_dialogue', 'vwf_scroll_shadow', 'vwf_menu'):
         if k not in opts:
             fail('option %s missing or not 0/1' % k)
+    if opts.get('vwf_menu') == '1' and opts.get('vwf_dialogue') != '1':
+        fail('vwf_menu requires vwf_dialogue')
     ok('options: ' + ', '.join('%s=%s' % kv for kv in sorted(opts.items())))
     print('sha256', hashlib.sha256(rom).hexdigest())
     if problems:

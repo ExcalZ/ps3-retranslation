@@ -23,3 +23,8 @@ vwf_dialogue = 1
 ; The opening scroll's letters cast a one-pixel black shadow (0: plain letters
 ; over the picture, as the stock scroll draws them).
 vwf_scroll_shadow = 1
+
+; Proportional text in the field menu too: item names, equipment, technique
+; names and labels (needs vwf_dialogue; the pool is VRAM tiles $240-$53F,
+; free while a menu screen is up).
+vwf_menu = 1

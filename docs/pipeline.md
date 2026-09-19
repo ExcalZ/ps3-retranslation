@@ -35,6 +35,7 @@ The options in `ps3.options.asm`:
 | `fix_tech_distributor` | the distribution box is drawn from values scaled to fit 24x14 cells (`ext/techdist.asm`) |
 | `vwf_dialogue` | proportional text in the dialogue window (`ext/vwf.asm`) |
 | `vwf_scroll_shadow` | the opening scroll's letters cast a 1 px black shadow (0 = plain letters like the stock scroll) |
+| `vwf_menu` | proportional item, equipment, technique and label text in the field menu; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `four_save_slots` | four save slots with safety copies in 32 KB of backup RAM (`ext/saveslots.asm`) |
 
 New code lives in `PSIII_Disasm/ext/*.asm`, included just before `EndOfRom`,
@@ -89,8 +90,13 @@ table). The credits' `hdr` is the two position bytes the generator keeps.
 | text | limit | enforced by |
 |---|---|---|
 | dialogue line | 192 px in the dialogue face (24 cells); two lines, then one per `{PAGE}` | `proofread.html`; the engine clips |
+| item name | 80 px in the field-menu face (10 cells) | `proofread.html`; the engine clips |
 | fixed-width tables | the widest line of the stock table, in cells | `proofread.html` (`budget` per segment) |
 | script region | it may grow freely: everything after it is label-relative | - |
+
+The menu pool has more physical room on the left item column, but 80 px is
+the item authoring limit: it preserves the stock two-column layout and the
+existing 10-cell name box. The proofreader enforces that stricter limit.
 
 The script region has no hard address ceiling: the disassembly is fully
 label-relative (assembling it with the text regenerated is bit-exact), and
@@ -107,6 +113,7 @@ python tools/test_text.py        # every original string round-trips through the
 python tools/test_vwf.py         # the VWF engine under the 68000 interpreter vs a reference composer
 python tools/test_techdist.py    # the distribution-box scaling under the interpreter
 python tools/ps3emu.py ps3en.bin # boots the ROM in BlastEm and screenshots the title
+python work/scripts/menuvwf.py   # Item, Stats and Equip screens in BlastEm
 ```
 
 `tools/ps3emu.py` drives BlastEm from Python through its GDB stub - pad

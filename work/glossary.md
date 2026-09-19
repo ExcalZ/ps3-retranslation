@@ -115,9 +115,10 @@ US called them Melee, Order, Heal, Time.
 | AquaParts / Sub Parts / AeroParts | マリン / サブマリン / スカイパーツ | Marine / Submarine / Sky Parts |
 | LayaPndnt | ライアペンダント | Laya Pendant |
 
-The US item names were cut to nine cells; the item windows are still 8x8
-cells here (see STATUS: menu VWF is not done), so the budget is the widest
-stock name of each table until that changes.
+The US item names were cut to nine cells. Field-menu names now use the
+proportional dialogue face in the existing 10-cell window, so their budget is
+80 px without moving the border ("Grenade Launcher" is 76 px and "Holy Knight
+Sword" is 75 px in the current face).
 
 ## Enemies
 

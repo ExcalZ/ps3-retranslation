@@ -13,7 +13,13 @@ VWFDia_Line     = VWFDia_RAM+$4A0	; word: 0 or 1
 VWFDia_X        = VWFDia_RAM+$4A2	; word: pen position in px
 VWFDia_Attr     = VWFDia_RAM+$4A4	; word: tilemap attribute bits (d0 at entry)
 VWFDia_Row      = VWFDia_RAM+$4A8	; long: mark-row pointer of the current line
-VWFDia_RAM_End  = VWFDia_RAM+$4AC
+VWFDia_Mode     = VWFDia_RAM+$4AC	; word: 0 dialogue (two lines, pool $C0), 1 menu (pool by screen cell)
+VWFDia_Tile     = VWFDia_RAM+$4AE	; word: first pool tile of the current line
+VWFDia_Cap      = VWFDia_RAM+$4B0	; word: canvas capacity of the line in cells (at most 24)
+VWFDia_MaxPx    = VWFDia_RAM+$4B2	; word: the same in px (glyphs past it are dropped)
+VWFDia_Pad      = VWFDia_RAM+$4B4	; word: cells the line fills with paper after the ink ($44(a6) for menus)
+VWFDia_Count    = VWFDia_RAM+$4B6	; word: tiles to expand and upload
+VWFDia_RAM_End  = VWFDia_RAM+$4B8
 
 SaveSlots_RAM    = $FFFFE900
 SaveSlots_Status = SaveSlots_RAM		; 4 words: 0 empty/bad, 4 fine (the $60(a6) values)

@@ -5,8 +5,9 @@ composer built from the same font binaries.
     python tools/test_vwf.py
 
 Covers: plain text, {BR}, {PAGE} continuation state, {NAME} inserts, {NUM} numbers,
-clipping at the right edge, the page scroll (VWFDia_ScrollUp) and the fixed-width
-fallback for windows that are not the dialogue's.
+clipping at the right edge, the page scroll (VWFDia_ScrollUp), the fixed-width
+fallback for windows that are not the dialogue's, the opening scroll, and the field
+menu (pool tile per screen cell, $44(a6) padding, the hand-off past row 24).
 """
 import os
 import sys
@@ -111,7 +112,7 @@ def check_line(m, line_bytes, row0, line, attr=0x8000, label=''):
     want = [attr | (POOL + line * CELLS + i) for i in range(cells)] + [attr | 0x1F] * (CELLS - cells)
     assert glyph == want, (label, 'glyph row', [hex(v) for v in glyph], [hex(v) for v in want])
     base = (POOL + line * CELLS) * 32
-    assert bytes(m.vram[base:base + CELLS * 32]) == expand(canvas), (label, 'pool tiles')
+    assert bytes(m.vram[base:base + cells * 32]) == expand(canvas)[:cells * 32], (label, 'pool tiles')
     return x
 
 
@@ -211,9 +212,93 @@ def test_opening_scroll(sym):
     print('  opening scroll ok (%d px, slot %d)' % (x, slot))
 
 
+MENU_POOL, MENU_STRIDE, PLANE_A, MAP_ID = 0x240, 0x80, 0xFFFF2000, 0xFFFFD022
+
+
+def menu_machine(sym, pad):
+    m = Machine()
+    m.poke(CTX + 0x42, (MENU_STRIDE).to_bytes(2, 'big'))
+    m.poke(CTX + 0x44, pad.to_bytes(2, 'big'))
+    m.poke(MAP_ID, (0x202).to_bytes(2, 'big'))
+    return m
+
+
+def menu_words(m, row, col, n):
+    d = m.peek(PLANE_A + row * MENU_STRIDE + col * 2, n * 2)
+    return [int.from_bytes(d[i:i + 2], 'big') for i in range(0, n * 2, 2)]
+
+
+def check_menu_line(m, line_bytes, row, col, pad, attr=0x8000, label=''):
+    """Mark row `row`, glyph row `row + 1`: pad cells of paper in the mark row (or the ink
+    width if wider), pool tiles $240 + row*32 + (col-4) for the ink cells, paper after."""
+    canvas, x = compose(line_bytes)
+    cells = (x + 7) // 8
+    n = max(cells, pad)
+    first = MENU_POOL + row * 32 + (col - 4)
+    assert menu_words(m, row, col, n) == [attr | 0x1F] * n, (label, 'mark row')
+    want = [attr | (first + i) for i in range(cells)] + [attr | 0x1F] * (n - cells)
+    assert menu_words(m, row + 1, col, n) == want, (label, 'glyph row', [hex(v) for v in menu_words(m, row + 1, col, n)], [hex(v) for v in want])
+    assert bytes(m.vram[first * 32:first * 32 + cells * 32]) == expand(canvas)[:cells * 32], (label, 'pool tiles')
+    return x
+
+
+def test_menu_items(sym):
+    """The item screen: names at (mark row 2, col 4), (2, 26) and (15, 4) with $44(a6) = 10,
+    equipped names with the $C000 attribute; the cell after the last never leaks."""
+    m = menu_machine(sym, 10)
+    render(m, sym, 'Steel Swd', row0=PLANE_A + 2 * MENU_STRIDE + 4 * 2)
+    check_menu_line(m, b'Steel Swd', 2, 4, 10, label='left column')
+    render(m, sym, 'Grenade Launcher', row0=PLANE_A + 2 * MENU_STRIDE + 26 * 2, attr=0xC000)
+    x = check_menu_line(m, b'Grenade Launcher', 2, 26, 10, attr=0xC000, label='right column, equipped')
+    assert (x + 7) // 8 == 10, x
+    assert menu_words(m, 3, 36, 1) == [0], 'nothing written past column 35'
+    render(m, sym, 'Laia Pendant', row0=PLANE_A + 15 * MENU_STRIDE + 4 * 2)
+    check_menu_line(m, b'Laia Pendant', 15, 4, 10, label='lower block')
+    # redrawing the same cell reuses its tile: the first name's tiles are overwritten in place
+    render(m, sym, 'Monomate', row0=PLANE_A + 2 * MENU_STRIDE + 4 * 2)
+    check_menu_line(m, b'Monomate', 2, 4, 10, label='redraw')
+    assert m.peek(CTX + 1, 1)[0] & 0x30 == 0
+    print('  menu item names ok')
+
+
+def test_menu_labels(sym):
+    """A label block with {BR}{BR} (four rows per label, $44(a6) = 8) and a block whose
+    third label falls past row 24 and is drawn by the stock renderer."""
+    m = menu_machine(sym, 8)
+    render(m, sym, 'Head{BR}{BR}R Hand{BR}{BR}L Hand', row0=PLANE_A + 0 * MENU_STRIDE + 5 * 2)
+    check_menu_line(m, b'Head', 0, 5, 8, label='label 1')
+    check_menu_line(m, b'R Hand', 4, 5, 8, label='label 2')
+    check_menu_line(m, b'L Hand', 8, 5, 8, label='label 3')
+    m = menu_machine(sym, 8)
+    render(m, sym, 'Luck{BR}{BR}Skill{BR}{BR}Late', row0=PLANE_A + 18 * MENU_STRIDE + 5 * 2)
+    check_menu_line(m, b'Luck', 18, 5, 8, label='label near the bottom')
+    check_menu_line(m, b'Skill', 22, 5, 8, label='last pooled row')
+    assert menu_words(m, 27, 5, 8) == [0x8000 | c for c in b'Late'] + [0x801F] * 4, 'hand-off: stock glyph tiles on row 27'
+    assert menu_words(m, 26, 5, 8) == [0x801F] * 8, 'hand-off: stock mark row'
+    print('  menu labels and the row-24 hand-off ok')
+
+
+def test_menu_off(sym):
+    """Outside a menu screen the plane A buffer takes the stock path (the battle box
+    draws there); inside it, rows the pool does not cover do too."""
+    m = menu_machine(sym, 8)
+    m.poke(MAP_ID, (0x5A).to_bytes(2, 'big'))
+    render(m, sym, 'Rhys', row0=PLANE_A + 2 * MENU_STRIDE + 4 * 2)
+    assert menu_words(m, 3, 4, 4) == [0x8000 | c for c in b'Rhys'], 'field map: stock tiles'
+    assert not m.vram_writes
+    m = menu_machine(sym, 8)
+    render(m, sym, 'Rhys', row0=PLANE_A + 24 * MENU_STRIDE + 16 * 2)   # the row-25 name plate
+    assert menu_words(m, 25, 16, 4) == [0x8000 | c for c in b'Rhys'], 'name plate: stock tiles'
+    render(m, sym, 'Rhys', row0=PLANE_A + 2 * MENU_STRIDE + 2 * 2)     # column 2: left of the pool
+    assert menu_words(m, 3, 2, 4) == [0x8000 | c for c in b'Rhys'], 'column 2: stock tiles'
+    assert not m.vram_writes
+    print('  menu fallbacks ok')
+
+
 def main():
     sym = Symbols()
-    for t in (test_plain, test_br_and_page, test_scroll, test_inserts, test_clip, test_fixed_fallback, test_opening_scroll):
+    for t in (test_plain, test_br_and_page, test_scroll, test_inserts, test_clip, test_fixed_fallback, test_opening_scroll,
+              test_menu_items, test_menu_labels, test_menu_off):
         t(sym)
     print('test_vwf: all passed')
 

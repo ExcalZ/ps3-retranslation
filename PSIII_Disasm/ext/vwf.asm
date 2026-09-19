@@ -30,6 +30,18 @@
 ; the first line, so VWFDia_ScrollUp also moves the second line's canvas up,
 ; rewrites those words to the first line's pool tiles and refreshes them in
 ; VRAM before the next page is rendered into the second line.
+;
+; The field menu (vwf_menu): while a menu "map" ($202-$20C) is loaded, VRAM
+; holds only the font and the five portrait slots at tiles $100-$23F, and the
+; field's art is reloaded when the menu closes. Text written into the plane A
+; buffer ($FFFF2000, 64 cells a row) whose glyph row is 1-24 and whose column
+; is 4-35 is composed the same way, into a pool that shadows the screen: one
+; tile per visible cell, $240 + (glyph row - 1) * 32 + (column - 4), $240-$53F.
+; A redraw of a cell reuses its tile, so nothing is allocated or freed; the
+; line fills $44(a6) cells with paper after the ink as the stock renderer does,
+; and a $F8 that leaves the range hands the rest of the string to the stock
+; renderer. Item names, equipment, technique names and the labels all go
+; through it; numbers (loc_FF7E) and the row-25 name plate stay fixed width.
 ; ===========================================================================
 	if vwf_dialogue
 
@@ -38,6 +50,10 @@ VWFDIA_CELLS    = 24		; cells per dialogue line
 VWFDIA_LINEPX    = VWFDIA_CELLS*8	; 192 px
 VWFDIA_STRIDE   = 26		; canvas row stride: 24 cells + 2 spill bytes
 VWFDIA_BLANK    = $1F		; the paper tile
+VWFMENU_POOL    = $240		; menu pool: 24 rows x 32 columns of the plane A buffer
+VWFMENU_ROWS    = 24
+VWFMENU_COLS    = 32
+VWFMENU_COL0    = 4
 
 ; RAM equates: ext/ram.asm
 
@@ -46,6 +62,17 @@ VWFDIA_BLANK    = $1F		; the paper tile
 ; a6 window context). Falls through to the stock renderer for other windows.
 ; ---------------------------------------------------------------------------
 VWFDia_Entry:
+	if vwf_menu
+	move.w	(map_id).w, d1
+	subi.w	#$202, d1
+	cmpi.w	#$A, d1			; a menu screen ($202-$20C, one per generation)
+	bhi.s	VWFDia_NotMenu
+	bsr.w	VWFMenu_Locate		; d1 = pool tile, d2 = capacity; d1 = $FFFF if not pooled
+	cmpi.w	#VWFMENU_POOL+VWFMENU_ROWS*VWFMENU_COLS, d1
+	bcc.s	VWFDia_NotMenu
+	bra.w	VWFMenu_Go
+VWFDia_NotMenu:
+	endif
 	cmpi.w	#VWFDIA_CELLS, $44(a6)
 	bne.s	VWFDia_Fixed
 	moveq	#0, d1
@@ -66,6 +93,12 @@ VWFDia_Go:
 	move.w	d0, (VWFDia_Attr).w
 	move.w	d1, (VWFDia_Line).w
 	move.l	a1, (VWFDia_Row).w
+	clr.w	(VWFDia_Mode).w
+	move.w	#VWFDIA_CELLS, (VWFDia_Cap).w
+	move.w	#VWFDIA_LINEPX, (VWFDia_MaxPx).w
+	move.w	#VWFDIA_CELLS, (VWFDia_Pad).w
+	bsr.w	VWFDia_LinePool
+VWFDia_Begin:
 	bsr.w	VWFDia_StartLine
 	lea	(VWFDia_Font).l, a4
 	lea	(VWFDia_Width).l, a3
@@ -127,6 +160,22 @@ VWFDia_Newline:				; $F8
 	bra.w	VWFDia_Loop
 +
 	bsr.w	VWFDia_Flush
+	move.w	$42(a6), d2
+	add.w	d2, d2
+	movea.l	(VWFDia_Row).w, a1
+	adda.w	d2, a1
+	move.l	a1, (VWFDia_Row).w
+	if vwf_menu
+	tst.w	(VWFDia_Mode).w
+	beq.s	VWFDia_Newline_Dia
+	bsr.w	VWFMenu_Locate
+	cmpi.w	#VWFMENU_POOL+VWFMENU_ROWS*VWFMENU_COLS, d1
+	bcc.w	VWFMenu_Handoff
+	bsr.w	VWFMenu_SetLine
+	bsr.w	VWFDia_StartLine
+	bra.w	VWFDia_Loop
+VWFDia_Newline_Dia:
+	endif
 	move.w	(VWFDia_Line).w, d1
 	addq.w	#1, d1
 	cmpi.w	#1, d1
@@ -134,13 +183,17 @@ VWFDia_Newline:				; $F8
 	moveq	#1, d1			; a third line has nowhere to go: overwrite the second
 +
 	move.w	d1, (VWFDia_Line).w
-	move.w	$42(a6), d2
-	add.w	d2, d2
-	movea.l	(VWFDia_Row).w, a1
-	adda.w	d2, a1
-	move.l	a1, (VWFDia_Row).w
+	bsr.w	VWFDia_LinePool
 	bsr.w	VWFDia_StartLine
 	bra.w	VWFDia_Loop
+
+; pool tile of the dialogue line: $C0 for line 0, $D8 for line 1
+VWFDia_LinePool:
+	move.w	(VWFDia_Line).w, d2
+	mulu.w	#VWFDIA_CELLS, d2
+	addi.w	#VWFDIA_POOL, d2
+	move.w	d2, (VWFDia_Tile).w
+	rts
 
 VWFDia_Number:				; $E4 nn
 	move.b	(a0)+, d1
@@ -206,7 +259,7 @@ VWFDia_Draw:
 	move.w	d2, d5
 	add.w	d4, d5
 	subq.w	#1, d5			; ink right edge (advance includes the 1 px gap)
-	cmpi.w	#VWFDIA_LINEPX, d5
+	cmp.w	(VWFDia_MaxPx).w, d5
 	bhi.s	VWFDia_Draw_Done
 	bsr.s	VWFDia_CanvasPtr
 	move.w	d2, d5
@@ -239,26 +292,33 @@ VWFDia_Draw_Done:
 ; the window's mark row and glyph row.
 ; ---------------------------------------------------------------------------
 VWFDia_Flush:
-	bsr.w	VWFDia_Expand
-	bsr.w	VWFDia_Upload
 	move.w	(VWFDia_X).w, d5
 	addq.w	#7, d5
 	lsr.w	#3, d5			; cells that hold ink
+	move.w	d5, (VWFDia_Count).w
+	bsr.w	VWFDia_Expand		; (clobbers d5)
+	bsr.w	VWFDia_Upload
+	move.w	(VWFDia_Count).w, d5
+	move.w	(VWFDia_Pad).w, d6
+	cmp.w	d5, d6
+	bcc.s	+
+	move.w	d5, d6			; cells written: the ink, or the pad width if wider
++
+	subq.w	#1, d6
+	bmi.s	VWFDia_Flush_Done	; nothing at all (a blank line in a zero-width window)
 	movea.l	(VWFDia_Row).w, a1
 	move.w	(VWFDia_Attr).w, d3
 	move.w	d3, d1
 	ori.w	#VWFDIA_BLANK, d1
-	moveq	#VWFDIA_CELLS-1, d7
+	move.w	d6, d7
 -
 	move.w	d1, (a1)+		; mark row: paper
 	dbf	d7, -
 	movea.l	(VWFDia_Row).w, a1
 	adda.w	$42(a6), a1		; glyph row
-	move.w	(VWFDia_Line).w, d2
-	mulu.w	#VWFDIA_CELLS, d2
-	addi.w	#VWFDIA_POOL, d2
+	move.w	(VWFDia_Tile).w, d2
 	or.w	d3, d2			; first pool tile of this line, with attributes
-	moveq	#VWFDIA_CELLS-1, d7
+	move.w	d6, d7
 VWFDia_Flush_Cells:
 	subq.w	#1, d5
 	bmi.s	VWFDia_Flush_Blanks
@@ -269,14 +329,17 @@ VWFDia_Flush_Cells:
 VWFDia_Flush_Blanks:
 	move.w	d1, (a1)+
 	dbf	d7, VWFDia_Flush_Blanks
+VWFDia_Flush_Done:
 	rts
 
 ; canvas of the current line -> VWFDia_Scratch (24 tiles, 4bpp)
 VWFDia_Expand:
+	move.w	(VWFDia_Count).w, d7
+	subq.w	#1, d7
+	bmi.s	VWFDia_Expand_Done
 	bsr.w	VWFDia_CanvasPtr
 	lea	(VWFDia_Scratch).w, a5
 	lea	(VWFDia_NibbleLUT).l, a4
-	moveq	#VWFDIA_CELLS-1, d7
 VWFDia_Expand_Tile:
 	moveq	#7, d6
 -
@@ -294,6 +357,7 @@ VWFDia_Expand_Tile:
 	suba.w	#8*VWFDIA_STRIDE-1, a2	; next column
 	dbf	d7, VWFDia_Expand_Tile
 	lea	(VWFDia_Font).l, a4	; restore for the draw loop
+VWFDia_Expand_Done:
 	rts
 
 ; canvas of the current line -> VWFDia_Scratch with a transparent paper (colour 0) and,
@@ -355,12 +419,14 @@ VWFDia_ExpandOpen_Tile:
 ; VWFDia_Scratch -> VRAM, the current line's pool tiles
 VWFDia_Upload:
 	movem.l	d0-d2/a0-a1, -(sp)
+	move.w	(VWFDia_Count).w, d1
+	lsl.w	#5, d1			; bytes
+	beq.s	+
 	lea	(VWFDia_Scratch).w, a0
-	move.w	(VWFDia_Line).w, d0
-	mulu.w	#VWFDIA_CELLS*32, d0
-	addi.w	#VWFDIA_POOL*32, d0
-	move.w	#VWFDIA_CELLS*32, d1
+	move.w	(VWFDia_Tile).w, d0
+	lsl.w	#5, d0			; VRAM address of the line's first pool tile
 	jsr	(LoadDataInVRAMWithOffset).l
++
 	movem.l	(sp)+, d0-d2/a0-a1
 	rts
 
@@ -379,6 +445,9 @@ VWFDia_ScrollUp:
 	move.l	(a0)+, (a1)+
 	dbf	d0, -
 	clr.w	(VWFDia_Line).w
+	clr.w	(VWFDia_Mode).w
+	move.w	#VWFDIA_POOL, (VWFDia_Tile).w
+	move.w	#VWFDIA_CELLS, (VWFDia_Count).w
 	bsr.w	VWFDia_Expand
 	bsr.w	VWFDia_Upload
 	lea	$FFFF9AEA.w, a1		; glyph row of the first line
@@ -423,6 +492,7 @@ VWFScroll_Go:
 	movem.l	d0-d7/a0-a6, -(sp)
 	lea	$FFFFD280.w, a6		; VWFDia_Draw reads nothing from it, but keep the convention
 	clr.w	(VWFDia_Line).w
+	move.w	#VWFDIA_LINEPX, (VWFDia_MaxPx).w
 	bsr.w	VWFDia_StartLine
 	lea	(VWFDia_Font).l, a4
 	lea	(VWFDia_Width).l, a3
@@ -490,6 +560,68 @@ VWFScroll_Done:
 	bclr	#6, $FFFFD006.w
 	movem.l	(sp)+, d0-d7/a0-a6
 	rts
+
+; ---------------------------------------------------------------------------
+; The field menu.
+; ---------------------------------------------------------------------------
+	if vwf_menu
+; a1 = a mark row in the plane A buffer? Then d1 = the pool tile of its first
+; cell and d2 = how many cells fit before column 36 (at most 24). d1 = $FFFF
+; (past the pool's end: compare unsigned) when the row is not one the pool
+; covers (mark rows 0-23, columns 4-35 of $FFFF2000).
+VWFMenu_Locate:
+	move.w	a1, d1			; low word: work RAM is $FFFFxxxx
+	subi.w	#$2000, d1
+	cmpi.w	#VWFMENU_ROWS*$80, d1
+	bcc.s	VWFMenu_Locate_No
+	move.w	d1, d2
+	andi.w	#$7F, d2
+	lsr.w	#1, d2			; cell column
+	subq.w	#VWFMENU_COL0, d2
+	bcs.s	VWFMenu_Locate_No
+	cmpi.w	#VWFMENU_COLS, d2
+	bcc.s	VWFMenu_Locate_No
+	lsr.w	#7, d1			; mark row = glyph row - 1 = pool row
+	lsl.w	#5, d1
+	add.w	d2, d1
+	addi.w	#VWFMENU_POOL, d1
+	neg.w	d2
+	addi.w	#VWFMENU_COLS, d2	; cells left on the row
+	cmpi.w	#VWFDIA_CELLS, d2
+	bls.s	+
+	moveq	#VWFDIA_CELLS, d2
++
+	rts
+VWFMenu_Locate_No:
+	move.w	#$FFFF, d1
+	rts
+
+; d1 = pool tile, d2 = capacity -> the line state
+VWFMenu_SetLine:
+	move.w	d1, (VWFDia_Tile).w
+	move.w	d2, (VWFDia_Cap).w
+	lsl.w	#3, d2
+	move.w	d2, (VWFDia_MaxPx).w
+	move.w	$44(a6), (VWFDia_Pad).w
+	rts
+
+VWFMenu_Go:
+	movem.l	d1-d7/a2-a5, -(sp)
+	move.w	d0, (VWFDia_Attr).w
+	clr.w	(VWFDia_Line).w
+	move.w	#1, (VWFDia_Mode).w
+	move.l	a1, (VWFDia_Row).w
+	bsr.s	VWFMenu_SetLine
+	bra.w	VWFDia_Begin
+
+; a $F8 moved the line out of the pool's rows: the stock renderer takes the
+; rest of the string (a0) from the new row (a1). The insert flag is clear here
+; (a $F8 inside an insert only ends the insert).
+VWFMenu_Handoff:
+	movem.l	(sp)+, d1-d7/a2-a5
+	move.w	(VWFDia_Attr).w, d0
+	jmp	(loc_10038_Fixed).l
+	endif
 
 ; (ink nibble << 4 | shadow nibble) -> 4 colour nibbles: ink 1, else shadow 2, else 0
 VWFDia_ShadowLUT:

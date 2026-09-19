@@ -35,11 +35,11 @@ the continuation into the lower line, so a `{PAGE}` scrolls one line.
 
 ## The proportional face (`ext/vwf.asm`)
 
-`VWFDia_Entry` is jumped to from the first instruction of `loc_10038`. It
-takes over only when `$44(a6) == 24` and `a1` is one of the dialogue's
-three text rows (`$FFFF9D26` template line 0, `$FFFF9AB6` live line 0,
-`$FFFF9B1E` live line 1); anything else jumps back to the stock code, so
-menus, name lists and the YES/NO box keep their fixed cells.
+`VWFDia_Entry` is jumped to from the first instruction of `loc_10038`.
+With `vwf_menu` enabled it first checks for a pooled field-menu position;
+otherwise it takes over only when `$44(a6) == 24` and `a1` is one of the
+dialogue's three text rows (`$FFFF9D26` template line 0, `$FFFF9AB6` live
+line 0, `$FFFF9B1E` live line 1). Other calls jump back to the stock code.
 
 For a line it ORs 1bpp glyph rows (`vwf/diafont.bin`, 8 bytes per text byte,
 advance in `vwf/diawidth.bin` = ink + 1 px, space 3 px) into a 192-px canvas
@@ -63,14 +63,37 @@ pool tiles, which the next page overwrites. `VWFDia_ScrollUp` (called in
 place of `loc_A3BA`) also copies line 1's canvas into line 0's, re-expands
 and re-uploads line 0's tiles and subtracts 24 from every copied pool index.
 
-RAM: `$FFFFE400-$FFFFE8AB` - the SEGA-screen art buffer, used only at boot
+RAM: `$FFFFE400-$FFFFE8B7` - the SEGA-screen art buffer, used only at boot
 (the Nemesis code table sits below at `$FFFFE000-$FFFFE1FF`, the stack above
-`$FFFFFC00`). Two canvases, a 768-byte expansion scratch, and four words of
-state.
+`$FFFFFC00`). Two canvases, a 768-byte expansion scratch, and line state:
+mode, pool tile, cell/pixel capacity, paper-padding width and ink-tile count.
 
 Cost: one line is at most 24 glyphs of 8 OR-pairs plus a 768-byte expansion
 and upload; well under a frame. The stock renderer is not otherwise touched,
 and with `vwf_dialogue = 0` the hook is not assembled.
+
+## The field menu
+
+With `vwf_menu = 1` (and `vwf_dialogue = 1`), the same composer also handles
+text drawn into the field menu's plane-A buffer. Menu maps are `$202-$20C`;
+they load only five portrait slots at VRAM tiles `$100-$23F`, and leaving the
+menu reloads the field map art. That leaves tiles `$240-$53F` free while the
+menu is open, below the sprite table at tile `$540`.
+
+The menu pool shadows the usable screen area instead of allocating tiles:
+mark rows 0-23 and columns 4-35 map to `$240 + row*32 + (column-4)`. Redrawing
+a cell therefore reuses its tile. Each call is clipped to the end of that row
+and at most 24 cells, while the stock `$44(a6)` width still controls how many
+cells are cleared with paper. A `{BR}` relocates the next line in the pool; if
+it steps below row 24, the rest of the string is handed back to the stock
+renderer.
+
+This catches item names, equipped items, technique names, menu labels and the
+"Whose?" name list. Numeric fields still use the game's direct digit renderer,
+and the row-25 character name plate remains fixed width. The item window is
+10 cells (80 px); the longest translated-style names tested so far fit it.
+Cursor highlighting continues to work because its palette-bit toggle changes
+the attributes on the same pool-tile words.
 
 ## The opening scroll
 

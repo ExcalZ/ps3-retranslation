@@ -1,15 +1,15 @@
 # Phantasy Star III: English Retranslation — source and tools
 
 Repository: https://github.com/ExcalZ/ps3-retranslation (no release yet - the
-translation pass has not started; see `work/STATUS.md`).
+translation pass is in progress; see `work/STATUS.md`).
 
 A new English translation of *Phantasy Star III: Generations of Doom*
 (*Toki no Keishousha*, Mega Drive / Genesis), made from the Japanese script,
 built as a **source patch on top of the game's disassembly** rather than by
 editing the ROM — the same shape as the
 [Phantasy Star IV retranslation](https://github.com/ExcalZ/ps4-retranslation).
-The dialogue window draws proportional (variable-width) text, there are four
-save slots (one per third-generation branch), the Japanese release's
+The dialogue window and field-menu text draw proportional (variable-width)
+text, there are four save slots (one per third-generation branch), the Japanese release's
 scrolling battle ground is restored, and the Technique Distributor no longer
 runs off the screen at high levels.
 
@@ -81,8 +81,10 @@ original and are what the generators key on.
   to 192 px in the dialogue face; only the text before the first `{PAGE}` may
   contain a `{BR}`.
 * **Names, menus, battle and shop text** live in `work/script.json`, one
-  segment per table. Those windows are still fixed-width 8x8 cells, one cell
-  per character; the widest line of the stock table is the budget.
+  segment per table. Item names use the proportional face with an 80 px
+  budget in the Item, Equip and Stats screens. Other non-dialogue windows
+  remain fixed-width 8x8 cells unless the proofreader identifies them as
+  dialogue-window text; the widest line of the stock table is their budget.
 * `tools/proofread.html` shows every line in the real fonts with live pixel
   widths and flags what does not fit. Open it in a browser and load a JSON
   (or serve the repository with `python -m http.server 8765` and open

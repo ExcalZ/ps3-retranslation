@@ -82,7 +82,7 @@
   The dialogue face and the stock 8x8 font are embedded: every line is drawn as the game will draw it.<br><br>
   Dialogue lines are proportional: <b>192 px per line</b>. The window shows two lines; {BR} starts the second,
   and each {PAGE} waits for a button, scrolls the window up one line and draws one more line - so only the text before the first {PAGE} may hold a {BR}.<br>
-  Everything else is still fixed-width 8x8 cells, one cell per character, with the stock table's cell budget.<br>
+  Item names are proportional with an <b>80 px</b> field-menu budget. Other text uses the budget shown in its preview.<br>
   <kbd>Ctrl</kbd>+<kbd>S</kbd> saves. Edit only the English; the JP and US columns are the originals.
 </div></main>
 <script>
@@ -143,8 +143,8 @@ function lineCells(line){let n=0;for(const b of line){if(Array.isArray(b))n+=b[0
 
 /* ---- drawing ---- */
 const INK='#e8eaed', PAPER='#3b4f7a', BAD='#b3261e';
-function drawVWF(canvas,line,scale){
-  const W=192,H=8; canvas.width=W*scale; canvas.height=H*scale;
+function drawVWF(canvas,line,scale,limit=192){
+  const W=limit,H=8; canvas.width=W*scale; canvas.height=H*scale;
   const g=canvas.getContext('2d'); g.fillStyle=PAPER; g.fillRect(0,0,canvas.width,canvas.height);
   let x=0;
   for(const b of line){
@@ -190,14 +190,16 @@ function budgetOf(seg,e){ // fixed-width segments: the widest US line of the seg
 function over(seg,e){
   const pages=lines(encode(e.en));
   if(isVWF(seg)){
-    for(const [k,p] of pages.entries()){if(p.length>(k?1:2))return true;for(const l of p)if(linePx(l)>192)return true;}
+    const limit=vwfLimit(seg);
+    for(const [k,p] of pages.entries()){if(p.length>(k?1:2))return true;for(const l of p)if(linePx(l)>limit)return true;}
     return encode(e.en).includes(-1);
   }
   const b=budgetOf(seg,e);
   for(const p of pages)for(const l of p)if(lineCells(l)>b)return true;
   return encode(e.en).includes(-1);
 }
-function isVWF(seg){return kind==='dialogue'||seg==='battle'||seg==='shops'||seg==='namestrings'||seg==='credits';}
+function isVWF(seg){return kind==='dialogue'||seg==='battle'||seg==='shops'||seg==='namestrings'||seg==='credits'||seg==='items';}
+function vwfLimit(seg){return seg==='items'?80:192;}
 function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 function fmtJP(s){return esc(s).replace(/\{([^}]*)\}/g,'<span class="ctl">{$1}</span>');}
 
@@ -236,14 +238,14 @@ function render(){
 }
 function preview(row,seg,e){
   const host=row.querySelector('.pages'), label=row.querySelector('.preview .label'); host.innerHTML='';
-  const bytes=encode(e.en), pages=lines(bytes), vwf=isVWF(seg), budget=vwf?null:budgetOf(seg,e);
-  label.textContent=vwf?'dialogue window: 192 px per line; two lines, then one new line per {PAGE}':`fixed 8x8 cells, budget ${budget} cells (widest stock line)`;
+  const bytes=encode(e.en), pages=lines(bytes), vwf=isVWF(seg), limit=vwf?vwfLimit(seg):null, budget=vwf?null:budgetOf(seg,e);
+  label.textContent=vwf?(seg==='items'?`field-menu item name: ${limit} px`:`dialogue window: ${limit} px per line; two lines, then one new line per {PAGE}`):`fixed 8x8 cells, budget ${budget} cells (widest stock line)`;
   pages.forEach((p,k)=>{
     const pg=document.createElement('div'); pg.className='page'; let bad=p.length>(k?1:2);
-    p.forEach(l=>{const c=document.createElement('canvas'); if(vwf)drawVWF(c,l,2); else drawFixed(c,l,2,budget); pg.appendChild(c);
+    p.forEach(l=>{const c=document.createElement('canvas'); if(vwf)drawVWF(c,l,2,limit); else drawFixed(c,l,2,budget); pg.appendChild(c);
       const w=document.createElement('div'); w.className='w'; const px=vwf?linePx(l):lineCells(l);
-      const lim=vwf?192:budget; if(px>lim){bad=true;w.classList.add('bad');}
-      w.textContent=vwf?`${px} / 192 px`:`${px} / ${budget} cells`; pg.appendChild(w);});
+      const lim=vwf?limit:budget; if(px>lim){bad=true;w.classList.add('bad');}
+      w.textContent=vwf?`${px} / ${limit} px`:`${px} / ${budget} cells`; pg.appendChild(w);});
     if(bad)pg.classList.add('bad'); host.appendChild(pg);
   });
   if(bytes.includes(-1)){const s=document.createElement('div');s.className='w bad';s.textContent='contains a character the font cannot draw';host.appendChild(s);}

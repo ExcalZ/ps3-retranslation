@@ -15,10 +15,11 @@ proportional: 16 lines of up to 192 px, from the JP scroll's 18 lines) and the
 attract-mode / game-over story narration (`loc_25F24`, 8 proportional
 pages). Everything else still equals the US text.
 
-Canonical experimental ROM `ps3en.bin` (every option on): 790,666 bytes;
+Canonical experimental ROM `ps3en.bin` (every option on): 791,816 bytes,
+SHA-256 `0482FD519FF8DB01450AABBF5FBD0BFAC33AB7C3A5D81CB27E7EC0D675D68342`;
 `tools/checkbuild.py` prints its SHA-256 after each build.
 Stock US ROM (every option 0 and every `en` equal to `us` reproduces it -
-verified 2026-09-19 after the save-slot work): 786,432 bytes, SHA-256
+verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
 `CB837A2B10B8D219D844A55D8EC25581A57152F5EE8361AB62389354170A21D5`, CRC32
 `C6B42B0F`, internal checksum `3A33`.
 
@@ -45,6 +46,17 @@ verified 2026-09-19 after the save-slot work): 786,432 bytes, SHA-256
   width: its columns place the target cursor. A battle message is two lines
   at most; the two three-line "won" messages are re-flowed in `en`. Not yet
   seen in BlastEm: shop prompts (same path as the dialogue's `$FFFF9AB6`).
+* **Field-menu VWF** (`vwf_menu`, `ext/vwf.asm`). Menu maps use a
+  screen-shadowing pool at tiles `$240-$53F`, so item/equipment/technique
+  names and labels render proportionally without allocation. Verified under
+  the interpreter (item columns, palette attributes, padding, redraws,
+  label line breaks, out-of-range hand-off and fixed fallbacks) and in BlastEm
+  (`work/scripts/menuvwf.py`, `work/analysis/mv_*.png`): Item and action
+  screens, all three Stats pages, Equip with a right-hand item and cursor
+  movement, Techs with seeded levels, clean returns to the field, and the
+  second-generation menu map `$204`. Switch still needs a multi-character
+  fixture. The main-menu list remains fixed width because it is composed in
+  a separate buffer before being copied to the plane.
 * **Scrolling battle ground** (`scrolling_ground`): the JP tables at
   `loc_780C0`. Data-only; the scroll routine is identical in both games.
   Verified in BlastEm: in a Landen-plain battle the row-20 scroll value
@@ -76,12 +88,10 @@ verified 2026-09-19 after the save-slot work): 786,432 bytes, SHA-256
 
 ## Not done
 
-* **Menu / battle-list VWF.** Item, technique, enemy and status windows
-  stay fixed-width. The PS4 project's pool-with-marks engine is the model;
-  the PS3 VRAM has only the 64 blank font tiles free (`$C0-$FF`, 48 used by
-  the dialogue), so a menu VWF would need to reclaim VRAM (the kana remnants
-  at `$80-$95` are unused by US text but referenced from tilemap data would
-  need checking) or draw names into the mark rows.
+* **Battle-list VWF and remaining menu checks.** Enemy/status battle windows
+  and shop lists remain fixed-width. The field-menu Switch screen has not yet
+  been exercised with a multi-character party; the main-menu list itself is
+  also fixed-width.
 * **The translation itself**, and the glossary decisions
   (`work/glossary.md`).
 * **Fonts for other languages**: only ASCII plus `" ; & %` glyphs exist.
@@ -90,15 +100,16 @@ verified 2026-09-19 after the save-slot work): 786,432 bytes, SHA-256
 
 ```
 python tools/sourcebuild.py ps3en.bin      # 0 errors, 0 warnings
-python tools/checkbuild.py                 # 12 invariants
+python tools/checkbuild.py                 # build, placement and option invariants
 python tools/test_text.py                  # 1180 US + 523 JP strings round-trip
-python tools/test_vwf.py                   # 6 engine cases under the interpreter
+python tools/test_vwf.py                   # 10 engine cases under the interpreter
 python tools/test_techdist.py
 python work/scripts/pagescroll.py          # BlastEm: 6 screenshots of the legend text scrolling
 python work/scripts/narration.py           # BlastEm: the opening
 python work/scripts/battle.py              # BlastEm: first encounter, scrolling ground, VWF messages
 python work/scripts/saveslots.py           # BlastEm: inn save into slot 3, reset, continue
 python work/scripts/saveslots2.py          # BlastEm: two saves, continue/erase lists
+python work/scripts/menuvwf.py             # BlastEm: Item, Stats, Equip, Techs, generation 2
 ```
 
 To reproduce the stock ROM: set every option in `ps3.options.asm` to 0 and
