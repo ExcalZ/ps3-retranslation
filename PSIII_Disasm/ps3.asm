@@ -23,6 +23,7 @@
 	include "ps3.macrosetup.asm"
 	
 	include "ps3.constants.asm"
+	include "ps3.options.asm"
 
 
 StartOfRom:
@@ -16462,7 +16463,12 @@ loc_C736:
 	move.w	#$F8, $8(a5)
 	move.w	#$B0, $A(a5)
 	addq.w	#4, $2(a5)
+	if fix_tech_distributor
+	lea	$30(a5), a0
+	jmp	(TechDist_Cursor).l
+	else
 	bra.w	loc_C828
+	endif
 loc_C766:
 	addq.b	#1, $C(a5)
 	move.b	(joypad_pressed).w, d7
@@ -16527,8 +16533,14 @@ loc_C80C:
 	rts
 loc_C818:
 	clr.b	$C(a5)
+	if fix_tech_distributor
+	jsr	(TechDist_Box).l	; a0 = $30(a5) here
+	lea	$30(a5), a0
+	jsr	(TechDist_Cursor).l
+	else
 	bsr.w	loc_C852
 	bsr.w	loc_C828
+	endif
 	bra.w	loc_FC18
 loc_C828:
 	lea	$30(a5), a0
@@ -16616,7 +16628,11 @@ loc_C8EC:
 	rts
 loc_C8F4:
 	bsr.w	loc_C970
+	if fix_tech_distributor
+	jsr	(TechDist_Box).l
+	else
 	bsr.w	loc_C852
+	endif
 	lea	$FFFFD068.w, a0
 	moveq	#0, d0
 	move.b	$1C(a6), d0
@@ -83997,6 +84013,54 @@ loc_78038:
 	dc.b	$00, $02, $08, $0E, $04, $0A, $00, $06 ;0x0 (0x000780B8-0x000780C0, Entry count: 0x00000008) [Unknown data]
 	
 ; =============================================
+; ==============================================================================
+; Battle background scroll speeds: one signed byte per 8-line row (28 rows), in
+; 1/16 px per frame, added to the per-cell horizontal scroll each frame (loc_CF1E).
+; The pointer table is indexed by the battle terrain ($FFFFD028/2). The Japanese
+; release scrolls the ground rows (13-27) toward the viewer, faster the nearer the
+; row; the US release zeroed those rows. scrolling_ground = 1 restores the JP tables.
+; ==============================================================================
+	if scrolling_ground
+loc_780C0:
+	dc.w	loc_780DC-(loc_780C0+0)	; 0
+	dc.w	loc_780F8-(loc_780C0+2)	; 1
+	dc.w	loc_78114-(loc_780C0+4)	; 2
+	dc.w	loc_78130-(loc_780C0+6)	; 3
+	dc.w	loc_7814C-(loc_780C0+8)	; 4
+	dc.w	loc_78168-(loc_780C0+10)	; 5
+	dc.w	loc_78184-(loc_780C0+12)	; 6
+	dc.w	loc_781A0-(loc_780C0+14)	; 7
+	dc.w	loc_781A0-(loc_780C0+16)	; 8
+	dc.w	loc_78168-(loc_780C0+18)	; 9
+	dc.w	loc_781A0-(loc_780C0+20)	; 10
+	dc.w	loc_781A0-(loc_780C0+22)	; 11
+	dc.w	loc_781A0-(loc_780C0+24)	; 12
+	dc.w	loc_78184-(loc_780C0+26)	; 13
+loc_780DC:
+	dc.b	$EC, $EE, $F0, $F2, $F4, $F6, $F8, $FA, $FC, $FE, $00, $00, $00, $14
+	dc.b	$18, $1C, $20, $24, $28, $2C, $30, $34, $38, $3C, $40, $44, $48, $4C
+loc_780F8:
+	dc.b	$EC, $EE, $F0, $F2, $F4, $F6, $F8, $FA, $FC, $FE, $00, $00, $00, $14
+	dc.b	$18, $1C, $20, $24, $28, $2C, $30, $34, $38, $3C, $40, $44, $48, $4C
+loc_78114:
+	dc.b	$EC, $EE, $F0, $F2, $F4, $F6, $F8, $FA, $FC, $FE, $00, $00, $00, $14
+	dc.b	$18, $1C, $20, $24, $28, $2C, $30, $34, $38, $3C, $40, $44, $48, $4C
+loc_78130:
+	dc.b	$F6, $F7, $F8, $F9, $FA, $FB, $FC, $FD, $FE, $FF, $00, $00, $00, $0A
+	dc.b	$0C, $0E, $10, $12, $14, $16, $18, $1A, $1C, $1E, $20, $22, $24, $26
+loc_7814C:
+	dc.b	$EC, $EE, $F0, $F2, $F4, $F6, $F8, $FA, $FC, $FE, $00, $00, $00, $14
+	dc.b	$18, $1C, $20, $28, $28, $30, $30, $3C, $3C, $3C, $4C, $4C, $4C, $4C
+loc_78168:
+	dc.b	$EC, $EC, $EC, $F2, $F2, $F6, $F8, $FA, $FC, $FE, $00, $00, $00, $0A
+	dc.b	$0C, $0E, $10, $12, $16, $16, $1C, $1C, $1C, $26, $26, $26, $26, $26
+loc_78184:
+	dc.b	$EC, $EC, $EC, $F2, $F2, $F6, $F8, $FA, $FC, $FE, $00, $00, $00, $0A
+	dc.b	$0C, $0E, $10, $12, $16, $16, $1C, $1C, $1C, $26, $26, $26, $26, $26
+loc_781A0:
+	dc.b	$EC, $EC, $EC, $F2, $F2, $F6, $F8, $FA, $FC, $FE, $00, $00, $00, $0A
+	dc.b	$0C, $0E, $10, $14, $14, $18, $18, $1E, $1E, $1E, $26, $26, $26, $26
+	else
 loc_780C0:	dc.w	loc_780DC-loc_780C0
 loc_780C2:	dc.w	loc_780F8-loc_780C2
 loc_780C4:	dc.w	loc_78114-loc_780C4
@@ -84061,6 +84125,8 @@ loc_781A0:
 	dc.b	$00 ;0x0 (0x000781B4-0x000781B5, Entry count: 0x00000001)
 	dc.b	$00 ;0x0 (0x000781B5-0x000781B6, Entry count: 0x00000001)
 	dc.b	$00, $00, $00, $00, $00, $00 ;0x0 (0x000781B6-0x000781BC, Entry count: 0x00000006)
+	endif
+
 	
 
 ; =============================================
@@ -115771,6 +115837,15 @@ loc_BFE34:
 	dc.b	$FF, $00, $00 ;0x0 (0x000BFFFD-0x000C0000, Entry count: 0x00000003) [Unknown data]
 	
 	even	
-	
+
+; ===========================================================================
+; Retranslation extension: new code and data live past the end of the original
+; ROM so nothing above moves. Each file is guarded by its option flag.
+; ===========================================================================
+	include "ext/techdist.asm"
+	include "ext/saveslots.asm"
+	include "ext/vwf.asm"
+	even
+
 EndOfRom:
 	END
