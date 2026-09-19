@@ -72,6 +72,21 @@ Cost: one line is at most 24 glyphs of 8 OR-pairs plus a 768-byte expansion
 and upload; well under a frame. The stock renderer is not otherwise touched,
 and with `vwf_dialogue = 0` the hook is not assembled.
 
+## The opening scroll
+
+The new-game scroll (`loc_1A156`, text `loc_1A33C`...) is a real vertical
+scroller: plane A scrolls up and each line is written straight into VRAM by
+`loc_F7F0` (text, column, plane row, attribute `$6000`) when its header row
+comes around, four rows apart. `VWFScroll_Entry` hooks `loc_F7F0` when the
+script offset is the new-game intro's (the same test the scroller uses to
+pick its table) and the string is not the row-clearing blank, composes the
+line with the dialogue routines and uploads it to a pool of 8 x 24 tiles at
+`$200-$2BF` - on that screen plane B's picture uses `$100-$1FF` and
+`$340-$413` - with slot (row/4) mod 8, which is reused 32 rows after it was
+written when the line has long scrolled off the 28-row screen. Blank cells
+get tile 0 (transparent) as the stock spaces did. The ending staff roll goes
+through the same routine on another screen and keeps the bold 8x8 capitals.
+
 ## What the JP release does differently
 
 * The JP font is kana only, 8x8, at ROM `$40000` (the US font is at

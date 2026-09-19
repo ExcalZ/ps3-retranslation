@@ -340,6 +340,101 @@ VWFDia_ScrollUp:
 	movem.l	(sp)+, d0-d7/a0-a5
 	rts
 
+; ---------------------------------------------------------------------------
+; The opening scroll. loc_1A156 scrolls plane A upward and, as each line's row
+; comes around, writes it straight into VRAM with loc_F7F0 (a0 text, d1 column,
+; d2 plane row, d3 attribute $6000). Hooked at loc_F7F0 when the script offset
+; is the new-game intro's: the line is composed like a dialogue line and its
+; tiles go to a pool of 8 x 24 tiles at $200-$2BF (plane B's picture uses
+; $100-$1FF and $340-$413 on that screen). Lines sit four rows apart, so the
+; slot is (row/4) mod 8: a slot is reused 32 rows after it was written, and a
+; line has scrolled off the 28-row screen by then. Blank cells get tile 0
+; (transparent), as the stock writer's spaces do.
+; ---------------------------------------------------------------------------
+VWFSCROLL_POOL  = $200
+
+VWFScroll_Entry:
+	cmpi.w	#loc_304DA-GameScript2, (script_offset).w
+	bne.s	VWFScroll_Fixed
+	cmpi.w	#$6000, d3
+	bne.s	VWFScroll_Fixed
+	cmpa.l	#loc_1B8C, a0		; the 40 blank tiles that clear a row: stock path
+	bne.s	VWFScroll_Go
+VWFScroll_Fixed:
+	jmp	(loc_F7F0_Fixed).l
+
+VWFScroll_Go:
+	movem.l	d0-d7/a0-a6, -(sp)
+	lea	$FFFFD280.w, a6		; VWFDia_Draw reads nothing from it, but keep the convention
+	clr.w	(VWFDia_Line).w
+	bsr.w	VWFDia_StartLine
+	lea	(VWFDia_Font).l, a4
+	lea	(VWFDia_Width).l, a3
+-
+	moveq	#0, d1
+	move.b	(a0)+, d1
+	cmpi.b	#$FC, d1
+	beq.s	+
+	cmpi.b	#$F8, d1		; no line breaks here: ignore
+	beq.s	-
+	cmpi.b	#$E0, d1
+	bcs.s	VWFScroll_Glyph
+	move.b	(a0)+, d1		; $F4/$F0 nn: the glyph without its mark
+VWFScroll_Glyph:
+	bsr.w	VWFDia_Draw
+	bra.s	-
++
+	bsr.w	VWFDia_Expand
+	move.w	10(sp), d2		; the entry's row, from the saved frame
+	move.w	d2, d3
+	lsr.w	#2, d3
+	andi.w	#7, d3			; slot
+	mulu.w	#VWFDIA_CELLS, d3
+	addi.w	#VWFSCROLL_POOL, d3	; first pool tile of this line
+	move.w	d3, d0
+	lsl.w	#5, d0			; its VRAM address
+	move.w	d3, d4
+	ori.w	#$6000, d4		; tile word: palette 3
+	lea	(VWFDia_Scratch).w, a0
+	move.w	#VWFDIA_CELLS*32, d1
+	move.w	d4, -(sp)
+	jsr	(LoadDataInVRAMWithOffset).l
+	move.w	(sp)+, d4
+	move.w	6(sp), d1		; the entry's column and row
+	move.w	10(sp), d2
+	; plane A words at (row d2, column d1): cells that hold ink, then transparent
+	lsl.w	#7, d2
+	add.w	d1, d1
+	add.w	d1, d2
+	addi.w	#$C000, d2
+	bset	#6, $FFFFD006.w
+	lea	vdp_control_port, a1
+	move.w	d2, d1
+	swap	d1
+	move.w	d2, d1
+	rol.w	#2, d1
+	andi.l	#$3FFF0003, d1
+	ori.l	#$40000000, d1
+	move.l	d1, (a1)
+	move.w	(VWFDia_X).w, d5
+	addq.w	#7, d5
+	lsr.w	#3, d5			; cells with ink
+	moveq	#VWFDIA_CELLS-1, d7
+VWFScroll_Cells:
+	subq.w	#1, d5
+	bmi.s	VWFScroll_Blanks
+	move.w	d4, vdp_data_port
+	addq.w	#1, d4
+	dbf	d7, VWFScroll_Cells
+	bra.s	VWFScroll_Done
+VWFScroll_Blanks:
+	move.w	#0, vdp_data_port
+	dbf	d7, VWFScroll_Blanks
+VWFScroll_Done:
+	bclr	#6, $FFFFD006.w
+	movem.l	(sp)+, d0-d7/a0-a6
+	rts
+
 ; 4 pixels (a nibble, MSB = leftmost) -> 4 colour nibbles: ink 1, paper 2
 VWFDia_NibbleLUT:
 	dc.w	$2222, $2221, $2212, $2211, $2122, $2121, $2112, $2111

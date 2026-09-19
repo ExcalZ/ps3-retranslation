@@ -20631,6 +20631,10 @@ loc_F7AE:
 ; ===========================
 
 loc_F7F0:
+	if vwf_dialogue
+	jmp	(VWFScroll_Entry).l	; proportional text for the opening scroll (ext/vwf.asm)
+loc_F7F0_Fixed:
+	endif
 	moveq	#0, d5
 	move.w	d1, d7
 loc_F7F4:
@@ -34357,147 +34361,147 @@ loc_1A338:	dc.w	loc_1A7BA-loc_1A338
 ; ==========================================
 loc_1A33C:
 	dc.b	$02, $82
-	dc.b	"A thousand years ago, a"
+	dc.b	"A thousand years ago, a witch named"
 	dc.b	$FC
 	
 	even
 	
 loc_1A356:
 	dc.b	$02, $86
-	dc.b	"witch named Laya was"
+	dc.b	"Laia was born. She bred an army of"
 	dc.b	$FC
 	
 	even
 	
 loc_1A36C:
 	dc.b	$02, $8A
-	dc.b	"born. She bred an army"
+	dc.b	"monsters and plotted to conquer the world."
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A386:
 	dc.b	$02, $8E
-	dc.b	"of monsters and plotted"
+	dc.b	"But the hero Orakio, leading an army of"
 	dc.b	$FC
 	
 	even
 	
 loc_1A3A0:
 	dc.b	$02, $92
-	dc.b	"to conquer the world."
+	dc.b	"robots, stood against her. The two armies"
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A3B8:
 	dc.b	$02, $96
-	dc.b	"The hero Orakio led an"
+	dc.b	"split the world in two and fought on,"
 	dc.b	$FC
 
 	even
 	
 loc_1A3D0:
 	dc.b	$02, $9A
-	dc.b	"army of robots against"
+	dc.b	"until at last Laia and Orakio struck each"
 	dc.b	$FC
 	
 	even
 	
 loc_1A3EA:
 	dc.b	$02, $9E
-	dc.b	"her. The two armies"
+	dc.b	"other down and both vanished from it."
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A404:
 	dc.b	$02, $A2
-	dc.b	"split the world in two"
+	dc.b	"The descendants of those who fought at"
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A420:
 	dc.b	$02, $A6
-	dc.b	"and fought on, until at"
+	dc.b	"Laia's side are now the Laians... and the"
 	dc.b	$FC
 	
 	even
 	
 loc_1A43C:	
 	dc.b	$02, $AA
-	dc.b	"last Laya and Orakio"
+	dc.b	"descendants of those who stood with"
 	dc.b	$FC
 	
 	even
 	
 loc_1A456:
 	dc.b	$02, $AE
-	dc.b	"struck each other down"
+	dc.b	"Orakio call themselves the Orakians."
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A46E:	
 	dc.b	$02, $B2
-	dc.b	"and both were lost."
+	dc.b	"The war destroyed a civilization that had"
 	dc.b	$FC
 	
 	even
 	
 loc_1A48A:
 	dc.b	$02, $B6
-	dc.b	"The descendants of"
+	dc.b	"flourished enough to sail among the stars,"
 	dc.b	$FC
 	
 	even
 	
 loc_1A4A2:
 	dc.b	$02, $BA
-	dc.b	"Laya's followers are the"
+	dc.b	"and the lives of the people fell back to"
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A4BE:
 	dc.b	$02, $BE
-	dc.b	"Layans; Orakio's are"
+	dc.b	"those of a medieval age..."
 	dc.b	$FC
 	
 	even
 	
 loc_1A4DA:
 	dc.b	$02, $C2
-	dc.b	"called the Orakians."
+	dc.b	" "
 	dc.b	$FC
 	
 	even
 	
 loc_1A4F4:
 	dc.b	$02, $C6
-	dc.b	"The war destroyed the"
+	dc.b	" "
 	dc.b	$FC
 	
 	even
 	
 loc_1A50A:
 	dc.b	$02, $CA
-	dc.b	"civilization that once"
+	dc.b	" "
 	dc.b	$FC
 	
 	even
 	
 loc_1A526:
 	dc.b	$02, $CE
-	dc.b	"sailed the stars. Life"
+	dc.b	" "
 	dc.b	$FC
 	
 	even
 	
 loc_1A53C:
 	dc.b	$02, $D2
-	dc.b	"became medieval again..."
+	dc.b	" "
 	dc.b	$FC
 	
 	even
@@ -49932,7 +49936,7 @@ loc_25F0A:
 loc_25F24:	
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"The dark goddess Laya bred hordes of"
+	dc.b	"The dark goddess Laia bred hordes of"
 	dc.b	$F8
 	dc.b	"monsters and plotted to destroy the world."
 	dc.b	$EC
@@ -49940,7 +49944,7 @@ loc_25F24:
 	dc.b	$EC
 	dc.b	"challenged her, and it is said they struck"
 	dc.b	$EC
-	dc.b	"Laya down at the cost of their own lives..."
+	dc.b	"Laia down at the cost of their own lives..."
 	dc.b	$EC
 	dc.b	"A thousand years have passed since then."
 	dc.b	$EC

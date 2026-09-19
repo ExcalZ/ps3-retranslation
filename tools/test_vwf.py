@@ -166,9 +166,34 @@ def test_fixed_fallback(sym):
     print('  fixed-width fallback ok')
 
 
+def test_opening_scroll(sym):
+    """loc_F7F0 with the new-game script offset: a line goes to plane A at (row, col) with
+    pool tiles $200 + 24*((row/4) mod 8), blanks are tile 0; the row-clearing string and
+    other screens take the stock path."""
+    m = Machine()
+    so = sym['loc_304DA'] - sym['GameScript2']
+    m.poke(0xFFFFD064, so.to_bytes(2, 'big'))
+    text = b'Laia was born.'
+    m.poke(TEXT, text + bytes([0xFC]))
+    m.call(sym['loc_F7F0'], a0=TEXT, d1=2, d2=30, d3=0x6000)
+    canvas, x = compose(text)
+    cells = (x + 7) // 8
+    slot = (30 // 4) & 7
+    first = 0x200 + slot * CELLS
+    row = 0xC000 + 30 * 128 + 2 * 2
+    words = [int.from_bytes(m.vram[row + i * 2:row + i * 2 + 2], 'big') for i in range(CELLS)]
+    assert words == [0x6000 | (first + i) for i in range(cells)] + [0] * (CELLS - cells), [hex(w) for w in words]
+    assert bytes(m.vram[first * 32:first * 32 + CELLS * 32]) == expand(canvas)
+    # the stock path for the blank row-clearing string and for another script offset
+    m2 = Machine(); m2.poke(0xFFFFD064, so.to_bytes(2, 'big'))
+    m2.call(sym['loc_F7F0'], a0=sym['loc_1B8C'], d1=0, d2=5, d3=0x6000)
+    assert not any(w < 0xC000 for w in m2.vram_writes), 'no pool upload for the clearing string'
+    print('  opening scroll ok (%d px, slot %d)' % (x, slot))
+
+
 def main():
     sym = Symbols()
-    for t in (test_plain, test_br_and_page, test_scroll, test_inserts, test_clip, test_fixed_fallback):
+    for t in (test_plain, test_br_and_page, test_scroll, test_inserts, test_clip, test_fixed_fallback, test_opening_scroll):
         t(sym)
     print('test_vwf: all passed')
 

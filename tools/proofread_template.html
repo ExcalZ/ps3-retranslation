@@ -189,7 +189,7 @@ function budgetOf(seg,e){ // fixed-width segments: the widest US line of the seg
 }
 function over(seg,e){
   const pages=lines(encode(e.en));
-  if(kind==='dialogue'||seg==='battle'||seg==='shops'||seg==='namestrings'){
+  if(isVWF(seg)){
     for(const [k,p] of pages.entries()){if(p.length>(k?1:2))return true;for(const l of p)if(linePx(l)>192)return true;}
     return encode(e.en).includes(-1);
   }
@@ -197,7 +197,7 @@ function over(seg,e){
   for(const p of pages)for(const l of p)if(lineCells(l)>b)return true;
   return encode(e.en).includes(-1);
 }
-function isVWF(seg){return kind==='dialogue'||seg==='battle'||seg==='shops'||seg==='namestrings';}
+function isVWF(seg){return kind==='dialogue'||seg==='battle'||seg==='shops'||seg==='namestrings'||seg==='credits';}
 function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 function fmtJP(s){return esc(s).replace(/\{([^}]*)\}/g,'<span class="ctl">{$1}</span>');}
 

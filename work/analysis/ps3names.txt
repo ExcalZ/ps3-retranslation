@@ -1,0 +1,303 @@
+ALL ABOUT PHANTASY STAR III NAMES (AND A BIT OF OTHER 
+STUFF)
+
+Contents:
+
+1. Those syllables in the character surnames
+2. Character and place names
+3. Mea culpa
+
+What follows is a series of explanations of questionable 
+entertainment and informational value regarding the 
+translation choices I made for the names in PS3.  I threw 
+this together just to give readers background on how I 
+made certain decisions and a heads-up on areas where I 
+might have made the wrong call.  I am permanently out of 
+the loop so far as what's going on in the PS fandom, so 
+what I'm about to write below has probably already been 
+discussed to death on forums and the like.  Please forgive
+any repeat information.
+
+To keep up with the discussions below, you'll need to know,
+as you probably already do, that the "r" sound in the 
+Japanese language is used to represent both the Western "l"
+and "r" sounds.  
+
+***
+
+1. THOSE SYLLABLES IN THE CHARACTER SURNAMES
+
+Most of the main characters in the Japanese PS3 have a last
+name composed of their homeland or presumable clan name 
+preceded by an isolated syllable: Lynn No Satera or Lune 
+Kay Eshyr, for example.  Particularly since the cast of PS3
+is almost entirely nobility, I took the syllable to be an 
+Alisa III surname prefix like Earth's own "de" or "de la" 
+and moved on.
+
+Recently, though, I happened upon this fanart (yes, this 
+will be going someplace relevant):
+
+http://www.pixiv.net/member_illust.php?mode=medium&
+illust_id=12494708
+
+that suggests that the syllables are meant to represent 
+middle initials.  (Please note that Japanese is a language
+of syllables; you can't, save for one exception that 
+doesn't apply in this case, have a consonant standing all 
+by its lonesome.)  Now, on one hand, it makes sense for a 
+bunch of short syllables between the characters' first and
+last names to be meant as initials, and the illustration 
+did give me a bit of an "oh, boy" feeling when I first saw
+it.
+
+On the other hand, there are a lot of reasons why this 
+wouldn't make sense in PS3, besides the fact that all those
+middle initials make everyone sound like a bunch of Nixon-
+era politicians.  For one thing, you pronounce an initial 
+by saying the name of the letter, and (with the exception 
+of the "kay"/"kei" in "Kay Eshyr"), the middle syllables in
+the PS3 names aren't names of letters; if you wanted Lynn 
+to have a middle initial of "N.", you'd give the rest of 
+her name in raw Japanese as "En Satera", not "No Satera".  
+Second is usage; if you address someone by or state your 
+own full name, as the characters do on many occasions in 
+PS3, you state the unabbreviated form of your middle name,
+not its initial (unless you're George W. Bush).  Thirdly, 
+note that this middle particle changes when a character 
+changes their name upon marriage; Mr. Marina becomes Kein 
+Le Cille, not Kein Sa Cille.  
+
+Then again, every single argument above can be negated by 
+observing that this is Phantasy Star III, and what do we 
+expect, really.  Plus, these are the kind of mistakes that 
+I can honestly see someone whose native language is 
+Japanese making if they were unfamiliar with the whole 
+"middle initial" concept, as many folks in Japan are.  
+(Much of the time, if a Western name has a middle initial,
+Japanese print sources will opt to leave initial in Western
+type, thus circumventing the issue of how to pronounce or 
+transliterate the letter, even if the rest of the name has
+been rendered in Japanese script.)
+
+I'm going to keep the syllables as previously rendered, as 
+parts of the characters' last names, but please understand 
+that the middle-initial idea is, while problematic, another
+possible explanation.
+
+***
+
+2. CHARACTER AND PLACE NAMES
+
+Riik: It's "Riiku" in pure katakana, for which I couldn't 
+figure out any sort of logical or attractive English 
+rendition and just left in a more or less raw form.  Asked 
+now, I might have chosen to render it as "Rhique" instead, 
+but that would mean devising a proper name for Shiin, so 
+heck with it.
+
+Kein: His name as given in straight katakana and in Western
+letters in the character profiles on the Saturn PS 
+compilation (though the latter is kinda iffy to cite for 
+evidence; see below).  "Cain" and "Kain," the two more 
+popular spellings of the name, are for some reason usually
+rendered as "Kain" (pronounced "kyne") in katakana, though 
+the sounds don't match up.  "Kane" is rendered as "Kein" 
+as well as "Keen," making it a legitimate potential choice,
+but I've decided to go with the more straightforward 
+option.
+
+Maia: Initially, I translated her raw Japanese name, 
+"Maarina," as "Marlena," thinking (along with another 
+reason discussed below) that an elongated "a" sound for the
+initial syllable would not be necessary or present if her 
+name were intended to be "Marina."  As I've learned with 
+experience, however, Japanese renderings of Western names 
+can be a bit liberal with matching up vowel sounds to 
+actual native pronunciations.  Additionally, there's the 
+minstrel in Rysel who mentions the sand bar between 
+Shusoran and Cille as the key to meeting "the child of the
+sea," suggesting that the character is indeed supposed to 
+have associations with the ocean (and that the whole 
+I-washed-up-on-the-shore thing was not just a one-off 
+thing from an artistic-thematic perspective).  The on-disc
+first-generation character profiles from the Saturn PS 
+compilation also give her name as "Marina" in Western 
+letters; then again, it also gives Lyle's very-obvious name
+as "Rile," so.  Still, I'm changing it back to "Marina," 
+but keep in mind this still may not be correct, because...
+
+Lena & Lein: I stick to the official English names when 
+they work as acceptable translations of the original names,
+and "Lena" works for "Rina," the raw katakana of the 
+Sateran princess's name.  I have two reservations, though.
+First, Japanese RPG writers are _awfully_ fond of the name
+"Rina" and its variant spellings (I mean as an intended 
+Western name, not just as a katakana rendering).  Second, 
+PS3 is very fond of combinative wordplay in naming when it
+comes to relationships like family members or romantic 
+rivals (Ayn chooses between Lann and Lynn for a wife; the 
+names of all four of Kein's possible grandsons end in 
+"in").  The other reason that I initially I translated 
+Maia's name as "Marlena is that I originally thought Kein 
+was being offered a cutesy choice between Marlena and Lena.
+While I suppose choosing between Marina and Lena is still 
+cutesy soundwise, it does beg the question of whether the 
+writers really wanted a choice between Marina and Rina 
+instead.  The PS compilation gives her the name of "Lina,"
+which I guess you can throw on the "Rile" pile.
+I'm sticking with "Lena," but keep in mind that "Rina" 
+might be the actual intent.  In that case, the name of her
+son with Kein would be "Rein," not "Lein," as his name is a
+combination of his mom and dad's.  (This leads to a 
+possible argument for "Lena" and "Lein," though; on the 
+path of L's, Japanese Nial's son with Alair/Luise is a 
+combination of his parents' names (Luin = LUise + LeIN).  
+That doesn't really work as well on the path of R's; all a
+Ruin would take from his mom would be the "u.") seems also
+to be a possible combination of his parents' name.    
+
+Ain: "Ayn" is a legitimate translation, and it is indeed 
+pronounced like the author's name.  I used "Ayn" when I 
+first translated his quest and would have continued using 
+it had it not been for a discovery about the Kein Sa Riik 
+family naming system: the names of all seven male leads end
+in "in," with only the first character in the original 
+Japanese changed.  
+
+Laia: Even though the pronunciations are the same, I chose 
+to preserve the name as it's spelled in the original 
+katakana instead of going with the English "Laya" because 
+Japanese tends to render foreign words ending in "aya" as, 
+well, ending in "aya" ("baya" and "Maya" both end in a "ya"
+katakana in the original Japanese).  I believe, though, 
+that I've seen "Laya" in secondary sources like Japanese 
+soundtrack liner notes, so my decision here might be wrong.
+
+Shiin, Noin, Fuin, Luin: Yeah, I dunno.
+Shiin is another "I give up" case like Riik.  One could 
+note that "Sean" could be a possible translation of the 
+name if the writers were confused on how to pronounce the 
+name and assigned the "ea" vowel combination an "ee" sound.
+That doesn't follow the "in" naming convention, though.
+(Though you could argue for "Sein" in that case, but my
+native-English eyes revolt at that.)
+Noin is pretty straightforward.
+Fuin is too, despite its utter weirdness.  One could argue 
+that it's meant to be "Huin" (or maybe "Hewin")  -  
+strictly speaking, Japanese doesn't have a "hu" syllable; 
+"fu" takes the place where it would be in the syllabry.  
+One might argue, though, that "Huin" would start with a 
+"hew" sound instead of a "hoo" sound and thus require a 
+"hyu" katakana.  Then _again_, see Marlena/Maarina above.  
+The PS3 character book gives his name as "Fin" (or "Finn"),
+but that's not how his name is depicted in-game and also 
+messes with the heroes' naming scheme.
+Luin, see Lena & Lein.  I agree that "Ruin" is a far cooler
+name for an RPG protagonist.  Lewin?
+
+The Violet Moon: The Alisa III's two satellites do indeed 
+have more prosaic names in the Japanese version, but the 
+color given to Dahlia, "murasaki," is in truth closer to 
+purple than violet.  But "purple" is an inherently 
+inelegant word.  (Yes, I know that's dumb reasoning.)
+
+Foundry: There's actually an extra "ow" vowel sound in
+between the "d" and the "r"  -  "Foundaury"?  (The original
+Japanese is "Faundauri.")  As with Riik, I choose "Foundry" 
+and leave it in God's hands.  (Yes, I know I've been lazy 
+in regards to three proper names here, but goddamn if PS3
+doesn't have some ugly names that're impossible to render 
+into anything halfway decent.)
+
+Satellite: Not a name change per se, but an oddity in the 
+text.  It's not exactly a secret that PS3 was a rushed 
+title, which led to a lot of corners being cut.  Among them
+is rampant reuse of text; very few of townspeople outside 
+the starting areas, for instance, have something different 
+to say between Shiin and Noin's quests and between Fuin and
+Luin's. 
+One of the bits of text reused is the party's dialogue 
+whenever it arrives by shuttle at the final dungeon in the 
+second generation; the lines are simply relabeled (with 
+bizarrely, the end of the line attributed to either Lynn or
+Dan altered to make it sound more natural coming from 
+either a younger woman or an older man).  This presents a 
+bit of a storyline problem, though, revolving around the 
+final line in this exchange: "Satellite...  So the moons 
+in our sky were spaceships too..."  Now, this is fine for
+Ain's quest, but Lein isn't searching for capital-S 
+Satellite; he's simply blasting off for Lune's place and 
+doesn't know anything about the Laian "place of peace."  
+Now, in Lein's quest, this line given to Laia, which yields
+a couple possible explanations.  First, Laia might just 
+think (for some nebulous reason) that the Violet Moon is 
+indeed Satellite the place of peace and is labeling it as 
+such.  This doesn't really work from a storytelling point 
+of view, though; invoking the name of Satellite once 
+without any context doesn't work in a game where the player
+could be going through Lein's quest first and thus have no 
+idea of what Satellite is.
+The second is that Laia could be recognizing the moon as a 
+small-s satellite.  (Japanese has no articles and no means 
+of capitalizing a word, so "a satellite" and "Satellite" 
+are both represented with the same Japanese text.)  This 
+could work particularly for Laia, who presumably might have
+a better everyday working knowledge of the old technology 
+given her closer links to the time that it was in wider 
+recognition and use.  (For the other humans, it's a little 
+shakier; if everyone knew what a satellite was, then why 
+did no one in Ain's quest suspect that the legendary place 
+of peace Satellite was...well, you know.)  One wonders why 
+Laia would expect her present-day comrades to recognize 
+the term, but then, Searren uses it just before she does.  
+Then again, Searren isn't exactly up on his social graces.
+I suppose one can't expect Laia to be completely filled in 
+on the current state of technology after a 1,000-year nap.
+Anyhow, the upshot: the line in the English script starts 
+as "Satellite..." when given to Lann and "A satellite..." 
+when said by Laia.  This is a (slight) difference in the 
+English script but not necessarily one in the original 
+Japanese.
+
+***
+
+3. MEA CULPA
+
+I first translated Kein and Ain's quests back when I had 
+considerably less experience with Japanese.  Barring 
+stylistic changes, here's a list of the errors I made the 
+first time around, which were corrected in the 2012 
+reissues:
+
+Kein: 
+- I missed that a villager in Riik refers to Kein as 
+"dispossessed" from succession to the throne (then, 
+presumably for the time being, since he's back in if he 
+marries Lena).
+- The man in Hyurri wasn't "accosted" by Mieu; he merely 
+tracked her to the lake.
+- I apparently forgot entirely to change the name of 
+Hasatak to its Japanese name, Hazatak. ("Proofreading"; 
+what's that?)
+
+Ain:
+- Lyle never left the battlefield.  He's calling for aid 
+when the messenger comes in the prologue and is going out 
+and out again into combat at great personal risk when you 
+visit Shusoran.  I missed this twice.  Christ Almighty.
+- The cape where Lyle appears is the "Dragon's Tail," not 
+the "Dragon's Cape." 
+- Endora is named "Lott" in the Japanese version; "the 
+artisans' village" is an epithet, not the town name proper.
+- The woman who speaks of Quisto is obviously romantically 
+interested in him.
+- Quisto in Lott has had his heart taken captive by Lann; 
+he doesn't want to take Lann captive himself.  Yeah, I 
+know.  At least Toyo Ozaki's PS3 character book has more 
+than enough crack to compensate.
+
+***
+
+R. Capowski, 12/16/12; comments and reprobations on 
+laziness to RACapowski@sceneryrecalled.com.
