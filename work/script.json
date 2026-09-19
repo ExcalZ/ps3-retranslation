@@ -123,7 +123,9 @@
      "hex": "0282546865206c6567656e6473206f66207468652070617374fc",
      "hdr": "0282",
      "us": "The legends of the past",
-     "en": "The legends of the past"
+     "en": "A thousand years ago, a",
+     "jp": "1000ねんまえ\nライアと いう まじょが うまれた。。。\nライアは、モンスターぐんだんを つくりだし\nせかいを せいふくしようと たくらんだ。。。\nしかし、えいゆう オラキオが、ロボットぐんだんを\nひきいて ライアに たちむかった。\nふたつの ぐんだんは、せかいを ふたつにして\nたたかいを つづけ、\nさいごは、ライアと オラキオは あいうちになり、\nともに このよから きえた。\nこのとき、ライアに くみして たたかった\nひとびとの しそんは、ライアの たみと。。。\nオラキオに みかたして たたかった ひとびとの\nしそんは、オラキオの たみと なのっている。\nこの せんそうによって、ほしの せかいを\nたびするほど さかえた ぶんめいは ほろび、\nひとびとの せいかつは ちゅうせいの じだいと\nかわらぬものとなった。。。",
+     "note": "The JP opening scroll (18 lines, from the JP ROM at $1A0C0-$1A38A) is attached to this first line; the 21 US lines are one fixed-width block of 24 cells each."
     },
     {
      "id": "loc_1A356",
@@ -131,7 +133,7 @@
      "hex": "02867368617065206f7572206c6976657320616e64fc",
      "hdr": "0286",
      "us": "shape our lives and",
-     "en": "shape our lives and"
+     "en": "witch named Laya was"
     },
     {
      "id": "loc_1A36C",
@@ -139,7 +141,7 @@
      "hex": "028a74686f7365206f66206f7572206368696c6472656e2efc",
      "hdr": "028a",
      "us": "those of our children.",
-     "en": "those of our children."
+     "en": "born. She bred an army"
     },
     {
      "id": "loc_1A386",
@@ -147,7 +149,7 @@
      "hex": "028e4f6e652073756368206c6567656e64206973206f662061fc",
      "hdr": "028e",
      "us": "One such legend is of a",
-     "en": "One such legend is of a"
+     "en": "of monsters and plotted"
     },
     {
      "id": "loc_1A3A0",
@@ -155,7 +157,7 @@
      "hex": "02927374727567676c65207468617420616c6d6f7374fc",
      "hdr": "0292",
      "us": "struggle that almost",
-     "en": "struggle that almost"
+     "en": "to conquer the world."
     },
     {
      "id": "loc_1A3B8",
@@ -163,7 +165,7 @@
      "hex": "029664657374726f796564206f757220776f726c642efc",
      "hdr": "0296",
      "us": "destroyed our world.",
-     "en": "destroyed our world."
+     "en": "The hero Orakio led an"
     },
     {
      "id": "loc_1A3D0",
@@ -171,7 +173,7 @@
      "hex": "029a546865206e616d6573206f66204f72616b696f20616e64fc",
      "hdr": "029a",
      "us": "The names of Orakio and",
-     "en": "The names of Orakio and"
+     "en": "army of robots against"
     },
     {
      "id": "loc_1A3EA",
@@ -179,7 +181,7 @@
      "hex": "029e4c617961206563686f20646f776e207468726f756768fc",
      "hdr": "029e",
      "us": "Laya echo down through",
-     "en": "Laya echo down through"
+     "en": "her. The two armies"
     },
     {
      "id": "loc_1A404",
@@ -187,7 +189,7 @@
      "hex": "02a27468652079656172732c207374696c6c20696e737069722dfc",
      "hdr": "02a2",
      "us": "the years, still inspir-",
-     "en": "the years, still inspir-"
+     "en": "split the world in two"
     },
     {
      "id": "loc_1A420",
@@ -195,7 +197,7 @@
      "hex": "02a6696e67206c6f766520616e6420686174726564206576656efc",
      "hdr": "02a6",
      "us": "ing love and hatred even",
-     "en": "ing love and hatred even"
+     "en": "and fought on, until at"
     },
     {
      "id": "loc_1A43C",
@@ -203,7 +205,7 @@
      "hex": "02aa6e6f772c20312c303030207965617273206166746572fc",
      "hdr": "02aa",
      "us": "now, 1,000 years after",
-     "en": "now, 1,000 years after"
+     "en": "last Laya and Orakio"
     },
     {
      "id": "loc_1A456",
@@ -211,7 +213,7 @@
      "hex": "02ae746865697220747261676963206465617468732efc",
      "hdr": "02ae",
      "us": "their tragic deaths.",
-     "en": "their tragic deaths."
+     "en": "struck each other down"
     },
     {
      "id": "loc_1A46E",
@@ -219,7 +221,7 @@
      "hex": "02b2546865697220636f6e666c696374207769706564206f7574fc",
      "hdr": "02b2",
      "us": "Their conflict wiped out",
-     "en": "Their conflict wiped out"
+     "en": "and both were lost."
     },
     {
      "id": "loc_1A48A",
@@ -227,7 +229,7 @@
      "hex": "02b6636976696c697a6174696f6e20616e64206c656674fc",
      "hdr": "02b6",
      "us": "civilization and left",
-     "en": "civilization and left"
+     "en": "The descendants of"
     },
     {
      "id": "loc_1A4A2",
@@ -235,7 +237,7 @@
      "hex": "02ba746865207375727669766f727320696e206120776f726c64fc",
      "hdr": "02ba",
      "us": "the survivors in a world",
-     "en": "the survivors in a world"
+     "en": "Laya's followers are the"
     },
     {
      "id": "loc_1A4BE",
@@ -243,7 +245,7 @@
      "hex": "02be6f66206d7574617465642063726561747572657320616e64fc",
      "hdr": "02be",
      "us": "of mutated creatures and",
-     "en": "of mutated creatures and"
+     "en": "Layans; Orakio's are"
     },
     {
      "id": "loc_1A4DA",
@@ -251,7 +253,7 @@
      "hex": "02c277617272696e6720706f636b657473206f66206d656e2efc",
      "hdr": "02c2",
      "us": "warring pockets of men.",
-     "en": "warring pockets of men."
+     "en": "called the Orakians."
     },
     {
      "id": "loc_1A4F4",
@@ -259,7 +261,7 @@
      "hex": "02c6496e746f207468697320736861747465726564fc",
      "hdr": "02c6",
      "us": "Into this shattered",
-     "en": "Into this shattered"
+     "en": "The war destroyed the"
     },
     {
      "id": "loc_1A50A",
@@ -267,7 +269,7 @@
      "hex": "02ca776f726c6420796f7520617265207468727573742c20746ffc",
      "hdr": "02ca",
      "us": "world you are thrust, to",
-     "en": "world you are thrust, to"
+     "en": "civilization that once"
     },
     {
      "id": "loc_1A526",
@@ -275,7 +277,7 @@
      "hex": "02ce6c697665206f722064696520627920796f7572fc",
      "hdr": "02ce",
      "us": "live or die by your",
-     "en": "live or die by your"
+     "en": "sailed the stars. Life"
     },
     {
      "id": "loc_1A53C",
@@ -283,7 +285,7 @@
      "hex": "02d273776f726420616e6420796f757220776974732e2e2e2efc",
      "hdr": "02d2",
      "us": "sword and your wits....",
-     "en": "sword and your wits...."
+     "en": "became medieval again..."
     },
     {
      "id": "loc_1A556",

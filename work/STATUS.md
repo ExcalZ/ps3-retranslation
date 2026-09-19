@@ -9,8 +9,11 @@ every string is extracted into JSON with its Japanese counterpart, the JSON
 is written back into the assembly by a generator whose round trip is
 bit-exact and idempotent, the dialogue window draws a proportional face,
 the three requested extras are in and verified, and the tests, the
-proofreader and the release packaging exist. **No line has been translated
-yet**: every `en` equals the US text. The translation pass is the next job.
+proofreader and the release packaging exist. **The translation pass has
+started** with the opening: the title/new-game scroll (`credits` segment,
+21 fixed-width lines of 24 cells, from the JP scroll's 18 lines) and the
+attract-mode / game-over story narration (`loc_25F24`, 8 proportional
+pages). Everything else still equals the US text.
 
 Canonical experimental ROM `ps3en.bin` (every option on): 790,666 bytes;
 `tools/checkbuild.py` prints its SHA-256 after each build.
@@ -110,6 +113,11 @@ does not spawn the walking sprite) and wanders into the first encounter;
 and the church save.
 
 ## Log
+
+* 2026-09-19 (later) - Translation started: opening scroll and attract
+  narration, both seen in BlastEm (`work/scripts/narration.py`, `attract.py`).
+  The scroll keeps the US line count because each line carries its own
+  position header; the JP has 18 lines plus a "1000 years ago" heading.
 
 * 2026-09-19 - Project started from the PS4 retranslation's shape. Read the
   text engine, found the JP script at `$25F0C` with the same structure,

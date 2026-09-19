@@ -34357,147 +34357,147 @@ loc_1A338:	dc.w	loc_1A7BA-loc_1A338
 ; ==========================================
 loc_1A33C:
 	dc.b	$02, $82
-	dc.b	"The legends of the past"
+	dc.b	"A thousand years ago, a"
 	dc.b	$FC
 	
 	even
 	
 loc_1A356:
 	dc.b	$02, $86
-	dc.b	"shape our lives and"
+	dc.b	"witch named Laya was"
 	dc.b	$FC
 	
 	even
 	
 loc_1A36C:
 	dc.b	$02, $8A
-	dc.b	"those of our children."
+	dc.b	"born. She bred an army"
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A386:
 	dc.b	$02, $8E
-	dc.b	"One such legend is of a"
+	dc.b	"of monsters and plotted"
 	dc.b	$FC
 	
 	even
 	
 loc_1A3A0:
 	dc.b	$02, $92
-	dc.b	"struggle that almost"
+	dc.b	"to conquer the world."
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A3B8:
 	dc.b	$02, $96
-	dc.b	"destroyed our world."
+	dc.b	"The hero Orakio led an"
 	dc.b	$FC
 
 	even
 	
 loc_1A3D0:
 	dc.b	$02, $9A
-	dc.b	"The names of Orakio and"
+	dc.b	"army of robots against"
 	dc.b	$FC
 	
 	even
 	
 loc_1A3EA:
 	dc.b	$02, $9E
-	dc.b	"Laya echo down through"
+	dc.b	"her. The two armies"
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A404:
 	dc.b	$02, $A2
-	dc.b	"the years, still inspir-"
+	dc.b	"split the world in two"
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A420:
 	dc.b	$02, $A6
-	dc.b	"ing love and hatred even"
+	dc.b	"and fought on, until at"
 	dc.b	$FC
 	
 	even
 	
 loc_1A43C:	
 	dc.b	$02, $AA
-	dc.b	"now, 1,000 years after"
+	dc.b	"last Laya and Orakio"
 	dc.b	$FC
 	
 	even
 	
 loc_1A456:
 	dc.b	$02, $AE
-	dc.b	"their tragic deaths."
+	dc.b	"struck each other down"
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A46E:	
 	dc.b	$02, $B2
-	dc.b	"Their conflict wiped out"
+	dc.b	"and both were lost."
 	dc.b	$FC
 	
 	even
 	
 loc_1A48A:
 	dc.b	$02, $B6
-	dc.b	"civilization and left"
+	dc.b	"The descendants of"
 	dc.b	$FC
 	
 	even
 	
 loc_1A4A2:
 	dc.b	$02, $BA
-	dc.b	"the survivors in a world"
+	dc.b	"Laya's followers are the"
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A4BE:
 	dc.b	$02, $BE
-	dc.b	"of mutated creatures and"
+	dc.b	"Layans; Orakio's are"
 	dc.b	$FC
 	
 	even
 	
 loc_1A4DA:
 	dc.b	$02, $C2
-	dc.b	"warring pockets of men."
+	dc.b	"called the Orakians."
 	dc.b	$FC
 	
 	even
 	
 loc_1A4F4:
 	dc.b	$02, $C6
-	dc.b	"Into this shattered"
+	dc.b	"The war destroyed the"
 	dc.b	$FC
 	
 	even
 	
 loc_1A50A:
 	dc.b	$02, $CA
-	dc.b	"world you are thrust, to"
+	dc.b	"civilization that once"
 	dc.b	$FC
 	
 	even
 	
 loc_1A526:
 	dc.b	$02, $CE
-	dc.b	"live or die by your"
+	dc.b	"sailed the stars. Life"
 	dc.b	$FC
 	
 	even
 	
 loc_1A53C:
 	dc.b	$02, $D2
-	dc.b	"sword and your wits...."
+	dc.b	"became medieval again..."
 	dc.b	$FC
 	
 	even
@@ -49932,59 +49932,21 @@ loc_25F0A:
 loc_25F24:	
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"The legends of Landen,"
+	dc.b	"The dark goddess Laya bred hordes of"
 	dc.b	$F8
-	dc.b	"your homeland, tell of"
+	dc.b	"monsters and plotted to destroy the world."
 	dc.b	$EC
-	dc.b	"world-sweeping wars"
+	dc.b	"But a hero named Orakio and his companions"
 	dc.b	$EC
-	dc.b	"fought 1,000 years ago."
+	dc.b	"challenged her, and it is said they struck"
 	dc.b	$EC
-	dc.b	"Brave Orakio sought to"
+	dc.b	"Laya down at the cost of their own lives..."
 	dc.b	$EC
-	dc.b	"foil the evil schemes of"
+	dc.b	"A thousand years have passed since then."
 	dc.b	$EC
-	dc.b	"the dark witch Laya and"
+	dc.b	"On the shore of the land where Orakio was"
 	dc.b	$EC
-	dc.b	"her hordes of monsters."
-	dc.b	$EC
-	dc.b	"In the final battle, all"
-	dc.b	$EC
-	dc.b	"combatants were killed,"
-	dc.b	$EC
-	dc.b	"though Orakio and Laya's"
-	dc.b	$EC
-	dc.b	"bodies were never found."
-	dc.b	$EC
-	dc.b	"The passageways between"
-	dc.b	$EC
-	dc.b	"the Layan worlds and the"
-	dc.b	$EC
-	dc.b	"Orakian worlds were"
-	dc.b	$EC
-	dc.b	"sealed. In time, people"
-	dc.b	$EC
-	dc.b	"forgot there were other"
-	dc.b	$EC
-	dc.b	"worlds besides Landen."
-	dc.b	$EC
-	dc.b	"Two months ago, a young"
-	dc.b	$EC
-	dc.b	"woman washed up on the"
-	dc.b	$EC
-	dc.b	"shores of Landen. The"
-	dc.b	$EC
-	dc.b	"woman remembered nothing"
-	dc.b	$EC
-	dc.b	"of her life prior to"
-	dc.b	$EC
-	dc.b	"waking up on the beach."
-	dc.b	$EC
-	dc.b	"This seemingly minor"
-	dc.b	$EC
-	dc.b	"event sets an epic"
-	dc.b	$EC
-	dc.b	"adventure in motion...."
+	dc.b	"raised, a girl washed up, her memory gone."
 	dc.b	$EC
 	dc.b	$FC
 	
