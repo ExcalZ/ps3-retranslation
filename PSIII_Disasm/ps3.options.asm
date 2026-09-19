@@ -10,7 +10,7 @@ scrolling_ground = 1
 
 ; Four save slots instead of two. The two extra slots (and their backup copies)
 ; live in the second 16 KB of backup RAM, so the header declares 32 KB.
-four_save_slots = 0
+four_save_slots = 1
 
 ; Keep the Technique Distributor's cost/level box inside the window when a
 ; character's level is high (the stock game writes past the window buffer).

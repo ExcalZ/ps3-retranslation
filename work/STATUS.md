@@ -8,7 +8,7 @@ The foundation is in place: the disassembly assembles the US ROM bit-exact,
 every string is extracted into JSON with its Japanese counterpart, the JSON
 is written back into the assembly by a generator whose round trip is
 bit-exact and idempotent, the dialogue window draws a proportional face,
-two of the three requested fixes are in and verified, and the tests, the
+the three requested extras are in and verified, and the tests, the
 proofreader and the release packaging exist. **No line has been translated
 yet**: every `en` equals the US text. The translation pass is the next job.
 
@@ -51,36 +51,28 @@ Stock US ROM (every option 0 reproduces it): 786,432 bytes, SHA-256
   fits 24x14 cells. Verified in BlastEm with 20/20/20/20 (a 40x40 box in
   the stock game, which runs off the plane buffer into the scroll tables and
   plane B) and under the interpreter (`tools/test_techdist.py`).
+* **Four save slots** (`four_save_slots`, `ext/saveslots.asm`). Backup RAM
+  is odd bytes at `$200001` in `$1000`-byte blocks; the stock game keeps two
+  saves in blocks 0-1 and their safety copies in 2-3. Now blocks 0-3 are
+  four saves and 4-7 the copies (header: 32 KB). The slot masks and the
+  copy offset are patched in place (`loc_14984`, `loc_149F2`, `loc_148A0`,
+  `loc_1488C`, `loc_11580`); the game select checks four slots in a loop
+  with a status word per slot, the lists are four rows built by
+  `SaveSlots_Gather` from one string, the cursor moves over four rows and
+  skips empty slots where only a saved game may be chosen, and the messages
+  about the chosen slot go through `SaveSlots_Select` ({NAME:00}/{NUM:00}/
+  {NUM:08}). Verified in BlastEm (`work/scripts/saveslots.py`,
+  `saveslots2.py`): save into slot 3 at the Landen inn, soft reset, "Saved
+  game 3 is fine", continue; save into slot 1, the continue list (cursor
+  1 -> 3 -> 1 skipping empties), erase slot 3, continue slot 1. Not yet
+  exercised: the repair-from-copy path and the "every slot full" warning
+  (both are the stock code with the new slot count).
 * **Tooling.** `sourcebuild.py`, `checkbuild.py`, `ps3emu.py` (BlastEm
   harness: boot script, teleport, store entry, NPC talk, screenshots),
   `ps3harness.py` (interpreter), `proofread.html`, `release.py`.
 
 ## Not done
 
-* **Four save slots** (`four_save_slots`, reserved). The analysis:
-  - Backup RAM is `$200001-$203FFF` (odd bytes, 16 KB): four `$1000`-byte
-    blocks. Slots 0-1 are the two saves, blocks 2-3 their backup copies
-    (`loc_149F2` copies `slot -> slot+2` after every save; the game select
-    repairs a slot from its copy). Each block is nearly full (`loc_14A4A`
-    table: `$28-$FFF`), so four slots with copies need 32 KB of SRAM
-    (header `$200001-$207FFF`; emulators and flash carts size SRAM from the
-    header), or four slots without copies in 16 KB.
-  - Low-level sites: `loc_14984` (`andi.w #1` -> `#3`), `loc_149F2`
-    (`andi.w #3` -> `#7`, copy to `slot+4`), `loc_148A0` (`st $2002(a0)`
-    -> `$4002(a0)`), `loc_11580` (repair from `slot+2` -> `+4`), the
-    header's backup RAM end.
-  - UI sites: the game-select state machine (`EnterGameSelect`,
-    `loc_1133C` table, ~100 states) checks slots `$1A(a6)` = 0, 1 and packs
-    the results into `$5E/$60/$62(a6)` with `bchg #2` arithmetic; the slot
-    list window `loc_3DB64` (two rows at (12,10)) and its cursor code
-    (`addq #4; andi #4` in `loc_117E8`, `loc_118E2`); `loc_11B88` reads the
-    two slots' names and levels into `$64(a6)`/`$6C(a6)` (the context has no
-    room for four - `$74-$7E` are in use); the church save flow
-    (`loc_C448`-`loc_C5A2`) uses the same window and `$1C(a6)` = slot*4;
-    the strings "position 1 or 2", "1./2." rows (`shops` segment 44-68).
-  - Estimate: ~300 lines of assembly plus new strings and window params;
-    test through `ps3emu.py` by entering the church (store type 6/7) with
-    `four_save_slots=1`.
 * **Menu / battle-list VWF.** Item, technique, enemy and status windows
   stay fixed-width. The PS4 project's pool-with-marks engine is the model;
   the PS3 VRAM has only the 64 blank font tiles free (`$C0-$FF`, 48 used by
@@ -101,6 +93,9 @@ python tools/test_vwf.py                   # 6 engine cases under the interprete
 python tools/test_techdist.py
 python work/scripts/pagescroll.py          # BlastEm: 6 screenshots of the legend text scrolling
 python work/scripts/narration.py           # BlastEm: the opening
+python work/scripts/battle.py              # BlastEm: first encounter, scrolling ground, VWF messages
+python work/scripts/saveslots.py           # BlastEm: inn save into slot 3, reset, continue
+python work/scripts/saveslots2.py          # BlastEm: two saves, continue/erase lists
 ```
 
 To reproduce the stock ROM: set every option in `ps3.options.asm` to 0,

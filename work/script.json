@@ -6195,7 +6195,7 @@
      "addr": "3E2C5",
      "hex": "446f20796f75207769736820746f207361766520796f7572f867616d6520696e20706f736974696f6e2031206f7220323ffc",
      "us": "Do you wish to save your{BR}game in position 1 or 2?",
-     "en": "Do you wish to save your{BR}game in position 1 or 2?",
+     "en": "Which position do you{BR}want to save in?",
      "jp": "どちらに セーブしますか ？{BR}"
     },
     {

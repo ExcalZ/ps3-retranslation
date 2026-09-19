@@ -5,9 +5,10 @@ A new English translation of *Phantasy Star III: Generations of Doom*
 built as a **source patch on top of the game's disassembly** rather than by
 editing the ROM — the same shape as the
 [Phantasy Star IV retranslation](https://github.com/ExcalZ/ps4-retranslation).
-The dialogue window draws proportional (variable-width) text, the Japanese
-release's scrolling battle ground is restored, and the Technique Distributor
-no longer runs off the screen at high levels.
+The dialogue window draws proportional (variable-width) text, there are four
+save slots (one per third-generation branch), the Japanese release's
+scrolling battle ground is restored, and the Technique Distributor no longer
+runs off the screen at high levels.
 
 This repository holds everything needed to rebuild the patch and to carry the
 translation work forward:

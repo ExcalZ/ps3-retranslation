@@ -39,16 +39,7 @@ VWFDIA_LINEPX    = VWFDIA_CELLS*8	; 192 px
 VWFDIA_STRIDE   = 26		; canvas row stride: 24 cells + 2 spill bytes
 VWFDIA_BLANK    = $1F		; the paper tile
 
-; RAM: the SEGA-screen art area, used only at boot
-VWFDia_RAM      = $FFFFE400
-VWFDia_Canvas0  = VWFDia_RAM		; 8 rows x 26 bytes, 1bpp
-VWFDia_Canvas1  = VWFDia_RAM+$D0
-VWFDia_Scratch  = VWFDia_RAM+$1A0	; 24 tiles x 32 bytes, 4bpp
-VWFDia_Line     = VWFDia_RAM+$4A0	; word: 0 or 1
-VWFDia_X        = VWFDia_RAM+$4A2	; word: pen position in px
-VWFDia_Attr     = VWFDia_RAM+$4A4	; word: tilemap attribute bits (d0 at entry)
-VWFDia_Row      = VWFDia_RAM+$4A8	; long: mark-row pointer of the current line
-VWFDia_RAM_End  = VWFDia_RAM+$4AC
+; RAM equates: ext/ram.asm
 
 ; ---------------------------------------------------------------------------
 ; Entry: registers as loc_10038 (a0 text, a1 mark-row pointer, d0 attribute,

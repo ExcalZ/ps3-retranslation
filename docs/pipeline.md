@@ -34,7 +34,7 @@ The options in `ps3.options.asm`:
 | `scrolling_ground` | the JP per-row scroll tables for the battle background (`loc_780C0`) |
 | `fix_tech_distributor` | the distribution box is drawn from values scaled to fit 24x14 cells (`ext/techdist.asm`) |
 | `vwf_dialogue` | proportional text in the dialogue window (`ext/vwf.asm`) |
-| `four_save_slots` | reserved; not implemented yet (see STATUS) |
+| `four_save_slots` | four save slots with safety copies in 32 KB of backup RAM (`ext/saveslots.asm`) |
 
 New code lives in `PSIII_Disasm/ext/*.asm`, included just before `EndOfRom`,
 so it sits past the original 768 KB and nothing in the original image moves

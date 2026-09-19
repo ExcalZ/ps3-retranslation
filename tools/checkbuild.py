@@ -81,8 +81,15 @@ def main():
     sym = Symbols()
     if opts.get('vwf_dialogue') == '1':
         src = open(os.path.join(DISASM, 'ext', 'vwf.asm'), encoding='utf-8').read()
-        base = int(re.search(r'^VWFDia_RAM\s*=\s*\$([0-9A-F]+)', src, re.M).group(1), 16)
-        endoff = int(re.search(r'^VWFDia_RAM_End\s*=\s*VWFDia_RAM\+\$([0-9A-F]+)', src, re.M).group(1), 16)
+        ram = open(os.path.join(DISASM, 'ext', 'ram.asm'), encoding='utf-8').read()
+        base = int(re.search(r'^VWFDia_RAM\s*=\s*\$([0-9A-F]+)', ram, re.M).group(1), 16)
+        endoff = int(re.search(r'^VWFDia_RAM_End\s*=\s*VWFDia_RAM\+\$([0-9A-F]+)', ram, re.M).group(1), 16)
+        sbase = int(re.search(r'^SaveSlots_RAM\s*=\s*\$([0-9A-F]+)', ram, re.M).group(1), 16)
+        send = sbase + int(re.search(r'^SaveSlots_RAM_End\s*=\s*SaveSlots_RAM\+\$([0-9A-F]+)', ram, re.M).group(1), 16)
+        if not (base + endoff <= sbase and send <= 0xFFFFFC00):
+            fail('SaveSlots RAM $%X-$%X overlaps the VWF block or the stack' % (sbase, send))
+        else:
+            ok('SaveSlots RAM $%X-$%X' % (sbase, send))
         if not (0xFFFFE400 <= base and base + endoff <= 0xFFFFFC00):
             fail('VWF RAM $%X-$%X leaves the boot-only area' % (base, base + endoff))
         else:

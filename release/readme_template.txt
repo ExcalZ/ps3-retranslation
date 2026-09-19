@@ -27,6 +27,7 @@ which is what lets the Japanese script be carried over in full.
 
   WHAT ELSE CHANGES
 
+  Save slots .......... four instead of two, one per third-generation branch
   Battle background ... the scrolling ground of the Japanese release is back
   Technique Distributor the distribution box stays on screen at high levels
                         (the original could crash there)
@@ -57,8 +58,10 @@ The patched ROM:
 
 The patched ROM is slightly larger than the original: the new text engine and
 its font live past the end of the original data. Every emulator and flash
-cart handles this; the save data (16 KB of backup RAM) is unchanged, so saves
-from the US game keep working.
+cart handles this. The cartridge header now declares 32 KB of backup RAM
+instead of 16 KB (four slots plus their safety copies); emulators and flash
+carts size the save file from the header, and a save file from the US game
+still loads - its two games are slots 1 and 2.
 
 --------------------------------------------------------------------------------
   3. CREDITS

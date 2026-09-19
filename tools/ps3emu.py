@@ -188,3 +188,15 @@ def talk(em, npc_x, npc_y):
     walk_to(em, npc_x, npc_y - 16)
     em.pad = BUTTON['D']; em.frames(2); em.pad = 0; em.frames(8)
     em.press('A', hold=2, release=2)
+
+
+def soft_reset(em):
+    """Restart the game without restarting BlastEm (backup RAM survives): at the pad-read
+    breakpoint the top of the stack is ReadJoypad's return address, so point it at the
+    entry point. The stub cannot set PC directly (P11 answers E01)."""
+    sp = em.regs()['a'][7]
+    entry = int.from_bytes(em.read(4, 4), 'big')
+    em.write(sp, entry.to_bytes(4, 'big'))
+    em.frames(2)
+    while em.word(0xFFFFD012) != SCREEN_TITLE:
+        em.frames(1)

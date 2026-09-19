@@ -24,6 +24,7 @@
 	
 	include "ps3.constants.asm"
 	include "ps3.options.asm"
+	include "ext/ram.asm"
 
 
 StartOfRom:
@@ -67,7 +68,11 @@ ROMEndLoc:
 	dc.l 	ram_end&$FFFFFF		; RAM End
 	dc.l 	$5241F820		; Backup RAM ID
 	dc.l 	$200001		; Backup RAM start address
+	if four_save_slots
+	dc.l	$207FFF		; Backup RAM end address: 32 KB, four slots and their copies
+	else
 	dc.l 	$203FFF		; Backup RAM end address
+	endif
 	dc.b 	"            "	; Modem support
 	dc.b 	"                                        "	; Notes
 	dc.b 	"UE              " ; Country
@@ -16231,6 +16236,9 @@ loc_C432:
 	move.w	#$8000, d0
 	bra.w	loc_10038
 loc_C448:
+	if four_save_slots
+	jmp	(SaveSlots_ChurchList).l
+	endif
 	lea	(loc_3DB64).l, a0
 	bsr.w	loc_FC9A
 	lea	$FFFF9C80.w, a0
@@ -16274,7 +16282,11 @@ loc_C4CE:
 	rts
 loc_C4D8:
 	move.w	$1C(a6), d0
+	if four_save_slots
+	cmpi.w	#SAVE_CANCEL, d0
+	else
 	cmpi.w	#8, d0
+	endif
 	bne.s	loc_C4EA
 	move.w	#$F0, (game_general_routine).w
 	rts
@@ -16292,7 +16304,11 @@ loc_C506:
 	move.w	#$F0, (game_general_routine).w
 	rts
 loc_C50E:
+	if four_save_slots
+	cmpi.w	#SAVE_CANCEL, $1C(a6)
+	else
 	cmpi.w	#8, $1C(a6)	
+	endif
 	bne.s	loc_C51E	
 	move.w	#$78, (game_general_routine).w	
 	rts	
@@ -16308,7 +16324,11 @@ loc_C51E:
 	move.w	#$8000, d0	
 	bra.w	loc_10038	
 loc_C542:
+	if four_save_slots
+	cmpi.w	#SAVE_CANCEL, $1C(a6)
+	else
 	cmpi.w	#8, $1C(a6)
+	endif
 	bne.s	loc_C552
 	move.w	#$78, (game_general_routine).w
 	rts
@@ -16323,6 +16343,9 @@ loc_C560:
 	lsr.w	#2, d0
 	jmp	(loc_1488C).l
 loc_C570:
+	if four_save_slots
+	jmp	(SaveSlots_SavedMsg).l
+	endif
 	bsr.w	loc_A804
 	jsr	(loc_11B88).l
 	moveq	#0, d0
@@ -23291,7 +23314,11 @@ loc_1157C:
 loc_11580:
 	move.w	$1A(a6), d1	
 	move.w	d1, d0	
+	if four_save_slots
+	addq.w	#4, d0
+	else
 	addq.w	#2, d0	
+	endif
 	bsr.w	loc_149F2	
 	moveq	#0, d0	
 	move.w	d0, $60(a6)	
@@ -23319,11 +23346,17 @@ loc_115CA:
 	move.w	#$8000, d0	
 	bra.w	loc_10038	
 loc_115EA:
+	if four_save_slots
+	jmp	(SaveSlots_NextSlot).l
+	endif
 	addq.w	#1, $1A(a6)
 	move.w	$60(a6), $5E(a6)
 	addq.w	#4, (game_general_routine).w
 	rts
 loc_115FA:
+	if four_save_slots
+	jmp	(SaveSlots_Summarize).l
+	endif
 	move.w	$5E(a6), d0
 	move.w	$60(a6), d1
 	andi.w	#4, d0
@@ -23430,6 +23463,9 @@ loc_116FA:
 	clr.b	$C(a6)	
 	rts	
 loc_1171A:
+	if four_save_slots
+	jmp	(SaveSlots_EraseEntry).l
+	endif
 	cmpi.w	#4, $62(a6)	
 	bne.s	loc_11736	
 	move.w	$5E(a6), d0	
@@ -23446,17 +23482,30 @@ loc_11736:
 loc_1174E:
 	bsr.w	loc_11B88	
 	addq.w	#4, (game_general_routine).w	
+	if four_save_slots
+	lea	(SaveSlots_WinGS).l, a0
+	bsr.w	loc_FC9A
+	bsr.w	loc_B8BA
+	lea	(SaveSlots_List).w, a0
+	else
 	lea	(loc_3DB4C).l, a0	
 	bsr.w	loc_FC9A	
 	bsr.w	loc_B8BA	
 	lea	(loc_3E443).l, a0	
+	endif
 	lea	$FFFF9C9E.w, a1	
 	move.w	#$8000, d0	
 	bra.w	loc_10038	
 loc_11776:
+	if four_save_slots
+	jmp	(SaveSlots_CursorChurch).l
+	endif
 	lea	$FFFF2518, a2
 	bra.s	loc_11784
 loc_1177E:
+	if four_save_slots
+	jmp	(SaveSlots_CursorGS).l
+	endif
 	lea	$FFFF2308, a2	
 loc_11784:
 	move.b	(joypad_pressed).w, d7
@@ -23508,10 +23557,18 @@ loc_11804:
 	lea	(LoadDataInVRAMWithOffset).l, a2
 	bra.w	loc_FC58
 loc_11818:
+	if four_save_slots
+	lea	(SaveSlots_WinChurch).l, a0
+	else
 	lea	(loc_3DB64).l, a0
+	endif
 	bra.s	loc_11826
 loc_11820:
+	if four_save_slots
+	lea	(SaveSlots_WinGS).l, a0
+	else
 	lea	(loc_3DB4C).l, a0	
+	endif
 loc_11826:
 	bsr.w	loc_FC9A
 	bsr.w	loc_B8BA
@@ -23521,6 +23578,9 @@ loc_11826:
 	clr.b	$C(a6)
 	rts
 loc_11840:
+	if four_save_slots
+	jmp	(SaveSlots_ConfirmErase).l
+	endif
 	cmpi.w	#8, $1C(a6)	
 	bcs.s	loc_11850	
 	move.w	#$6C, (game_general_routine).w	
@@ -23585,6 +23645,9 @@ loc_118FE:
 	lea	(LoadDataInVRAMWithOffset).l, a2	
 	bra.w	loc_FC58	
 loc_11916:
+	if four_save_slots
+	jmp	(SaveSlots_Erase).l
+	endif
 	moveq	#0, d0	
 	move.b	$22(a6), d0	
 	beq.s	loc_11926	
@@ -23609,6 +23672,9 @@ loc_11960:
 	move.w	#$6C, (game_general_routine).w	
 	rts	
 loc_11968:
+	if four_save_slots
+	jmp	(SaveSlots_NewGameEntry).l
+	endif
 	cmpi.w	#8, $62(a6)	
 	beq.s	loc_1197C	
 	clr.b	$22(a6)	
@@ -23629,6 +23695,9 @@ loc_119A2:
 	move.w	#$158, (game_general_routine).w	
 	rts	
 loc_119AA:
+	if four_save_slots
+	jmp	(SaveSlots_ContinueEntry).l
+	endif
 	cmpi.w	#8, $62(a6)	
 	beq.s	loc_119C6	
 	move.w	$5E(a6), d0	
@@ -23643,6 +23712,9 @@ loc_119C6:
 	move.w	#$8000, d0	
 	bra.w	loc_10038	
 loc_119DE:
+	if four_save_slots
+	jmp	(SaveSlots_Continue).l
+	endif
 	cmpi.w	#8, $1C(a6)	
 	bcs.s	loc_119EE	
 	move.w	#$6C, (game_general_routine).w	
@@ -23741,7 +23813,11 @@ loc_11AE0:
 	bsr.w	loc_FC9A
 	lea	$FFFFA100.w, a0
 	bsr.w	loc_FCE2
+	if four_save_slots
+	lea	(SaveSlots_WinGS).l, a0
+	else
 	lea	(loc_3DB4C).l, a0
+	endif
 	bsr.w	loc_FC9A
 	lea	$FFFF9C80.w, a0
 	bsr.w	loc_FCE2
@@ -23771,6 +23847,9 @@ loc_11B72:
 	bclr	#5, (a0,d0.w)
 	rts
 loc_11B88:
+	if four_save_slots
+	jmp	(SaveSlots_Gather).l
+	endif
 	lea	$00200029, a1
 	lea	$64(a6), a2
 	move.l	a2, (char_name_saved).w
@@ -27181,7 +27260,11 @@ loc_1488C:
 	bsr.w	loc_14972
 loc_148A0:
 	st	$2(a0)
+	if four_save_slots
+	st	$4002(a0)
+	else
 	st	$2002(a0)
+	endif
 	lea	loc_14A4A(pc), a3
 	move.w	(a3)+, d6
 loc_148AE:
@@ -27205,10 +27288,18 @@ loc_148CA:
 	bsr.w	loc_149DA
 	move.w	(sp)+, d0
 	move.w	d0, d1
+	if four_save_slots
+	addq.w	#4, d1			; the copy lives four blocks up
+	else
 	addq.w	#2, d1
+	endif
 	bsr.w	loc_149F2
 	clr.b	$2(a0)
+	if four_save_slots
+	clr.b	$4002(a0)
+	else
 	clr.b	$2002(a0)
+	endif
 	jmp	(VDPEnableVInterrupt).l
 loc_148FA:
 	move.w	d0, -(sp)	
@@ -27260,7 +27351,11 @@ loc_1497A:
 	rts
 loc_14984:
 	lea	$00200001, a0
+	if four_save_slots
+	andi.w	#3, d0
+	else
 	andi.w	#1, d0
+	endif
 	ror.w	#4, d0
 	adda.w	d0, a0
 	tst.b	$2(a0)
@@ -27308,11 +27403,19 @@ loc_149E6:
 	rts
 loc_149F2:
 	lea	$00200001, a1
+	if four_save_slots
+	andi.w	#7, d0
+	else
 	andi.w	#3, d0
+	endif
 	ror.w	#4, d0
 	adda.w	d0, a1
 	lea	$00200001, a2
+	if four_save_slots
+	andi.w	#7, d1
+	else
 	andi.w	#3, d1
+	endif
 	ror.w	#4, d1
 	adda.w	d1, a2
 	move.w	#$7FF, d2
@@ -71220,9 +71323,9 @@ loc_3E2B1:
 	dc.b	$FC
 	
 loc_3E2C5:
-	dc.b	"Do you wish to save your"
+	dc.b	"Which position do you"
 	dc.b	$F8
-	dc.b	"game in position 1 or 2?"
+	dc.b	"want to save in?"
 	dc.b	$FC
 	
 loc_3E2F7:
