@@ -84,7 +84,13 @@ line with the dialogue routines and uploads it to a pool of 8 x 24 tiles at
 `$200-$2BF` - on that screen plane B's picture uses `$100-$1FF` and
 `$340-$413` - with slot (row/4) mod 8, which is reused 32 rows after it was
 written when the line has long scrolled off the 28-row screen. Blank cells
-get tile 0 (transparent) as the stock spaces did. The ending staff roll goes
+get tile 0 (transparent) as the stock spaces did, and the tiles themselves
+are expanded with a transparent paper (`VWFDia_ExpandOpen`): the stock font's
+black paper is invisible on that screen, but tiles at `$200` drawn with the
+same paper covered the picture with bars. With `vwf_scroll_shadow = 1` the
+ink casts a one-pixel black shadow right and down (the expansion looks up
+ink and shadow nibbles together in `VWFDia_ShadowLUT`), which keeps the
+thinner face readable over the bright parts of the picture. The ending staff roll goes
 through the same routine on another screen and keeps the bold 8x8 capitals.
 
 ## What the JP release does differently

@@ -16,5 +16,10 @@ four_save_slots = 1
 ; character's level is high (the stock game writes past the window buffer).
 fix_tech_distributor = 1
 
-; Proportional (variable-width) text in the dialogue window.
+; Proportional (variable-width) text in the dialogue window, the battle message
+; row and the opening scroll.
 vwf_dialogue = 1
+
+; The opening scroll's letters cast a one-pixel black shadow (0: plain letters
+; over the picture, as the stock scroll draws them).
+vwf_scroll_shadow = 1

@@ -61,6 +61,26 @@ def expand(canvas):
     return bytes(out)
 
 
+def expand_open(canvas, shadow=True):
+    """Reference for the scroll: transparent paper, ink 1, a black (2) shadow 1 px right
+    and down of the ink."""
+    ink = [bytes(r[:26]) for r in canvas]
+    sh = [bytearray(26) for _ in range(8)]
+    if shadow:
+        for r in range(1, 8):
+            prev = int.from_bytes(ink[r - 1], 'big') >> 1
+            sh[r][:] = prev.to_bytes(26, 'big')
+    out = bytearray()
+    for c in range(CELLS):
+        for r in range(8):
+            v = 0
+            for bit in range(7, -1, -1):
+                mask = 1 << bit
+                v = (v << 4) | (1 if ink[r][c] & mask else (2 if sh[r][c] & mask else 0))
+            out += v.to_bytes(4, 'big')
+    return bytes(out)
+
+
 def rows(m, row0):
     mark = m.peek(row0, CELLS * 2)
     glyph = m.peek(row0 + STRIDE, CELLS * 2)
@@ -183,7 +203,7 @@ def test_opening_scroll(sym):
     row = 0xC000 + 30 * 128 + 2 * 2
     words = [int.from_bytes(m.vram[row + i * 2:row + i * 2 + 2], 'big') for i in range(CELLS)]
     assert words == [0x6000 | (first + i) for i in range(cells)] + [0] * (CELLS - cells), [hex(w) for w in words]
-    assert bytes(m.vram[first * 32:first * 32 + CELLS * 32]) == expand(canvas)
+    assert bytes(m.vram[first * 32:first * 32 + CELLS * 32]) == expand_open(canvas), 'scroll tiles (transparent paper + shadow)'
     # the stock path for the blank row-clearing string and for another script offset
     m2 = Machine(); m2.poke(0xFFFFD064, so.to_bytes(2, 'big'))
     m2.call(sym['loc_F7F0'], a0=sym['loc_1B8C'], d1=0, d2=5, d3=0x6000)

@@ -296,6 +296,62 @@ VWFDia_Expand_Tile:
 	lea	(VWFDia_Font).l, a4	; restore for the draw loop
 	rts
 
+; canvas of the current line -> VWFDia_Scratch with a transparent paper (colour 0) and,
+; with vwf_scroll_shadow, a shadow in colour 2 one pixel right and down of the ink.
+; Each output nibble pair is looked up by (ink nibble << 4 | shadow nibble).
+VWFDia_ExpandOpen:
+	bsr.w	VWFDia_CanvasPtr
+	lea	(VWFDia_Scratch).w, a5
+	lea	(VWFDia_ShadowLUT).l, a4
+	moveq	#VWFDIA_CELLS-1, d7
+VWFDia_ExpandOpen_Tile:
+	moveq	#0, d3			; previous row's shadow bits for this column (16 bits: this byte and the next)
+	moveq	#7, d6
+-
+	moveq	#0, d5
+	move.b	(a2), d5		; ink, this byte
+	move.w	d3, d4			; shadow = previous row shifted right by one pixel
+	if vwf_scroll_shadow
+	else
+	moveq	#0, d4
+	endif
+	; high nibble: ink bits 7-4, shadow bits 7-4 of the shifted previous row
+	move.w	d5, d2
+	andi.w	#$F0, d2		; ink << 4 already in place
+	move.w	d4, d1
+	lsr.w	#4, d1
+	andi.w	#$F, d1
+	or.w	d1, d2
+	add.w	d2, d2
+	move.w	(a4,d2.w), (a5)+
+	move.w	d5, d2
+	andi.w	#$F, d2
+	lsl.w	#4, d2
+	move.w	d4, d1
+	andi.w	#$F, d1
+	or.w	d1, d2
+	add.w	d2, d2
+	move.w	(a4,d2.w), (a5)+
+	; this row becomes the next row's shadow source: (byte, next byte) >> 1
+	move.w	d5, d3
+	lsl.w	#8, d3
+	move.b	1(a2), d3
+	lsr.w	#1, d3
+	lsr.w	#8, d3
+	andi.w	#$FF, d3
+	; the bit shifted out of the previous byte's low end belongs to this byte
+	move.b	-1(a2), d1
+	andi.w	#1, d1
+	ror.w	#1, d1			; -> bit 15
+	lsr.w	#8, d1			; -> bit 7
+	or.w	d1, d3
+	lea	VWFDIA_STRIDE(a2), a2
+	dbf	d6, -
+	suba.w	#8*VWFDIA_STRIDE-1, a2	; next column
+	dbf	d7, VWFDia_ExpandOpen_Tile
+	lea	(VWFDia_Font).l, a4
+	rts
+
 ; VWFDia_Scratch -> VRAM, the current line's pool tiles
 VWFDia_Upload:
 	movem.l	d0-d2/a0-a1, -(sp)
@@ -384,7 +440,7 @@ VWFScroll_Glyph:
 	bsr.w	VWFDia_Draw
 	bra.s	-
 +
-	bsr.w	VWFDia_Expand
+	bsr.w	VWFDia_ExpandOpen
 	move.w	10(sp), d2		; the entry's row, from the saved frame
 	move.w	d2, d3
 	lsr.w	#2, d3
@@ -434,6 +490,41 @@ VWFScroll_Done:
 	bclr	#6, $FFFFD006.w
 	movem.l	(sp)+, d0-d7/a0-a6
 	rts
+
+; (ink nibble << 4 | shadow nibble) -> 4 colour nibbles: ink 1, else shadow 2, else 0
+VWFDia_ShadowLUT:
+	dc.w	$0000, $0002, $0020, $0022, $0200, $0202, $0220, $0222
+	dc.w	$2000, $2002, $2020, $2022, $2200, $2202, $2220, $2222
+	dc.w	$0001, $0001, $0021, $0021, $0201, $0201, $0221, $0221
+	dc.w	$2001, $2001, $2021, $2021, $2201, $2201, $2221, $2221
+	dc.w	$0010, $0012, $0010, $0012, $0210, $0212, $0210, $0212
+	dc.w	$2010, $2012, $2010, $2012, $2210, $2212, $2210, $2212
+	dc.w	$0011, $0011, $0011, $0011, $0211, $0211, $0211, $0211
+	dc.w	$2011, $2011, $2011, $2011, $2211, $2211, $2211, $2211
+	dc.w	$0100, $0102, $0120, $0122, $0100, $0102, $0120, $0122
+	dc.w	$2100, $2102, $2120, $2122, $2100, $2102, $2120, $2122
+	dc.w	$0101, $0101, $0121, $0121, $0101, $0101, $0121, $0121
+	dc.w	$2101, $2101, $2121, $2121, $2101, $2101, $2121, $2121
+	dc.w	$0110, $0112, $0110, $0112, $0110, $0112, $0110, $0112
+	dc.w	$2110, $2112, $2110, $2112, $2110, $2112, $2110, $2112
+	dc.w	$0111, $0111, $0111, $0111, $0111, $0111, $0111, $0111
+	dc.w	$2111, $2111, $2111, $2111, $2111, $2111, $2111, $2111
+	dc.w	$1000, $1002, $1020, $1022, $1200, $1202, $1220, $1222
+	dc.w	$1000, $1002, $1020, $1022, $1200, $1202, $1220, $1222
+	dc.w	$1001, $1001, $1021, $1021, $1201, $1201, $1221, $1221
+	dc.w	$1001, $1001, $1021, $1021, $1201, $1201, $1221, $1221
+	dc.w	$1010, $1012, $1010, $1012, $1210, $1212, $1210, $1212
+	dc.w	$1010, $1012, $1010, $1012, $1210, $1212, $1210, $1212
+	dc.w	$1011, $1011, $1011, $1011, $1211, $1211, $1211, $1211
+	dc.w	$1011, $1011, $1011, $1011, $1211, $1211, $1211, $1211
+	dc.w	$1100, $1102, $1120, $1122, $1100, $1102, $1120, $1122
+	dc.w	$1100, $1102, $1120, $1122, $1100, $1102, $1120, $1122
+	dc.w	$1101, $1101, $1121, $1121, $1101, $1101, $1121, $1121
+	dc.w	$1101, $1101, $1121, $1121, $1101, $1101, $1121, $1121
+	dc.w	$1110, $1112, $1110, $1112, $1110, $1112, $1110, $1112
+	dc.w	$1110, $1112, $1110, $1112, $1110, $1112, $1110, $1112
+	dc.w	$1111, $1111, $1111, $1111, $1111, $1111, $1111, $1111
+	dc.w	$1111, $1111, $1111, $1111, $1111, $1111, $1111, $1111
 
 ; 4 pixels (a nibble, MSB = leftmost) -> 4 colour nibbles: ink 1, paper 2
 VWFDia_NibbleLUT:
