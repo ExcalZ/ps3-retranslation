@@ -70720,19 +70720,15 @@ loc_3D972:
 	dc.b	$FC
 
 loc_3D97C:
-	dc.b	$E8, $00, "'s party won."
+	dc.b	$E8, $00, "'s party won. Earned"
 	dc.b	$F8
-	dc.b	"Earned ", $E4, $00, " XP"
-	dc.b	$F8
-	dc.b	"and ", $E4, $04, " meseta."
+	dc.b	$E4, $00, " XP and ", $E4, $04, " meseta."
 	dc.b	$FC
 
 loc_3D9A8:
-	dc.b	$E8, $00, " won."
+	dc.b	$E8, $00, " won. Earned"
 	dc.b	$F8
-	dc.b	"Earned ", $E4, $00, " XP"
-	dc.b	$F8
-	dc.b	"and ", $E4, $04, " meseta."
+	dc.b	$E4, $00, " XP and ", $E4, $04, " meseta."
 	dc.b	$FC
 
 loc_3D9CC:

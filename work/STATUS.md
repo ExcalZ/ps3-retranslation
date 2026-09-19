@@ -13,10 +13,10 @@ proofreader and the release packaging exist. **No line has been translated
 yet**: every `en` equals the US text. The translation pass is the next job.
 
 Canonical experimental ROM `ps3en.bin` (all options on except
-`four_save_slots`): 789,624 bytes, SHA-256
-`55C9178F48D8200B97986044248F16FAA633BE5EC17FFB523C9C07BD95CBF6A3`.
+`four_save_slots`): 789,632 bytes; the SHA-256 is printed by
+`tools/checkbuild.py` and recorded in the git log of each build.
 Stock US ROM (every option 0 reproduces it): 786,432 bytes, SHA-256
-`CB837A2B10B8D219D844A55D8ECD25581A57152F5EE8361AB62389354170A21D5`, CRC32
+`CB837A2B10B8D219D844A55D8EC25581A57152F5EE8361AB62389354170A21D5`, CRC32
 `C6B42B0F`, internal checksum `3A33`.
 
 ## Done
@@ -36,12 +36,16 @@ Stock US ROM (every option 0 reproduces it): 786,432 bytes, SHA-256
   in BlastEm: field dialogue, the 25-page legend text through the page
   scroll, game-select messages; under the interpreter: `tools/test_vwf.py`
   (which found and fixed a register clobber that truncated `{NUM}` inserts
-  to one digit). Not yet seen in BlastEm: battle messages and shop prompts
-  (both use the same window and the same path; the interpreter test covers
-  the shop-style `$FFFF9AB6` row).
+  to one digit); battle messages (`$FFFF2C0A`, the plane-A row the battle
+  box uses) - seen in BlastEm ("You've been ambushed!", "Chirper attacks!",
+  "Damage 2", "You have been defeated."). The enemy-name row stays fixed
+  width: its columns place the target cursor. A battle message is two lines
+  at most; the two three-line "won" messages are re-flowed in `en`. Not yet
+  seen in BlastEm: shop prompts (same path as the dialogue's `$FFFF9AB6`).
 * **Scrolling battle ground** (`scrolling_ground`): the JP tables at
   `loc_780C0`. Data-only; the scroll routine is identical in both games.
-  Not yet watched in BlastEm (needs a battle; see "Verification").
+  Verified in BlastEm: in a Landen-plain battle the row-20 scroll value
+  advances 60/16 px per frame... i.e. 3 px/frame (`work/scripts/battle.py`).
 * **Technique Distributor** (`fix_tech_distributor`, `ext/techdist.asm`):
   the box and cursor are drawn from values divided by the smallest k that
   fits 24x14 cells. Verified in BlastEm with 20/20/20/20 (a 40x40 box in
@@ -102,9 +106,11 @@ python work/scripts/narration.py           # BlastEm: the opening
 To reproduce the stock ROM: set every option in `ps3.options.asm` to 0,
 `python tools/sourcebuild.py stock.bin`, compare with `PSIII_Disasm/ps3original.bin`.
 
-Still to do in BlastEm: a battle (walk out of Landen onto the world map,
-map `$00`, and wait for an encounter) to watch the scrolling ground and a
-battle message in the VWF; a shop purchase; the church save.
+`work/scripts/battle.py` leaves Landen through its real exit (`teleport`
+with the door's own parameters, `$3818` - a bare teleport onto a world map
+does not spawn the walking sprite) and wanders into the first encounter;
+`battle_win.py` plays it out with C. Still to do in BlastEm: a shop purchase
+and the church save.
 
 ## Log
 

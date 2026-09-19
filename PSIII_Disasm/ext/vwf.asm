@@ -14,8 +14,11 @@
 ; VRAM, the page wait - is the stock code.
 ;
 ; Windows that are not the dialogue's (menus, name lists, the small YES/NO
-; box) still go through the stock renderer: the entry checks the window is 24
-; cells wide and the target is one of the three dialogue rows.
+; box, the enemy-name row of the battle box whose columns place the target
+; cursor) still go through the stock renderer: the entry checks the window is
+; 24 cells wide and the target is one of the three dialogue rows or the battle
+; message row. A message is two lines at most: a third $F8 line overwrites the
+; second (the proofreader flags it).
 ;
 ; Control codes are handled as the stock renderer does: $F8 newline, $EC page
 ; wait (the rest of the text is left in $3E(a6) and bit 5 of $1(a6) is set),
@@ -58,6 +61,8 @@ VWFDia_Entry:
 	cmpa.l	#$FFFF9D26, a1		; script text into the window template
 	beq.s	VWFDia_Go
 	cmpa.l	#$FFFF9AB6, a1		; message into the live window, first line
+	beq.s	VWFDia_Go
+	cmpa.l	#$FFFF2C0A, a1		; battle message row (plane A buffer, row 24, col 5)
 	beq.s	VWFDia_Go
 	moveq	#1, d1
 	cmpa.l	#$FFFF9B1E, a1		; next page into the live window, second line

@@ -5588,7 +5588,7 @@
      "addr": "3D97C",
      "hex": "e800277320706172747920776f6e2ef84561726e656420e400205850f8616e6420e404206d65736574612efc",
      "us": "{NAME:00}'s party won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta.",
-     "en": "{NAME:00}'s party won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta.",
+     "en": "{NAME:00}'s party won. Earned{BR}{NUM:00} XP and {NUM:04} meseta.",
      "jp": "{NAME:00}たちは たたかいに かった。{BR}けいけんち {NUM:00} と{BR}{NUM:04} メセタを えた。"
     },
     {
@@ -5598,7 +5598,7 @@
      "addr": "3D9A8",
      "hex": "e80020776f6e2ef84561726e656420e400205850f8616e6420e404206d65736574612efc",
      "us": "{NAME:00} won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta.",
-     "en": "{NAME:00} won.{BR}Earned {NUM:00} XP{BR}and {NUM:04} meseta.",
+     "en": "{NAME:00} won. Earned{BR}{NUM:00} XP and {NUM:04} meseta.",
      "jp": "{NAME:00}は たたかいに かった。{BR}けいけんち {NUM:00} と{BR}{NUM:04} メセタを えた。"
     },
     {

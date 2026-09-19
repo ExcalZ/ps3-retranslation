@@ -1,0 +1,9 @@
+map 0x0 pos 1744 312 D004 0xc2 timer 0
+primary 0 e0 00 00 04 00 00 2e 22 06 d0 01 38 00 00 00 00
+primary 1 e0 00 00 04 00 00 4b 68 06 d0 01 38 00 00 02 00
+0 pos 1752 296 timer 0
+20 pos 1776 296 timer 0
+battle at frame 4877 map 0x232
+0 hscroll 018d0000 01140000
+1 hscroll 01740000 01500000
+2 hscroll 015b0000 018c0000
