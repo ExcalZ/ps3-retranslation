@@ -174,6 +174,25 @@ def test_inserts(sym):
     print('  {NAME} and {NUM} inserts ok')
 
 
+def test_long_names(sym):
+    """$E0 nn in a record's four-letter name field draws entry nn of VWFName_Table: inline in
+    the proportional renderer, and through the stock renderer's recursion (with the insert
+    flag restored) when the fixed path draws it - in both cases inside a {NAME} insert."""
+    m = machine(sym)
+    m.poke(0x0FF800, bytes([0xE0, 1, 0xFC, 0, 0]))       # a record name field: entry 1
+    m.poke(NAMES, (0x0FF800).to_bytes(4, 'big'))
+    m.poke(0x0FF810, bytes([0xE0, 17, 0xFC, 0, 0]))      # entry 17
+    m.poke(NAMES + 4, (0x0FF810).to_bytes(4, 'big'))
+    render(m, sym, '{NAME:00} defended {NAME:04}.', row0=LIVE_ROW0)
+    check_line(m, b'Searren defended Shiin.', LIVE_ROW0, 0, label='long names, proportional')
+    assert m.peek(CTX + 1, 1)[0] & 0x10 == 0, 'insert flag cleared'
+    other = 0xFFFF9C9E                                    # a fixed-width window row
+    render(m, sym, '1.{NAME:00} LV', row0=other)
+    mark, glyph = rows(m, other)
+    assert glyph[:12] == [0x8000 | c for c in b'1.Searren LV'], [hex(w) for w in glyph[:12]]
+    print('  long party names ok')
+
+
 def test_clip(sym):
     m = machine(sym)
     text = 'W' * 40
@@ -448,7 +467,7 @@ def test_battle_box(sym):
     print('  battle box ok')
 
 
-SMOOTH_POOL, SMOOTH_RATE_ADDR = 0x580, 0xFFFFD11C
+SMOOTH_POOL, SMOOTH_RATE_ADDR, GAME_ROUTINE = 0x580, 0xFFFFD11C, 0xFFFFD284
 
 
 def smooth_view(canvases, k):
@@ -510,6 +529,35 @@ def test_smooth_scroll(sym):
     # idle: the next frames count as the stock does (the counter moves again)
     m.call(sym['loc_A368'])
     assert m.peek(CTX + 0xC, 1)[0] == 1, 'the page counter runs again'
+    # a button press pays out two lines ($D = 2 after `move.w #2, $C(a6)`): the second
+    # starts the frame the first finishes, not eight frames later as the stock counter
+    # would have it
+    m3 = box_machine()
+    render(m3, sym, 'aa{BR}bb{PAGE}cc{PAGE}dd{PAGE}ee', row0=LIVE_ROW0)
+    ca, cb, cc, cd = (compose(t)[0] for t in (b'aa', b'bb', b'cc', b'dd'))
+    m3.poke(SMOOTH_RATE_ADDR, bytes([0x48])); m3.poke(CTX + 0xC, bytes([7])); m3.poke(CTX + 0xD, bytes([2]))
+    m3.a[6] = CTX
+    for k in range(16):
+        m3.call(sym['loc_A368'])
+    assert m3.peek(CTX + 0xD, 1)[0] == 1
+    assert bytes(m3.vram[SMOOTH_POOL * 32:SMOOTH_POOL * 32 + 96 * 32]) == smooth_view((ca, cb, cc), 15), 'first line at 15 px'
+    m3.call(sym['loc_A368'])            # 16 px: finishes, and the second line begins at once
+    assert m3.peek(CTX + 0xD, 1)[0] == 0, 'the second line was taken'
+    assert bytes(m3.vram[SMOOTH_POOL * 32:SMOOTH_POOL * 32 + 96 * 32]) == smooth_view((cb, cc, cd), 0), 'second line at 0 px'
+    for r in range(4):
+        words = [int.from_bytes(m3.peek(LIVE_ROW0 + r * STRIDE + 2 * c, 2), 'big') for c in range(CELLS)]
+        assert words == [0x8000 | (SMOOTH_POOL + r * CELLS + c) for c in range(CELLS)], ('chained interior row', r)
+    assert m3.peek(CTX + 0xC, 1)[0] == 0, 'the page counter did not move'
+    m3.call(sym['loc_A368'])
+    assert bytes(m3.vram[SMOOTH_POOL * 32:SMOOTH_POOL * 32 + 96 * 32]) == smooth_view((cb, cc, cd), 1), 'second line at 1 px: no gap'
+    for k in range(15):
+        m3.call(sym['loc_A368'])
+    check_line(m3, b'cc', LIVE_ROW0, 0, label='chained line 0')
+    check_line(m3, b'dd', LIVE_ROW1, 1, label='chained line 1')
+    assert m3.peek(CTX + 0xD, 1)[0] == 0 and m3.peek(CTX + 1, 1)[0] & 0x20, 'a third line waits for the button'
+    for k in range(8):
+        m3.call(sym['loc_A368'])
+    assert m3.peek(CTX + 0xD, 1)[0] == 0xFF and int.from_bytes(m3.peek(GAME_ROUTINE, 2), 'big') == 8, 'then the wait state'
     # the fastest speed takes four frames, the slowest sixty-four
     for value, frames in ((0x08, 4), (0x88, 64)):
         m2 = box_machine()
@@ -528,7 +576,7 @@ def test_smooth_scroll(sym):
 
 def main():
     sym = Symbols()
-    for t in (test_plain, test_br_and_page, test_scroll, test_inserts, test_clip, test_fixed_fallback, test_opening_scroll,
+    for t in (test_plain, test_br_and_page, test_scroll, test_inserts, test_long_names, test_clip, test_fixed_fallback, test_opening_scroll,
               test_menu_items, test_menu_labels, test_menu_main_list, test_menu_off,
               test_shop_list, test_battle_box, test_smooth_scroll):
         t(sym)

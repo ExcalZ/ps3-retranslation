@@ -21456,6 +21456,9 @@ CtrlCodeJmpTbl:
 	bra.w	loc_1009E	; $E8
 	bra.w	loc_100BC	; $E4
 ; ===============================
+	if vwf_dialogue
+	jmp	(VWFName_Fixed).l	; $E0 nn: a party name from VWFName_Table (ext/vwf.asm)
+	endif
 
 
 loc_1009E:		; $E0
@@ -38208,8 +38211,12 @@ MieuInitStatsData:
 	dc.b	CharID_Mieu_Mask
 	dc.b	$18, $0B, $07, $07, $10
 	dc.b	$03
+	if vwf_dialogue
+	dc.b	$E0, 0, $FC, 0, 0	; VWFName_Table entry 0 (Mieu): the name may be longer than four letters
+	else
 	dc.b	"Mieu"
 	dc.b	$FC
+	endif
 	dc.b	$03, $15
 	dc.w	MieuGwynExpTable+8-ExpTableData
 	dc.w	loc_1E536-TechPowerGrowthRate
@@ -38230,8 +38237,12 @@ WrenInitStatsData:
 	dc.b	CharID_Wren_Mask
 	dc.b	$3C, $06, $29, $1C, $04
 	dc.b	$04
-	dc.b	"Searren"
+	if vwf_dialogue
+	dc.b	$E0, 1, $FC, 0, 0	; VWFName_Table entry 1 (Wren): the name may be longer than four letters
+	else
+	dc.b	"Wren"
 	dc.b	$FC
+	endif
 	dc.b	$07, $08
 	dc.w	WrenExpTable+8-ExpTableData
 	dc.w	loc_1E541-TechPowerGrowthRate
@@ -38277,8 +38288,12 @@ RhysInitStatsData:
 	dc.b	CharID_RhysNial_Mask
 	dc.b	$1E, $08, $08, $07, $08
 	dc.b	$03
-	dc.b	"Kein"
+	if vwf_dialogue
+	dc.b	$E0, 2, $FC, 0, 0	; VWFName_Table entry 2 (Rhys): the name may be longer than four letters
+	else
+	dc.b	"Rhys"
 	dc.b	$FC
+	endif
 	dc.b	$0A, $05
 	dc.w	RhysExpTable+8-ExpTableData
 	dc.w	loc_1E52C-TechPowerGrowthRate
@@ -38298,8 +38313,12 @@ LyleInitStatsData:
 	dc.b	CharID_LyleRyan_Mask
 	dc.b	$4B, $26, $29, $2C, $2A
 	dc.b	$03
+	if vwf_dialogue
+	dc.b	$E0, 3, $FC, 0, 0	; VWFName_Table entry 3 (Lyle): the name may be longer than four letters
+	else
 	dc.b	"Lyle"
 	dc.b	$FC
+	endif
 	dc.b	$46, $2D
 	dc.w	LyleExpTable+8-ExpTableData
 	dc.w	loc_1E531-TechPowerGrowthRate
@@ -38321,8 +38340,12 @@ LenaInitStatsData:
 	dc.b	CharID_LenaSari_Mask
 	dc.b	$1E, $0D, $06, $06, $05
 	dc.b	$02
+	if vwf_dialogue
+	dc.b	$E0, 4, $FC, 0, 0	; VWFName_Table entry 4 (Lena): the name may be longer than four letters
+	else
 	dc.b	"Lena"
 	dc.b	$FC
+	endif
 	dc.b	$05, $0E
 	dc.w	LenaExpTable+8-ExpTableData
 	dc.w	loc_1E52C-TechPowerGrowthRate
@@ -38344,8 +38367,12 @@ NialInitStatsData:
 	dc.b	CharID_RhysNial_Mask
 	dc.b	$4B, $18, $3A, $39, $2A
 	dc.b	$03
-	dc.b	"Lein"
+	if vwf_dialogue
+	dc.b	$E0, 5, $FC, 0, 0	; VWFName_Table entry 5 (Nial): the name may be longer than four letters
+	else
+	dc.b	"Nial"
 	dc.b	$FC
+	endif
 	dc.b	$49, $27
 	dc.w	NialExpTable+8-ExpTableData
 	dc.w	loc_1E52C-TechPowerGrowthRate
@@ -38370,8 +38397,12 @@ LayaInitStatsData:
 	dc.b	CharID_LayaGwyn_Mask
 	dc.b	$12, $18, $07, $06, $0B
 	dc.b	$03
-	dc.b	"Laia"
+	if vwf_dialogue
+	dc.b	$E0, 6, $FC, 0, 0	; VWFName_Table entry 6 (Laya): the name may be longer than four letters
+	else
+	dc.b	"Laya"
 	dc.b	$FC
+	endif
 	dc.b	$17, $1A
 	dc.w	LayaExpTable+8-ExpTableData
 	dc.w	loc_1E541-TechPowerGrowthRate
@@ -38393,8 +38424,12 @@ GwynInitStatsData:
 	dc.b	CharID_LayaGwyn_Mask
 	dc.b	$12, $18, $07, $06, $0B
 	dc.b	$03
-	dc.b	"Laia"
+	if vwf_dialogue
+	dc.b	$E0, 7, $FC, 0, 0	; VWFName_Table entry 7 (Gwyn): the name may be longer than four letters
+	else
+	dc.b	"Gwyn"
 	dc.b	$FC
+	endif
 	dc.b	$02, $02
 	dc.w	MieuGwynExpTable+8-ExpTableData
 	dc.w	loc_1E52C-TechPowerGrowthRate
@@ -38417,8 +38452,12 @@ RyanInitStatsData:
 	dc.b	CharID_LyleRyan_Mask
 	dc.b	$69, $2C, $41, $3D, $3D
 	dc.b	$02
-	dc.b	"Dan"
+	if vwf_dialogue
+	dc.b	$E0, 8, $FC, 0, 0	; VWFName_Table entry 8 (Ryan): the name may be longer than four letters
+	else
+	dc.b	"Ryan"
 	dc.b	$FC
+	endif
 	dc.b	$67, $3B
 	dc.w	RyanExpTable+8-ExpTableData
 	dc.w	loc_1E531-TechPowerGrowthRate
@@ -38441,8 +38480,12 @@ AynInitStatsData:
 	dc.b	CharID_AynSeanCrysAdanAron_Mask
 	dc.b	$3C, $26, $34, $34, $26
 	dc.b	$03
+	if vwf_dialogue
+	dc.b	$E0, 9, $FC, 0, 0	; VWFName_Table entry 9 (Ayn): the name may be longer than four letters
+	else
 	dc.b	"Ayn"
-	dc.b	$FC, $00	
+	dc.b	$FC, $00
+	endif
 	dc.b	$37, $2A
 	dc.w	AynExpTable+8-ExpTableData
 	dc.w	loc_1E541-TechPowerGrowthRate
@@ -38466,8 +38509,12 @@ SariInitStatsData:
 	dc.b	CharID_LenaSari_Mask
 	dc.b	$CE, $8E, $AF, $AF, $8E
 	dc.b	$02
-	dc.b	"Lynn"
+	if vwf_dialogue
+	dc.b	$E0, 10, $FC, 0, 0	; VWFName_Table entry 10 (Sari): the name may be longer than four letters
+	else
+	dc.b	"Sari"
 	dc.b	$FC
+	endif
 	dc.b	$D3, $0C
 	dc.w	SariExpTable+8-ExpTableData
 	dc.w	loc_1E52C-TechPowerGrowthRate
@@ -38490,8 +38537,12 @@ TheaInitStatsData:
 	dc.b	CharID_TheaKara_Mask
 	dc.b	$12, $0F, $07, $07, $10
 	dc.b	$02
-	dc.b	"Lann"
+	if vwf_dialogue
+	dc.b	$E0, 11, $FC, 0, 0	; VWFName_Table entry 11 (Thea): the name may be longer than four letters
+	else
+	dc.b	"Thea"
 	dc.b	$FC
+	endif
 	dc.b	$06, $21
 	dc.w	TheaExpTable+8-ExpTableData
 	dc.w	loc_1E541-TechPowerGrowthRate
@@ -38513,8 +38564,12 @@ AdanInitStatsData:
 	dc.b	CharID_AynSeanCrysAdanAron_Mask
 	dc.b	$8A, $62, $6F, $70, $5E
 	dc.b	$02
-	dc.b	"Fuin"
+	if vwf_dialogue
+	dc.b	$E0, 12, $FC, 0, 0	; VWFName_Table entry 12 (Adan): the name may be longer than four letters
+	else
+	dc.b	"Adan"
 	dc.b	$FC
+	endif
 	dc.b	$8E, $57
 	dc.w	AdanExpTable+8-ExpTableData
 	dc.w	loc_1E552-TechPowerGrowthRate
@@ -38542,8 +38597,12 @@ KaraPrincessInitStatsData:
 	dc.b	CharID_TheaKara_Mask
 	dc.b	$12, $16, $08, $06, $0F
 	dc.b	$03
-	dc.b	"Luna"
+	if vwf_dialogue
+	dc.b	$E0, 13, $FC, 0, 0	; VWFName_Table entry 13 (Kara): the name may be longer than four letters
+	else
+	dc.b	"Kara"
 	dc.b	$FC
+	endif
 	dc.b	$18, $1C
 	dc.w	KaraPrincessExpTable+8-ExpTableData
 	dc.w	loc_1E55E-TechPowerGrowthRate
@@ -38565,8 +38624,12 @@ KaraWarriorInitStatsData:
 	dc.b	CharID_TheaKara_Mask
 	dc.b	$79, $5A, $53, $58, $62
 	dc.b	$03
-	dc.b	"Luna"
+	if vwf_dialogue
+	dc.b	$E0, 14, $FC, 0, 0	; VWFName_Table entry 14 (Kara): the name may be longer than four letters
+	else
+	dc.b	"Kara"
 	dc.b	$FC
+	endif
 	dc.b	$8C, $79
 	dc.w	KaraWarriorExpTable+8-ExpTableData
 	dc.w	loc_1E552-TechPowerGrowthRate
@@ -38588,8 +38651,12 @@ AronInitStatsData:
 	dc.b	CharID_AynSeanCrysAdanAron_Mask
 	dc.b	$8C, $5A, $6C, $6B, $5A
 	dc.b	$03
-	dc.b	"Luin"
+	if vwf_dialogue
+	dc.b	$E0, 15, $FC, 0, 0	; VWFName_Table entry 15 (Aron): the name may be longer than four letters
+	else
+	dc.b	"Aron"
 	dc.b	$FC
+	endif
 	dc.b	$85, $57
 	dc.w	AronExpTable+8-ExpTableData
 	dc.w	loc_1E552-TechPowerGrowthRate
@@ -38618,8 +38685,12 @@ CrysInitStatsData:
 	dc.b	CharID_AynSeanCrysAdanAron_Mask
 	dc.b	$91, $48, $74, $75, $5A
 	dc.b	$03
-	dc.b	"Noin"
+	if vwf_dialogue
+	dc.b	$E0, 16, $FC, 0, 0	; VWFName_Table entry 16 (Crys): the name may be longer than four letters
+	else
+	dc.b	"Crys"
 	dc.b	$FC
+	endif
 	dc.b	$8B, $45
 	dc.w	CrysExpTable+8-ExpTableData
 	dc.w	loc_1E552-TechPowerGrowthRate
@@ -38646,8 +38717,12 @@ SeanInitStatsData:
 	dc.b	CharID_AynSeanCrysAdanAron_Mask
 	dc.b	$82, $5A, $64, $64, $5A
 	dc.b	$03
-	dc.b	"Shiin"
+	if vwf_dialogue
+	dc.b	$E0, 17, $FC, 0, 0	; VWFName_Table entry 17 (Sean): the name may be longer than four letters
+	else
+	dc.b	"Sean"
 	dc.b	$FC
+	endif
 	dc.b	$8A, $67
 	dc.w	SeanExpTable+8-ExpTableData
 	dc.w	loc_1E54C-TechPowerGrowthRate
@@ -38667,6 +38742,87 @@ SeanInitialEquip:
 SeanInitialEquip_End:
 
 	dc.l	$06060606, $06060606, $06060606, $06060606, $06060606, $06060606, 0, 0
+; The party names for the proportional text (see VWFDia_LongName in
+; ext/vwf.asm): the records above refer to them by index, so a name is no
+; longer held to the four letters of the record field.
+	if vwf_dialogue
+VWFName_Table:
+	dc.w	VWFName_00-VWFName_Table
+	dc.w	VWFName_01-VWFName_Table
+	dc.w	VWFName_02-VWFName_Table
+	dc.w	VWFName_03-VWFName_Table
+	dc.w	VWFName_04-VWFName_Table
+	dc.w	VWFName_05-VWFName_Table
+	dc.w	VWFName_06-VWFName_Table
+	dc.w	VWFName_07-VWFName_Table
+	dc.w	VWFName_08-VWFName_Table
+	dc.w	VWFName_09-VWFName_Table
+	dc.w	VWFName_10-VWFName_Table
+	dc.w	VWFName_11-VWFName_Table
+	dc.w	VWFName_12-VWFName_Table
+	dc.w	VWFName_13-VWFName_Table
+	dc.w	VWFName_14-VWFName_Table
+	dc.w	VWFName_15-VWFName_Table
+	dc.w	VWFName_16-VWFName_Table
+	dc.w	VWFName_17-VWFName_Table
+VWFName_00:
+	dc.b	"Mieu"
+	dc.b	$FC
+VWFName_01:
+	dc.b	"Searren"
+	dc.b	$FC
+VWFName_02:
+	dc.b	"Kein"
+	dc.b	$FC
+VWFName_03:
+	dc.b	"Lyle"
+	dc.b	$FC
+VWFName_04:
+	dc.b	"Lena"
+	dc.b	$FC
+VWFName_05:
+	dc.b	"Lein"
+	dc.b	$FC
+VWFName_06:
+	dc.b	"Laia"
+	dc.b	$FC
+VWFName_07:
+	dc.b	"Laia"
+	dc.b	$FC
+VWFName_08:
+	dc.b	"Dan"
+	dc.b	$FC
+VWFName_09:
+	dc.b	"Ain"
+	dc.b	$FC
+VWFName_10:
+	dc.b	"Lynn"
+	dc.b	$FC
+VWFName_11:
+	dc.b	"Lann"
+	dc.b	$FC
+VWFName_12:
+	dc.b	"Fuin"
+	dc.b	$FC
+VWFName_13:
+	dc.b	"Luna"
+	dc.b	$FC
+VWFName_14:
+	dc.b	"Luna"
+	dc.b	$FC
+VWFName_15:
+	dc.b	"Luin"
+	dc.b	$FC
+VWFName_16:
+	dc.b	"Noin"
+	dc.b	$FC
+VWFName_17:
+	dc.b	"Shiin"
+	dc.b	$FC
+VWFName_End:
+	even
+	endif
+
 ; -----------------------------------------------------------------------------------------
 
 

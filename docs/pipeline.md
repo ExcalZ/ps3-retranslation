@@ -118,7 +118,7 @@ only, `--widths` to print each one's widest line).
 | field main-menu label | 56 px after its fixed one-cell margin (7 cells) | `proofread.html`; the engine clips |
 | item and technique names | 72 px (the battle lists' nine cells; the menu allows 80, the shops 88) | `proofread.html` |
 | enemy names | 75 px (the battle box's group line beside a two-digit count) | `proofread.html` |
-| party names | 40 px (the battle stat window's five cells) | `proofread.html` |
+| party names | 40 px (the battle stat window's five cells); the record field itself is four letters, so the names live in `VWFName_Table` (`$E0 nn`, see engine.md) | `proofread.html` |
 | ending transmission (`namestrings`) | 24 cells, fixed-width: `loc_F7F0` writes each pair of lines straight into VRAM in the 8x8 font | `proofread.html`, `linecheck.py` |
 | fixed-width tables | the widest line of the stock table, in cells | `proofread.html` (`budget` per segment) |
 | script region | it may grow freely: everything after it is label-relative | - |

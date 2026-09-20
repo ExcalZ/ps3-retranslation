@@ -30,7 +30,7 @@ SEGMENTS = [
     ('megido',      'loc_A0E4',          'MainGame_GameScript', 'the two story techniques named in cutscenes'),
     ('marriage',    'loc_17EAC',         'Obj_EventTreasureChest', 'marriage choice menus, two lines each'),
     ('credits',     'loc_1A33C',         'loc_1A7C4',           'ending credits: each labelled entry is 2 position bytes (kept in `hdr`), text, $FC; bold capitals are written as fullwidth letters', {'hdr': 2}),
-    ('charnames',   'MieuInitStatsData', 'loc_1E4C6',           'party member names in the initial stats records'),
+    ('charnames',   'VWFName_00',        'VWFName_End',         'party member names: VWFName_Table, referred to by the initial stats records ($E0 nn; the record field holds four letters)'),
     ('menus',       'loc_1F6CE',         'loc_1F920',           'field menu labels and prompts'),
     ('menus2',      'loc_1F9C4',         'loc_1F9D2',           'field menu: Can\'t etc.'),
     ('namestrings', 'loc_30CD8',         'loc_31136',           'the ending transmission: pairs of lines drawn straight into VRAM by loc_F7F0 (fixed-width, 24 cells)'),

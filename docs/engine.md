@@ -115,6 +115,33 @@ dialogue pool, pixel-identical to the last frame, and the window is copied
 as the stock code copies it. Rates: 1/4, 3/8, 1/2, 3/4, 1, 1.5, 2, 3 and
 4 px per frame for speeds 1-9 (64 down to 4 frames a line).
 
+A button press pays out two lines: `loc_A368` counts them in `$D(a6)` at
+every wrap of its 8-frame counter `$C(a6)`, and in the stock game that
+counter was the whole pacing. With the animation it would leave the box
+still for 8 frames between the two scrolls, so `VWFSmooth_Finish` checks
+`$D(a6)` and the more-text flag itself and starts the second line the frame
+the first completes (the counter still runs its 8 frames after the last
+line before the button is read again, as stock).
+
+## Party names longer than four letters
+
+The initial stats records (`MieuInitStatsData`...) hold each name in a
+four-letter field that `InitCharStats` copies verbatim into the character
+record (`$27(a0)`, `$03` + four letters + `$FC`) - every US name has four
+letters for that reason, and "Searren" or "Shiin" would shift the words after
+the field and crash `SetMainCharStatsPtr` on an odd address. With
+`vwf_dialogue` a record holds `$E0 nn, $FC` instead, and `VWFName_Table` in
+`ps3.asm` (the `charnames` segment) holds the names at any length. Both
+renderers expand `$E0 nn`: the proportional one inline, glyph by glyph
+(`VWFDia_LongName`; not as a nested insert, since a name is normally reached
+through `{NAME:nn}` already and the insert flag is one bit deep), and the
+stock one through `VWFName_Fixed`, jumped to from its control table (`$E0`
+lands right after the table, where the stock code fell through into the
+`{NAME}` handler), which restores the insert flag afterwards. Saved games
+carry the `$E0 nn` bytes in the record, so a save made with the option on
+shows the long names too. The battle stat window's five cells (40 px)
+remain the budget.
+
 The 96 tiles are the window plane's nametable rows 0-18 (`$B000-$B97F`):
 the window plane is off on every screen with the dialogue box (the field,
 the world map, the shops, the narration screens - `work/scripts/

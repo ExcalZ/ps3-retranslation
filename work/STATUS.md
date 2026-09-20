@@ -18,8 +18,8 @@ the Japanese throughout - the user's decision of 2026-09-19, recorded in
 `work/glossary.md`. What remains is proofreading in play: only a handful of
 lines have been seen on the console side so far (see the log).
 
-Canonical experimental ROM `ps3en.bin` (every option on): 825,536 bytes,
-SHA-256 `5A35A0ED27A64E57C25C671AABB67B79A89AF0543A4045E00938610385636865`;
+Canonical experimental ROM `ps3en.bin` (every option on): 825,676 bytes,
+SHA-256 `3687EBFA6E6434C6E0126DA61643841C0B2A1A64DC22DD186181300EC1D3A9E8`;
 `tools/checkbuild.py` prints its SHA-256 after each build.
 Stock US ROM (every option 0 and every `en` equal to `us` reproduces it -
 verified 2026-09-20 after the translation pass): 786,432 bytes, SHA-256
@@ -198,6 +198,20 @@ does not spawn the walking sprite) and wanders into the first encounter;
 `battle_win.py` plays it out with C. Still to do in BlastEm: the church save.
 
 ## Log
+
+* 2026-09-20 (later) - Two fixes from play. The party names: the initial
+  stats records hold a four-letter name field copied verbatim, so the
+  translated "Searren" and "Shiin" shifted the records and the game reset on
+  reaching Landen (`SetMainCharStatsPtr`, odd address). The records now hold
+  `$E0 nn` and the names live in `VWFName_Table` (the `charnames` segment,
+  now 18 runs: Ain's record had escaped the extractor), expanded by both
+  renderers (`docs/engine.md`). And the smooth scroll's second line of a
+  page no longer waits for the stock 8-frame counter: `VWFSmooth_Finish`
+  starts it the frame the first completes. Both under the interpreter
+  (`test_long_names`, the chained case of `test_smooth_scroll`) and in
+  BlastEm by RAM trace (the window's screenshots were blank all day):
+  boot to Landen with 9 NPCs, the menu and battle scenarios through, the
+  page advance 16 + 16 frames back to back. Stock reproduction byte-identical.
 
 * 2026-09-20 - The translation pass: every dialogue entry, the tables, the
   shop/battle text and the ending transmission, from the JP, with the JP

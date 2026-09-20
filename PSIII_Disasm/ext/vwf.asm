@@ -190,6 +190,8 @@ VWFDia_Loop:
 	beq.w	VWFDia_Insert
 	cmpi.b	#$E4, d1
 	beq.w	VWFDia_Number
+	cmpi.b	#$E0, d1
+	beq.w	VWFDia_LongName
 	; $F4 / $F0: glyph with a mark above it (JP only); draw the glyph
 	move.b	(a0)+, d1
 VWFDia_Glyph:
@@ -298,6 +300,56 @@ VWFDia_Number:				; $E4 nn
 	andi.w	#$F, d1
 	dbf	d7, -
 	bra.w	VWFDia_Loop
+
+; $E0 nn: a party name from VWFName_Table (ps3.asm). The initial stats records
+; hold each name in a four-letter field that InitCharStats copies verbatim
+; (every US name has four letters for that reason); with the option on a
+; record holds $E0 nn instead and the name of any length lives in the table.
+; Drawn inline, glyph by glyph - not as a nested insert, because a name is
+; usually reached through {NAME:nn} already and the insert flag is one deep.
+VWFDia_LongName:
+	move.b	(a0)+, d1
+	move.l	a0, -(sp)
+	lea	(VWFName_Table).l, a0
+	add.w	d1, d1
+	adda.w	(a0,d1.w), a0
+-
+	moveq	#0, d1
+	move.b	(a0)+, d1
+	cmpi.b	#$FC, d1
+	beq.s	+
+	bsr.w	VWFDia_Draw
+	bra.s	-
++
+	movea.l	(sp)+, a0
+	bra.w	VWFDia_Loop
+
+; The same code in the stock renderer (jumped to from its control table: $E0
+; lands right after the table, where the stock code fell through into the
+; {NAME} handler). Inserted through the stock recursion, restoring the insert
+; flag afterwards so a name inside a {NAME} insert returns to the text.
+VWFName_Fixed:
+	moveq	#0, d1
+	move.b	(a0)+, d1
+	move.l	a0, -(sp)
+	move.w	d5, -(sp)
+	moveq	#0, d5
+	btst	#4, $1(a6)
+	beq.s	+
+	moveq	#1, d5			; inside a {NAME} insert already
++
+	lea	(VWFName_Table).l, a0
+	add.w	d1, d1
+	adda.w	(a0,d1.w), a0
+	bset	#4, $1(a6)
+	jsr	(loc_10048).l
+	tst.b	d5
+	beq.s	+
+	bset	#4, $1(a6)
++
+	move.w	(sp)+, d5
+	movea.l	(sp)+, a0
+	jmp	(loc_10048).l
 
 ; ---------------------------------------------------------------------------
 ; Clear the current line's canvas and reset the pen.
@@ -710,6 +762,23 @@ VWFSmooth_Finish:
 	move.w	#VWFDIA_CELLS, (VWFDia_Cap).w
 	move.w	#VWFDIA_LINEPX, (VWFDia_MaxPx).w
 	move.w	#VWFDIA_CELLS, (VWFDia_Pad).w
+	; a button press pays out two lines ($D(a6) counts them down at every
+	; wrap of the 8-frame counter in loc_A368). Stock drew each at once, so
+	; the counter was the whole pacing; here it would leave the box still
+	; for 8 frames between the two scrolls. When the second line is due and
+	; there is text for it, start it this frame instead: the canvases have
+	; just been promoted, and VWFSmooth_Begin repoints the rows it needs,
+	; so the pool draw and window copy below can wait for the last line.
+	tst.b	$D(a6)
+	ble.s	VWFSmooth_Finish_Draw
+	btst	#5, $1(a6)
+	beq.s	VWFSmooth_Finish_Draw
+	subq.b	#1, $D(a6)
+	bsr.w	VWFSmooth_Begin
+	movem.l	(sp)+, d1-d7/a0-a5
+	moveq	#1, d0
+	rts
+VWFSmooth_Finish_Draw:
 	moveq	#0, d6			; line
 VWFSmooth_Finish_Line:
 	move.w	d6, (VWFDia_Line).w
