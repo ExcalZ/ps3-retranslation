@@ -43,8 +43,9 @@
 ; renderer. The main-menu list is first rendered into its 10x12 staging buffer,
 ; so its five exact line addresses map to the screen-shadowing tiles they will
 ; occupy after loc_10C42 copies it. Item names, equipment, technique names and
-; the labels all go through this path; numbers (loc_FF7E) and the row-25 name
-; plate stay fixed width.
+; the labels all go through this path (a line's leading spaces keep their
+; 8-px cell, so the indented prompts line up with the window's header);
+; numbers (loc_FF7E) and the row-25 name plate stay fixed width.
 ;
 ; The shops (vwf_shop): a store screen ($222-$230) is a map of the same kind -
 ; the field art is reloaded on exit and the map itself loads one picture at
@@ -72,7 +73,9 @@
 ; The rate comes from the "message scrolling speed" option (1-9 ->
 ; 1/4, 3/8, 1/2, 3/4, 1, 1.5, 2, 3, 4 px per frame).
 ;
-; The battle box (vwf_battle): the enemy-group lines, the character names of
+; The battle box (vwf_battle): the victory and level-up messages, drawn from
+; the box's top row ($FFFF2A0A) after loc_CF52 clears it, take the dialogue
+; path as two lines; the enemy-group lines, the character names of
 ; the stat window and the item and technique lists, from VWFBattle_Table
 ; (see there for the battle screen's VRAM). Targeting does not touch those
 ; cells: an enemy target is the enemy's own sprite lit up, and an ally target
@@ -137,8 +140,13 @@ VWFDia_NotShop:
 	move.l	a2, (VWFDia_List).w
 	bsr.w	VWFList_Find
 	cmpi.w	#$FFFF, d1
-	beq.s	VWFDia_NotBattle
-	bra.w	VWFMenu_Go
+	bne.w	VWFMenu_Go
+	cmpa.l	#$FFFF2A0A, a1		; the victory and level-up messages (loc_ED2C, loc_EEF4): the
+	bne.s	VWFDia_NotBattle	; box's top row after loc_CF52 clears it, two lines like the
+	cmpi.w	#VWFDIA_CELLS, $44(a6)	; dialogue's (the US "won" message had three; en re-flows it)
+	bne.s	VWFDia_NotBattle
+	moveq	#0, d1
+	bra.s	VWFDia_Go
 VWFDia_NotBattle:
 	endif
 	cmpi.w	#VWFDIA_CELLS, $44(a6)
@@ -382,6 +390,7 @@ VWFDia_StartLine:
 	move.l	d1, (a2)+
 	dbf	d2, -
 	clr.w	(VWFDia_X).w
+	move.w	(VWFDia_Mode).w, (VWFDia_Lead).w	; a pooled line: leading spaces keep their cell
 	rts
 
 ; a2 = canvas of the current line
@@ -400,13 +409,26 @@ VWFDia_CanvasPtr:
 
 ; ---------------------------------------------------------------------------
 ; Draw glyph d1 (a text byte) at the pen and advance. a3 = widths, a4 = font.
-; Glyphs that would cross the right edge are dropped.
+; Glyphs that would cross the right edge are dropped. On a pooled line (a menu,
+; shop or battle window) the spaces before the first ink advance a whole cell:
+; the stock strings indent with 8-px spaces ("  What?", " Use") so that their
+; text lines up with the window's other rows, and a 3-px space would pull it
+; left and leave ink in a cell the redraws never clear.
 ; ---------------------------------------------------------------------------
 VWFDia_Draw:
 	movem.l	d4-d7/a2/a5, -(sp)	; the number loop keeps its digits in d6/d7
 	moveq	#0, d4
 	move.b	(a3,d1.w), d4		; advance
 	beq.s	VWFDia_Draw_Done
+	tst.w	(VWFDia_Lead).w
+	beq.s	VWFDia_Draw_Ink
+	cmpi.b	#' ', d1
+	bne.s	VWFDia_Draw_First
+	moveq	#8, d4			; a leading space: one cell
+	bra.s	VWFDia_Draw_Ink
+VWFDia_Draw_First:
+	clr.w	(VWFDia_Lead).w
+VWFDia_Draw_Ink:
 	move.w	(VWFDia_X).w, d2
 	move.w	d2, d5
 	add.w	d4, d5
@@ -657,6 +679,7 @@ VWFScroll_Go:
 	movem.l	d0-d7/a0-a6, -(sp)
 	lea	$FFFFD280.w, a6		; VWFDia_Draw reads nothing from it, but keep the convention
 	clr.w	(VWFDia_Line).w
+	clr.w	(VWFDia_Mode).w		; not a pooled line: its spaces are 3 px
 	move.w	#VWFDIA_LINEPX, (VWFDia_MaxPx).w
 	bsr.w	VWFDia_StartLine
 	lea	(VWFDia_Font).l, a4

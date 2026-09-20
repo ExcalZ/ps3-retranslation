@@ -8,6 +8,12 @@
 ; speed tables at loc_780C0).
 scrolling_ground = 1
 
+; The party walks twice as fast on foot: 2 px a frame, four frames a step
+; instead of 1 px and eight (vehicles keep their speeds). The walking
+; animation runs at its stock pace; the scripted walks (demo input, the dock)
+; count steps, so cutscenes cover the same ground.
+fast_walk = 1
+
 ; Four save slots instead of two. The two extra slots (and their backup copies)
 ; live in the second 16 KB of backup RAM, so the header declares 32 KB.
 four_save_slots = 1

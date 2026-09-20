@@ -37,18 +37,44 @@ _CANDIDATES = [os.environ.get('BLASTEM', ''),
                os.path.join(os.path.dirname(ROOT), 'ps4-translate', 'blastem-win32-0.6.2', 'blastem.exe')]
 BLASTEM = next((p for p in _CANDIDATES if p and os.path.exists(p)), _CANDIDATES[1])
 LST = os.path.join(ROOT, 'PSIII_Disasm', 'ps3.lst')
+STATES = os.path.join(ROOT, 'work', 'states')
 
 
 def listing_address(label, after=None, lst=LST):
     return blastem_drive.listing_address(lst, label, after)
 
 
+def harness_rom(rom, sram=None):
+    """A copy of `rom` under work/states/harness/harness-<name> (refreshed when the ROM
+    changes), with BlastEm's save file for that name removed or replaced by `sram`."""
+    import shutil
+    d = os.path.join(STATES, 'harness')
+    os.makedirs(d, exist_ok=True)
+    copy = os.path.join(d, 'harness-' + os.path.basename(rom))
+    if not os.path.exists(copy) or open(copy, 'rb').read() != open(rom, 'rb').read():
+        shutil.copyfile(rom, copy)
+    save_dir = os.path.join(os.environ.get('LOCALAPPDATA', ''), 'blastem',
+                            os.path.splitext(os.path.basename(copy))[0])
+    save = os.path.join(save_dir, 'save.sram')
+    if os.path.exists(save):
+        os.remove(save)
+    if sram:
+        os.makedirs(save_dir, exist_ok=True)
+        shutil.copyfile(sram, save)
+    return copy
+
+
 class PS3(blastem_drive.BlastEm):
     def __init__(self, rom, port=1234, lst=LST, sram=None, state=None):
         """`state`: a BlastEm .state saved by save_state (its .ram beside it): the game
         resumes there, through the 0.6.2 reset-on-load workaround of the base class, with
-        the work RAM put back from the .ram file."""
-        self.rom = os.path.abspath(rom)
+        the work RAM put back from the .ram file.
+        BlastEm keeps backup RAM per ROM file name (%LOCALAPPDATA%/blastem/<name>/
+        save.sram), so the emulator runs a copy of the ROM under a harness name and starts
+        with that copy's save file removed: a scenario never sees the user's saved games
+        (boot_to_field would pick "Continue") and never overwrites them. `sram`: a .sram
+        file to start from instead."""
+        self.rom = harness_rom(os.path.abspath(rom), sram)
         self.lst = lst
         self.pad = 0
         self.frame = 0
@@ -167,7 +193,6 @@ SCREEN_TITLE, SCREEN_GAMESEL, SCREEN_MAIN = 4, 0xC, 0x10
 # not in a battle or a menu). RAM holds ROM addresses (object routines,
 # script and name pointers), so a snapshot is tied to the ROM's layout: it is
 # keyed by the ROM's SHA-256 and is remade when the ROM changes.
-STATES = os.path.join(ROOT, 'work', 'states')
 
 
 def _rom_key(rom):

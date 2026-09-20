@@ -88,8 +88,14 @@ cells are cleared with paper. A `{BR}` relocates the next line in the pool; if
 it steps below row 24, the rest of the string is handed back to the stock
 renderer.
 
-This catches item names, equipped items, technique names and menu labels. It
-also recognizes the five exact rows of the main menu's 10x12 staging buffer
+This catches item names, equipped items, technique names and menu labels. On
+a pooled line the spaces before the first ink are whole 8-px cells: the stock
+prompts indent with spaces (`"  What?"` at column 15, `" Use"` at 16) so that
+the text lines up with the window's header at column 17, and a 3-px space
+would pull it left and leave ink in a cell the later redraws (which start one
+cell to the right) never clear. The Equip screen's `What?` was six tile words
+written by hand at `$FFFF2322`; it now renders the same `"  What?"` string
+as the Item screen. It also recognizes the five exact rows of the main menu's 10x12 staging buffer
 and maps them to their eventual screen positions. The first cell stays fixed
 blank because the stock transition cleanup deliberately leaves it alone; the
 remaining seven cells give each label 56 px, enough for the full `Technique`
@@ -223,7 +229,10 @@ not touch the enemy row's cells: an enemy target is the enemy's own sprite
 lit up, an ally target the character's name in the stat window (the
 `loc_D56C` palette toggle, widened to five cells); the list highlights
 toggle the same way. The battle message row was already on the dialogue
-pool.
+pool, and the victory and level-up messages (`loc_ED2C`, `loc_EEF4`), which
+`loc_CF52` clears the whole box for and draws from its top row `$FFFF2A0A`,
+take the same path as two dialogue lines (the US "won" message had three;
+the translation re-flows it into two).
 
 The battle list's nine cells make **72 px the item and technique name budget
 game-wide**; the enemy line leaves 75 px for a name beside a two-digit
@@ -255,6 +264,26 @@ ink casts a one-pixel black shadow right and down (the expansion looks up
 ink and shadow nibbles together in `VWFDia_ShadowLUT`), which keeps the
 thinner face readable over the bright parts of the picture. The ending staff roll goes
 through the same routine on another screen and keeps the bold 8x8 capitals.
+
+## The party's step (`fast_walk`)
+
+On foot the sprite manager (`Obj_CharSpriteManager`) moves the party
+`$FFFFD242` px a frame - 1, set at `loc_2DE0`; the vehicles set 2 or 4 for
+themselves - for the eight frames its counter `$C(a5)` runs (`loc_3036`,
+`andi.b #7`), one 8-px tile a step. The visible party sprites (`loc_4C42`)
+move 1 px a frame from `loc_4E4A` while the manager's stepping bit is set and
+pick their walking frame from their own free-running frame counter (`$22(a5)
+= ($C(a5) >> 2) & 6`). With `fast_walk = 1` the step is 2 px a frame over
+four frames and the sprites move 2 px too, so a step is still one tile and
+the animation, counting frames, keeps its pace. Two scripted walks count
+frames and are scaled to match: the demo-script player `loc_11CE8` (an
+entry's count is steps; `<< 2` instead of `<< 3`, a pause keeps its 8-frame
+unit) and the dock's eight steps onto the boat (`loc_1993A`, 32 frames
+instead of 64). The other demo-mode objects wait on positions or on their
+own timers without walking. Verified in BlastEm (`work/scripts/walkspeed.py`)
+against a `fast_walk = 0` build: `Demo_LandenWalkToPrison` run from the town
+ends every entry on the same tile, the field walk is 2 px a frame with the
+animation frame changing every eighth frame in both.
 
 ## What the JP release does differently
 

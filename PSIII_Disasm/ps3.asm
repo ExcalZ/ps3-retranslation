@@ -3563,7 +3563,11 @@ loc_2DE0:
 	st	$E(a4)
 	dbf	d3, -
 
+	if fast_walk
+	move.w	#2, $FFFFD242.w		; 2 px a frame on foot, four frames a step (loc_3036)
+	else
 	move.w	#1, $FFFFD242.w
+	endif
 	rts
 	
 Obj_CharSpriteManager:
@@ -3731,7 +3735,11 @@ loc_3016:
 ; ================================================
 loc_3036:
 	addq.b	#1, $C(a5)
+	if fast_walk
+	andi.b	#3, $C(a5)		; a step is 8 px: four frames at 2 px
+	else
 	andi.b	#7, $C(a5)
+	endif
 	bne.s	loc_304A
 	subq.w	#4, $2(a5)
 	bra.w	loc_2EC4
@@ -5987,11 +5995,17 @@ loc_4C42:
 	add.w	d3, d3
 	move.b	(a0,d3.w), d1
 	ext.w	d1
+	if fast_walk
+	add.w	d1, d1			; 2 px a frame, as the manager moves (loc_2DE0)
+	endif
 	add.w	d1, $8(a5)
 	move.b	$1(a0,d3.w), d1
 	ext.w	d1
+	if fast_walk
+	add.w	d1, d1
+	endif
 	add.w	d1, $A(a5)
-	move.w	$C(a5), d0
+	move.w	$C(a5), d0		; the walking animation counts frames, not steps: its pace stays
 	lsr.w	#2, d0
 	andi.w	#6, d0
 	move.w	d0, $22(a5)
@@ -12462,10 +12476,20 @@ loc_964C:
 	bls.s	loc_9654
 	addq.w	#2, d0
 loc_9654:
-	lea	$FFFF2322, a0
+	if vwf_menu
+	movem.l	d0-d7/a0-a5, -(sp)	; d0 is the list flags stored below
+	lea	(loc_1F744+4).l, a0	; the "  What?" prompt (menus#004), on the pool like the Item screen's
+	lea	$FFFF229E, a1		; its own header position: mark row 5, column 15 (ext/vwf.asm)
+	move.w	#$A, $44(a6)
+	move.w	#$A000, d0
+	jsr	(loc_10038).l
+	movem.l	(sp)+, d0-d7/a0-a5
+	else
+	lea	$FFFF2322, a0		; "What? " as tile words
 	move.l	#$A057A068, (a0)+
 	move.l	#$A061A074, (a0)+
 	move.l	#$A03FA01F, (a0)
+	endif
 	move.w	d0, $26(a6)
 	clr.w	$28(a6)
 	clr.w	$C(a6)
@@ -24039,7 +24063,17 @@ loc_11CC8:
 	move.w	#7, $FFFFD158.w
 	rts
 loc_11CE8:
+	if fast_walk
+	tst.b	(a0)			; a walk entry counts steps, now four frames each;
+	beq.s	+			; a pause (no input) keeps its 8 frames a unit
+	lsl.b	#2, d0
+	bra.s	++
++
 	lsl.b	#3, d0
++
+	else
+	lsl.b	#3, d0			; units of one 8-frame step
+	endif
 	move.b	d0, $24(a5)
 	move.b	(a0)+, (demo_joypad_input).w
 	move.l	a0, $20(a5)
@@ -33432,7 +33466,11 @@ loc_1992E:
 	jmp	(DisplaySprite).l
 loc_1993A:
 	addq.b	#1, $C(a5)
+	if fast_walk
+	andi.b	#$1F, $C(a5)		; the eight steps onto the dock, four frames each
+	else
 	andi.b	#$3F, $C(a5)
+	endif
 	bne.s	loc_19964
 	bclr	#2, $FFFFD004.w
 	clr.w	(demo_joypad_input).w
@@ -66381,13 +66419,13 @@ ItemName_LaconChst:	dc.b	"Ceramic Chest"
 	dc.b	$FC
 ItemName_RoyalChst:	dc.b	"Comet Chest"
 	dc.b	$FC
-ItemName_Fiblira:	dc.b	"Fiblira"
+ItemName_Fiblira:	dc.b	"Fibrilla"
 	dc.b	$FC
-ItemName_SteelFib:	dc.b	"Star Fiblira"
+ItemName_SteelFib:	dc.b	"Star Fibrilla"
 	dc.b	$FC
-ItemName_LaconFib:	dc.b	"Laconia Fiblira"
+ItemName_LaconFib:	dc.b	"Laconia Fibrilla"
 	dc.b	$FC
-ItemName_RoyalFib:	dc.b	"Queen Fiblira"
+ItemName_RoyalFib:	dc.b	"Queen Fibrilla"
 	dc.b	$FC
 ItemName_Vest:	dc.b	"Wool Vest"
 	dc.b	$FC
@@ -66405,15 +66443,15 @@ ItemName_RoyalVest:	dc.b	"Ancient Vest"
 	dc.b	$FC
 ItemName_Protector:	dc.b	"Protector"
 	dc.b	$FC
-ItemName_SteelPrtc:	dc.b	"Steel Guard"
+ItemName_SteelPrtc:	dc.b	"Steel Protector"
 	dc.b	$FC
 ItemName_CeramPrtc:	dc.b	"Ceramic Guard"
 	dc.b	$FC
-ItemName_ForcePrtc:	dc.b	"Comet Guard"
+ItemName_ForcePrtc:	dc.b	"Comet Protector"
 	dc.b	$FC
-ItemName_LaconPrtc:	dc.b	"Laconia Guard"
+ItemName_LaconPrtc:	dc.b	"Laconia Protectr"
 	dc.b	$FC
-ItemName_RoyalPrtc:	dc.b	"Maxima Guard"
+ItemName_RoyalPrtc:	dc.b	"MaximaProtector"
 	dc.b	$FC
 ItemName_Boots:	dc.b	"Leather Boots"
 	dc.b	$FC
@@ -66433,15 +66471,15 @@ ItemName_LaconShld:	dc.b	"Laconia Shield"
 	dc.b	$FC
 ItemName_RoyalShld:	dc.b	"Emperor Shield"
 	dc.b	$FC
-ItemName_Emel:	dc.b	"Emel"
+ItemName_Emel:	dc.b	$80, "rmel"
 	dc.b	$FC
-ItemName_SteelEmel:	dc.b	"Leather Emel"
+ItemName_SteelEmel:	dc.b	"Leather ", $80, "rmel"
 	dc.b	$FC
-ItemName_CeramEmel:	dc.b	"Ceramic Emel"
+ItemName_CeramEmel:	dc.b	"Ceramic ", $80, "rmel"
 	dc.b	$FC
 ItemName_ForceEmel:	dc.b	"Faith Sleeve"
 	dc.b	$FC
-ItemName_LaconEmel:	dc.b	"Laconia Emel"
+ItemName_LaconEmel:	dc.b	"Laconia ", $80, "rmel"
 	dc.b	$FC
 ItemName_RoyalEmel:	dc.b	"Greensleeve"
 	dc.b	$FC

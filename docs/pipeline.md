@@ -40,6 +40,7 @@ The options in `ps3.options.asm`:
 | `vwf_battle` | proportional enemy-group row, stat-window names and item / technique lists in the battle box; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `smooth_scroll` | a page advance in the dialogue window scrolls the text up smoothly at the rate of the "message scrolling speed" option; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `four_save_slots` | four save slots with safety copies in 32 KB of backup RAM (`ext/saveslots.asm`) |
+| `fast_walk` | the party walks twice as fast on foot: 2 px a frame, four frames a step (`loc_2DE0`, `loc_3036`, the party sprites at `loc_4C42`); the walking animation keeps its pace, and the scripted walks (the demo-script player `loc_11CE8`, the dock's `loc_1993A`) count steps, so cutscenes end on the same tiles (`work/scripts/walkspeed.py` compares against a `fast_walk = 0` build) |
 
 New code lives in `PSIII_Disasm/ext/*.asm`, included just before `EndOfRom`,
 so it sits past the original 768 KB and nothing in the original image moves
@@ -159,6 +160,11 @@ python work/scripts/menuvwf.py   # Item, Stats, Equip, Techs, Switch and generat
 injection at `ReadJoypad`, work-RAM reads, window screenshots, a `teleport`
 that fakes a door transition and store entry by the shop-type flag - so a
 scenario is a deterministic pad script from power-on (`work/scripts/`).
+BlastEm keeps backup RAM per ROM file name, so the harness runs a copy of the
+ROM (`work/states/harness/harness-<name>`) whose save file it removes first:
+a scenario never meets the user's saved games on the game-select screen (the
+boot would pick "Continue") and never overwrites them. A ROM built with other
+options gets its own listing beside it (`<rom>.lst`) for the label lookups.
 
 Snapshots make that fast: `boot_to_field` takes the 64 KB of work RAM and
 the registers at the pad breakpoint once it reaches Landen (`snapshot`,

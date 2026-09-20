@@ -11,8 +11,8 @@ editing the ROM — the same shape as the
 The dialogue window, the field menu, the shop lists and the battle box draw
 proportional (variable-width) text, a page of dialogue scrolls up smoothly
 at the rate of the message-speed option, there are four save slots (one per third-generation branch), the Japanese release's
-scrolling battle ground is restored, and the Technique Distributor no longer
-runs off the screen at high levels.
+scrolling battle ground is restored, the party walks twice as fast, and the
+Technique Distributor no longer runs off the screen at high levels.
 
 This repository holds everything needed to rebuild the patch and to carry the
 translation work forward:

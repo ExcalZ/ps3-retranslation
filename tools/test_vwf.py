@@ -30,14 +30,20 @@ NUMS = 0xFFFFD4A0          # longs for {NUM:nn}
 TEXT = 0x0FF000            # scratch text lives in the unused part of the 1 MB window
 
 
-def compose(line_bytes):
-    """Reference: 1bpp canvas rows (24 bytes each) and the pen position for one line."""
+def compose(line_bytes, lead=False):
+    """Reference: 1bpp canvas rows (24 bytes each) and the pen position for one line.
+    `lead`: a pooled line, whose spaces before the first ink are whole 8-px cells."""
     canvas = [bytearray(26) for _ in range(8)]
     x = 0
     for b in line_bytes:
         w = WIDTH[b]
         if w == 0:
             continue
+        if lead:
+            if b == 0x20:
+                w = 8
+            else:
+                lead = False
         if x + w - 1 > 192:
             continue
         for r in range(8):
@@ -256,7 +262,7 @@ def menu_words(m, row, col, n):
 def check_menu_line(m, line_bytes, row, col, pad, attr=0x8000, label=''):
     """Mark row `row`, glyph row `row + 1`: pad cells of paper in the mark row (or the ink
     width if wider), pool tiles $240 + row*32 + (col-4) for the ink cells, paper after."""
-    canvas, x = compose(line_bytes)
+    canvas, x = compose(line_bytes, lead=True)
     cells = (x + 7) // 8
     n = max(cells, pad)
     first = MENU_POOL + row * 32 + (col - 4)
@@ -301,6 +307,35 @@ def test_menu_labels(sym):
     assert menu_words(m, 27, 5, 8) == [0x8000 | c for c in b'Late'] + [0x801F] * 4, 'hand-off: stock glyph tiles on row 27'
     assert menu_words(m, 26, 5, 8) == [0x801F] * 8, 'hand-off: stock mark row'
     print('  menu labels and the row-24 hand-off ok')
+
+
+def test_menu_leading_spaces(sym):
+    """The prompts indent with spaces ("  What?" at column 15, " Use" at 16) so their text
+    lines up with the window's other rows at column 17: on a pooled line a leading space
+    is a whole cell, and the cells it covers hold paper only, so a later redraw that
+    starts one cell to the right (loc_1F778's {BR}{BR} over the What? row) leaves no ink
+    behind. A space after the first ink is still 3 px."""
+    m = menu_machine(sym, 10)
+    render(m, sym, '  What?', row0=PLANE_A + 5 * MENU_STRIDE + 15 * 2, attr=0x2000)
+    x = check_menu_line(m, b'  What?', 5, 15, 10, attr=0x2000, label='What?')
+    canvas, x0 = compose(b'What?')
+    assert x == 16 + x0, (x, x0)
+    first = MENU_POOL + 5 * 32 + (15 - 4)
+    assert bytes(m.vram[first * 32:first * 32 + 64]) == expand([bytearray(26) for _ in range(8)])[:64], 'the two space cells are paper'
+    m = menu_machine(sym, 8)
+    render(m, sym, ' Use{BR} Give{BR} Discard', row0=PLANE_A + 6 * MENU_STRIDE + 16 * 2)
+    check_menu_line(m, b' Use', 6, 16, 8, label='Use')
+    check_menu_line(m, b' Give', 8, 16, 8, label='Give')
+    x = check_menu_line(m, b' Discard', 10, 16, 8, label='Discard')
+    assert x == 8 + compose(b'Discard')[1], x
+    m = menu_machine(sym, 10)
+    x = render(m, sym, 'R Hand', row0=PLANE_A + 4 * MENU_STRIDE + 5 * 2)
+    assert check_menu_line(m, b'R Hand', 4, 5, 10, label='inner space') == compose(b'R Hand')[1]
+    # the dialogue keeps its 3-px spaces
+    m = machine(sym)
+    render(m, sym, '  Hm.')
+    check_line(m, b'  Hm.', TEMPLATE_ROW0, 0, label='dialogue')
+    print('  leading spaces on pooled lines ok')
 
 
 def test_menu_main_list(sym):
@@ -520,6 +555,34 @@ def test_battle_box(sym):
     m.poke(CTX + 0x44, (24).to_bytes(2, 'big'))
     render(m, sym, "You've been ambushed!", row0=0xFFFF2C0A)
     check_line(m, b"You've been ambushed!", 0xFFFF2C0A, 0, label='battle message')
+    # the victory message: two lines from the box's top row (plane A rows 20-23, stride $80)
+    m.poke(CTX + 0x42, (0x80).to_bytes(2, 'big'))
+    m.poke(0x0FF800, b'Kein\xFC')
+    m.poke(NUMS, (12).to_bytes(4, 'big'))
+    m.poke(NUMS + 4, (35).to_bytes(4, 'big'))
+    render(m, sym, "{NAME:00}'s party won. Earned{BR}{NUM:00} XP and {NUM:04} meseta.", row0=0xFFFF2A0A)
+    for line, text in enumerate((b"Kein's party won. Earned", b'\x02\x03 XP and \x04\x06 meseta.')):
+        canvas, x = compose(text)
+        cells = (x + 7) // 8
+        row0 = 0xFFFF2A0A + line * 0x100
+        mark = [int.from_bytes(m.peek(row0 + 2 * c, 2), 'big') for c in range(24)]
+        glyph = [int.from_bytes(m.peek(row0 + 0x80 + 2 * c, 2), 'big') for c in range(24)]
+        assert mark == [0x801F] * 24, (line, [hex(v) for v in mark])
+        assert glyph == [0x8000 | (POOL + line * 24 + c) for c in range(cells)] + [0x801F] * (24 - cells), (line, [hex(v) for v in glyph])
+        base = (POOL + line * 24) * 32
+        assert bytes(m.vram[base:base + cells * 32]) == expand(canvas)[:cells * 32], line
+    assert m.a[1] & 0xFFFFFF == 0xFF2B0A, hex(m.a[1])
+    render(m, sym, '{NAME:00} gained a level!', row0=0xFFFF2A0A)
+    canvas, x = compose(b'Kein gained a level!')
+    cells = (x + 7) // 8
+    glyph = [int.from_bytes(m.peek(0xFFFF2A8A + 2 * c, 2), 'big') for c in range(24)]
+    assert glyph == [0x8000 | (POOL + c) for c in range(cells)] + [0x801F] * (24 - cells)
+    # off the battle screen that row is stock
+    m.poke(MAP_ID, (0x5A).to_bytes(2, 'big'))
+    m.vram_writes = []
+    render(m, sym, 'won', row0=0xFFFF2A0A)
+    assert m.peek(0xFFFF2A8A, 2) == bytes([0x80, ord('w')]) and not m.vram_writes
+    m.poke(MAP_ID, (0x232).to_bytes(2, 'big'))
     # off the battle screen the same rows are stock
     m.poke(MAP_ID, (0x5A).to_bytes(2, 'big'))
     m.poke(CTX + 0x42, (0x80).to_bytes(2, 'big'))
@@ -640,7 +703,7 @@ def test_smooth_scroll(sym):
 def main():
     sym = Symbols()
     for t in (test_plain, test_br_and_page, test_scroll, test_inserts, test_long_names, test_clip, test_fixed_fallback, test_opening_scroll,
-              test_menu_items, test_menu_labels, test_menu_main_list, test_menu_plates, test_menu_off,
+              test_menu_items, test_menu_labels, test_menu_leading_spaces, test_menu_main_list, test_menu_plates, test_menu_off,
               test_shop_list, test_shop_small_windows, test_battle_box, test_smooth_scroll):
         t(sym)
     print('test_vwf: all passed')
