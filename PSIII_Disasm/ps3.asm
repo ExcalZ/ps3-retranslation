@@ -40222,7 +40222,7 @@ loc_1F5F2:
 loc_1F6CE:
 	dc.b	" Item"
 	dc.b	$F8
-	dc.b	" Techniq"
+	dc.b	" Technique"
 	dc.b	$F8
 	dc.b	" Stats"
 	dc.b	$F8

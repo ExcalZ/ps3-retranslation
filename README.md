@@ -82,9 +82,10 @@ original and are what the generators key on.
   contain a `{BR}`.
 * **Names, menus, battle and shop text** live in `work/script.json`, one
   segment per table. Item names use the proportional face with an 80 px
-  budget in the Item, Equip and Stats screens. Other non-dialogue windows
-  remain fixed-width 8x8 cells unless the proofreader identifies them as
-  dialogue-window text; the widest line of the stock table is their budget.
+  budget in the Item, Equip and Stats screens. The five field main-menu labels
+  use it too, with a 56 px budget after their fixed one-cell margin. Other
+  non-dialogue windows remain fixed-width 8x8 cells unless the proofreader
+  identifies them as proportional; the widest stock line is their budget.
 * `tools/proofread.html` shows every line in the real fonts with live pixel
   widths and flags what does not fit. Open it in a browser and load a JSON
   (or serve the repository with `python -m http.server 8765` and open

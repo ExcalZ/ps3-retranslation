@@ -15,8 +15,8 @@ proportional: 16 lines of up to 192 px, from the JP scroll's 18 lines) and the
 attract-mode / game-over story narration (`loc_25F24`, 8 proportional
 pages). Everything else still equals the US text.
 
-Canonical experimental ROM `ps3en.bin` (every option on): 791,816 bytes,
-SHA-256 `0482FD519FF8DB01450AABBF5FBD0BFAC33AB7C3A5D81CB27E7EC0D675D68342`;
+Canonical experimental ROM `ps3en.bin` (every option on): 791,922 bytes,
+SHA-256 `A6BA353B496DBD924203976671418869293E0A22704E95DB8F394B2E7FDAA248`;
 `tools/checkbuild.py` prints its SHA-256 after each build.
 Stock US ROM (every option 0 and every `en` equal to `us` reproduces it -
 verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
@@ -56,8 +56,9 @@ verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
   movement, Techs with seeded levels, clean returns to the field, and the
   second-generation menu map `$204`. Switch uses an active Rhys/Mieu fixture;
   both cursor states, the committed reorder, object-slot mapping, and clean
-  field return are verified. The main-menu list remains fixed width because
-  it is composed in a separate buffer before being copied to the plane.
+  field return are verified. The main-menu staging buffer is also mapped into
+  the pool: its cursor palette works, transitions clear cleanly, and the full
+  41 px `Technique` replaces the stock `Techniq` abbreviation.
 * **Scrolling battle ground** (`scrolling_ground`): the JP tables at
   `loc_780C0`. Data-only; the scroll routine is identical in both games.
   Verified in BlastEm: in a Landen-plain battle the row-20 scroll value
@@ -90,7 +91,7 @@ verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
 ## Not done
 
 * **Battle-list VWF.** Enemy/status battle windows and shop lists remain
-  fixed-width. The field main-menu list is also fixed-width.
+  fixed-width.
 * **The translation itself**, and the glossary decisions
   (`work/glossary.md`).
 * **Fonts for other languages**: only ASCII plus `" ; & %` glyphs exist.
@@ -101,7 +102,7 @@ verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
 python tools/sourcebuild.py ps3en.bin      # 0 errors, 0 warnings
 python tools/checkbuild.py                 # build, placement and option invariants
 python tools/test_text.py                  # 1180 US + 523 JP strings round-trip
-python tools/test_vwf.py                   # 10 engine cases under the interpreter
+python tools/test_vwf.py                   # 11 engine cases under the interpreter
 python tools/test_techdist.py
 python work/scripts/pagescroll.py          # BlastEm: 6 screenshots of the legend text scrolling
 python work/scripts/narration.py           # BlastEm: the opening

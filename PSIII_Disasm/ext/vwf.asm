@@ -40,8 +40,11 @@
 ; A redraw of a cell reuses its tile, so nothing is allocated or freed; the
 ; line fills $44(a6) cells with paper after the ink as the stock renderer does,
 ; and a $F8 that leaves the range hands the rest of the string to the stock
-; renderer. Item names, equipment, technique names and the labels all go
-; through it; numbers (loc_FF7E) and the row-25 name plate stay fixed width.
+; renderer. The main-menu list is first rendered into its 10x12 staging buffer,
+; so its five exact line addresses map to the screen-shadowing tiles they will
+; occupy after loc_10C42 copies it. Item names, equipment, technique names and
+; the labels all go through this path; numbers (loc_FF7E) and the row-25 name
+; plate stay fixed width.
 ; ===========================================================================
 	if vwf_dialogue
 
@@ -570,6 +573,49 @@ VWFScroll_Done:
 ; (past the pool's end: compare unsigned) when the row is not one the pool
 ; covers (mark rows 0-23, columns 4-35 of $FFFF2000).
 VWFMenu_Locate:
+	; The main-menu list is composed into a 10-cell-wide staging buffer, then
+	; copied to plane A at column 16. Its five mark rows land at screen rows
+	; 1, 3, 5, 7 and 9. Accept only that buffer's exact 8-cell text context.
+	cmpi.w	#$14, $42(a6)
+	bne.s	VWFMenu_Locate_Plane
+	cmpi.w	#8, $44(a6)
+	bne.s	VWFMenu_Locate_Plane
+	move.w	a1, d1
+	cmpi.w	#$9A82, d1
+	beq.s	VWFMenu_Locate_MainStart
+	cmpi.w	#$9B22, d1
+	bne.s	VWFMenu_Locate_MainCheck
+VWFMenu_Locate_MainStart:
+	addq.w	#2, a1			; keep the stock full-cell left margin
+	addq.w	#2, d1
+VWFMenu_Locate_MainCheck:
+	moveq	#0, d2
+	cmpi.w	#$9A84, d1
+	beq.s	VWFMenu_Locate_Main
+	addq.w	#2, d2
+	cmpi.w	#$9AAC, d1
+	beq.s	VWFMenu_Locate_Main
+	addq.w	#2, d2
+	cmpi.w	#$9AD4, d1
+	beq.s	VWFMenu_Locate_Main
+	addq.w	#2, d2
+	cmpi.w	#$9AFC, d1
+	beq.s	VWFMenu_Locate_Main
+	addq.w	#2, d2
+	cmpi.w	#$9B24, d1
+	bne.s	VWFMenu_Locate_Plane
+VWFMenu_Locate_Main:
+	cmpi.b	#' ', (a0)
+	bne.s	+
+	addq.w	#1, a0			; the margin is now the untouched first cell
++
+	addq.w	#1, d2			; screen mark row
+	lsl.w	#5, d2			; 32 pooled columns per row
+	addi.w	#VWFMENU_POOL+13, d2	; screen column 17 - VWFMENU_COL0
+	move.w	d2, d1
+	moveq	#7, d2
+	rts
+VWFMenu_Locate_Plane:
 	move.w	a1, d1			; low word: work RAM is $FFFFxxxx
 	subi.w	#$2000, d1
 	cmpi.w	#VWFMENU_ROWS*$80, d1
@@ -602,7 +648,13 @@ VWFMenu_SetLine:
 	move.w	d2, (VWFDia_Cap).w
 	lsl.w	#3, d2
 	move.w	d2, (VWFDia_MaxPx).w
-	move.w	$44(a6), (VWFDia_Pad).w
+	lsr.w	#3, d2
+	move.w	$44(a6), d1
+	cmp.w	d2, d1
+	bls.s	+
+	move.w	d2, d1			; never pad past this line's pool capacity
++
+	move.w	d1, (VWFDia_Pad).w
 	rts
 
 VWFMenu_Go:

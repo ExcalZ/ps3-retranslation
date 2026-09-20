@@ -91,6 +91,7 @@ table). The credits' `hdr` is the two position bytes the generator keeps.
 |---|---|---|
 | dialogue line | 192 px in the dialogue face (24 cells); two lines, then one per `{PAGE}` | `proofread.html`; the engine clips |
 | item name | 80 px in the field-menu face (10 cells) | `proofread.html`; the engine clips |
+| field main-menu label | 56 px after its fixed one-cell margin (7 cells) | `proofread.html`; the engine clips |
 | fixed-width tables | the widest line of the stock table, in cells | `proofread.html` (`budget` per segment) |
 | script region | it may grow freely: everything after it is label-relative | - |
 

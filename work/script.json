@@ -822,7 +822,7 @@
      "addr": "1F6CE",
      "hex": "204974656df820546563686e6971f8205374617473f8204571756970fc",
      "us": " Item{BR} Techniq{BR} Stats{BR} Equip",
-     "en": " Item{BR} Techniq{BR} Stats{BR} Equip",
+     "en": " Item{BR} Technique{BR} Stats{BR} Equip",
      "jp": "アイテム{BR} テクニック{BR} つよさ{BR} そうび"
     },
     {

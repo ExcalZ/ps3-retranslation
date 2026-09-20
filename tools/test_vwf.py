@@ -7,7 +7,8 @@ composer built from the same font binaries.
 Covers: plain text, {BR}, {PAGE} continuation state, {NAME} inserts, {NUM} numbers,
 clipping at the right edge, the page scroll (VWFDia_ScrollUp), the fixed-width
 fallback for windows that are not the dialogue's, the opening scroll, and the field
-menu (pool tile per screen cell, $44(a6) padding, the hand-off past row 24).
+menu (pool tile per screen cell, main-list staging, $44(a6) padding, and the
+hand-off past row 24).
 """
 import os
 import sys
@@ -278,6 +279,45 @@ def test_menu_labels(sym):
     print('  menu labels and the row-24 hand-off ok')
 
 
+def test_menu_main_list(sym):
+    """The main-menu list is rendered into a 10x12 staging buffer and copied to
+    plane A later. Its five exact line addresses must use the pool tiles for
+    screen rows 1/3/5/7/9, column 16, without pooling nearby staging text."""
+    staging = 0xFFFF9A82
+    m = menu_machine(sym, 8)
+    m.poke(CTX + 0x42, (0x14).to_bytes(2, 'big'))
+    labels = (b'Item', b'Technique', b'Stats', b'Equip')
+    render(m, sym, ' Item{BR} Technique{BR} Stats{BR} Equip', row0=staging)
+    for i, label in enumerate(labels):
+        row0 = staging + 2 + i * 0x28
+        canvas, x = compose(label)
+        cells = (x + 7) // 8
+        mark = [int.from_bytes(m.peek(row0 + j * 2, 2), 'big') for j in range(7)]
+        glyph = [int.from_bytes(m.peek(row0 + 0x14 + j * 2, 2), 'big') for j in range(7)]
+        first = MENU_POOL + (1 + i * 2) * 32 + 13
+        assert m.peek(row0 - 2, 2) == b'\0\0', (label, 'fixed left margin')
+        assert mark == [0x801F] * 7, (label, 'mark row')
+        assert glyph == ([0x8000 | (first + j) for j in range(cells)] +
+                         [0x801F] * (7 - cells)), (label, 'glyph row', glyph)
+        assert bytes(m.vram[first * 32:first * 32 + cells * 32]) == expand(canvas)[:cells * 32], (label, 'pool tiles')
+
+    m = menu_machine(sym, 8)
+    m.poke(CTX + 0x42, (0x14).to_bytes(2, 'big'))
+    render(m, sym, ' Switch', row0=0xFFFF9B22)
+    first = MENU_POOL + 9 * 32 + 13
+    canvas, x = compose(b'Switch')
+    cells = (x + 7) // 8
+    glyph = [int.from_bytes(m.peek(0xFFFF9B38 + j * 2, 2), 'big') for j in range(7)]
+    assert glyph == [0x8000 | (first + j) for j in range(cells)] + [0x801F] * (7 - cells)
+    assert bytes(m.vram[first * 32:first * 32 + cells * 32]) == expand(canvas)[:cells * 32]
+
+    m = menu_machine(sym, 8)
+    m.poke(CTX + 0x42, (0x14).to_bytes(2, 'big'))
+    render(m, sym, 'Nearby', row0=0xFFFF9A86)
+    assert not m.vram_writes, 'nearby staging address must stay fixed width'
+    print('  main-menu staging list ok')
+
+
 def test_menu_off(sym):
     """Outside a menu screen the plane A buffer takes the stock path (the battle box
     draws there); inside it, rows the pool does not cover do too."""
@@ -298,7 +338,7 @@ def test_menu_off(sym):
 def main():
     sym = Symbols()
     for t in (test_plain, test_br_and_page, test_scroll, test_inserts, test_clip, test_fixed_fallback, test_opening_scroll,
-              test_menu_items, test_menu_labels, test_menu_off):
+              test_menu_items, test_menu_labels, test_menu_main_list, test_menu_off):
         t(sym)
     print('test_vwf: all passed')
 

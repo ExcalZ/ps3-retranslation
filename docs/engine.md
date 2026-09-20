@@ -89,11 +89,17 @@ it steps below row 24, the rest of the string is handed back to the stock
 renderer.
 
 This catches item names, equipped items, technique names, menu labels and the
-"Whose?" name list. Numeric fields still use the game's direct digit renderer,
-and the row-25 character name plate remains fixed width. The item window is
-10 cells (80 px); the longest translated-style names tested so far fit it.
-Cursor highlighting continues to work because its palette-bit toggle changes
-the attributes on the same pool-tile words.
+"Whose?" name list. It also recognizes the five exact rows of the main menu's
+10x12 staging buffer and maps them to their eventual screen positions. The
+first cell stays fixed blank because the stock transition cleanup deliberately
+leaves it alone; the remaining seven cells give each label 56 px, enough for
+the full `Technique` (41 px) instead of the stock `Techniq`.
+
+Numeric fields still use the game's direct digit renderer, and the row-25
+character name plate remains fixed width. The item window is 10 cells (80 px);
+the longest translated-style names tested so far fit it. Cursor highlighting
+continues to work because its palette-bit toggle changes the attributes on the
+same pool-tile words.
 
 ## The opening scroll
 
