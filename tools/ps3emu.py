@@ -44,7 +44,10 @@ def listing_address(label, after=None, lst=LST):
 
 
 class PS3(blastem_drive.BlastEm):
-    def __init__(self, rom, port=1234, lst=LST, sram=None):
+    def __init__(self, rom, port=1234, lst=LST, sram=None, state=None):
+        """`state`: a BlastEm .state saved by save_state (its .ram beside it): the game
+        resumes there, through the 0.6.2 reset-on-load workaround of the base class, with
+        the work RAM put back from the .ram file."""
         self.rom = os.path.abspath(rom)
         self.lst = lst
         self.pad = 0
@@ -55,6 +58,8 @@ class PS3(blastem_drive.BlastEm):
         self.lag_samples = []
         self.vint_log = []
         args = [BLASTEM, self.rom, '-D']
+        if state:
+            args += ['-s', os.path.abspath(state)]
         self.proc = subprocess.Popen(args, cwd=os.path.dirname(BLASTEM),
                                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         self.sock = None
@@ -69,9 +74,34 @@ class PS3(blastem_drive.BlastEm):
             raise RuntimeError("BlastEm's GDB stub did not answer")
         self.sock.settimeout(60)
         self.buf = b''
+        if state:
+            self._survive_startup_reset(os.path.abspath(state))
         self.pad_bp = listing_address('ReadJoypad', r'move\.b\s+\(a1\), d1', lst)
         self.breakpoint(self.pad_bp)
         self.vint_bp = None
+
+    def _survive_startup_reset(self, state):
+        """As the base class, but the work RAM comes from the .ram file save_state wrote
+        beside the state (the base class needs a reference RAM image this repository
+        does not carry), and the sound-driver stubs use this game's labels."""
+        r = self.regs()
+        pc = r['pc']
+        entry = int.from_bytes(self.read(4, 4), 'big')
+        for label in ('JumpTo_UpdateSound',):
+            try:
+                self.write(listing_address(label), bytes([0x4E, 0x75]))
+            except KeyError:
+                pass
+        self.write(entry, bytes([0x33, 0xFC, 0x01, 0x00, 0x00, 0xA1, 0x12, 0x00, 0x4E, 0xF9]) + pc.to_bytes(4, 'big'))
+        self.breakpoint(entry)
+        stop = self.cont()
+        assert stop == entry, 'expected the startup reset at %06X, stopped at %06X' % (entry, stop)
+        self.write_ram(open(os.path.splitext(state)[0] + '.ram', 'rb').read())
+        for i in range(8):
+            self.setreg(i, r['d'][i])
+            self.setreg(8 + i, r['a'][i])
+        self.setreg(16, r['sr'])
+        self.unbreak(entry)
 
     # ReadJoypad is called for both pads in one VBlank; only the first call is a frame
     def step_frame(self, hook=None):

@@ -136,7 +136,15 @@ verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
   in BlastEm (`work/scripts/smoothscroll.py`, `work/analysis/ss2_*.png`):
   the legend text at speeds 5, 1 and 9, the box closing, the menu after.
   Found on the way: the state words sit in the SEGA-screen art buffer and
-  are not zero after boot, so a message's first line clears them.
+  are not zero after boot, so a message's first line clears them. And a
+  hand-played run (`work/scripts/observe.py`: the stub attached, keyboard
+  passed through, a state saved every ten seconds) reset the game after
+  the king's speech: the page code runs inside the object loop, which keeps
+  the current object in a5, and `VWFSmooth_Begin` clobbered a3-a5/d3-d7
+  (the stock tail touches only d0-d2/d5-d7/a0-a2); the loop then jumped
+  through my scratch pointer - an address error into the entry point, or a
+  VDP data-port read, depending on timing. Begin now saves those registers;
+  the scene replays cleanly from a pre-speech state (`replay16.py`).
 * **Harness.** RAM snapshots resume Landen in five seconds
   (`boot_to_field`); `save_state` presses BlastEm's save-state key for
   VRAM audits; the interpreter's `jsr (An)` mask was wrong (never matched).

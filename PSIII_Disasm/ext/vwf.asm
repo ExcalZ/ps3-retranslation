@@ -739,6 +739,8 @@ VWFSmooth_Finish_Line:
 ; the rate from the message-speed option, show offset 0 with the interior on
 ; the scroll pool, and let VWFSmooth_Tick do the rest.
 VWFSmooth_Begin:
+	movem.l	d1-d7/a0-a5, -(sp)	; the page code runs inside the object loop (a5 = the
+					; object; the stock tail touches only d0-d2/d5-d7/a0-a2)
 	bclr	#5, $1(a6)
 	move.w	#1, (VWFSmooth_Defer).w
 	movea.l	$3E(a6), a0
@@ -779,6 +781,7 @@ VWFSmooth_Begin_Cell:
 	moveq	#0, d0
 	bsr.w	VWFSmooth_Show
 	bsr.w	VWFSmooth_Copy
+	movem.l	(sp)+, d1-d7/a0-a5
 	rts
 
 VWFSmooth_Rates:
