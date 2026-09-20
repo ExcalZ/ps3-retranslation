@@ -88,6 +88,27 @@ the entry and the one it sets), `target` (the label it redirects to),
 `header_only` (a redirect with no text) and `anchor` (paired through an NPC
 table). The credits' `hdr` is the two position bytes the generator keeps.
 
+A header-only entry is where the US emptied a line: its four header bytes are
+followed directly by the next entry's header, so had the game ever reached it
+the renderer would have read that header as text (`$FF` is not a control code
+it knows). The JP has text at every one of them; giving such an entry an `en`
+makes the generator emit the text (and an empty `en` removes it again), so
+those lines are restored rather than left as dead redirects.
+
+The pairing with the JP is by NPC-table anchors and, between anchors, by
+order. Two places break the order: the US split the Dark Falz speech into one
+entry fewer than the JP (from `loc_2F8D4` to `loc_2FDEC` the JP text of an
+entry is the one shown at the *previous* index) and the escapipe "press Reset"
+notice sits inside an `{END}` orphan (from `loc_30330` on, likewise). The
+translation follows the game's actual sequence, not the paired `jp` field,
+through that stretch.
+
+Text edits go through `tools/applybatch.py batch.json [--script]`: a JSON
+object of ids to new `en` strings, merged into the file (keeping its CRLF
+endings) and checked against the budgets below at once. `tools/linecheck.py`
+runs the same checks over everything (`--changed` for the translated entries
+only, `--widths` to print each one's widest line).
+
 ## 4. Budgets
 
 | text | limit | enforced by |
@@ -98,6 +119,7 @@ table). The credits' `hdr` is the two position bytes the generator keeps.
 | item and technique names | 72 px (the battle lists' nine cells; the menu allows 80, the shops 88) | `proofread.html` |
 | enemy names | 75 px (the battle box's group line beside a two-digit count) | `proofread.html` |
 | party names | 40 px (the battle stat window's five cells) | `proofread.html` |
+| ending transmission (`namestrings`) | 24 cells, fixed-width: `loc_F7F0` writes each pair of lines straight into VRAM in the 8x8 font | `proofread.html`, `linecheck.py` |
 | fixed-width tables | the widest line of the stock table, in cells | `proofread.html` (`budget` per segment) |
 | script region | it may grow freely: everything after it is label-relative | - |
 
@@ -119,6 +141,7 @@ python tools/checkbuild.py       # JSON/asm sync, fonts, proofreader, header, RA
 python tools/test_text.py        # every original string round-trips through the codec (US and JP)
 python tools/test_vwf.py         # the VWF engine under the 68000 interpreter vs a reference composer
 python tools/test_techdist.py    # the distribution-box scaling under the interpreter
+python tools/linecheck.py        # every en string against its budget (the proofreader's rules, from the shell)
 python tools/ps3emu.py ps3en.bin # boots the ROM in BlastEm and screenshots the title
 python work/scripts/menuvwf.py   # Item, Stats, Equip, Techs, Switch and generation-2 menus
 ```

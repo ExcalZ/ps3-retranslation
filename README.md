@@ -88,6 +88,12 @@ original and are what the generators key on.
   use it too, with a 56 px budget after their fixed one-cell margin. Other
   non-dialogue windows remain fixed-width 8x8 cells unless the proofreader
   identifies them as proportional; the widest stock line is their budget.
+* Naming follows the Japanese (`work/glossary.md`): Kein, Marina, Ain,
+  Lein, Searren, the kingdom of Riik, Satellite and the Violet Moon, Dark
+  Falz, the Foie / Sun Force techniques, the full item names.
+* `tools/applybatch.py batch.json [--script]` merges a JSON of id -> `en`
+  edits into the right file and checks each against its budget;
+  `tools/linecheck.py` checks everything from the shell.
 * `tools/proofread.html` shows every line in the real fonts with live pixel
   widths and flags what does not fit. Open it in a browser and load a JSON
   (or serve the repository with `python -m http.server 8765` and open

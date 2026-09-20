@@ -1,6 +1,6 @@
 # PS3 Retranslation — Current Handoff
 
-Updated: 2026-09-19
+Updated: 2026-09-20
 
 ## State
 
@@ -9,17 +9,20 @@ every string is extracted into JSON with its Japanese counterpart, the JSON
 is written back into the assembly by a generator whose round trip is
 bit-exact and idempotent, the dialogue window draws a proportional face,
 the three requested extras are in and verified, and the tests, the
-proofreader and the release packaging exist. **The translation pass has
-started** with the opening: the new-game scroll (`credits` segment, now
-proportional: 16 lines of up to 192 px, from the JP scroll's 18 lines) and the
-attract-mode / game-over story narration (`loc_25F24`, 8 proportional
-pages). Everything else still equals the US text.
+proofreader and the release packaging exist. **The first full translation
+pass is done** (2026-09-20): all 546 dialogue entries from the JP (the three
+without a JP counterpart keep their US text), the item, technique, enemy and
+party-name tables, the shop and battle messages, the marriage menus, the
+ending transmission and the opening scroll and narration. Naming follows
+the Japanese throughout - the user's decision of 2026-09-19, recorded in
+`work/glossary.md`. What remains is proofreading in play: only a handful of
+lines have been seen on the console side so far (see the log).
 
-Canonical experimental ROM `ps3en.bin` (every option on): 791,922 bytes,
-SHA-256 `A6BA353B496DBD924203976671418869293E0A22704E95DB8F394B2E7FDAA248`;
+Canonical experimental ROM `ps3en.bin` (every option on): 825,536 bytes,
+SHA-256 `5A35A0ED27A64E57C25C671AABB67B79A89AF0543A4045E00938610385636865`;
 `tools/checkbuild.py` prints its SHA-256 after each build.
 Stock US ROM (every option 0 and every `en` equal to `us` reproduces it -
-verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
+verified 2026-09-20 after the translation pass): 786,432 bytes, SHA-256
 `CB837A2B10B8D219D844A55D8EC25581A57152F5EE8361AB62389354170A21D5`, CRC32
 `C6B42B0F`, internal checksum `3A33`.
 
@@ -151,10 +154,20 @@ verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
 
 ## Not done
 
+* **Proofreading in play.** The translation has been checked against the
+  budgets (`tools/linecheck.py`: 0 problems) and a few entries rendered by
+  the real engine under the interpreter, but not yet read through in
+  BlastEm scene by scene. The BlastEm window rendered blank (white) on
+  2026-09-20, so `work/scripts/dialogue_check.py` (which points a Landen
+  NPC at any entry and screenshots every page) is still to be run.
+* Three restored header-only lines (`loc_261F8`, `loc_261FC`, `loc_26200`)
+  are reached through flag `$16`, which the game sets in later generations;
+  they have not been seen in play.
+* The ending transmission (`namestrings`) keeps the US line counts (14/14/
+  14/6 per ending) with the JP text re-flowed; the JP's shorter blocks are
+  padded with blank lines, as the JP itself does.
 * **Fixed-width leftovers.** The field menu's row-25 name plate, the
   "Whose?" name lists and the numbers; the game-select save list.
-* **The translation itself**, and the glossary decisions
-  (`work/glossary.md`).
 * **Fonts for other languages**: only ASCII plus `" ; & %` glyphs exist.
 
 ## Verification checklist
@@ -165,6 +178,7 @@ python tools/checkbuild.py                 # build, placement and option invaria
 python tools/test_text.py                  # 1180 US + 523 JP strings round-trip
 python tools/test_vwf.py                   # 11 engine cases under the interpreter
 python tools/test_techdist.py
+python tools/linecheck.py                  # every en string against its budget
 python work/scripts/pagescroll.py          # BlastEm: 6 screenshots of the legend text scrolling
 python work/scripts/narration.py           # BlastEm: the opening
 python work/scripts/battle.py              # BlastEm: first encounter, scrolling ground, VWF messages
@@ -174,8 +188,8 @@ python work/scripts/menuvwf.py             # BlastEm: Item, Stats, Equip, Techs,
 ```
 
 To reproduce the stock ROM: set every option in `ps3.options.asm` to 0 and
-every `en` to its `us` (three `en` fields differ today: the two re-flowed
-battle "won" messages and the save-position prompt),
+every `en` to its `us` (a script that copies `us` over `en` in both JSON
+files, builds and restores them; the JSON files are CRLF),
 `python tools/sourcebuild.py stock.bin`, compare with `PSIII_Disasm/ps3original.bin`.
 
 `work/scripts/battle.py` leaves Landen through its real exit (`teleport`
@@ -184,6 +198,21 @@ does not spawn the walking sprite) and wanders into the first encounter;
 `battle_win.py` plays it out with C. Still to do in BlastEm: the church save.
 
 ## Log
+
+* 2026-09-20 - The translation pass: every dialogue entry, the tables, the
+  shop/battle text and the ending transmission, from the JP, with the JP
+  names (`work/glossary.md`). Found on the way: `gentext.py` skipped the
+  header-only entries (US redirect targets with no text; the renderer would
+  have read the next header as text), so it now emits their `en`; the
+  `namestrings` segment is not `{NAME}` inserts but the ending transmission,
+  fixed-width 24 cells (`loc_F7F0`), and the proofreader/linecheck treat it
+  so; the technique names repeated in `menus` for the Techs screen are
+  proportional (72 px); the JP/US pairing is shifted by one through the Dark
+  Falz speech and after the escapipe notice (`docs/pipeline.md`); "Megid"
+  being one byte shorter than "Megido" misaligned the code after
+  `loc_A0EB` - an `even` follows it now. New tools: `applybatch.py`,
+  `linecheck.py`, `work/scripts/dialogue_check.py`. Stock reproduction
+  re-verified byte-identical.
 
 * 2026-09-19 (later) - Translation started: opening scroll and attract
   narration, both seen in BlastEm (`work/scripts/narration.py`, `attract.py`).

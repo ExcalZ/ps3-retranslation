@@ -243,9 +243,27 @@ def gen_dialogue(src, doc, problems):
         mf = re.match(r'^dc\.b\s+\$([0-9A-F]{2}),\s*\$([0-9A-F]{2})\s*$', flags_line)
         if not mf or ('%s %s' % (mf.group(1), mf.group(2))).upper() != e['flags']:
             problems.append('dialogue: entry %s flags %r vs JSON %s' % (e['id'], flags_line, e['flags'])); return
-        if e['header_only']:
-            i += 2; continue
         k = i + 2
+        if e['header_only']:
+            # a US redirect target without text of its own (the renderer would run into
+            # the next header): the translation may restore the JP line there, so emit
+            # text when `en` is non-empty and take it out again when it is empty
+            has_text = is_dcb(split_label(src.lines[k])[1])
+            j = k
+            if has_text:
+                while not ends_fc(split_label(src.lines[j])[1]):
+                    j += 1
+                j += 1
+            if e['en']:
+                try:
+                    data = ps3text.encode(e['en'], 'us')
+                except ValueError as ex:
+                    problems.append('dialogue/%s: %s' % (e['id'], ex)); i = j; continue
+                src.replace(k, j, text_lines(data))
+            elif has_text:
+                src.replace(k, j, [])
+            i = j
+            continue
         j = k
         while not ends_fc(split_label(src.lines[j])[1]):
             j += 1

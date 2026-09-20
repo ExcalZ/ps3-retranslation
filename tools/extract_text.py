@@ -33,7 +33,7 @@ SEGMENTS = [
     ('charnames',   'MieuInitStatsData', 'loc_1E4C6',           'party member names in the initial stats records'),
     ('menus',       'loc_1F6CE',         'loc_1F920',           'field menu labels and prompts'),
     ('menus2',      'loc_1F9C4',         'loc_1F9D2',           'field menu: Can\'t etc.'),
-    ('namestrings', 'loc_30CD8',         'loc_31136',           'strings inserted into dialogue through {NAME:nn}'),
+    ('namestrings', 'loc_30CD8',         'loc_31136',           'the ending transmission: pairs of lines drawn straight into VRAM by loc_F7F0 (fixed-width, 24 cells)'),
     ('items',       'InventoryNameData', 'TechniqueData',       'item names'),
     ('techs',       'TechniqueData',     'loc_39A30',           'technique names (inside the technique records)'),
     ('enemies',     'EnemyNameData',     'loc_3C36A',           'enemy names'),

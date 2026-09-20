@@ -130,6 +130,17 @@ class PS3(blastem_drive.BlastEm):
         hw = winshot.windows_of_pid(self.proc.pid)
         if not hw:
             raise RuntimeError('no BlastEm window')
+        if not getattr(self, '_topmost', False):
+            # the window DC only holds BlastEm's own pixels while nothing covers the
+            # window: raise it (asynchronously - its thread is stopped in the stub, so
+            # the request is served during the next frames) before the first capture
+            import ctypes
+            swp = ctypes.windll.user32.SetWindowPos
+            swp.argtypes = [ctypes.c_void_p] * 2 + [ctypes.c_int] * 4 + [ctypes.c_uint]
+            for h in hw:   # HWND_TOPMOST; NOSIZE | NOMOVE | NOACTIVATE | ASYNCWINDOWPOS
+                swp(h, ctypes.c_void_p(-1), 0, 0, 0, 0, 0x0001 | 0x0002 | 0x0010 | 0x4000)
+            self._topmost = True
+            self.frames(2)
         winshot.capture(self.proc.pid, path)
         return path
 

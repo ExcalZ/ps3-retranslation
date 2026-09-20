@@ -205,8 +205,9 @@ function isMainMenu(seg,e){return seg==='menus'&&(e.id==='menus#000'||e.id==='me
 //   enemies    75 px  the battle box's group line, 88 px less a space and a two-digit count
 //   charnames  40 px  the battle stat window (five cells; the field windows are wider)
 const VWF_SEGMENTS={items:72,techs:72,enemies:75,charnames:40};
-function isVWF(seg,e){return kind==='dialogue'||seg==='battle'||seg==='shops'||seg==='namestrings'||seg==='credits'||seg in VWF_SEGMENTS||isMainMenu(seg,e);}
-function vwfLimit(seg,e){return seg in VWF_SEGMENTS?VWF_SEGMENTS[seg]:isMainMenu(seg,e)?56:192;}
+function isMenuTech(seg,e){return seg==='menus'&&/^menus#0(2\d|3[0-5])$/.test(e.id);}   // the technique names repeated for the Techs screen
+function isVWF(seg,e){return kind==='dialogue'||seg==='battle'||seg==='shops'||seg==='credits'||seg in VWF_SEGMENTS||isMainMenu(seg,e)||isMenuTech(seg,e);}
+function vwfLimit(seg,e){return seg in VWF_SEGMENTS?VWF_SEGMENTS[seg]:isMainMenu(seg,e)?56:isMenuTech(seg,e)?VWF_SEGMENTS.techs:192;}
 function vwfLines(seg,e,page){return isMainMenu(seg,e)?(e.id==='menus#000'?4:1):(page?1:2);}
 function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 function fmtJP(s){return esc(s).replace(/\{([^}]*)\}/g,'<span class="ctl">{$1}</span>');}
