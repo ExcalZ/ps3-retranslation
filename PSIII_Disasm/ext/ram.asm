@@ -20,7 +20,20 @@ VWFDia_MaxPx    = VWFDia_RAM+$4B2	; word: the same in px (glyphs past it are dro
 VWFDia_Pad      = VWFDia_RAM+$4B4	; word: cells the line fills with paper after the ink ($44(a6) for menus)
 VWFDia_Count    = VWFDia_RAM+$4B6	; word: tiles to expand and upload
 VWFDia_Skew     = VWFDia_RAM+$4B8	; word: bytes the entry moved a1 by (the main list's margin cell)
-VWFDia_RAM_End  = VWFDia_RAM+$4BA
+VWFDia_Xs       = VWFDia_RAM+$4BA	; 3 words: ink width in px of dialogue lines 0-2 (smooth_scroll)
+VWFDia_RAM_End  = VWFDia_RAM+$4C0
+
+; The smooth page scroll (smooth_scroll): a third line canvas, the 32-px view of
+; the box interior, its 96 expanded tiles, and the animation state.
+VWFSmooth_RAM     = $FFFFEA00
+VWFSmooth_Canvas2 = VWFSmooth_RAM		; 8 rows x 26: the page being scrolled in
+VWFSmooth_View    = VWFSmooth_RAM+$D0		; 32 rows x 26: the interior at the current offset
+VWFSmooth_Scratch = VWFSmooth_RAM+$410	; 96 tiles x 32 bytes
+VWFSmooth_Acc     = VWFSmooth_RAM+$1010	; word: scroll position in 1/8 px (0-128)
+VWFSmooth_Rate    = VWFSmooth_RAM+$1012	; word: 1/8 px per frame
+VWFSmooth_Active  = VWFSmooth_RAM+$1014	; word: a scroll is running
+VWFSmooth_Defer   = VWFSmooth_RAM+$1016	; word: compose into canvas 2, write nothing
+VWFSmooth_RAM_End = VWFSmooth_RAM+$1018
 
 SaveSlots_RAM    = $FFFFE900
 SaveSlots_Status = SaveSlots_RAM		; 4 words: 0 empty/bad, 4 fine (the $60(a6) values)

@@ -448,11 +448,89 @@ def test_battle_box(sym):
     print('  battle box ok')
 
 
+SMOOTH_POOL, SMOOTH_RATE_ADDR = 0x580, 0xFFFFD11C
+
+
+def smooth_view(canvases, k):
+    """Reference: the 32-px interior at offset k over the 48-px stack of three lines
+    (blank, line 0, blank, line 1, blank, line 2), as 96 tiles (ink 1, paper 2)."""
+    out = bytearray()
+    for block in range(4):
+        rows = []
+        for r in range(8):
+            y = k + block * 8 + r
+            if y & 8:
+                rows.append(canvases[y >> 4][y & 7])
+            else:
+                rows.append(bytearray(26))
+        out += expand(rows)
+    return bytes(out)
+
+
+def test_smooth_scroll(sym):
+    """A page advance with smooth_scroll: loc_A368 composes the next page into a third
+    canvas, then each frame shows the interior slid by the option's rate on pool tiles
+    $580-$5DF, and at 16 px both lines are drawn the ordinary way."""
+    def box_machine():
+        m = machine(sym)
+        m.poke(MAP_ID, (0x5A).to_bytes(2, 'big'))
+        # the window geometry loc_FC58 copies with: 6 rows of $34 bytes, $4C to the next plane row
+        m.poke(CTX + 0x30, (STRIDE).to_bytes(2, 'big')); m.poke(CTX + 0x46, (6).to_bytes(2, 'big'))
+        m.poke(CTX + 0x7C, (0x80 - STRIDE).to_bytes(2, 'big')); m.poke(CTX + 0x3C, (0x100).to_bytes(2, 'big'))
+        return m
+    m = box_machine()
+    render(m, sym, 'The legends of Landen,{BR}your homeland, tell of{PAGE}world-sweeping wars{PAGE}fought.', row0=LIVE_ROW0)
+    cont = int.from_bytes(m.peek(CTX + 0x3E, 4), 'big')
+    l0, l1, l2 = compose(b'The legends of Landen,')[0], compose(b'your homeland, tell of')[0], compose(b'world-sweeping wars')[0]
+    m.poke(SMOOTH_RATE_ADDR, bytes([0x48]))          # speed 5: 1 px per frame
+    m.poke(CTX + 0xC, bytes([7])); m.poke(CTX + 0xD, bytes([1]))
+    m.a[6] = CTX
+    # frame 1: the counter wraps, the page advance begins: offset 0 on the scroll pool
+    m.vram_writes = []
+    m.call(sym['loc_A368'])
+    flags = m.peek(CTX + 1, 1)[0]
+    assert flags & 0x20, 'the third page keeps the continuation flag set'
+    assert int.from_bytes(m.peek(CTX + 0x3E, 4), 'big') != cont, 'continuation pointer moved to the third page'
+    for r in range(4):
+        words = [int.from_bytes(m.peek(LIVE_ROW0 + r * STRIDE + 2 * c, 2), 'big') for c in range(CELLS)]
+        assert words == [0x8000 | (SMOOTH_POOL + r * CELLS + c) for c in range(CELLS)], ('interior row', r, [hex(w) for w in words[:4]])
+    assert bytes(m.vram[SMOOTH_POOL * 32:SMOOTH_POOL * 32 + 96 * 32]) == smooth_view((l0, l1, l2), 0), 'view at 0 px'
+    # frames 2..: one px per frame; check the view half way
+    for k in range(1, 8):
+        m.call(sym['loc_A368'])
+    assert bytes(m.vram[SMOOTH_POOL * 32:SMOOTH_POOL * 32 + 96 * 32]) == smooth_view((l0, l1, l2), 7), 'view at 7 px'
+    assert m.peek(CTX + 0xC, 1)[0] == 0, 'the page counter is frozen while scrolling'
+    for k in range(8, 16):
+        m.call(sym['loc_A368'])
+    assert bytes(m.vram[SMOOTH_POOL * 32:SMOOTH_POOL * 32 + 96 * 32]) == smooth_view((l0, l1, l2), 15), 'view at 15 px'
+    # the 16th px finishes: lines 0 and 1 are the old line 1 and the new page, on the dialogue pool
+    m.call(sym['loc_A368'])
+    check_line(m, b'your homeland, tell of', LIVE_ROW0, 0, label='scrolled line 0')
+    check_line(m, b'world-sweeping wars', LIVE_ROW1, 1, label='scrolled line 1')
+    # idle: the next frames count as the stock does (the counter moves again)
+    m.call(sym['loc_A368'])
+    assert m.peek(CTX + 0xC, 1)[0] == 1, 'the page counter runs again'
+    # the fastest speed takes four frames, the slowest sixty-four
+    for value, frames in ((0x08, 4), (0x88, 64)):
+        m2 = box_machine()
+        render(m2, sym, 'a{PAGE}b{PAGE}c', row0=LIVE_ROW0)
+        m2.poke(SMOOTH_RATE_ADDR, bytes([value])); m2.poke(CTX + 0xC, bytes([7])); m2.poke(CTX + 0xD, bytes([1]))
+        m2.a[6] = CTX
+        n = 0
+        while True:
+            m2.call(sym['loc_A368']); n += 1
+            if int.from_bytes(m2.peek(LIVE_ROW1 + STRIDE, 2), 'big') == 0x8000 | (POOL + CELLS):
+                break
+            assert n < 200
+        assert n == frames + 1, (hex(value), n)
+    print('  smooth page scroll ok')
+
+
 def main():
     sym = Symbols()
     for t in (test_plain, test_br_and_page, test_scroll, test_inserts, test_clip, test_fixed_fallback, test_opening_scroll,
               test_menu_items, test_menu_labels, test_menu_main_list, test_menu_off,
-              test_shop_list, test_battle_box):
+              test_shop_list, test_battle_box, test_smooth_scroll):
         t(sym)
     print('test_vwf: all passed')
 

@@ -38,6 +38,7 @@ The options in `ps3.options.asm`:
 | `vwf_menu` | proportional item, equipment, technique and label text in the field menu; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `vwf_shop` | proportional item names in the shops' buy and sell lists; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `vwf_battle` | proportional enemy-group row, stat-window names and item / technique lists in the battle box; requires `vwf_dialogue` (`ext/vwf.asm`) |
+| `smooth_scroll` | a page advance in the dialogue window scrolls the text up smoothly at the rate of the "message scrolling speed" option; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `four_save_slots` | four save slots with safety copies in 32 KB of backup RAM (`ext/saveslots.asm`) |
 
 New code lives in `PSIII_Disasm/ext/*.asm`, included just before `EndOfRom`,
@@ -138,6 +139,14 @@ Five seconds instead of seventy. RAM holds ROM addresses, so a snapshot is
 keyed by the ROM's hash and remade after any build that moves code (a text
 change does). A snapshot must be taken on a map the field loop can reload -
 not in a battle, a menu or a shop.
+
+VRAM, which the stub cannot read, comes from BlastEm's own savestates:
+`save_state(em, path)` posts the save-state key to BlastEm's window and
+copies the file it writes (with the work RAM beside it), and
+`tools/vramaudit.py` reads the nametables, the sprite table and the tile
+data out of it and prints what is referenced and what is free. That is how
+the menu, shop, battle and dialogue pools were placed (`work/scripts/
+vramstates.py`).
 
 ## 6. Retargeting
 

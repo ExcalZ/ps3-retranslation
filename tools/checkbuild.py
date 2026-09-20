@@ -138,15 +138,27 @@ def main():
                 fail('battle pool lines outside the free ranges %s or overlapping %s' % (bad, overlap))
             else:
                 ok('battle pool: %d lines inside $25C-$27F, $364-$37F, $580-$5CB' % len(spans))
+        if opts.get('smooth_scroll') == '1':
+            sbase = int(re.search(r'^VWFSmooth_RAM\s*=\s*\$([0-9A-F]+)', ram, re.M).group(1), 16)
+            sendoff = int(re.search(r'^VWFSmooth_RAM_End\s*=\s*VWFSmooth_RAM\+\$([0-9A-F]+)', ram, re.M).group(1), 16)
+            if not (send <= sbase and sbase + sendoff <= 0xFFFFFC00):
+                fail('smooth-scroll RAM $%X-$%X overlaps the save-slot block or the stack' % (sbase, sbase + sendoff))
+            else:
+                ok('smooth-scroll RAM $%X-$%X' % (sbase, sbase + sendoff))
+            spool = int(re.search(r'^VWFSMOOTH_POOL\s*=\s*\$([0-9A-F]+)', src, re.M).group(1), 16)
+            if not (0x580 <= spool and spool + 96 <= 0x600):
+                fail('smooth-scroll pool $%X-$%X leaves the window plane area ($580-$5FF, off on every dialogue screen)' % (spool, spool + 95))
+            else:
+                ok('smooth-scroll pool $%X-$%X on the window plane' % (spool, spool + 95))
         for name in ('VWFDia_Entry', 'VWFDia_ScrollUp', 'VWFDia_Font'):
             if sym[name] < 0xC0000:
                 fail('%s at $%X is below the original end of ROM' % (name, sym[name]))
         ok('extension routines sit past $C0000')
     # 7. options
-    for k in ('scrolling_ground', 'four_save_slots', 'fix_tech_distributor', 'vwf_dialogue', 'vwf_scroll_shadow', 'vwf_menu', 'vwf_shop', 'vwf_battle'):
+    for k in ('scrolling_ground', 'four_save_slots', 'fix_tech_distributor', 'vwf_dialogue', 'vwf_scroll_shadow', 'vwf_menu', 'vwf_shop', 'vwf_battle', 'smooth_scroll'):
         if k not in opts:
             fail('option %s missing or not 0/1' % k)
-    for k in ('vwf_menu', 'vwf_shop', 'vwf_battle'):
+    for k in ('vwf_menu', 'vwf_shop', 'vwf_battle', 'smooth_scroll'):
         if opts.get(k) == '1' and opts.get('vwf_dialogue') != '1':
             fail('%s requires vwf_dialogue' % k)
     ok('options: ' + ', '.join('%s=%s' % kv for kv in sorted(opts.items())))

@@ -57,6 +57,21 @@
 ; A $F8 in a list line hands the rest to the stock renderer (the pool locate
 ; fails outside plane A), which no list uses.
 ;
+; The smooth page scroll (smooth_scroll): on a page advance the stock code
+; copies line 1's words into line 0 and draws the new line at once. Instead,
+; VWFSmooth_Begin composes the next page into a third canvas without drawing
+; it, then over the following frames (VWFSmooth_Tick, first in loc_A368) shows
+; the 32-px box interior as a window sliding down a 48-px stack of the three
+; lines: each frame the view is rebuilt from the canvases at the pixel
+; offset, expanded to 96 tiles and uploaded to $580-$5DF - the window
+; plane's nametable area, $B000-$BFFF, which the window plane never shows on
+; a screen with the dialogue box (it is off on the field, in the shops and on
+; the narration screens) - while the four interior rows of the window point
+; at those tiles. At 16 px the canvases are promoted and both lines are
+; drawn the ordinary way (pool $C0-$EF), pixel-identical to the last frame.
+; The rate comes from the "message scrolling speed" option (1-9 ->
+; 1/4, 3/8, 1/2, 3/4, 1, 1.5, 2, 3, 4 px per frame).
+;
 ; The battle box (vwf_battle): the enemy-group lines, the character names of
 ; the stat window and the item and technique lists, from VWFBattle_Table
 ; (see there for the battle screen's VRAM). Targeting does not touch those
@@ -72,6 +87,7 @@ VWFDIA_CELLS    = 24		; cells per dialogue line
 VWFDIA_LINEPX    = VWFDIA_CELLS*8	; 192 px
 VWFDIA_STRIDE   = 26		; canvas row stride: 24 cells + 2 spill bytes
 VWFDIA_BLANK    = $1F		; the paper tile
+VWFDIA_ROWBYTES = $34		; the live window's row stride ($42(a6) for the dialogue)
 VWFMENU_POOL    = $240		; menu pool: 24 rows x 32 columns of the plane A buffer
 VWFMENU_ROWS    = 24
 VWFMENU_COLS    = 32
@@ -138,6 +154,17 @@ VWFDia_Go:
 	movem.l	d1-d7/a2-a5, -(sp)
 	move.w	d0, (VWFDia_Attr).w
 	move.w	d1, (VWFDia_Line).w
+	if smooth_scroll
+	tst.w	d1
+	bne.s	+			; a message starts with its first line: no scroll can be
+	clr.w	(VWFSmooth_Active).w	; running and nothing is deferred (the RAM is not zero
+	clr.w	(VWFSmooth_Defer).w	; after boot: the SEGA screen's art buffer lived here)
++
+	tst.w	(VWFSmooth_Defer).w
+	beq.s	+
+	move.w	#2, (VWFDia_Line).w	; the next page is composed into the third canvas
++
+	endif
 	move.l	a1, (VWFDia_Row).w
 	clr.w	(VWFDia_Mode).w
 	move.w	#VWFDIA_CELLS, (VWFDia_Cap).w
@@ -291,6 +318,11 @@ VWFDia_CanvasPtr:
 	tst.w	(VWFDia_Line).w
 	beq.s	+
 	lea	(VWFDia_Canvas1).w, a2
+	if smooth_scroll
+	cmpi.w	#2, (VWFDia_Line).w
+	bne.s	+
+	lea	(VWFSmooth_Canvas2).w, a2
+	endif
 +
 	rts
 
@@ -340,6 +372,17 @@ VWFDia_Draw_Done:
 ; the window's mark row and glyph row.
 ; ---------------------------------------------------------------------------
 VWFDia_Flush:
+	if smooth_scroll
+	tst.w	(VWFDia_Mode).w
+	bne.s	+
+	move.w	(VWFDia_Line).w, d6	; a dialogue line: keep its ink width for the scroll
+	add.w	d6, d6
+	lea	(VWFDia_Xs).w, a1
+	move.w	(VWFDia_X).w, (a1,d6.w)
+	tst.w	(VWFSmooth_Defer).w
+	bne.w	VWFDia_Flush_Done	; deferred: the canvas is all that is wanted
++
+	endif
 	move.w	(VWFDia_X).w, d5
 	addq.w	#7, d5
 	lsr.w	#3, d5			; cells that hold ink
@@ -387,6 +430,8 @@ VWFDia_Expand:
 	bmi.s	VWFDia_Expand_Done
 	bsr.w	VWFDia_CanvasPtr
 	lea	(VWFDia_Scratch).w, a5
+; a2 = an 8-row canvas, a5 = destination, d7 = tiles - 1
+VWFDia_ExpandFrom:
 	lea	(VWFDia_NibbleLUT).l, a4
 VWFDia_Expand_Tile:
 	moveq	#7, d6
@@ -608,6 +653,196 @@ VWFScroll_Done:
 	bclr	#6, $FFFFD006.w
 	movem.l	(sp)+, d0-d7/a0-a6
 	rts
+
+; ---------------------------------------------------------------------------
+; The smooth page scroll.
+; ---------------------------------------------------------------------------
+	if smooth_scroll
+VWFSMOOTH_POOL  = $580		; 96 tiles: 4 rows x 24 cells, the window plane's unused rows
+VWFSMOOTH_ROW0  = $FFFF9AB6	; the live window's first interior row
+VWFSMOOTH_LINE  = 16		; px per line: a mark row and a glyph row
+
+; Called at the top of loc_A368 every frame of the page wait. Advances a
+; running scroll and returns Z clear (the frame is consumed); Z set otherwise.
+VWFSmooth_Tick:
+	tst.w	(VWFSmooth_Active).w
+	beq.s	VWFSmooth_Tick_Idle
+	movem.l	d1-d7/a0-a5, -(sp)
+	move.w	(VWFSmooth_Acc).w, d0
+	add.w	(VWFSmooth_Rate).w, d0
+	cmpi.w	#VWFSMOOTH_LINE*8, d0
+	bls.s	+
+	move.w	#VWFSMOOTH_LINE*8, d0
++
+	move.w	d0, (VWFSmooth_Acc).w
+	lsr.w	#3, d0			; px
+	cmpi.w	#VWFSMOOTH_LINE, d0
+	beq.s	VWFSmooth_Finish
+	bsr.w	VWFSmooth_Show
+	movem.l	(sp)+, d1-d7/a0-a5
+	moveq	#1, d0			; Z clear
+	rts
+VWFSmooth_Tick_Idle:
+	moveq	#0, d0			; Z set
+	rts
+
+; The scroll is complete: line 0 <- line 1, line 1 <- the new page, drawn the
+; ordinary way (their words and pool tiles), and the window copied to VRAM.
+VWFSmooth_Finish:
+	clr.w	(VWFSmooth_Active).w
+	lea	(VWFDia_Canvas1).w, a0
+	lea	(VWFDia_Canvas0).w, a1
+	moveq	#(8*VWFDIA_STRIDE)/4-1, d0
+-
+	move.l	(a0)+, (a1)+
+	dbf	d0, -
+	lea	(VWFSmooth_Canvas2).w, a0
+	lea	(VWFDia_Canvas1).w, a1
+	moveq	#(8*VWFDIA_STRIDE)/4-1, d0
+-
+	move.l	(a0)+, (a1)+
+	dbf	d0, -
+	lea	(VWFDia_Xs).w, a0
+	move.w	2(a0), (a0)
+	move.w	4(a0), 2(a0)
+	clr.w	(VWFDia_Mode).w
+	move.w	#$8000, (VWFDia_Attr).w
+	move.w	#VWFDIA_CELLS, (VWFDia_Cap).w
+	move.w	#VWFDIA_LINEPX, (VWFDia_MaxPx).w
+	move.w	#VWFDIA_CELLS, (VWFDia_Pad).w
+	moveq	#0, d6			; line
+VWFSmooth_Finish_Line:
+	move.w	d6, (VWFDia_Line).w
+	bsr.w	VWFDia_LinePool
+	move.w	d6, d0
+	add.w	d0, d0
+	lea	(VWFDia_Xs).w, a0
+	move.w	(a0,d0.w), (VWFDia_X).w
+	move.w	d6, d0
+	mulu.w	#2*VWFDIA_ROWBYTES, d0
+	lea	VWFSMOOTH_ROW0.w, a1
+	adda.w	d0, a1
+	move.l	a1, (VWFDia_Row).w
+	move.w	d6, -(sp)
+	bsr.w	VWFDia_Flush		; (clobbers d5-d7)
+	move.w	(sp)+, d6
+	addq.w	#1, d6
+	cmpi.w	#2, d6
+	bcs.s	VWFSmooth_Finish_Line
+	bsr.w	VWFSmooth_Copy
+	movem.l	(sp)+, d1-d7/a0-a5
+	moveq	#1, d0
+	rts
+
+; Replaces the tail of loc_A368 on a page advance: compose the next page into
+; canvas 2 (updating the continuation state as the stock render would), take
+; the rate from the message-speed option, show offset 0 with the interior on
+; the scroll pool, and let VWFSmooth_Tick do the rest.
+VWFSmooth_Begin:
+	bclr	#5, $1(a6)
+	move.w	#1, (VWFSmooth_Defer).w
+	movea.l	$3E(a6), a0
+	lea	$FFFF9B1E.w, a1		; recognised as the second line; deferred to canvas 2
+	move.w	#$8000, d0
+	jsr	(loc_10038).l
+	clr.w	(VWFSmooth_Defer).w
+	; rate: the option stores 136 - 16 * (speed - 1) frames of dwell
+	moveq	#0, d0
+	move.b	(battle_msg_timer_saved).w, d0
+	move.w	#$88, d1
+	sub.w	d0, d1
+	bcc.s	+
+	moveq	#0, d1
++
+	lsr.w	#4, d1
+	cmpi.w	#8, d1
+	bls.s	+
+	moveq	#8, d1
++
+	lea	VWFSmooth_Rates(pc), a0
+	move.b	(a0,d1.w), d1
+	move.w	d1, (VWFSmooth_Rate).w
+	clr.w	(VWFSmooth_Acc).w
+	move.w	#1, (VWFSmooth_Active).w
+	; the four interior rows point at the scroll pool, row by row
+	lea	VWFSMOOTH_ROW0.w, a1
+	move.w	#$8000|VWFSMOOTH_POOL, d1
+	moveq	#3, d6
+VWFSmooth_Begin_Row:
+	moveq	#VWFDIA_CELLS-1, d7
+VWFSmooth_Begin_Cell:
+	move.w	d1, (a1)+
+	addq.w	#1, d1
+	dbf	d7, VWFSmooth_Begin_Cell
+	lea	VWFDIA_ROWBYTES-2*VWFDIA_CELLS(a1), a1
+	dbf	d6, VWFSmooth_Begin_Row
+	moveq	#0, d0
+	bsr.w	VWFSmooth_Show
+	bsr.w	VWFSmooth_Copy
+	rts
+
+VWFSmooth_Rates:
+	dc.b	2, 3, 4, 6, 8, 12, 16, 24, 32	; 1/8 px per frame for speeds 1-9
+	even
+
+; d0 = offset in px (0-16): build the interior view from the three canvases,
+; expand it and upload it to the scroll pool.
+VWFSmooth_Show:
+	lea	(VWFSmooth_View).w, a1
+	moveq	#31, d7
+VWFSmooth_Show_Row:
+	move.w	d0, d1			; y in the 48-px stack: blank, line 0, blank, line 1, blank, line 2
+	btst	#3, d1
+	beq.s	VWFSmooth_Show_Blank
+	move.w	d1, d2
+	andi.w	#7, d2			; row within the glyph
+	lsr.w	#4, d1			; line
+	lea	(VWFDia_Canvas0).w, a0
+	beq.s	+
+	lea	(VWFDia_Canvas1).w, a0
+	subq.w	#1, d1
+	beq.s	+
+	lea	(VWFSmooth_Canvas2).w, a0
++
+	mulu.w	#VWFDIA_STRIDE, d2
+	adda.w	d2, a0
+	moveq	#VWFDIA_STRIDE/2-1, d2
+-
+	move.w	(a0)+, (a1)+
+	dbf	d2, -
+	bra.s	VWFSmooth_Show_Next
+VWFSmooth_Show_Blank:
+	moveq	#VWFDIA_STRIDE/2-1, d2
+-
+	clr.w	(a1)+
+	dbf	d2, -
+VWFSmooth_Show_Next:
+	addq.w	#1, d0
+	dbf	d7, VWFSmooth_Show_Row
+	lea	(VWFSmooth_View).w, a3
+	lea	(VWFSmooth_Scratch).w, a5
+	moveq	#3, d3
+VWFSmooth_Show_Block:
+	move.w	d3, -(sp)
+	lea	(a3), a2
+	lea	8*VWFDIA_STRIDE(a3), a3	; the next 8-row block
+	moveq	#VWFDIA_CELLS-1, d7
+	bsr.w	VWFDia_ExpandFrom	; a2 -> a5, 24 tiles; a5 ends past them
+	move.w	(sp)+, d3
+	dbf	d3, VWFSmooth_Show_Block
+	lea	(VWFSmooth_Scratch).w, a0
+	move.w	#VWFSMOOTH_POOL*32, d0
+	move.w	#96*32, d1
+	jsr	(LoadDataInVRAMWithOffset).l
+	rts
+
+; the live window to plane A, as the stock page code does
+VWFSmooth_Copy:
+	lea	$FFFF9A80.w, a0
+	lea	(LoadDataInVRAMWithOffset).l, a2
+	jsr	(loc_FC58).l
+	rts
+	endif
 
 ; ---------------------------------------------------------------------------
 ; The field menu, the shop lists and the battle box (VWFMenu_Go is the shared

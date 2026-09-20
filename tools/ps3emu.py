@@ -261,6 +261,34 @@ def talk(em, npc_x, npc_y):
     em.press('A', hold=2, release=2)
 
 
+STATE_DIR = os.path.join(os.environ.get('LOCALAPPDATA', ''), 'blastem')
+
+
+def save_state(em, path):
+    """Press BlastEm's save-state key (the backtick, ui.save_state) in its window and copy
+    the quicksave it writes to `path`. The .state holds VRAM, CRAM, VSRAM and the VDP
+    registers, which the stub cannot read (tools/vramaudit.py reads them back)."""
+    import ctypes, shutil
+    sys.path.insert(0, os.path.join(HERE, 'md'))
+    import winshot
+    d = os.path.join(STATE_DIR, os.path.splitext(os.path.basename(em.rom))[0])
+    q = os.path.join(d, 'quicksave.state')
+    if os.path.exists(q):
+        os.remove(q)
+    for h in winshot.windows_of_pid(em.proc.pid):
+        ctypes.windll.user32.PostMessageW(h, 0x100, 0xC0, 0x00290001)
+        ctypes.windll.user32.PostMessageW(h, 0x101, 0xC0, 0xC0290001)
+    for _ in range(120):
+        em.frames(1)
+        if os.path.exists(q):
+            break
+    em.frames(5)
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    shutil.copy(q, path)
+    open(os.path.splitext(path)[0] + '.ram', 'wb').write(em.read(0xFF0000, 0x10000))   # for vramaudit's locator
+    return path
+
+
 def soft_reset(em):
     """Restart the game without restarting BlastEm (backup RAM survives): at the pad-read
     breakpoint the top of the stack is ReadJoypad's return address, so point it at the

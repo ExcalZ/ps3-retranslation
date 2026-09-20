@@ -9,7 +9,8 @@ built as a **source patch on top of the game's disassembly** rather than by
 editing the ROM — the same shape as the
 [Phantasy Star IV retranslation](https://github.com/ExcalZ/ps4-retranslation).
 The dialogue window, the field menu, the shop lists and the battle box draw
-proportional (variable-width) text, there are four save slots (one per third-generation branch), the Japanese release's
+proportional (variable-width) text, a page of dialogue scrolls up smoothly
+at the rate of the message-speed option, there are four save slots (one per third-generation branch), the Japanese release's
 scrolling battle ground is restored, and the Technique Distributor no longer
 runs off the screen at high levels.
 

@@ -95,6 +95,34 @@ first cell stays fixed blank because the stock transition cleanup deliberately
 leaves it alone; the remaining seven cells give each label 56 px, enough for
 the full `Technique` (41 px) instead of the stock `Techniq`.
 
+## The smooth page scroll
+
+The stock page advance (`loc_A368`) copies line 1's words into line 0 and
+draws the new line whole; the "message scrolling speed" option (1-9,
+`TextScrollSpeedValues`: 136 down to 8 frames) is only a dwell time - how
+long a battle message or an unattended cutscene page stays before the next.
+With `smooth_scroll = 1` the advance is animated. `VWFSmooth_Begin` composes
+the next page into a third canvas without drawing it (the renderer is told
+to defer: it still updates the continuation state), reads the option and,
+over the following frames (`VWFSmooth_Tick`, hooked at the top of
+`loc_A368`, where it freezes the page counter), shows the box's 32-px
+interior as a window sliding down a 48-px stack of blank, line 0, blank,
+line 1, blank, line 2: each frame the view is rebuilt from the canvases at
+the pixel offset, expanded to 96 tiles and uploaded to `$580-$5DF`, with the
+four interior rows of the window pointing at those tiles. At 16 px the
+canvases are promoted and both lines are drawn the ordinary way on the
+dialogue pool, pixel-identical to the last frame, and the window is copied
+as the stock code copies it. Rates: 1/4, 3/8, 1/2, 3/4, 1, 1.5, 2, 3 and
+4 px per frame for speeds 1-9 (64 down to 4 frames a line).
+
+The 96 tiles are the window plane's nametable rows 0-18 (`$B000-$B97F`):
+the window plane is off on every screen with the dialogue box (the field,
+the world map, the shops, the narration screens - `work/scripts/
+vramstates.py` audited them), so nothing reads or writes them there; in
+battle the box lives on that plane, and battle messages are one line and
+do not page. The state words live in the SEGA-screen art buffer, which is
+not zero after boot, so a message's first line clears them.
+
 ## The shops
 
 A store screen is a map of the same kind (`$222-$230`, one per store type,

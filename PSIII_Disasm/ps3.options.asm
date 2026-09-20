@@ -35,3 +35,8 @@ vwf_shop = 1
 ; Proportional text in the battle box: the enemy-group row, the character
 ; names of the stat window and the item and technique lists (needs vwf_dialogue).
 vwf_battle = 1
+
+; A page advance in the dialogue window scrolls the text up smoothly, one
+; 16-px line, at a rate set by the "message scrolling speed" option (needs
+; vwf_dialogue). 0: the stock one-step page change.
+smooth_scroll = 1

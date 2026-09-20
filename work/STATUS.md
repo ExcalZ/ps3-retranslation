@@ -124,6 +124,23 @@ verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
   at **72 px** (the battle lists' nine cells), enemy names 75 px, party
   names 40 px - `proofread.html` enforces it.
 
+* **Smooth page scroll** (`smooth_scroll`, `ext/vwf.asm`). The message-speed
+  option was only a dwell time (battle messages, unattended cutscene pages;
+  ordinary dialogue ignored it). Now a page advance scrolls the text up
+  16 px at 1/4 to 4 px per frame by that option, on 96 tiles of the window
+  plane's never-shown rows (`$580-$5DF`; `work/scripts/vramstates.py` +
+  `tools/vramaudit.py` audited every dialogue screen through BlastEm
+  savestates). Verified under the interpreter (`test_smooth_scroll`: the
+  view at 0, 7 and 15 px against a reference, the settled lines, the page
+  counter frozen and released, 4 frames at speed 9 and 64 at speed 1) and
+  in BlastEm (`work/scripts/smoothscroll.py`, `work/analysis/ss2_*.png`):
+  the legend text at speeds 5, 1 and 9, the box closing, the menu after.
+  Found on the way: the state words sit in the SEGA-screen art buffer and
+  are not zero after boot, so a message's first line clears them.
+* **Harness.** RAM snapshots resume Landen in five seconds
+  (`boot_to_field`); `save_state` presses BlastEm's save-state key for
+  VRAM audits; the interpreter's `jsr (An)` mask was wrong (never matched).
+
 ## Not done
 
 * **Fixed-width leftovers.** The field menu's row-25 name plate, the

@@ -159,7 +159,7 @@ class CPU:
             self.pc = (base + self._s16(self.fetch())) & 0xFFFFFF
             return False
 
-        if (op & 0xFFC0) == 0x4E90:                        # jsr (An)
+        if (op & 0xFFF8) == 0x4E90:                        # jsr (An)
             tgt = self.a[op & 7] & 0xFFFFFF
             self.a[7] -= 4
             self.wl(self.a[7], self.pc)

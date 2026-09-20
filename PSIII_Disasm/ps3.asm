@@ -13557,6 +13557,10 @@ loc_A348:
 	move.w	#$10, (game_general_routine).w
 	rts
 loc_A368:
+	if smooth_scroll
+	jsr	(VWFSmooth_Tick).l	; a running page scroll owns the frame (ext/vwf.asm)
+	bne.s	loc_A3B8
+	endif
 	addq.b	#1, $C(a6)
 	andi.b	#7, $C(a6)
 	bne.s	loc_A3B8
@@ -13564,6 +13568,9 @@ loc_A368:
 	bcs.s	loc_A3B2
 	btst	#5, $1(a6)
 	beq.s	loc_A3B2
+	if smooth_scroll
+	jmp	(VWFSmooth_Begin).l	; compose the next page and start scrolling it in
+	endif
 	lea	$FFFF9AB6.w, a1
 	lea	$68(a1), a0
 	if vwf_dialogue

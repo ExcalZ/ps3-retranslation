@@ -1,0 +1,5 @@
+speed5 shots 6 routine 0x8
+speed5b shots 6 routine 0x8
+speed1 shots 6 routine 0x8
+speed9 shots 2 routine 0x8
+routine 0xff10
