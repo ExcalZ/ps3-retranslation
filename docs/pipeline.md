@@ -36,6 +36,7 @@ The options in `ps3.options.asm`:
 | `vwf_dialogue` | proportional text in the dialogue window (`ext/vwf.asm`) |
 | `vwf_scroll_shadow` | the opening scroll's letters cast a 1 px black shadow (0 = plain letters like the stock scroll) |
 | `vwf_menu` | proportional item, equipment, technique and label text in the field menu; requires `vwf_dialogue` (`ext/vwf.asm`) |
+| `vwf_shop` | proportional item names in the shops' buy and sell lists; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `four_save_slots` | four save slots with safety copies in 32 KB of backup RAM (`ext/saveslots.asm`) |
 
 New code lives in `PSIII_Disasm/ext/*.asm`, included just before `EndOfRom`,

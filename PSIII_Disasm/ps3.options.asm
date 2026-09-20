@@ -28,3 +28,6 @@ vwf_scroll_shadow = 1
 ; names and labels (needs vwf_dialogue; the pool is VRAM tiles $240-$53F,
 ; free while a menu screen is up).
 vwf_menu = 1
+
+; Proportional item names in the shops' buy and sell lists (needs vwf_dialogue).
+vwf_shop = 1

@@ -110,16 +110,27 @@ def main():
                 fail('menu pool tiles $%X-$%X reach the sprite table at $540' % (menu_pool, menu_end - 1))
             else:
                 ok('menu pool tiles $%X-$%X below the sprite table at $540' % (menu_pool, menu_end - 1))
+        if opts.get('vwf_shop') == '1':
+            # the shop list table: first mark row, stride, cells, pool; the pool lines must not
+            # overlap each other and must sit below the sprite table
+            rows = int(re.search(r'^VWFSHOP_ROWS\s*=\s*(\d+)', src, re.M).group(1))
+            tab = re.findall(r'^\tdc\.w\t\$([0-9A-F]+), \$([0-9A-F]+), (\d+), \$([0-9A-F]+)', src, re.M)
+            spans = sorted((int(pool, 16), int(pool, 16) + rows * int(cells)) for _, _, cells, pool in tab)
+            if len(spans) != 3 or any(spans[i][1] > spans[i + 1][0] for i in range(len(spans) - 1)) or spans[-1][1] > 0x540:
+                fail('shop pool lines %s overlap or reach the sprite table' % spans)
+            else:
+                ok('shop pool tiles $%X-$%X (%d lists)' % (spans[0][0], spans[-1][1] - 1, len(spans)))
         for name in ('VWFDia_Entry', 'VWFDia_ScrollUp', 'VWFDia_Font'):
             if sym[name] < 0xC0000:
                 fail('%s at $%X is below the original end of ROM' % (name, sym[name]))
         ok('extension routines sit past $C0000')
     # 7. options
-    for k in ('scrolling_ground', 'four_save_slots', 'fix_tech_distributor', 'vwf_dialogue', 'vwf_scroll_shadow', 'vwf_menu'):
+    for k in ('scrolling_ground', 'four_save_slots', 'fix_tech_distributor', 'vwf_dialogue', 'vwf_scroll_shadow', 'vwf_menu', 'vwf_shop'):
         if k not in opts:
             fail('option %s missing or not 0/1' % k)
-    if opts.get('vwf_menu') == '1' and opts.get('vwf_dialogue') != '1':
-        fail('vwf_menu requires vwf_dialogue')
+    for k in ('vwf_menu', 'vwf_shop'):
+        if opts.get(k) == '1' and opts.get('vwf_dialogue') != '1':
+            fail('%s requires vwf_dialogue' % k)
     ok('options: ' + ', '.join('%s=%s' % kv for kv in sorted(opts.items())))
     print('sha256', hashlib.sha256(rom).hexdigest())
     if problems:

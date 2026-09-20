@@ -103,6 +103,11 @@ def render(m, sym, text, row0=TEMPLATE_ROW0, attr=0x8000):
     m.vram_writes = []
     m.a[6] = CTX
     m.call(sym['loc_10038'], a0=TEXT, a1=row0, d0=attr)
+    # the stock renderer leaves a1 at the last line's mark row; the shop list writes
+    # the price relative to a1 after the name
+    stride = int.from_bytes(m.peek(CTX + 0x42, 2), 'big')
+    lines = text.split('{PAGE}')[0].count('{BR}')
+    assert m.a[1] & 0xFFFFFF == (row0 + 2 * stride * lines) & 0xFFFFFF, ('a1 after render', hex(m.a[1]), hex(row0), lines)
 
 
 def check_line(m, line_bytes, row0, line, attr=0x8000, label=''):
@@ -335,10 +340,61 @@ def test_menu_off(sym):
     print('  menu fallbacks ok')
 
 
+# the shop list windows: first mark row, line stride, cells, pool base (VWFShop_Table)
+SHOP_LISTS = ((0xFFFFA126, 0x48, 16, 0x240), (0xFFFF9D30, 0x38, 11, 0x290), (0xFFFF9E80, 0x38, 11, 0x2C7))
+SHOP_ROW0, SHOP_STRIDE, SHOP_CELLS = SHOP_LISTS[0][:3]
+
+
+def test_shop_list(sym):
+    """A store screen ($222): the five lines of the buy list ($FFFFA126 + i*$48, 16 cells)
+    and of the two sell-list pages ($FFFF9D30 / $FFFF9E80 + i*$38, 11 cells) each get
+    their own pool line; other rows of the buffers, other windows and other screens
+    take the stock path."""
+    m = Machine()
+    m.poke(MAP_ID, (0x222).to_bytes(2, 'big'))
+    names = (b'Grenade Launcher', b'Knife', b'Laconian Sword', b'Monomate', b'Star Atomizer')
+    for row0, stride, cells_w, pool in SHOP_LISTS:
+        m.poke(CTX + 0x42, (stride // 2).to_bytes(2, 'big'))
+        m.poke(CTX + 0x44, cells_w.to_bytes(2, 'big'))
+        for i, name in enumerate(names):
+            render(m, sym, name.decode(), row0=row0 + i * stride)
+            canvas, x = compose(name)
+            cells = (x + 7) // 8
+            row = m.peek(row0 + i * stride, cells_w * 2)
+            mark = [int.from_bytes(row[j:j + 2], 'big') for j in range(0, cells_w * 2, 2)]
+            row = m.peek(row0 + i * stride + stride // 2, cells_w * 2)
+            glyph = [int.from_bytes(row[j:j + 2], 'big') for j in range(0, cells_w * 2, 2)]
+            first = pool + cells_w * i
+            assert mark == [0x801F] * cells_w, (hex(row0), name, mark)
+            assert glyph == [0x8000 | (first + c) for c in range(cells)] + [0x801F] * (cells_w - cells), (hex(row0), name, [hex(v) for v in glyph])
+            assert bytes(m.vram[first * 32:first * 32 + cells * 32]) == expand(canvas)[:cells * 32], (hex(row0), name, 'tiles')
+    assert (compose(b'Grenade Launcher')[1] + 7) // 8 <= 11, 'the widest name stays clear of the price at cell 11'
+    m.poke(CTX + 0x42, (0x24).to_bytes(2, 'big'))
+    m.poke(CTX + 0x44, (SHOP_CELLS).to_bytes(2, 'big'))
+    # a row that is not a line start (the glyph row of line 0), a 24-cell window on the
+    # same screen (the dialogue box, its own pool), and the same buffer on the field map
+    m.vram_writes = []
+    render(m, sym, 'Knife', row0=SHOP_ROW0 + 0x24)
+    assert m.peek(SHOP_ROW0 + 0x48, 2) == bytes([0x80, ord('K')]), 'off-line row: stock tiles'
+    assert not m.vram_writes
+    m.poke(CTX + 0x42, (STRIDE).to_bytes(2, 'big'))
+    m.poke(CTX + 0x44, (24).to_bytes(2, 'big'))
+    render(m, sym, 'Welcome.', row0=LIVE_ROW0)
+    check_line(m, b'Welcome.', LIVE_ROW0, 0, label='shop prompt in the dialogue box')
+    m.poke(CTX + 0x42, (0x24).to_bytes(2, 'big'))
+    m.poke(CTX + 0x44, (SHOP_CELLS).to_bytes(2, 'big'))
+    m.poke(MAP_ID, (0x5A).to_bytes(2, 'big'))
+    m.vram_writes = []
+    render(m, sym, 'Knife', row0=SHOP_ROW0)
+    assert m.peek(SHOP_ROW0 + 0x24, 2) == bytes([0x80, ord('K')]) and not m.vram_writes, 'field map: stock tiles'
+    print('  shop list ok')
+
+
 def main():
     sym = Symbols()
     for t in (test_plain, test_br_and_page, test_scroll, test_inserts, test_clip, test_fixed_fallback, test_opening_scroll,
-              test_menu_items, test_menu_labels, test_menu_main_list, test_menu_off):
+              test_menu_items, test_menu_labels, test_menu_main_list, test_menu_off,
+              test_shop_list):
         t(sym)
     print('test_vwf: all passed')
 

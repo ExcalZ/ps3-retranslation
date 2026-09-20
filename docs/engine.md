@@ -95,6 +95,24 @@ first cell stays fixed blank because the stock transition cleanup deliberately
 leaves it alone; the remaining seven cells give each label 56 px, enough for
 the full `Technique` (41 px) instead of the stock `Techniq`.
 
+## The shops
+
+A store screen is a map of the same kind (`$222-$230`, one per store type,
+table `loc_BA1C`): the field art is reloaded on exit and the map itself loads
+one picture at tiles `$101-$131`, so the same free range is available. With
+`vwf_shop = 1` the three list windows take the pooled path: the buy list
+(`loc_A9A2`, buffer `$FFFFA126`, five lines of 16 cells, stride `$48`) and the
+two sell-list pages (`loc_AE86` / `loc_B1C8`, buffers `$FFFF9D30` and
+`$FFFF9E80`, five lines of 11 cells, stride `$38`). `VWFShop_Table` gives each
+list a pool line per list line at `$240-$2FD`, and the window animation
+(`loc_FD3E`, `loc_FE3C`) copies the words to plane A as it does the stock
+ones. The buy list writes the price with the digit renderer from cell 11
+after the name, relative to the `a1` the name renderer returns - which is why
+the engine leaves `a1` at the last line's mark row exactly as the stock
+renderer does - so a name has 88 px on every list; the proofreader's item
+budget stays the field menu's 80 px, the tighter of the two. The shop
+prompts were already proportional (the dialogue rows).
+
 Numeric fields still use the game's direct digit renderer, and the row-25
 character name plate remains fixed width. The item window is 10 cells (80 px);
 the longest translated-style names tested so far fit it. Cursor highlighting

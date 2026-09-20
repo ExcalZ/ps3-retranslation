@@ -1,0 +1,33 @@
+weapon0 map 0x222 routine 0x4 $2 0x0
+weapon planeA distinct 55 above $FF: 49, min $101 max $131
+weapon planeB distinct 1 above $FF: 0, min $0 max $0
+weapon1 map 0x222 routine 0x1c $2 0x0
+weapon2 map 0x222 routine 0x3c $2 0x0
+weapon3 map 0x222 routine 0x5c $2 0x0
+weapon4 map 0x222 routine 0x88 $2 0x0
+weapon5 map 0x222 routine 0x1c $2 0x0
+weapon_list planeA distinct 90 above $FF: 49, min $101 max $131
+weapon_list planeB distinct 1 above $FF: 0, min $0 max $0
+weapon_out map 0x5a routine 0xff1c $2 0x0
+armor0 map 0x224 routine 0x4 $2 0x0
+armor planeA distinct 55 above $FF: 49, min $101 max $131
+armor planeB distinct 1 above $FF: 0, min $0 max $0
+armor1 map 0x224 routine 0x1c $2 0x0
+armor2 map 0x224 routine 0x3c $2 0x0
+armor3 map 0x224 routine 0x5c $2 0x0
+armor4 map 0x224 routine 0x88 $2 0x0
+armor5 map 0x224 routine 0x1c $2 0x0
+armor_list planeA distinct 91 above $FF: 49, min $101 max $131
+armor_list planeB distinct 1 above $FF: 0, min $0 max $0
+armor_out map 0x5a routine 0xff1c $2 0x0
+item0 map 0x226 routine 0x4 $2 0x0
+item planeA distinct 55 above $FF: 49, min $101 max $131
+item planeB distinct 1 above $FF: 0, min $0 max $0
+item1 map 0x226 routine 0x1c $2 0x0
+item2 map 0x226 routine 0x3c $2 0x0
+item3 map 0x226 routine 0x5c $2 0x0
+item4 map 0x226 routine 0x88 $2 0x0
+item5 map 0x226 routine 0x1c $2 0x0
+item_list planeA distinct 90 above $FF: 49, min $101 max $131
+item_list planeB distinct 1 above $FF: 0, min $0 max $0
+item_out map 0x5a routine 0xff1c $2 0x0

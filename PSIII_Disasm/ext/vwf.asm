@@ -45,6 +45,17 @@
 ; occupy after loc_10C42 copies it. Item names, equipment, technique names and
 ; the labels all go through this path; numbers (loc_FF7E) and the row-25 name
 ; plate stay fixed width.
+;
+; The shops (vwf_shop): a store screen ($222-$230) is a map of the same kind -
+; the field art is reloaded on exit and the map itself loads one picture at
+; tiles $101-$131 - and its buy and sell lists are composed into a window
+; buffer (buy list $FFFFA126, five lines of 16 cells, stride $48; sell list
+; pages $FFFF9D30 and $FFFF9E80, five lines of 11 cells, stride $38) that the
+; window animation copies to plane A. Those rows take the same path with a
+; pool line per list line at $240-$2FD (VWFShop_Table); the buy list's price
+; is written after the name from cell 11, so a name has 88 px on every list.
+; A $F8 in a list line hands the rest to the stock renderer (the pool locate
+; fails outside plane A), which no list uses.
 ; ===========================================================================
 	if vwf_dialogue
 
@@ -57,6 +68,8 @@ VWFMENU_POOL    = $240		; menu pool: 24 rows x 32 columns of the plane A buffer
 VWFMENU_ROWS    = 24
 VWFMENU_COLS    = 32
 VWFMENU_COL0    = 4
+VWFPOOL_END     = $540		; the sprite table ($A800) starts here
+VWFSHOP_ROWS    = 5		; lines in every shop list window
 
 ; RAM equates: ext/ram.asm
 
@@ -65,6 +78,7 @@ VWFMENU_COL0    = 4
 ; a6 window context). Falls through to the stock renderer for other windows.
 ; ---------------------------------------------------------------------------
 VWFDia_Entry:
+	clr.w	(VWFDia_Skew).w
 	if vwf_menu
 	move.w	(map_id).w, d1
 	subi.w	#$202, d1
@@ -75,6 +89,17 @@ VWFDia_Entry:
 	bcc.s	VWFDia_NotMenu
 	bra.w	VWFMenu_Go
 VWFDia_NotMenu:
+	endif
+	if vwf_shop
+	move.w	(map_id).w, d1
+	subi.w	#$222, d1
+	cmpi.w	#$E, d1			; a store screen ($222-$230, one per store type)
+	bhi.s	VWFDia_NotShop
+	bsr.w	VWFShop_Find		; d1 = pool tile, d2 = capacity; d1 = $FFFF if not a list line
+	cmpi.w	#VWFPOOL_END, d1
+	bcc.s	VWFDia_NotShop
+	bra.w	VWFMenu_Go
+VWFDia_NotShop:
 	endif
 	cmpi.w	#VWFDIA_CELLS, $44(a6)
 	bne.s	VWFDia_Fixed
@@ -142,6 +167,8 @@ VWFDia_End:				; $FC
 +
 	bsr.w	VWFDia_Flush
 VWFDia_Exit:
+	movea.l	(VWFDia_Row).w, a1	; as the stock renderer leaves it: the last line's mark
+	suba.w	(VWFDia_Skew).w, a1	; row (the shop list writes the price relative to it)
 	movem.l	(sp)+, d1-d7/a2-a5
 	rts
 
@@ -168,7 +195,7 @@ VWFDia_Newline:				; $F8
 	movea.l	(VWFDia_Row).w, a1
 	adda.w	d2, a1
 	move.l	a1, (VWFDia_Row).w
-	if vwf_menu
+	if vwf_menu|vwf_shop
 	tst.w	(VWFDia_Mode).w
 	beq.s	VWFDia_Newline_Dia
 	bsr.w	VWFMenu_Locate
@@ -565,9 +592,9 @@ VWFScroll_Done:
 	rts
 
 ; ---------------------------------------------------------------------------
-; The field menu.
+; The field menu and the shop lists (VWFMenu_Go is the shared pooled-line entry).
 ; ---------------------------------------------------------------------------
-	if vwf_menu
+	if vwf_menu|vwf_shop
 ; a1 = a mark row in the plane A buffer? Then d1 = the pool tile of its first
 ; cell and d2 = how many cells fit before column 36 (at most 24). d1 = $FFFF
 ; (past the pool's end: compare unsigned) when the row is not one the pool
@@ -588,6 +615,7 @@ VWFMenu_Locate:
 VWFMenu_Locate_MainStart:
 	addq.w	#2, a1			; keep the stock full-cell left margin
 	addq.w	#2, d1
+	move.w	#2, (VWFDia_Skew).w	; undone at exit so a1 ends where the stock leaves it
 VWFMenu_Locate_MainCheck:
 	moveq	#0, d2
 	cmpi.w	#$9A84, d1
@@ -657,13 +685,60 @@ VWFMenu_SetLine:
 	move.w	d1, (VWFDia_Pad).w
 	rts
 
+	if vwf_shop
+; The shop list windows: each is composed into its own buffer and copied to
+; plane A by the window animation. Low word of the first mark row, stride
+; between lines, cells ($44(a6) at the time), first pool tile.
+VWFShop_Table:
+	dc.w	$A126, $48, 16, $240	; buy list (loc_3DB34): the price is written from cell 11
+	dc.w	$9D30, $38, 11, $290	; sell list, page one (loc_3DB10)
+	dc.w	$9E80, $38, 11, $2C7	; sell list, page two (loc_3DB1C)
+	dc.w	0
+
+; a1 = the first mark row of a line of one of those windows, with $44(a6)
+; matching? Then d1 = its pool tile and d2 = the cells; d1 = $FFFF otherwise.
+VWFShop_Find:
+	lea	VWFShop_Table(pc), a2
+VWFShop_Next:
+	move.w	(a2)+, d1		; first mark row (low word); 0 ends the table
+	beq.s	VWFShop_No
+	move.w	(a2)+, d2		; stride
+	move.w	(a2)+, d3		; cells
+	move.w	(a2)+, d4		; pool
+	cmp.w	$44(a6), d3
+	bne.s	VWFShop_Next
+	move.w	a1, d5
+	sub.w	d1, d5			; offset from the first line
+	bcs.s	VWFShop_Next
+	moveq	#0, d6			; line index: the offset must be a multiple of the stride
+VWFShop_Line:
+	tst.w	d5
+	beq.s	VWFShop_Found
+	sub.w	d2, d5
+	bcs.s	VWFShop_Next
+	addq.w	#1, d6
+	cmpi.w	#VWFSHOP_ROWS, d6
+	bcs.s	VWFShop_Line
+	bra.s	VWFShop_Next
+VWFShop_Found:
+	mulu.w	d3, d6			; line * cells
+	add.w	d4, d6
+	move.w	d6, d1
+	move.w	d3, d2
+	rts
+VWFShop_No:
+	move.w	#$FFFF, d1
+	rts
+	endif
+
+; d1 = pool tile, d2 = capacity: a pooled line (menu or shop)
 VWFMenu_Go:
 	movem.l	d1-d7/a2-a5, -(sp)
 	move.w	d0, (VWFDia_Attr).w
 	clr.w	(VWFDia_Line).w
 	move.w	#1, (VWFDia_Mode).w
 	move.l	a1, (VWFDia_Row).w
-	bsr.s	VWFMenu_SetLine
+	bsr.w	VWFMenu_SetLine
 	bra.w	VWFDia_Begin
 
 ; a $F8 moved the line out of the pool's rows: the stock renderer takes the

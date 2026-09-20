@@ -19,7 +19,8 @@ VWFDia_Cap      = VWFDia_RAM+$4B0	; word: canvas capacity of the line in cells (
 VWFDia_MaxPx    = VWFDia_RAM+$4B2	; word: the same in px (glyphs past it are dropped)
 VWFDia_Pad      = VWFDia_RAM+$4B4	; word: cells the line fills with paper after the ink ($44(a6) for menus)
 VWFDia_Count    = VWFDia_RAM+$4B6	; word: tiles to expand and upload
-VWFDia_RAM_End  = VWFDia_RAM+$4B8
+VWFDia_Skew     = VWFDia_RAM+$4B8	; word: bytes the entry moved a1 by (the main list's margin cell)
+VWFDia_RAM_End  = VWFDia_RAM+$4BA
 
 SaveSlots_RAM    = $FFFFE900
 SaveSlots_Status = SaveSlots_RAM		; 4 words: 0 empty/bad, 4 fine (the $60(a6) values)

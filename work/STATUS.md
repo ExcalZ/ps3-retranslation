@@ -44,8 +44,9 @@ verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
   box uses) - seen in BlastEm ("You've been ambushed!", "Chirper attacks!",
   "Damage 2", "You have been defeated."). The enemy-name row stays fixed
   width: its columns place the target cursor. A battle message is two lines
-  at most; the two three-line "won" messages are re-flowed in `en`. Not yet
-  seen in BlastEm: shop prompts (same path as the dialogue's `$FFFF9AB6`).
+  at most; the two three-line "won" messages are re-flowed in `en`. Shop
+  prompts (same path as the dialogue's `$FFFF9AB6`) seen in BlastEm with the
+  shop work below.
 * **Field-menu VWF** (`vwf_menu`, `ext/vwf.asm`). Menu maps use a
   screen-shadowing pool at tiles `$240-$53F`, so item/equipment/technique
   names and labels render proportionally without allocation. Verified under
@@ -88,10 +89,25 @@ verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
   harness: boot script, teleport, store entry, NPC talk, screenshots),
   `ps3harness.py` (interpreter), `proofread.html`, `release.py`.
 
+* **Shop-list VWF** (`vwf_shop`, `ext/vwf.asm`). Store maps (`$222-$230`)
+  load one picture at tiles `$101-$131`, so the buy list (`$FFFFA126`, 16
+  cells) and the two sell-list pages (`$FFFF9D30`, `$FFFF9E80`, 11 cells)
+  get a pool line each at `$240-$2FD` (`VWFShop_Table`). Found on the way:
+  the buy list writes the price relative to the `a1` the name renderer
+  returns, so the engine now restores `a1` to the stock convention (the last
+  line's mark row) at exit, and `test_vwf.py` asserts it on every render.
+  Verified under the interpreter (all three lists, off-line rows, the
+  dialogue box on the same screen, the field map) and in BlastEm
+  (`work/scripts/shopvwf.py`, `work/analysis/sv_*.png`): a weapon shop
+  stocked with five long names - list, cursor, "who carries it", the
+  purchase - and an eight-item sell inventory: page one, the NEXT marker,
+  the cascaded page two, the offer and the sale; the field and the menu are
+  clean afterwards.
+
 ## Not done
 
-* **Battle-list VWF.** Enemy/status battle windows and shop lists remain
-  fixed-width.
+* **Battle-list VWF.** The enemy-name and status rows of the battle box
+  remain fixed-width: their columns place the target cursor.
 * **The translation itself**, and the glossary decisions
   (`work/glossary.md`).
 * **Fonts for other languages**: only ASCII plus `" ; & %` glyphs exist.
@@ -120,8 +136,7 @@ battle "won" messages and the save-position prompt),
 `work/scripts/battle.py` leaves Landen through its real exit (`teleport`
 with the door's own parameters, `$3818` - a bare teleport onto a world map
 does not spawn the walking sprite) and wanders into the first encounter;
-`battle_win.py` plays it out with C. Still to do in BlastEm: a shop purchase
-and the church save.
+`battle_win.py` plays it out with C. Still to do in BlastEm: the church save.
 
 ## Log
 
