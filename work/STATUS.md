@@ -18,8 +18,8 @@ the Japanese throughout - the user's decision of 2026-09-19, recorded in
 `work/glossary.md`. What remains is proofreading in play: only a handful of
 lines have been seen on the console side so far (see the log).
 
-Canonical experimental ROM `ps3en.bin` (every option on): 826,066 bytes,
-SHA-256 `D8AE62DD48708B9A231D5D817E4AA03E2F3B01FB14D92E80FD980BE479B0438A`;
+Canonical experimental ROM `ps3en.bin` (every option on): 826,114 bytes,
+SHA-256 `0A00503687034E33613B853257A498B431C3C72E83446E2A0AEABFDD6AD295F8`;
 `tools/checkbuild.py` prints its SHA-256 after each build.
 Stock US ROM (every option 0 and every `en` equal to `us` reproduces it -
 verified 2026-09-20 after the translation pass): 786,432 bytes, SHA-256
@@ -148,6 +148,10 @@ verified 2026-09-20 after the translation pass): 786,432 bytes, SHA-256
   through my scratch pointer - an address error into the entry point, or a
   VDP data-port read, depending on timing. Begin now saves those registers;
   the scene replays cleanly from a pre-speech state (`replay16.py`).
+* **Fast walk** (`fast_walk`): 2 px a frame, four frames a step on foot; the
+  sprites' animation keeps its pace and the scripted walks count steps
+  (`docs/engine.md`). Verified in BlastEm against a `fast_walk = 0` build
+  (`work/scripts/walkspeed.py`).
 * **Harness.** RAM snapshots resume Landen in five seconds
   (`boot_to_field`); `save_state` presses BlastEm's save-state key for
   VRAM audits; the interpreter's `jsr (An)` mask was wrong (never matched).
@@ -159,8 +163,11 @@ verified 2026-09-20 after the translation pass): 786,432 bytes, SHA-256
   playing it; `work/scripts/dialogue_check.py` points a Landen NPC at any
   entry and screenshots every page for reading a scene at a time.
 * Three restored header-only lines (`loc_261F8`, `loc_261FC`, `loc_26200`)
-  are reached through flag `$16`, which the game sets in later generations;
-  they have not been seen in play.
+  are reached only through flag `$16` (the Nial branch); seen in BlastEm with
+  the flag forced (`work/analysis/f16_*.png`). On the wedding day the Landen
+  townspeople repeat two lines (`us_2619E`, `us_261CA` and their copies at
+  `loc_26F9C`...`loc_27330`): that is the JP script - the US localization
+  varied them.
 * The ending transmission (`namestrings`) keeps the US line counts (14/14/
   14/6 per ending) with the JP text re-flowed; the JP's shorter blocks are
   padded with blank lines, as the JP itself does.
@@ -168,7 +175,9 @@ verified 2026-09-20 after the translation pass): 786,432 bytes, SHA-256
   the game-select save list (`1.{NAME} LV{NUM}`, 12 cells - leaders are at
   most five letters), the message-speed prompt, the numbers everywhere, the
   ending transmission and the staff roll (by design).
-* **Fonts for other languages**: only ASCII plus `" ; & %` glyphs exist.
+* **Fonts for other languages**: only ASCII plus `" ; & %` and `Ä ä` glyphs
+  exist (the umlauts on the stock font's unused kana tiles `$80`/`$81`,
+  `ps3text.US_ENCODE`; the fixed 8x8 face has no glyph for them).
 
 ## Verification checklist
 
@@ -185,6 +194,9 @@ python work/scripts/battle.py              # BlastEm: first encounter, scrolling
 python work/scripts/saveslots.py           # BlastEm: inn save into slot 3, reset, continue
 python work/scripts/saveslots2.py          # BlastEm: two saves, continue/erase lists
 python work/scripts/menuvwf.py             # BlastEm: Item, Stats, Equip, Techs, Switch, generation 2
+python work/scripts/prompts.py             # BlastEm: the indented What?/Use prompts, Equip's What?
+python work/scripts/victory.py             # BlastEm: a won battle, the victory and level-up messages
+python work/scripts/walkspeed.py ps3en.bin [slow.bin]  # BlastEm: the fast walk vs a fast_walk = 0 build
 ```
 
 To reproduce the stock ROM: set every option in `ps3.options.asm` to 0,
@@ -199,6 +211,27 @@ does not spawn the walking sprite) and wanders into the first encounter;
 `battle_win.py` plays it out with C. Still to do in BlastEm: the church save.
 
 ## Log
+
+* 2026-09-20 (latest, item names) - Fibrilla for Fiblira, the Protector
+  series back to "Protector" where it fits (the user's rule for names past
+  72 px: drop the space first, then an unpronounced letter -
+  MaximaProtector, Laconia Protectr), Ärmel for Emel with Ä/ä added to the
+  proportional face (`vwfmixed.py`, bytes `$80`/`$81` in `ps3text.py`,
+  `diafont.py` and the proofreader). Seen in BlastEm (`work/analysis/
+  um_items.png`).
+
+* 2026-09-20 (later) - From play: the field walk is twice as fast
+  (`fast_walk`; the animation and the scripted walks unchanged in effect),
+  the Equip screen's hand-written `What?` renders through the pool, a
+  pooled line's leading spaces are whole cells (Item's `What?` and its
+  Use/Give/Discard list sat one cell left of the header and left a fragment
+  of the `W` behind), and the victory / level-up messages (`$FFFF2A0A`, two
+  lines) are proportional. `test_vwf.py` covers the last two; BlastEm
+  (`prompts.py`, `victory.py`, `walkspeed.py`, `menuvwf.py`) the rest. The
+  harness runs BlastEm on a copy of the ROM with its own empty save file:
+  the user's saved game had made `boot_to_field` choose Continue. The three
+  flag-`$16` lines were checked with the flag forced; the repeated
+  wedding-day lines are the JP's own. Stock reproduction byte-identical.
 
 * 2026-09-20 (late) - The new-game scroll: the user's reflow, and its 17
   lines spaced five rows apart (`hdr_en`) so the text spans the US text's
