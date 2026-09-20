@@ -34407,140 +34407,139 @@ loc_1A33C:
 	even
 	
 loc_1A356:
-	dc.b	$02, $86
-	dc.b	"A witch named Laia was born. She bred an army of"
+	dc.b	$02, $87
+	dc.b	"A witch named Laia was born. She raised an"
 	dc.b	$FC
 	
 	even
 	
 loc_1A36C:
-	dc.b	$02, $8A
-	dc.b	"monsters and plotted to conquer the world."
+	dc.b	$02, $8C
+	dc.b	"army of monsters and plotted to conquer"
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A386:
-	dc.b	$02, $8E
-	dc.b	"But the hero Orakio, leading an army of"
+	dc.b	$02, $91
+	dc.b	"the world. But the hero Orakio, leading an"
 	dc.b	$FC
 	
 	even
 	
 loc_1A3A0:
-	dc.b	$02, $92
-	dc.b	"robots, stood against her. The two armies"
+	dc.b	$02, $96
+	dc.b	"army of robots, stood against her. The two"
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A3B8:
-	dc.b	$02, $96
-	dc.b	"split the world in two and fought on,"
+	dc.b	$02, $9B
+	dc.b	"armies split the world in two and fought on,"
 	dc.b	$FC
 
 	even
 	
 loc_1A3D0:
-	dc.b	$02, $9A
+	dc.b	$02, $A0
 	dc.b	"until at last Laia and Orakio struck each"
 	dc.b	$FC
 	
 	even
 	
 loc_1A3EA:
-	dc.b	$02, $9E
-	dc.b	"other down and both disappeared."
+	dc.b	$02, $A5
+	dc.b	"other down, and both disappeared."
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A404:
-	dc.b	$02, $A2
-	dc.b	"The descendants of those who fought at"
+	dc.b	$02, $AA
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A420:
-	dc.b	$02, $A6
-	dc.b	"Laia's side are now the Laians... and the"
+	dc.b	$02, $AF
+	dc.b	"The descendants of those who fought at"
 	dc.b	$FC
 	
 	even
 	
 loc_1A43C:	
-	dc.b	$02, $AA
-	dc.b	"descendants of those who stood with"
+	dc.b	$02, $B4
+	dc.b	"Laia's side are now the Laians... and the"
 	dc.b	$FC
 	
 	even
 	
 loc_1A456:
-	dc.b	$02, $AE
-	dc.b	"Orakio call themselves the Orakians."
+	dc.b	$02, $B9
+	dc.b	"descendants of those who stood with"
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A46E:	
-	dc.b	$02, $B2
-	dc.b	"The war destroyed a civilization that had"
+	dc.b	$02, $BE
+	dc.b	"Orakio call themselves the Orakians."
 	dc.b	$FC
 	
 	even
 	
 loc_1A48A:
-	dc.b	$02, $B6
-	dc.b	"flourished enough to sail among the stars,"
+	dc.b	$02, $C3
+	dc.b	"The war destroyed a civilization that had"
 	dc.b	$FC
 	
 	even
 	
 loc_1A4A2:
-	dc.b	$02, $BA
-	dc.b	"and the lives of the people fell back to"
+	dc.b	$02, $C8
+	dc.b	"flourished enough to sail among the stars,"
 	dc.b	$FC
 	
 	align 2
 	
 loc_1A4BE:
-	dc.b	$02, $BE
-	dc.b	"those of a medieval age..."
+	dc.b	$02, $CD
+	dc.b	"and the lives of the people fell back to"
 	dc.b	$FC
 	
 	even
 	
 loc_1A4DA:
-	dc.b	$02, $C2
-	dc.b	" "
+	dc.b	$02, $D2
+	dc.b	" those of a medieval age..."
 	dc.b	$FC
 	
 	even
 	
 loc_1A4F4:
-	dc.b	$02, $C6
+	dc.b	$02, $D6
 	dc.b	" "
 	dc.b	$FC
 	
 	even
 	
 loc_1A50A:
-	dc.b	$02, $CA
+	dc.b	$02, $DA
 	dc.b	" "
 	dc.b	$FC
 	
 	even
 	
 loc_1A526:
-	dc.b	$02, $CE
-	dc.b	$00
+	dc.b	$02, $DE
+	dc.b	" "
 	dc.b	$FC
 	
 	even
 	
 loc_1A53C:
-	dc.b	$02, $D2
+	dc.b	$02, $E2
 	dc.b	" "
 	dc.b	$FC
 	
@@ -34548,6 +34547,7 @@ loc_1A53C:
 	
 loc_1A556:
 	dc.b	$02, $E4
+	dc.b	$00
 	dc.b	$FC
 ; ==========================================
 	even

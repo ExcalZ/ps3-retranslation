@@ -19,7 +19,7 @@ the Japanese throughout - the user's decision of 2026-09-19, recorded in
 lines have been seen on the console side so far (see the log).
 
 Canonical experimental ROM `ps3en.bin` (every option on): 826,066 bytes,
-SHA-256 `3CF9BFAD7BBEF6DDA8E04BADA81BDBCE8D7EE6CA7CCB0767425DC90B9E8F40B5`;
+SHA-256 `D8AE62DD48708B9A231D5D817E4AA03E2F3B01FB14D92E80FD980BE479B0438A`;
 `tools/checkbuild.py` prints its SHA-256 after each build.
 Stock US ROM (every option 0 and every `en` equal to `us` reproduces it -
 verified 2026-09-20 after the translation pass): 786,432 bytes, SHA-256
@@ -187,9 +187,10 @@ python work/scripts/saveslots2.py          # BlastEm: two saves, continue/erase 
 python work/scripts/menuvwf.py             # BlastEm: Item, Stats, Equip, Techs, Switch, generation 2
 ```
 
-To reproduce the stock ROM: set every option in `ps3.options.asm` to 0 and
-every `en` to its `us` (a script that copies `us` over `en` in both JSON
-files, builds and restores them; the JSON files are CRLF),
+To reproduce the stock ROM: set every option in `ps3.options.asm` to 0,
+every `en` to its `us` and drop the credits' `hdr_en` fields (a script that
+does so in both JSON files, builds and restores them; the JSON files are
+CRLF),
 `python tools/sourcebuild.py stock.bin`, compare with `PSIII_Disasm/ps3original.bin`.
 
 `work/scripts/battle.py` leaves Landen through its real exit (`teleport`
@@ -198,6 +199,13 @@ does not spawn the walking sprite) and wanders into the first encounter;
 `battle_win.py` plays it out with C. Still to do in BlastEm: the church save.
 
 ## Log
+
+* 2026-09-20 (late) - The new-game scroll: the user's reflow, and its 17
+  lines spaced five rows apart (`hdr_en`) so the text spans the US text's
+  rows and no blank tail precedes the end; the scroller ends on its table's
+  last row whatever the entries hold, which is why moving the `{00}` did
+  nothing. Proofreader saves keep the file's line endings. Lines are still
+  capped at 192 px: the scroll composes on the dialogue canvas (24 cells).
 
 * 2026-09-20 (night) - The attract narration read too fast: the unattended
   dwell was a fixed `$20(a6)` frames per two lines, and the lines now hold

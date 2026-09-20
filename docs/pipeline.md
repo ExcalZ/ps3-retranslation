@@ -86,7 +86,15 @@ Both hold the **original bytes** (`hex`), the **Japanese** (`jp`), the
 Dialogue entries also carry `flags` (`chk set`: the event flag that redirects
 the entry and the one it sets), `target` (the label it redirects to),
 `header_only` (a redirect with no text) and `anchor` (paired through an NPC
-table). The credits' `hdr` is the two position bytes the generator keeps.
+table). The credits' `hdr` is the two position bytes of a scroll entry
+(column, row) as the US placed it; an optional `hdr_en` places the
+translation's entry elsewhere (the generator writes it in place of `hdr`;
+a stock-reproduction build drops it along with the `en` texts). The
+new-game scroll's 17 lines sit five rows apart (`$82 + 5k`) so they span the
+same rows as the US text's 21 lines four apart, and the scroll ends with the
+last line on screen as in the stock game rather than after a blank tail; the
+scroller ends when its entry table is exhausted (the last entry's row,
+`$E4`), whatever the entries hold.
 
 A header-only entry is where the US emptied a line: its four header bytes are
 followed directly by the next entry's header, so had the game ever reached it

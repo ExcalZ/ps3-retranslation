@@ -175,7 +175,7 @@ function drawFixed(canvas,line,scale,budget){
 }
 
 /* ---- document model ---- */
-let doc=null, kind=null, fileName='script.json', dirty=false;
+let doc=null, kind=null, fileName='script.json', dirty=false, crlf=false, trailingNL=true;   // the repository keeps the JSON files' own line endings
 function allEntries(){
   if(kind==='dialogue')return doc.entries.map(e=>({e,seg:'dialogue'}));
   const out=[];for(const [s,seg] of Object.entries(doc.segments))for(const r of seg.runs)out.push({e:r,seg:s});return out;
@@ -268,12 +268,13 @@ function preview(row,seg,e){
 function markDirty(){dirty=true;document.getElementById('save').disabled=false;}
 function pick(accept,cb){const i=document.createElement('input');i.type='file';i.accept=accept;i.onchange=()=>{const f=i.files[0];const r=new FileReader();r.onload=()=>cb(r.result,f.name);r.readAsText(f);};i.click();}
 document.getElementById('loadScript').onclick=()=>pick('.json',(txt,name)=>{
-  doc=JSON.parse(txt); fileName=name; kind=doc.entries?'dialogue':'script'; dirty=false; document.getElementById('save').disabled=true; render();
+  doc=JSON.parse(txt); fileName=name; crlf=txt.includes('\r\n'); trailingNL=txt.endsWith('\n'); kind=doc.entries?'dialogue':'script'; dirty=false; document.getElementById('save').disabled=true; render();
 });
 function save(){
   if(!doc)return;
   const copy=JSON.parse(JSON.stringify(doc)); if(copy.segments)for(const s of Object.values(copy.segments))delete s._budget;
-  const blob=new Blob([JSON.stringify(copy,null,1)],{type:'application/json'});
+  let out=JSON.stringify(copy,null,1); if(trailingNL)out+='\n'; if(crlf)out=out.replace(/\n/g,'\r\n');
+  const blob=new Blob([out],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fileName;a.click();
   dirty=false;document.getElementById('save').disabled=true;
 }
@@ -283,7 +284,7 @@ document.getElementById('q').addEventListener('input',()=>{if(doc)render();});
 document.getElementById('filter').addEventListener('change',()=>{if(doc)render();});
 /* served over http (python -m http.server from the repo root): ?file=work/dialogue.json loads directly */
 const params=new URLSearchParams(location.search);
-if(params.get('file'))fetch('/'+params.get('file')).then(r=>r.text()).then(txt=>{doc=JSON.parse(txt);fileName=params.get('file').split('/').pop();kind=doc.entries?'dialogue':'script';render();});
+if(params.get('file'))fetch('/'+params.get('file')).then(r=>r.text()).then(txt=>{doc=JSON.parse(txt);crlf=txt.includes('\r\n');trailingNL=txt.endsWith('\n');fileName=params.get('file').split('/').pop();kind=doc.entries?'dialogue':'script';render();});
 window.addEventListener('beforeunload',ev=>{if(dirty){ev.preventDefault();ev.returnValue='';}});
 </script>
 </body>

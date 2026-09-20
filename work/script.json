@@ -133,7 +133,8 @@
      "hex": "02867368617065206f7572206c6976657320616e64fc",
      "hdr": "0286",
      "us": "shape our lives and",
-     "en": "A witch named Laia was born. She bred an army of"
+     "en": "A witch named Laia was born. She raised an",
+     "hdr_en": "0287"
     },
     {
      "id": "loc_1A36C",
@@ -141,7 +142,8 @@
      "hex": "028a74686f7365206f66206f7572206368696c6472656e2efc",
      "hdr": "028a",
      "us": "those of our children.",
-     "en": "monsters and plotted to conquer the world."
+     "en": "army of monsters and plotted to conquer",
+     "hdr_en": "028c"
     },
     {
      "id": "loc_1A386",
@@ -149,7 +151,8 @@
      "hex": "028e4f6e652073756368206c6567656e64206973206f662061fc",
      "hdr": "028e",
      "us": "One such legend is of a",
-     "en": "But the hero Orakio, leading an army of"
+     "en": "the world. But the hero Orakio, leading an",
+     "hdr_en": "0291"
     },
     {
      "id": "loc_1A3A0",
@@ -157,7 +160,8 @@
      "hex": "02927374727567676c65207468617420616c6d6f7374fc",
      "hdr": "0292",
      "us": "struggle that almost",
-     "en": "robots, stood against her. The two armies"
+     "en": "army of robots, stood against her. The two",
+     "hdr_en": "0296"
     },
     {
      "id": "loc_1A3B8",
@@ -165,7 +169,8 @@
      "hex": "029664657374726f796564206f757220776f726c642efc",
      "hdr": "0296",
      "us": "destroyed our world.",
-     "en": "split the world in two and fought on,"
+     "en": "armies split the world in two and fought on,",
+     "hdr_en": "029b"
     },
     {
      "id": "loc_1A3D0",
@@ -173,7 +178,8 @@
      "hex": "029a546865206e616d6573206f66204f72616b696f20616e64fc",
      "hdr": "029a",
      "us": "The names of Orakio and",
-     "en": "until at last Laia and Orakio struck each"
+     "en": "until at last Laia and Orakio struck each",
+     "hdr_en": "02a0"
     },
     {
      "id": "loc_1A3EA",
@@ -181,7 +187,8 @@
      "hex": "029e4c617961206563686f20646f776e207468726f756768fc",
      "hdr": "029e",
      "us": "Laya echo down through",
-     "en": "other down and both disappeared."
+     "en": "other down, and both disappeared.",
+     "hdr_en": "02a5"
     },
     {
      "id": "loc_1A404",
@@ -189,7 +196,8 @@
      "hex": "02a27468652079656172732c207374696c6c20696e737069722dfc",
      "hdr": "02a2",
      "us": "the years, still inspir-",
-     "en": "The descendants of those who fought at"
+     "en": "",
+     "hdr_en": "02aa"
     },
     {
      "id": "loc_1A420",
@@ -197,7 +205,8 @@
      "hex": "02a6696e67206c6f766520616e6420686174726564206576656efc",
      "hdr": "02a6",
      "us": "ing love and hatred even",
-     "en": "Laia's side are now the Laians... and the"
+     "en": "The descendants of those who fought at",
+     "hdr_en": "02af"
     },
     {
      "id": "loc_1A43C",
@@ -205,7 +214,8 @@
      "hex": "02aa6e6f772c20312c303030207965617273206166746572fc",
      "hdr": "02aa",
      "us": "now, 1,000 years after",
-     "en": "descendants of those who stood with"
+     "en": "Laia's side are now the Laians... and the",
+     "hdr_en": "02b4"
     },
     {
      "id": "loc_1A456",
@@ -213,7 +223,8 @@
      "hex": "02ae746865697220747261676963206465617468732efc",
      "hdr": "02ae",
      "us": "their tragic deaths.",
-     "en": "Orakio call themselves the Orakians."
+     "en": "descendants of those who stood with",
+     "hdr_en": "02b9"
     },
     {
      "id": "loc_1A46E",
@@ -221,7 +232,8 @@
      "hex": "02b2546865697220636f6e666c696374207769706564206f7574fc",
      "hdr": "02b2",
      "us": "Their conflict wiped out",
-     "en": "The war destroyed a civilization that had"
+     "en": "Orakio call themselves the Orakians.",
+     "hdr_en": "02be"
     },
     {
      "id": "loc_1A48A",
@@ -229,7 +241,8 @@
      "hex": "02b6636976696c697a6174696f6e20616e64206c656674fc",
      "hdr": "02b6",
      "us": "civilization and left",
-     "en": "flourished enough to sail among the stars,"
+     "en": "The war destroyed a civilization that had",
+     "hdr_en": "02c3"
     },
     {
      "id": "loc_1A4A2",
@@ -237,7 +250,8 @@
      "hex": "02ba746865207375727669766f727320696e206120776f726c64fc",
      "hdr": "02ba",
      "us": "the survivors in a world",
-     "en": "and the lives of the people fell back to"
+     "en": "flourished enough to sail among the stars,",
+     "hdr_en": "02c8"
     },
     {
      "id": "loc_1A4BE",
@@ -245,7 +259,8 @@
      "hex": "02be6f66206d7574617465642063726561747572657320616e64fc",
      "hdr": "02be",
      "us": "of mutated creatures and",
-     "en": "those of a medieval age..."
+     "en": "and the lives of the people fell back to",
+     "hdr_en": "02cd"
     },
     {
      "id": "loc_1A4DA",
@@ -253,7 +268,8 @@
      "hex": "02c277617272696e6720706f636b657473206f66206d656e2efc",
      "hdr": "02c2",
      "us": "warring pockets of men.",
-     "en": " "
+     "en": " those of a medieval age...",
+     "hdr_en": "02d2"
     },
     {
      "id": "loc_1A4F4",
@@ -261,7 +277,8 @@
      "hex": "02c6496e746f207468697320736861747465726564fc",
      "hdr": "02c6",
      "us": "Into this shattered",
-     "en": " "
+     "en": " ",
+     "hdr_en": "02d6"
     },
     {
      "id": "loc_1A50A",
@@ -269,7 +286,8 @@
      "hex": "02ca776f726c6420796f7520617265207468727573742c20746ffc",
      "hdr": "02ca",
      "us": "world you are thrust, to",
-     "en": " "
+     "en": " ",
+     "hdr_en": "02da"
     },
     {
      "id": "loc_1A526",
@@ -277,7 +295,8 @@
      "hex": "02ce6c697665206f722064696520627920796f7572fc",
      "hdr": "02ce",
      "us": "live or die by your",
-     "en": "{00}"
+     "en": " ",
+     "hdr_en": "02de"
     },
     {
      "id": "loc_1A53C",
@@ -285,7 +304,8 @@
      "hex": "02d273776f726420616e6420796f757220776974732e2e2e2efc",
      "hdr": "02d2",
      "us": "sword and your wits....",
-     "en": " "
+     "en": " ",
+     "hdr_en": "02e2"
     },
     {
      "id": "loc_1A556",
@@ -293,7 +313,7 @@
      "hex": "02e400fc",
      "hdr": "02e4",
      "us": "{00}",
-     "en": ""
+     "en": "{00}"
     },
     {
      "id": "loc_1A55A",

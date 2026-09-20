@@ -197,6 +197,12 @@ def gen_segments(src, doc, problems):
                 j = i + 1
                 while not is_dcb(split_label(src.lines[j])[1]):
                     j += 1
+                # the position bytes: `hdr_en` where the translation places the line
+                # elsewhere, else the original `hdr` (so a source that held a moved line
+                # goes back when the field is dropped)
+                pos = r.get('hdr_en') or r.get('hdr')
+                if pos:
+                    src.replace(j, j + 1, ['	dc.b	' + ', '.join('$%02X' % v for v in bytes.fromhex(pos))])
                 k = j + 1   # first text line
                 e = k
                 while not ends_fc(split_label(src.lines[e])[1]):
