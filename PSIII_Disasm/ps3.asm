@@ -12172,9 +12172,18 @@ loc_91FC:
 	move.w	$2E(a4), d0
 	lsr.w	#1, d0
 	bsr.w	loc_FFA8
+	if vwf_menu
+	movem.l	d1-d7/a1-a4, -(sp)	; the number routine below keeps its attribute in d2
+	lea	(loc_3DEE7).l, a0	; the shops' "Meseta" label, proportional on the pool (ext/vwf.asm)
+	lea	$FFFF24A0, a1		; mark row above the stock label's row
+	move.w	#$8000, d0
+	jsr	(loc_10038).l
+	movem.l	(sp)+, d1-d7/a1-a4
+	else
 	lea	$FFFF2520, a0
 	move.l	#$804D8045, (a0)+
 	move.w	#$8053, (a0)
+	endif
 	lea	$FFFF25A0, a0
 	move.l	(money_owned).w, d0
 	cmpi.l	#$5F5E0FF, d0
@@ -13144,6 +13153,9 @@ loc_9E74:
 	bra.s	loc_9EA4
 
 loc_9E8E:
+	if vwf_menu
+	jsr	(VWFMenu_Header).l	; render the label into the header: the copied words would point at shadow tiles (ext/vwf.asm)
+	else
 	adda.w	d0, a0
 	movea.l	(a0), a0
 	move.l	(a0)+, (a1)+
@@ -13155,6 +13167,7 @@ loc_9E8E:
 	move.l	(a0)+, (a1)+
 	move.w	(a0)+, (a1)+
 	adda.w	d1, a1
+	endif
 loc_9EA4:
 	moveq	#7, d2
 	move.w	#$72, d1
@@ -71555,13 +71568,13 @@ loc_3DEDE:
 	
 
 loc_3DEDF:
-	dc.b	"BUY"
+	dc.b	"Buy"
 	dc.b	$F8
-	dc.b	"SEL"
+	dc.b	"Sell"
 	dc.b	$FC
 	
 loc_3DEE7:
-	dc.b	"MES"
+	dc.b	"Meseta"
 	dc.b	$FC
 	
 loc_3DEEB:
@@ -71591,9 +71604,9 @@ loc_3DF5A:
 	dc.b	$FC
 	
 loc_3DF7D:
-	dc.b	"YES"
+	dc.b	"Yes"
 	dc.b	$F8
-	dc.b	"NO "
+	dc.b	"No"
 	dc.b	$FC
 	
 loc_3DF85:

@@ -5877,7 +5877,7 @@
      "addr": "3DEDF",
      "hex": "425559f853454cfc",
      "us": "BUY{BR}SEL",
-     "en": "BUY{BR}SEL",
+     "en": "Buy{BR}Sell",
      "jp": " かう{BR} うる"
     },
     {
@@ -5887,7 +5887,7 @@
      "addr": "3DEE7",
      "hex": "4d4553fc",
      "us": "MES",
-     "en": "MES",
+     "en": "Meseta",
      "jp": "メセタ"
     },
     {
@@ -5947,7 +5947,7 @@
      "addr": "3DF7D",
      "hex": "594553f84e4f20fc",
      "us": "YES{BR}NO ",
-     "en": "YES{BR}NO ",
+     "en": "Yes{BR}No",
      "jp": "はい{BR}いいえ"
     },
     {

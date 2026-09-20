@@ -88,12 +88,30 @@ cells are cleared with paper. A `{BR}` relocates the next line in the pool; if
 it steps below row 24, the rest of the string is handed back to the stock
 renderer.
 
-This catches item names, equipped items, technique names, menu labels and the
-"Whose?" name list. It also recognizes the five exact rows of the main menu's
-10x12 staging buffer and maps them to their eventual screen positions. The
-first cell stays fixed blank because the stock transition cleanup deliberately
-leaves it alone; the remaining seven cells give each label 56 px, enough for
-the full `Technique` (41 px) instead of the stock `Techniq`.
+This catches item names, equipped items, technique names and menu labels. It
+also recognizes the five exact rows of the main menu's 10x12 staging buffer
+and maps them to their eventual screen positions. The first cell stays fixed
+blank because the stock transition cleanup deliberately leaves it alone; the
+remaining seven cells give each label 56 px, enough for the full `Technique`
+(41 px) instead of the stock `Techniq`.
+
+The party status boxes are window buffers too (six 10x13-cell buffers at
+`loc_1F592`, copied to the plane at `loc_1F5AA`); the name plate is the only
+text the renderer draws in them. `VWFMenu_Locate_Box` maps a buffer cell to
+its screen cell. A box in the lower row (plane row 14) puts its plate's mark
+row at 24, just below the pool, so that row maps to `$580 + column` - the
+window plane's first nametable row, which no menu screen shows (the smooth
+scroll uses the same tiles on dialogue screens). A plate gets five cells
+(40 px, the party-name budget) so its level digits stay untouched; the
+cursor's palette toggle already spans the plate's eight words.
+
+A submenu's header used to be five words *copied* from the selected label's
+rows (`loc_9E74`). Copied pool words point at the label row's shadow tiles,
+which the next prompt drawn over that row rewrites - "Who?" left the header
+reading "Who? ique". `VWFMenu_Header` renders the label's text into the
+header instead (seven cells, the window's interior). The Stats screen's
+`MES` was three tile words written by hand at `$FFFF2520`; it now renders the
+shops' "Meseta" string through the pool.
 
 ## The smooth page scroll
 
@@ -159,7 +177,13 @@ one picture at tiles `$101-$131`, so the same free range is available. With
 (`loc_A9A2`, buffer `$FFFFA126`, five lines of 16 cells, stride `$48`) and the
 two sell-list pages (`loc_AE86` / `loc_B1C8`, buffers `$FFFF9D30` and
 `$FFFF9E80`, five lines of 11 cells, stride `$38`). `VWFShop_Table` gives each
-list a pool line per list line at `$240-$2FD`, and the window animation
+list a pool line per list line at `$240-$2FD` - and, since the party names
+grew past four letters, the "Who will carry it?" name list (`$FFFF9C8E`,
+four cells: Searren's ink ends exactly at 32 px), the Buy/Sell - Yes/No
+window (`$FFFF9BC6`, one string whose `{BR}` line is found through the same
+table: `VWFDia_List` remembers the table a line came from) and the Meseta
+label (`$FFFF9C22`, six cells of pool ahead of the amount at cell 6) at
+`$300-$321` - and the window animation
 (`loc_FD3E`, `loc_FE3C`) copies the words to plane A as it does the stock
 ones. The buy list writes the price with the digit renderer from cell 11
 after the name, relative to the `a1` the name renderer returns - which is why

@@ -93,6 +93,9 @@ VWFMENU_ROWS    = 24
 VWFMENU_COLS    = 32
 VWFMENU_COL0    = 4
 VWFPOOL_END     = $540		; the sprite table ($A800) starts here
+VWFMENU_ROW24   = $580		; pool row for mark row 24 (the lower status boxes' name plates): the
+				; window plane's first nametable row, which no menu screen shows
+VWFMENU_PLATE   = 5		; cells of a status-box name plate before its level digits
 
 ; RAM equates: ext/ram.asm
 
@@ -108,8 +111,9 @@ VWFDia_Entry:
 	cmpi.w	#$A, d1			; a menu screen ($202-$20C, one per generation)
 	bhi.s	VWFDia_NotMenu
 	bsr.w	VWFMenu_Locate		; d1 = pool tile, d2 = capacity; d1 = $FFFF if not pooled
-	cmpi.w	#VWFMENU_POOL+VWFMENU_ROWS*VWFMENU_COLS, d1
-	bcc.s	VWFDia_NotMenu
+	cmpi.w	#$FFFF, d1
+	beq.s	VWFDia_NotMenu
+	clr.l	(VWFDia_List).w
 	bra.w	VWFMenu_Go
 VWFDia_NotMenu:
 	endif
@@ -119,6 +123,7 @@ VWFDia_NotMenu:
 	cmpi.w	#$E, d1			; a store screen ($222-$230, one per store type)
 	bhi.s	VWFDia_NotShop
 	lea	VWFShop_Table(pc), a2
+	move.l	a2, (VWFDia_List).w	; a {BR} finds its next line in the same table
 	bsr.w	VWFList_Find		; d1 = pool tile, d2 = capacity; d1 = $FFFF if not a list line
 	cmpi.w	#$FFFF, d1
 	beq.s	VWFDia_NotShop
@@ -129,6 +134,7 @@ VWFDia_NotShop:
 	cmpi.w	#$232, (map_id).w	; the battle screen
 	bne.s	VWFDia_NotBattle
 	lea	VWFBattle_Table(pc), a2
+	move.l	a2, (VWFDia_List).w
 	bsr.w	VWFList_Find
 	cmpi.w	#$FFFF, d1
 	beq.s	VWFDia_NotBattle
@@ -242,12 +248,23 @@ VWFDia_Newline:				; $F8
 	movea.l	(VWFDia_Row).w, a1
 	adda.w	d2, a1
 	move.l	a1, (VWFDia_Row).w
-	if vwf_menu|vwf_shop
+	if vwf_menu|vwf_shop|vwf_battle
 	tst.w	(VWFDia_Mode).w
 	beq.s	VWFDia_Newline_Dia
 	bsr.w	VWFMenu_Locate
-	cmpi.w	#VWFMENU_POOL+VWFMENU_ROWS*VWFMENU_COLS, d1
-	bcc.w	VWFMenu_Handoff
+	cmpi.w	#$FFFF, d1
+	bne.s	VWFDia_Newline_Pooled
+	if vwf_shop|vwf_battle
+	move.l	(VWFDia_List).w, d1	; a list window's second line (Buy/Sell, Yes/No)
+	beq.w	VWFMenu_Handoff
+	movea.l	d1, a2
+	bsr.w	VWFList_Find
+	cmpi.w	#$FFFF, d1
+	beq.w	VWFMenu_Handoff
+	else
+	bra.w	VWFMenu_Handoff
+	endif
+VWFDia_Newline_Pooled:
 	bsr.w	VWFMenu_SetLine
 	bsr.w	VWFDia_StartLine
 	bra.w	VWFDia_Loop
@@ -930,9 +947,9 @@ VWFMenu_Locate:
 	; copied to plane A at column 16. Its five mark rows land at screen rows
 	; 1, 3, 5, 7 and 9. Accept only that buffer's exact 8-cell text context.
 	cmpi.w	#$14, $42(a6)
-	bne.s	VWFMenu_Locate_Plane
+	bne.w	VWFMenu_Locate_Plane
 	cmpi.w	#8, $44(a6)
-	bne.s	VWFMenu_Locate_Plane
+	bne.w	VWFMenu_Locate_Plane
 	move.w	a1, d1
 	cmpi.w	#$9A82, d1
 	beq.s	VWFMenu_Locate_MainStart
@@ -957,7 +974,7 @@ VWFMenu_Locate_MainCheck:
 	beq.s	VWFMenu_Locate_Main
 	addq.w	#2, d2
 	cmpi.w	#$9B24, d1
-	bne.s	VWFMenu_Locate_Plane
+	bne.s	VWFMenu_Locate_Box
 VWFMenu_Locate_Main:
 	cmpi.b	#' ', (a0)
 	bne.s	+
@@ -968,6 +985,61 @@ VWFMenu_Locate_Main:
 	addi.w	#VWFMENU_POOL+13, d2	; screen column 17 - VWFMENU_COL0
 	move.w	d2, d1
 	moveq	#7, d2
+	rts
+VWFMenu_Locate_Box:
+	; The party status boxes: six 10x13-cell buffers (loc_1F592) copied to
+	; the plane at loc_1F5AA. Their name plates are the only text the
+	; renderer draws there. A box at plane row 14 puts its plate's glyph row
+	; at 25, below the pool; that row maps to VWFMENU_ROW24 instead. The
+	; plate keeps its level digits in its last cells, so a name gets five.
+	lea	(loc_1F592).l, a2
+	lea	(loc_1F5AA).l, a3
+	moveq	#5, d3
+VWFMenu_Locate_BoxNext:
+	move.w	a1, d1
+	sub.w	2(a2), d1		; offset into this box's buffer
+	bcs.s	+
+	cmpi.w	#$104, d1
+	bcs.s	VWFMenu_Locate_BoxHit
++
+	addq.w	#4, a2
+	addq.w	#4, a3
+	dbf	d3, VWFMenu_Locate_BoxNext
+	bra.s	VWFMenu_Locate_Plane
+VWFMenu_Locate_BoxHit:
+	moveq	#0, d2			; row within the box
+-
+	subi.w	#20, d1
+	bcs.s	+
+	addq.w	#1, d2
+	bra.s	-
++
+	addi.w	#20, d1
+	lsr.w	#1, d1			; column within the box
+	move.w	2(a3), d3		; the box's plane address, low word
+	subi.w	#$2000, d3
+	move.w	d3, d4
+	lsr.w	#7, d3
+	add.w	d2, d3			; mark row on screen
+	andi.w	#$7F, d4
+	lsr.w	#1, d4
+	add.w	d1, d4			; column on screen
+	subq.w	#VWFMENU_COL0, d4
+	bcs.s	VWFMenu_Locate_No
+	cmpi.w	#VWFMENU_COLS, d4
+	bcc.s	VWFMenu_Locate_No
+	moveq	#VWFMENU_PLATE, d2
+	cmpi.w	#VWFMENU_ROWS, d3
+	bcc.s	+
+	lsl.w	#5, d3
+	add.w	d3, d4
+	addi.w	#VWFMENU_POOL, d4
+	move.w	d4, d1
+	rts
++
+	bne.s	VWFMenu_Locate_No	; only the row just below the pool has tiles set aside
+	addi.w	#VWFMENU_ROW24, d4
+	move.w	d4, d1
 	rts
 VWFMenu_Locate_Plane:
 	move.w	a1, d1			; low word: work RAM is $FFFFxxxx
@@ -994,6 +1066,61 @@ VWFMenu_Locate_Plane:
 	rts
 VWFMenu_Locate_No:
 	move.w	#$FFFF, d1
+	rts
+
+; loc_9E74 builds a submenu window by copying five words of the selected
+; label's rows into the window's header rows. With the pool those words point
+; at the label's own shadow tiles, which the next prompt drawn over the label
+; row overwrites ("Who?" left "Who? ique" in the header). Render the label's
+; text into the header instead. In: d0 = routine - 4 (4, 8, $C, $10 for
+; Technique, Stats, Equip, Switch), a1 = the header's mark row (col 17, its
+; words are pooled through VWFMenu_Locate_Plane). Out: a1 two rows down, as
+; the copy left it. Seven cells: the window's interior ends at column 23.
+VWFMenu_Header:
+	movem.l	d0-d7/a0/a2-a5, -(sp)
+	movea.l	a1, a3
+	lsr.w	#2, d0			; label 1-4
+	lea	(loc_1F6CE).l, a0	; " Item{BR} Technique{BR} Stats{BR} Equip"
+	move.w	d0, d1
+	cmpi.w	#4, d0
+	bne.s	VWFMenu_Header_Skip
+	lea	(loc_1F6EB).l, a0	; " Switch"
+	moveq	#0, d1
+VWFMenu_Header_Skip:
+	subq.w	#1, d1
+	bmi.s	VWFMenu_Header_Copy
+-
+	cmpi.b	#$F8, (a0)+
+	bne.s	-
+	dbf	d1, -
+VWFMenu_Header_Copy:
+	cmpi.b	#' ', (a0)
+	bne.s	+
+	addq.w	#1, a0			; the margin cell is not part of the label
++
+	lea	-16(sp), sp		; the one line, $FC-terminated, on the stack
+	movea.l	sp, a2
+	moveq	#14, d1
+-
+	move.b	(a0)+, d2
+	cmpi.b	#$F8, d2
+	beq.s	+
+	cmpi.b	#$FC, d2
+	beq.s	+
+	move.b	d2, (a2)+
+	dbf	d1, -
++
+	move.b	#$FC, (a2)
+	movea.l	sp, a0
+	movea.l	a3, a1
+	move.w	$44(a6), d3
+	move.w	#7, $44(a6)
+	move.w	#$8000, d0
+	jsr	(loc_10038).l
+	move.w	d3, $44(a6)
+	lea	16(sp), sp
+	lea	$100(a3), a1
+	movem.l	(sp)+, d0-d7/a0/a2-a5
 	rts
 
 ; d1 = pool tile, d2 = capacity -> the line state
@@ -1061,6 +1188,9 @@ VWFShop_Table:
 	dc.w	$A126, $48, 5, 16, 16, $240	; buy list (loc_3DB34): the price is written from cell 11
 	dc.w	$9D30, $38, 5, 11, 11, $290	; sell list, page one (loc_3DB10)
 	dc.w	$9E80, $38, 5, 11, 11, $2C7	; sell list, page two (loc_3DB1C)
+	dc.w	$9C8E, $18, 5, 4, 4, $300	; the party name list, "Who will carry it?" (loc_3DD68)
+	dc.w	$9BC6, $18, 2, 4, 4, $314	; Buy / Sell, Yes / No (one string, {BR} to the second line)
+	dc.w	$9C22, 0, 1, 14, 6, $31C	; the Meseta label; the amount is written from cell 6 (loc_FFDC at $9C4A)
 	dc.w	0
 	endif
 

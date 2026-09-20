@@ -115,12 +115,12 @@ def main():
             # the pool lines must not overlap each other and must sit below the sprite table
             tab = src[src.index('VWFShop_Table:'):]
             tab = tab[:tab.index('dc.w\t0')]
-            tab = re.findall(r'^\tdc\.w\t\$([0-9A-F]+), \$([0-9A-F]+), (\d+), (\d+), (\d+), \$([0-9A-F]+)', tab, re.M)
+            tab = re.findall(r'^\tdc\.w\t\$([0-9A-F]+), \$?([0-9A-F]+), (\d+), (\d+), (\d+), \$([0-9A-F]+)', tab, re.M)
             spans = sorted((int(pool, 16), int(pool, 16) + int(lines) * int(cap)) for _, _, lines, _, cap, pool in tab)
-            if len(spans) != 3 or any(spans[i][1] > spans[i + 1][0] for i in range(len(spans) - 1)) or spans[-1][1] > 0x540:
+            if len(spans) < 3 or any(spans[i][1] > spans[i + 1][0] for i in range(len(spans) - 1)) or spans[-1][1] > 0x540:
                 fail('shop pool lines %s overlap or reach the sprite table' % spans)
             else:
-                ok('shop pool tiles $%X-$%X (%d lists)' % (spans[0][0], spans[-1][1] - 1, len(spans)))
+                ok('shop pool tiles $%X-$%X (%d windows)' % (spans[0][0], spans[-1][1] - 1, len(spans)))
         if opts.get('vwf_battle') == '1':
             # every battle pool line must lie in a range no battle loader touches (see VWFBattle_Table)
             free = ((0x25C, 0x280), (0x364, 0x380), (0x580, 0x5CC))

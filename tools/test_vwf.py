@@ -335,11 +335,44 @@ def test_menu_main_list(sym):
     assert glyph == [0x8000 | (first + j) for j in range(cells)] + [0x801F] * (7 - cells)
     assert bytes(m.vram[first * 32:first * 32 + cells * 32]) == expand(canvas)[:cells * 32]
 
+    # any other cell of the six status-box buffers is pooled at its screen position:
+    # box 0 ($FFFF9A80, plane row 1 col 15) row 0 col 3 -> mark row 1, col 18
     m = menu_machine(sym, 8)
     m.poke(CTX + 0x42, (0x14).to_bytes(2, 'big'))
     render(m, sym, 'Nearby', row0=0xFFFF9A86)
-    assert not m.vram_writes, 'nearby staging address must stay fixed width'
+    first = MENU_POOL + 1 * 32 + 14
+    canvas, x = compose(b'Nearby')
+    glyph = [int.from_bytes(m.peek(0xFFFF9A86 + 0x14 + j * 2, 2), 'big') for j in range(5)]
+    assert glyph == [0x8000 | (first + j) for j in range((x + 7) // 8)] + [0x801F] * (5 - (x + 7) // 8), [hex(w) for w in glyph]
     print('  main-menu staging list ok')
+
+
+def test_menu_plates(sym):
+    """A name plate of a lower status box (box 1 at plane row 14: its row 10 is mark row
+    24) draws on the row set aside below the pool, $580 + column, with five cells before
+    the level digits; a plate of an upper box (row 1) lands inside the pool."""
+    m = menu_machine(sym, 8)
+    m.poke(CTX + 0x42, (0x14).to_bytes(2, 'big'))
+    plate = 0xFFFF9B84 + 10 * 20 + 2                 # box 1, row 10, col 1 -> screen (24, 16)
+    m.poke(plate + 0x14 + 10, (0x8002).to_bytes(2, 'big'))   # the level digit already there
+    render(m, sym, 'Searren', row0=plate)
+    canvas, x = compose(b'Searren')
+    cells = (x + 7) // 8
+    assert cells == 5, x
+    first = 0x580 + 16 - 4
+    glyph = [int.from_bytes(m.peek(plate + 0x14 + j * 2, 2), 'big') for j in range(8)]
+    assert glyph[:5] == [0x8000 | (first + j) for j in range(5)], [hex(w) for w in glyph]
+    assert glyph[5] == 0x8002 and glyph[6:] == [0, 0], ('the plate pads five cells only', [hex(w) for w in glyph])
+    assert bytes(m.vram[first * 32:first * 32 + 5 * 32]) == expand(canvas)[:5 * 32]
+    plate = 0xFFFF9E90 + 10 * 20 + 2                 # box 4 at plane row 1 col 26 -> screen (11, 27)
+    m = menu_machine(sym, 8)
+    m.poke(CTX + 0x42, (0x14).to_bytes(2, 'big'))
+    render(m, sym, 'Mieu', row0=plate)
+    first = MENU_POOL + 11 * 32 + 23
+    glyph = [int.from_bytes(m.peek(plate + 0x14 + j * 2, 2), 'big') for j in range(5)]
+    canvas, x = compose(b'Mieu')
+    assert glyph == [0x8000 | (first + j) for j in range((x + 7) // 8)] + [0x801F] * (5 - (x + 7) // 8), [hex(w) for w in glyph]
+    print('  status-box name plates ok')
 
 
 def test_menu_off(sym):
@@ -407,6 +440,36 @@ def test_shop_list(sym):
     render(m, sym, 'Knife', row0=SHOP_ROW0)
     assert m.peek(SHOP_ROW0 + 0x24, 2) == bytes([0x80, ord('K')]) and not m.vram_writes, 'field map: stock tiles'
     print('  shop list ok')
+
+
+def test_shop_small_windows(sym):
+    """The store's small windows: the party name list ($FFFF9C8E + i*$18, 4 cells), the
+    Buy/Sell window ($FFFF9BC6, one string whose {BR} continues on the same table's next
+    line) and the Meseta label ($FFFF9C22, 14 cells of window but six of pool, the amount
+    being written from cell 6)."""
+    m = Machine()
+    m.poke(MAP_ID, (0x224).to_bytes(2, 'big'))
+    m.poke(CTX + 0x42, (0xC).to_bytes(2, 'big')); m.poke(CTX + 0x44, (4).to_bytes(2, 'big'))
+    m.poke(0x0FF800, bytes([0xE0, 1, 0xFC, 0, 0])); m.poke(NAMES, (0x0FF800).to_bytes(4, 'big'))
+    render(m, sym, '{NAME:00}', row0=0xFFFF9C8E + 2 * 0x18)
+    canvas, x = compose(b'Searren')
+    assert x == 33 and (x + 7) // 8 == 5, x
+    glyph = [int.from_bytes(m.peek(0xFFFF9C8E + 2 * 0x18 + 0xC + j * 2, 2), 'big') for j in range(4)]
+    assert glyph == [0x8000 | (0x300 + 8 + j) for j in range(4)], [hex(w) for w in glyph]
+    assert bytes(m.vram[(0x308) * 32:(0x308 + 4) * 32]) == expand(canvas)[:4 * 32], 'Searren: its ink ends at the fourth cell'
+    render(m, sym, 'Buy{BR}Sell', row0=0xFFFF9BC6)
+    g0 = [int.from_bytes(m.peek(0xFFFF9BC6 + 0xC + j * 2, 2), 'big') for j in range(4)]
+    g1 = [int.from_bytes(m.peek(0xFFFF9BC6 + 0x18 + 0xC + j * 2, 2), 'big') for j in range(4)]
+    cb = (compose(b'Buy')[1] + 7) // 8; cs = (compose(b'Sell')[1] + 7) // 8
+    assert g0 == [0x8000 | (0x314 + j) for j in range(cb)] + [0x801F] * (4 - cb), [hex(w) for w in g0]
+    assert g1 == [0x8000 | (0x318 + j) for j in range(cs)] + [0x801F] * (4 - cs), [hex(w) for w in g1]
+    m.poke(CTX + 0x42, (0xE).to_bytes(2, 'big')); m.poke(CTX + 0x44, (14).to_bytes(2, 'big'))
+    m.poke(0xFFFF9C22 + 0xE + 6 * 2, bytes([0x80, 0x06]))     # a digit of the amount
+    render(m, sym, 'Meseta', row0=0xFFFF9C22)
+    g = [int.from_bytes(m.peek(0xFFFF9C22 + 0xE + j * 2, 2), 'big') for j in range(7)]
+    cm = (compose(b'Meseta')[1] + 7) // 8
+    assert g[:6] == [0x8000 | (0x31C + j) for j in range(cm)] + [0x801F] * (6 - cm) and g[6] == 0x8006, [hex(w) for w in g]
+    print('  shop small windows ok')
 
 
 def test_battle_box(sym):
@@ -577,8 +640,8 @@ def test_smooth_scroll(sym):
 def main():
     sym = Symbols()
     for t in (test_plain, test_br_and_page, test_scroll, test_inserts, test_long_names, test_clip, test_fixed_fallback, test_opening_scroll,
-              test_menu_items, test_menu_labels, test_menu_main_list, test_menu_off,
-              test_shop_list, test_battle_box, test_smooth_scroll):
+              test_menu_items, test_menu_labels, test_menu_main_list, test_menu_plates, test_menu_off,
+              test_shop_list, test_shop_small_windows, test_battle_box, test_smooth_scroll):
         t(sym)
     print('test_vwf: all passed')
 

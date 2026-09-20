@@ -21,7 +21,8 @@ VWFDia_Pad      = VWFDia_RAM+$4B4	; word: cells the line fills with paper after 
 VWFDia_Count    = VWFDia_RAM+$4B6	; word: tiles to expand and upload
 VWFDia_Skew     = VWFDia_RAM+$4B8	; word: bytes the entry moved a1 by (the main list's margin cell)
 VWFDia_Xs       = VWFDia_RAM+$4BA	; 3 words: ink width in px of dialogue lines 0-2 (smooth_scroll)
-VWFDia_RAM_End  = VWFDia_RAM+$4C0
+VWFDia_List     = VWFDia_RAM+$4C0	; long: the list table (VWFShop_/VWFBattle_Table) the line came from, 0 if none
+VWFDia_RAM_End  = VWFDia_RAM+$4C4
 
 ; The smooth page scroll (smooth_scroll): a third line canvas, the 32-px view of
 ; the box interior, its 96 expanded tiles, and the animation state.

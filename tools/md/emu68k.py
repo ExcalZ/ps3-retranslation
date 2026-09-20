@@ -261,26 +261,29 @@ class CPU:
         # addi.w #imm,Dn
         if (op & 0xFFF8) == 0x0640:
             imm = self.fetch(); r = op & 7
-            v = ((self.d[r] & 0xFFFF) + imm) & 0xFFFF
-            self.setd_w(r, v); self.Z = (v == 0)
+            raw = (self.d[r] & 0xFFFF) + imm
+            v = raw & 0xFFFF
+            self.setd_w(r, v); self.Z = (v == 0); self.N = bool(v & 0x8000); self.C = raw > 0xFFFF
             return False
 
         # subi.l #imm,Dn
         if (op & 0xFFF8) == 0x0480:
             imm = (self.fetch() << 16) | self.fetch()
             r = op & 7
-            v = (self.d[r] - imm) & 0xFFFFFFFF
+            raw = self.d[r] - imm
+            v = raw & 0xFFFFFFFF
             self.d[r] = v
-            self.Z = (v == 0)
+            self.Z = (v == 0); self.N = bool(v & 0x80000000); self.C = raw < 0
             return False
 
         # subi.w #imm,Dn
         if (op & 0xFFF8) == 0x0440:
             imm = self.fetch()
             r = op & 7
-            v = ((self.d[r] & 0xFFFF) - imm) & 0xFFFF
+            raw = (self.d[r] & 0xFFFF) - imm
+            v = raw & 0xFFFF
             self.setd_w(r, v)
-            self.Z = (v == 0)
+            self.Z = (v == 0); self.N = bool(v & 0x8000); self.C = raw < 0   # bcs after subi (the box row loop)
             return False
 
         # move.l An,-(a7)

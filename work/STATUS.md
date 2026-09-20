@@ -18,8 +18,8 @@ the Japanese throughout - the user's decision of 2026-09-19, recorded in
 `work/glossary.md`. What remains is proofreading in play: only a handful of
 lines have been seen on the console side so far (see the log).
 
-Canonical experimental ROM `ps3en.bin` (every option on): 825,676 bytes,
-SHA-256 `3687EBFA6E6434C6E0126DA61643841C0B2A1A64DC22DD186181300EC1D3A9E8`;
+Canonical experimental ROM `ps3en.bin` (every option on): 825,992 bytes,
+SHA-256 `C4F70A39FE73E8EC75B1D28E8C0108BA5A99DE2EBEF6AACAF240446D7DF07A63`;
 `tools/checkbuild.py` prints its SHA-256 after each build.
 Stock US ROM (every option 0 and every `en` equal to `us` reproduces it -
 verified 2026-09-20 after the translation pass): 786,432 bytes, SHA-256
@@ -155,19 +155,19 @@ verified 2026-09-20 after the translation pass): 786,432 bytes, SHA-256
 ## Not done
 
 * **Proofreading in play.** The translation has been checked against the
-  budgets (`tools/linecheck.py`: 0 problems) and a few entries rendered by
-  the real engine under the interpreter, but not yet read through in
-  BlastEm scene by scene. The BlastEm window rendered blank (white) on
-  2026-09-20, so `work/scripts/dialogue_check.py` (which points a Landen
-  NPC at any entry and screenshots every page) is still to be run.
+  budgets (`tools/linecheck.py`: 0 problems) and the user has started
+  playing it; `work/scripts/dialogue_check.py` points a Landen NPC at any
+  entry and screenshots every page for reading a scene at a time.
 * Three restored header-only lines (`loc_261F8`, `loc_261FC`, `loc_26200`)
   are reached through flag `$16`, which the game sets in later generations;
   they have not been seen in play.
 * The ending transmission (`namestrings`) keeps the US line counts (14/14/
   14/6 per ending) with the JP text re-flowed; the JP's shorter blocks are
   padded with blank lines, as the JP itself does.
-* **Fixed-width leftovers.** The field menu's row-25 name plate, the
-  "Whose?" name lists and the numbers; the game-select save list.
+* **Fixed-width leftovers** (`work/scripts/fixedaudit.py` lists them):
+  the game-select save list (`1.{NAME} LV{NUM}`, 12 cells - leaders are at
+  most five letters), the message-speed prompt, the numbers everywhere, the
+  ending transmission and the staff roll (by design).
 * **Fonts for other languages**: only ASCII plus `" ; & %` glyphs exist.
 
 ## Verification checklist
@@ -198,6 +198,24 @@ does not spawn the walking sprite) and wanders into the first encounter;
 `battle_win.py` plays it out with C. Still to do in BlastEm: the church save.
 
 ## Log
+
+* 2026-09-20 (evening) - The user's first play notes: Buy/Sell, the
+  character names, "MES", "Who?nique" and a cursor highlight. A BlastEm
+  audit of the stock renderer's fixed entry (`work/scripts/fixedaudit.py`)
+  listed every window still on the 8x8 path; now pooled: the party name
+  plates in the field menu (a mapping of the six status-box buffers, with
+  the row below the pool on `$580+`), the shop's name list, Buy/Sell -
+  Yes/No and Meseta (`VWFShop_Table`; a `{BR}` in a list line now finds its
+  second line in the same table), and the Stats screen's Meseta. The header
+  of a submenu is rendered instead of copied - copied pool words pointed at
+  the label row's tiles, which "Who?" then overwrote. `loc_9E8E` and the
+  Stats label are `if vwf_menu` hooks in ps3.asm. The interpreter's
+  addi/subi fast paths gained their N/C flags (a `bcs` after `subi.w` had
+  never worked there). Seen in BlastEm (`work/scripts/smallwindows.py`,
+  `work/analysis/sw_*.png`): Technique's "Who?" over a clean header, the
+  plates, Switch, the shop's list, purchase and name list with its
+  highlight; menu, shop and battle scenarios still pass; stock reproduction
+  byte-identical.
 
 * 2026-09-20 (later) - Two fixes from play. The party names: the initial
   stats records hold a four-letter name field copied verbatim, so the
