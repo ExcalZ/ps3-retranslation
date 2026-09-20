@@ -150,8 +150,12 @@ so the budget is **72 px** (`proofread.html` measures it). **Decided: the JP
 names, in full** (`work/script.json`, `items`): Antipoison, Star / Moon
 Atomizer, Exa Ocarina; Soldier's / Knight's / Ceramic / Laser / Laconia /
 Emperor / Planar / Orakio's / Nei Sword; the ラコニア metal is "Laconia"
-throughout (its "Laconian" form pushes Laconia Bandana past 72 px); プロテクタ
-upgrades are "... Guard" beside the base "Protector" for the same reason;
+throughout (its "Laconian" form pushes Laconia Bandana past 72 px); the
+プロテクタ series keeps "Protector" (Ceramic Guard is セラミックガード in the JP),
+and where a full name would pass 72 px the user's rule applies - first drop
+the space, then an unpronounced letter: MaximaProtector (70 px), Laconia
+Protectr (71 px; the letter alone suffices, so the space stays); フィブリラ is
+Fibrilla; エーメル is the German Ärmel (sleeve), with Ä/ä added to the face;
 "Grenade Launcher" (76 px) became "Grenade Gun"; せいきしのつるぎ (holy
 knight's sword, 75 px) "Paladin Sword"; the two eclipse pieces are Eclipse
 Armor (にっしょく) and Eclipse Robe (げっしょく). Key items: Forest

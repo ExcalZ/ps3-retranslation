@@ -50,8 +50,12 @@ US_DECODE.update({0x10: '-', 0x13: '.', 0x14: ',', 0x1F: ' '})
 # the bold capitals at $A0-$B9 (credits) are written as fullwidth letters so they stay
 # distinct from the ASCII face
 US_DECODE.update({0xA0 + i: chr(0xFF21 + i) for i in range(26)})
+# umlauts on two of the stock font's unused kana tiles ($80-$94 are kana the US text never
+# uses); the proportional face draws them (diafont.py), the fixed 8x8 face would show kana
+US_DECODE.update({0x80: 'Ä', 0x81: 'ä'})
 US_ENCODE = {chr(b): b for b in range(0x20, 0x7F)}
 US_ENCODE.update({chr(0xFF21 + i): 0xA0 + i for i in range(26)})
+US_ENCODE.update({'Ä': 0x80, 'ä': 0x81})
 # the staff-roll part of the credits is assembled under a `charset` directive that maps
 # space, '-', '.', ',' and the digits to the JP-layout tiles; encode with charset='credits'
 # there so the bytes match what the assembler produced for the original source

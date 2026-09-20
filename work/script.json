@@ -2929,7 +2929,7 @@
      "addr": "396C3",
      "hex": "4669626c697261fc",
      "us": "Fiblira",
-     "en": "Fiblira",
+     "en": "Fibrilla",
      "jp": "フィブリラ"
     },
     {
@@ -2939,7 +2939,7 @@
      "addr": "396CB",
      "hex": "537465656c20466962fc",
      "us": "Steel Fib",
-     "en": "Star Fiblira",
+     "en": "Star Fibrilla",
      "jp": "ほしのフィブリラ"
     },
     {
@@ -2949,7 +2949,7 @@
      "addr": "396D5",
      "hex": "4c61636f6e20466962fc",
      "us": "Lacon Fib",
-     "en": "Laconia Fiblira",
+     "en": "Laconia Fibrilla",
      "jp": "ラコニアフィブリラ"
     },
     {
@@ -2959,7 +2959,7 @@
      "addr": "396DF",
      "hex": "526f79616c20466962fc",
      "us": "Royal Fib",
-     "en": "Queen Fiblira",
+     "en": "Queen Fibrilla",
      "jp": "クイーンフィブリラ"
     },
     {
@@ -3049,7 +3049,7 @@
      "addr": "39734",
      "hex": "537465656c50727463fc",
      "us": "SteelPrtc",
-     "en": "Steel Guard",
+     "en": "Steel Protector",
      "jp": "スチールプロテクタ"
     },
     {
@@ -3069,7 +3069,7 @@
      "addr": "39748",
      "hex": "466f72636550727463fc",
      "us": "ForcePrtc",
-     "en": "Comet Guard",
+     "en": "Comet Protector",
      "jp": "コメットプロテクタ"
     },
     {
@@ -3079,7 +3079,7 @@
      "addr": "39752",
      "hex": "4c61636f6e50727463fc",
      "us": "LaconPrtc",
-     "en": "Laconia Guard",
+     "en": "Laconia Protectr",
      "jp": "ラコニアプロテクタ"
     },
     {
@@ -3089,7 +3089,7 @@
      "addr": "3975C",
      "hex": "526f79616c50727463fc",
      "us": "RoyalPrtc",
-     "en": "Maxima Guard",
+     "en": "MaximaProtector",
      "jp": "マキシマプロテクタ"
     },
     {
@@ -3189,7 +3189,7 @@
      "addr": "397B9",
      "hex": "456d656cfc",
      "us": "Emel",
-     "en": "Emel",
+     "en": "Ärmel",
      "jp": "エーメル"
     },
     {
@@ -3199,7 +3199,7 @@
      "addr": "397BE",
      "hex": "537465656c456d656cfc",
      "us": "SteelEmel",
-     "en": "Leather Emel",
+     "en": "Leather Ärmel",
      "jp": "レザーエーメル"
     },
     {
@@ -3209,7 +3209,7 @@
      "addr": "397C8",
      "hex": "436572616d456d656cfc",
      "us": "CeramEmel",
-     "en": "Ceramic Emel",
+     "en": "Ceramic Ärmel",
      "jp": "セラミックエーメル"
     },
     {
@@ -3229,7 +3229,7 @@
      "addr": "397DC",
      "hex": "4c61636f6e456d656cfc",
      "us": "LaconEmel",
-     "en": "Laconia Emel",
+     "en": "Laconia Ärmel",
      "jp": "ラコニアエーメル"
     },
     {

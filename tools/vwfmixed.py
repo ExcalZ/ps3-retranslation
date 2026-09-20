@@ -123,6 +123,10 @@ _g('"', 0, '#.#', '#.#')
 _g(';', 3, '.#', '..', '.#', '#.')
 _g('&', 0, '.#..', '#.#.', '#.#.', '.#..', '#.#.', '#..#', '.##.')
 _g('%', 0, '#..#', '...#', '..#.', '..#.', '.#..', '#...', '#..#')
+# umlauts (the German loan-words among the item names: "Ärmel"): the dots take row 0, so
+# the capital's body is a row shorter, apex on row 1; the lowercase keeps its x-height
+_g('Ä', 0, '#..#', '.##.', '#..#', '####', '#..#', '#..#', '#..#')
+_g('ä', 0, '#..#', '....', '.##.', '...#', '.###', '#..#', '.###')
 
 
 def ink(ch):

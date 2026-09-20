@@ -26,6 +26,7 @@ for b in range(0x20, 0x7F):
 for i in range(10):
     code[0x01 + i] = str(i)
 code[0x10] = '-'; code[0x13] = '.'; code[0x14] = ','
+code[0x80] = 'Ä'; code[0x81] = 'ä'    # umlauts on the stock font's unused kana tiles (ps3text.US_ENCODE)
 
 
 def glyph_rows(ch):

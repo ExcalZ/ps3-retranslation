@@ -110,6 +110,7 @@ function encode(text){
     const c=ch.charCodeAt(0);
     if(c>=0x20&&c<0x7F)out.push(c);
     else if(c>=0xFF21&&c<=0xFF3A)out.push(0xA0+c-0xFF21);
+    else if(ch==='Ä')out.push(0x80); else if(ch==='ä')out.push(0x81);
     else if(ch===' ')out.push(0x20);
     else out.push(-1);           // unencodable: flagged
     i++;
