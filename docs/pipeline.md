@@ -113,7 +113,7 @@ python tools/test_text.py        # every original string round-trips through the
 python tools/test_vwf.py         # the VWF engine under the 68000 interpreter vs a reference composer
 python tools/test_techdist.py    # the distribution-box scaling under the interpreter
 python tools/ps3emu.py ps3en.bin # boots the ROM in BlastEm and screenshots the title
-python work/scripts/menuvwf.py   # Item, Stats and Equip screens in BlastEm
+python work/scripts/menuvwf.py   # Item, Stats, Equip, Techs, Switch and generation-2 menus
 ```
 
 `tools/ps3emu.py` drives BlastEm from Python through its GDB stub - pad

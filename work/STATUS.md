@@ -54,9 +54,10 @@ verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
   (`work/scripts/menuvwf.py`, `work/analysis/mv_*.png`): Item and action
   screens, all three Stats pages, Equip with a right-hand item and cursor
   movement, Techs with seeded levels, clean returns to the field, and the
-  second-generation menu map `$204`. Switch still needs a multi-character
-  fixture. The main-menu list remains fixed width because it is composed in
-  a separate buffer before being copied to the plane.
+  second-generation menu map `$204`. Switch uses an active Rhys/Mieu fixture;
+  both cursor states, the committed reorder, object-slot mapping, and clean
+  field return are verified. The main-menu list remains fixed width because
+  it is composed in a separate buffer before being copied to the plane.
 * **Scrolling battle ground** (`scrolling_ground`): the JP tables at
   `loc_780C0`. Data-only; the scroll routine is identical in both games.
   Verified in BlastEm: in a Landen-plain battle the row-20 scroll value
@@ -88,10 +89,8 @@ verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
 
 ## Not done
 
-* **Battle-list VWF and remaining menu checks.** Enemy/status battle windows
-  and shop lists remain fixed-width. The field-menu Switch screen has not yet
-  been exercised with a multi-character party; the main-menu list itself is
-  also fixed-width.
+* **Battle-list VWF.** Enemy/status battle windows and shop lists remain
+  fixed-width. The field main-menu list is also fixed-width.
 * **The translation itself**, and the glossary decisions
   (`work/glossary.md`).
 * **Fonts for other languages**: only ASCII plus `" ; & %` glyphs exist.
@@ -109,7 +108,7 @@ python work/scripts/narration.py           # BlastEm: the opening
 python work/scripts/battle.py              # BlastEm: first encounter, scrolling ground, VWF messages
 python work/scripts/saveslots.py           # BlastEm: inn save into slot 3, reset, continue
 python work/scripts/saveslots2.py          # BlastEm: two saves, continue/erase lists
-python work/scripts/menuvwf.py             # BlastEm: Item, Stats, Equip, Techs, generation 2
+python work/scripts/menuvwf.py             # BlastEm: Item, Stats, Equip, Techs, Switch, generation 2
 ```
 
 To reproduce the stock ROM: set every option in `ps3.options.asm` to 0 and
