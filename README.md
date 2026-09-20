@@ -8,8 +8,8 @@ A new English translation of *Phantasy Star III: Generations of Doom*
 built as a **source patch on top of the game's disassembly** rather than by
 editing the ROM — the same shape as the
 [Phantasy Star IV retranslation](https://github.com/ExcalZ/ps4-retranslation).
-The dialogue window, the field menu and the shop lists draw proportional
-(variable-width) text, there are four save slots (one per third-generation branch), the Japanese release's
+The dialogue window, the field menu, the shop lists and the battle box draw
+proportional (variable-width) text, there are four save slots (one per third-generation branch), the Japanese release's
 scrolling battle ground is restored, and the Technique Distributor no longer
 runs off the screen at high levels.
 
@@ -81,9 +81,9 @@ original and are what the generators key on.
   to 192 px in the dialogue face; only the text before the first `{PAGE}` may
   contain a `{BR}`.
 * **Names, menus, battle and shop text** live in `work/script.json`, one
-  segment per table. Item names use the proportional face with an 80 px
-  budget in the Item, Equip and Stats screens (the shop lists allow 88 px,
-  so the same budget covers them). The five field main-menu labels
+  segment per table. Item and technique names use the proportional face with
+  a 72 px budget (the battle lists; the menu allows 80 px and the shops 88),
+  enemy names 75 px and party names 40 px. The five field main-menu labels
   use it too, with a 56 px budget after their fixed one-cell margin. Other
   non-dialogue windows remain fixed-width 8x8 cells unless the proofreader
   identifies them as proportional; the widest stock line is their budget.

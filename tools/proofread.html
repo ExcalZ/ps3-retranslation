@@ -82,7 +82,7 @@
   The dialogue face and the stock 8x8 font are embedded: every line is drawn as the game will draw it.<br><br>
   Dialogue lines are proportional: <b>192 px per line</b>. The window shows two lines; {BR} starts the second,
   and each {PAGE} waits for a button, scrolls the window up one line and draws one more line - so only the text before the first {PAGE} may hold a {BR}.<br>
-  Item names are proportional with an <b>80 px</b> field-menu budget. Other text uses the budget shown in its preview.<br>
+  Item and technique names are proportional with a <b>72 px</b> budget (the battle lists), enemy names <b>75 px</b>, party names <b>40 px</b>; other text uses the budget shown in its preview.<br>
   <kbd>Ctrl</kbd>+<kbd>S</kbd> saves. Edit only the English; the JP and US columns are the originals.
 </div></main>
 <script>
@@ -201,8 +201,14 @@ function over(seg,e){
   return encode(e.en).includes(-1);
 }
 function isMainMenu(seg,e){return seg==='menus'&&(e.id==='menus#000'||e.id==='menus#001');}
-function isVWF(seg,e){return kind==='dialogue'||seg==='battle'||seg==='shops'||seg==='namestrings'||seg==='credits'||seg==='items'||isMainMenu(seg,e);}
-function vwfLimit(seg,e){return seg==='items'?80:isMainMenu(seg,e)?56:192;}
+// proportional budgets, the tightest window each table is drawn in:
+//   items      72 px  the battle item list (nine cells; the menu allows 80, the shops 88)
+//   techs      72 px  the battle technique list (same cells)
+//   enemies    75 px  the battle box's group line, 88 px less a space and a two-digit count
+//   charnames  40 px  the battle stat window (five cells; the field windows are wider)
+const VWF_SEGMENTS={items:72,techs:72,enemies:75,charnames:40};
+function isVWF(seg,e){return kind==='dialogue'||seg==='battle'||seg==='shops'||seg==='namestrings'||seg==='credits'||seg in VWF_SEGMENTS||isMainMenu(seg,e);}
+function vwfLimit(seg,e){return seg in VWF_SEGMENTS?VWF_SEGMENTS[seg]:isMainMenu(seg,e)?56:192;}
 function vwfLines(seg,e,page){return isMainMenu(seg,e)?(e.id==='menus#000'?4:1):(page?1:2);}
 function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 function fmtJP(s){return esc(s).replace(/\{([^}]*)\}/g,'<span class="ctl">{$1}</span>');}
@@ -243,7 +249,7 @@ function render(){
 function preview(row,seg,e){
   const host=row.querySelector('.pages'), label=row.querySelector('.preview .label'); host.innerHTML='';
   const bytes=encode(e.en), pages=lines(bytes), vwf=isVWF(seg,e), limit=vwf?vwfLimit(seg,e):null, budget=vwf?null:budgetOf(seg,e);
-  label.textContent=vwf?(seg==='items'?`field-menu item name: ${limit} px`:isMainMenu(seg,e)?`field main-menu label: ${limit} px`:`dialogue window: ${limit} px per line; two lines, then one new line per {PAGE}`):`fixed 8x8 cells, budget ${budget} cells (widest stock line)`;
+  label.textContent=vwf?(seg in VWF_SEGMENTS?`${seg}: ${limit} px (the tightest window this table is drawn in)`:isMainMenu(seg,e)?`field main-menu label: ${limit} px`:`dialogue window: ${limit} px per line; two lines, then one new line per {PAGE}`):`fixed 8x8 cells, budget ${budget} cells (widest stock line)`;
   pages.forEach((p,k)=>{
     const pg=document.createElement('div'); pg.className='page'; let bad=p.length>vwfLines(seg,e,k);
     p.forEach(l=>{const c=document.createElement('canvas'); if(vwf)drawVWF(c,l,2,limit); else drawFixed(c,l,2,budget); pg.appendChild(c);

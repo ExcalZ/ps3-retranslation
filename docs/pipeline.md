@@ -37,6 +37,7 @@ The options in `ps3.options.asm`:
 | `vwf_scroll_shadow` | the opening scroll's letters cast a 1 px black shadow (0 = plain letters like the stock scroll) |
 | `vwf_menu` | proportional item, equipment, technique and label text in the field menu; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `vwf_shop` | proportional item names in the shops' buy and sell lists; requires `vwf_dialogue` (`ext/vwf.asm`) |
+| `vwf_battle` | proportional enemy-group row, stat-window names and item / technique lists in the battle box; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `four_save_slots` | four save slots with safety copies in 32 KB of backup RAM (`ext/saveslots.asm`) |
 
 New code lives in `PSIII_Disasm/ext/*.asm`, included just before `EndOfRom`,
@@ -93,6 +94,9 @@ table). The credits' `hdr` is the two position bytes the generator keeps.
 | dialogue line | 192 px in the dialogue face (24 cells); two lines, then one per `{PAGE}` | `proofread.html`; the engine clips |
 | item name | 80 px in the field-menu face (10 cells) | `proofread.html`; the engine clips |
 | field main-menu label | 56 px after its fixed one-cell margin (7 cells) | `proofread.html`; the engine clips |
+| item and technique names | 72 px (the battle lists' nine cells; the menu allows 80, the shops 88) | `proofread.html` |
+| enemy names | 75 px (the battle box's group line beside a two-digit count) | `proofread.html` |
+| party names | 40 px (the battle stat window's five cells) | `proofread.html` |
 | fixed-width tables | the widest line of the stock table, in cells | `proofread.html` (`budget` per segment) |
 | script region | it may grow freely: everything after it is label-relative | - |
 

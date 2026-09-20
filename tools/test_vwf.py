@@ -390,11 +390,69 @@ def test_shop_list(sym):
     print('  shop list ok')
 
 
+def test_battle_box(sym):
+    """The battle screen ($232): an enemy-group line in the box buffer, the five character
+    names of the stat window (five-cell pool lines, $44(a6) = 4), an item-list entry at a
+    name's cell with $44(a6) = 9, and the message row still on the dialogue pool."""
+    m = Machine()
+    m.poke(MAP_ID, (0x232).to_bytes(2, 'big'))
+    # the enemy group: "{NAME:00} {NUM:00}" into the box buffer, stride $44
+    m.poke(0x0FF800, b'Chirper\xFC')
+    m.poke(NAMES, (0x0FF800).to_bytes(4, 'big'))
+    m.poke(NUMS, (2).to_bytes(4, 'big'))
+    m.poke(CTX + 0x42, (0x44).to_bytes(2, 'big'))
+    m.poke(CTX + 0x44, (12).to_bytes(2, 'big'))
+    render(m, sym, '{NAME:00} {NUM:00}', row0=0xFFFF9D70)
+    canvas, x = compose(b'Chirper \x03')
+    cells = (x + 7) // 8
+    glyph = [int.from_bytes(m.peek(0xFFFF9D70 + 0x44 + 2 * c, 2), 'big') for c in range(11)]
+    assert glyph == [0x8000 | (0x580 + c) for c in range(cells)] + [0x801F] * (11 - cells), [hex(v) for v in glyph]
+    assert bytes(m.vram[0x580 * 32:0x580 * 32 + cells * 32]) == expand(canvas)[:cells * 32]
+    assert m.peek(0xFFFF9D70 + 0x44 + 22, 2) == b'\x00\x00', 'the twelfth cell stays untouched (capacity 11)'
+    # character names: five cells apart in plane A row 20, $44(a6) = 4
+    m.poke(CTX + 0x42, (0x80).to_bytes(2, 'big'))
+    m.poke(CTX + 0x44, (4).to_bytes(2, 'big'))
+    for i, name in enumerate((b'Rhys', b'Marina', b'Searren', b'Mieu', b'Lyle')):
+        row0 = PLANE_A + 20 * 0x80 + (6 + 5 * i) * 2
+        render(m, sym, name.decode(), row0=row0)
+        canvas, x = compose(name)
+        cells = (x + 7) // 8
+        assert cells <= 5, (name, x)
+        n = max(cells, 4)
+        glyph = [int.from_bytes(m.peek(row0 + 0x80 + 2 * c, 2), 'big') for c in range(n)]
+        first = 0x5AC + 5 * i
+        assert glyph == [0x8000 | (first + c) for c in range(cells)] + [0x801F] * (n - cells), (name, [hex(v) for v in glyph])
+        assert bytes(m.vram[first * 32:first * 32 + cells * 32]) == expand(canvas)[:cells * 32], name
+    # an item-list entry at the second name's cell, told apart by $44(a6) = 9
+    m.poke(CTX + 0x44, (9).to_bytes(2, 'big'))
+    row0 = PLANE_A + 20 * 0x80 + 11 * 2
+    render(m, sym, 'Star Atomizer', row0=row0)
+    canvas, x = compose(b'Star Atomizer')
+    cells = (x + 7) // 8
+    n = max(cells, 9)               # the stock pads to $44(a6) = 9
+    glyph = [int.from_bytes(m.peek(row0 + 0x80 + 2 * c, 2), 'big') for c in range(n)]
+    assert glyph == [0x8000 | (0x25C + c) for c in range(cells)] + [0x801F] * (n - cells), [hex(v) for v in glyph]
+    assert bytes(m.vram[0x25C * 32:0x25C * 32 + cells * 32]) == expand(canvas)[:cells * 32]
+    # the message row keeps the dialogue pool
+    m.poke(CTX + 0x42, (STRIDE).to_bytes(2, 'big'))
+    m.poke(CTX + 0x44, (24).to_bytes(2, 'big'))
+    render(m, sym, "You've been ambushed!", row0=0xFFFF2C0A)
+    check_line(m, b"You've been ambushed!", 0xFFFF2C0A, 0, label='battle message')
+    # off the battle screen the same rows are stock
+    m.poke(MAP_ID, (0x5A).to_bytes(2, 'big'))
+    m.poke(CTX + 0x42, (0x80).to_bytes(2, 'big'))
+    m.poke(CTX + 0x44, (4).to_bytes(2, 'big'))
+    m.vram_writes = []
+    render(m, sym, 'Rhys', row0=PLANE_A + 20 * 0x80 + 6 * 2)
+    assert m.peek(PLANE_A + 21 * 0x80 + 6 * 2, 2) == bytes([0x80, ord('R')]) and not m.vram_writes
+    print('  battle box ok')
+
+
 def main():
     sym = Symbols()
     for t in (test_plain, test_br_and_page, test_scroll, test_inserts, test_clip, test_fixed_fallback, test_opening_scroll,
               test_menu_items, test_menu_labels, test_menu_main_list, test_menu_off,
-              test_shop_list):
+              test_shop_list, test_battle_box):
         t(sym)
     print('test_vwf: all passed')
 

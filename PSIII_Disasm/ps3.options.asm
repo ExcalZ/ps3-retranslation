@@ -31,3 +31,7 @@ vwf_menu = 1
 
 ; Proportional item names in the shops' buy and sell lists (needs vwf_dialogue).
 vwf_shop = 1
+
+; Proportional text in the battle box: the enemy-group row, the character
+; names of the stat window and the item and technique lists (needs vwf_dialogue).
+vwf_battle = 1

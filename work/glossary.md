@@ -115,18 +115,19 @@ US called them Melee, Order, Heal, Time.
 | AquaParts / Sub Parts / AeroParts | マリン / サブマリン / スカイパーツ | Marine / Submarine / Sky Parts |
 | LayaPndnt | ライアペンダント | Laya Pendant |
 
-The US item names were cut to nine cells. Field-menu names now use the
-proportional dialogue face in the existing 10-cell window, so their budget is
-80 px without moving the border ("Grenade Launcher" is 76 px and "Holy Knight
-Sword" is 75 px in the current face).
+The US item names were cut to nine cells. Every item window draws the
+proportional face now; the tightest is the battle item list at nine cells,
+so the budget is **72 px** (`proofread.html` measures it): "Soldier's Sword"
+is 64 px, "Star Atomizer" 57, "Forest Sapphire" 67, but "Grenade Launcher"
+(76) and "Holy Knight Sword" (75) no longer fit.
 
 ## Enemies
 
 Mostly different names in the JP (Glop = ジェリー Jelly, the Grinder family
 = バズール, Clops = ルーテラ, Dogbot = ヘルアーマー Hell Armour, Amazon =
 ナスカ). The full list is in `work/script.json` (`enemies`). Whether to
-restore them is a decision for the translation pass; the enemy name window
-is fixed-width.
+restore them is a decision for the translation pass; the battle box's group
+line is proportional, with 75 px for the name beside its two-digit count.
 
 ## Places
 

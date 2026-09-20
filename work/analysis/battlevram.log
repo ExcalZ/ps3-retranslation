@@ -1,0 +1,16 @@
+battle at frame 4795
+== box (ambush message) planeA 52 tiles (max $2E4)  planeB 98 (max $19C)  sprites 56
+   free runs (>=16) up to $540: ['$100-$13B (60)', '$19D-$280 (228)', '$2E5-$37F (155)', '$390-$39F (16)', '$3B0-$4BF (272)', '$4CC-$53F (116)']
+   planeA >$FF: 281 282 283 284 289 28A 28B 28C 28D 294 295 296 297 298 29A 29B 29C 2A0 2A1 2A2 2AF 2B0 2B1 2C0 2C1 2C2 2CC 2CD 2CE 2D1 2D2 2D9 2DA 2DB 2E3 2E4
+== after A planeA 52 tiles (max $2E4)  planeB 98 (max $19C)  sprites 56
+   free runs (>=16) up to $540: ['$100-$13B (60)', '$19D-$280 (228)', '$2E5-$37F (155)', '$390-$39F (16)', '$3B0-$4BF (272)', '$4CC-$53F (116)']
+   planeA >$FF: 281 282 283 284 287 289 28A 28B 28C 28D 294 295 297 298 29B 29C 29E 2A0 2A1 2A2 2AF 2B0 2B1 2C0 2C1 2C2 2CC 2CD 2CE 2D1 2D2 2D9 2DA 2DB 2E3 2E4
+== after A again planeA 52 tiles (max $2E4)  planeB 98 (max $19C)  sprites 56
+   free runs (>=16) up to $540: ['$100-$13B (60)', '$19D-$280 (228)', '$2E5-$37F (155)', '$390-$39F (16)', '$3B0-$4BF (272)', '$4CC-$53F (116)']
+   planeA >$FF: 281 282 283 284 289 28A 28B 28C 28D 294 295 297 298 299 29B 29C 29D 2A0 2A1 2A2 2AF 2B0 2B1 2C0 2C1 2C2 2CC 2CD 2CE 2D1 2D2 2D9 2DA 2DB 2E3 2E4
+== after C planeA 35 tiles (max $29C)  planeB 98 (max $19C)  sprites 56
+   free runs (>=16) up to $540: ['$100-$13B (60)', '$19D-$280 (228)', '$29D-$37F (227)', '$390-$39F (16)', '$3B0-$4BF (272)', '$4CC-$53F (116)']
+   planeA >$FF: 281 287 289 28A 28B 294 295 296 297 298 29A 29B 29C
+== after C again planeA 35 tiles (max $29C)  planeB 98 (max $19C)  sprites 56
+   free runs (>=16) up to $540: ['$100-$13B (60)', '$19D-$280 (228)', '$29D-$37F (227)', '$390-$39F (16)', '$3B0-$4BF (272)', '$4CC-$53F (116)']
+   planeA >$FF: 281 287 289 28A 28B 294 295 296 297 298 29A 29B 29C

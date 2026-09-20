@@ -113,6 +113,32 @@ renderer does - so a name has 88 px on every list; the proofreader's item
 budget stays the field menu's 80 px, the tighter of the two. The shop
 prompts were already proportional (the dialogue rows).
 
+## The battle box
+
+The battle screen (`map_id` `$232`) loads its art itself: the shared
+background tileset at `$2000-$4B7F` (380 tiles, every terrain draws from it),
+the box art and effects from the map descriptor at `$5000-$6C7F`, enemy art
+into slots at `$7000`, `$7400`, `$7800` and `$9000` (an enemy is up to 115
+tiles, so the whole of `$7000-$A7FF` is theirs), the sprite table at `$A800`
+and a per-line scroll table at `$AC00`. The box is drawn on the **window
+plane** at `$B000`, but only from its row 19 (`loc_FC4E` copies to `$B986`)
+and the window is shown from row 20, so the plane's rows 0-18 - `$B000-$B97F`,
+tiles `$580-$5CB` - are never written or displayed. With `vwf_battle = 1`
+those 76 tiles and the two gaps `$25C-$27F` and `$364-$37F` hold the pools of
+`VWFBattle_Table`: the four enemy-group lines (`{NAME} {NUM}` from
+`loc_DDDA` into the box buffer, 11 cells each), the five character names of
+the stat window (`Battle_WriteCharStats`, plane A row 20, five cells apart,
+so a name may now be five cells rather than the stock four - the highlight
+in `loc_D56C` is widened to match) and the five item / technique list
+entries (`loc_3D8AE` positions, nine cells, `$44(a6) = 9`). PS III has no
+enemy targeting, so nothing is anchored to the enemy row's cells; the list
+and name highlights are palette toggles on the copied words. The battle
+message row was already on the dialogue pool.
+
+The battle list's nine cells make **72 px the item and technique name budget
+game-wide**; the enemy line leaves 75 px for a name beside a two-digit
+count, and the stat window 40 px for a party member's name.
+
 Numeric fields still use the game's direct digit renderer, and the row-25
 character name plate remains fixed width. The item window is 10 cells (80 px);
 the longest translated-style names tested so far fit it. Cursor highlighting

@@ -56,6 +56,13 @@
 ; is written after the name from cell 11, so a name has 88 px on every list.
 ; A $F8 in a list line hands the rest to the stock renderer (the pool locate
 ; fails outside plane A), which no list uses.
+;
+; The battle box (vwf_battle): the enemy-group lines, the character names of
+; the stat window and the item and technique lists, from VWFBattle_Table
+; (see there for the battle screen's VRAM). PS III has no enemy targeting, so
+; nothing anchors a cursor to those cells; the highlights are palette toggles
+; on the copied words, and the name highlight is widened to five cells in
+; ps3.asm (loc_D56C) to match the name's five-cell pool line.
 ; ===========================================================================
 	if vwf_dialogue
 
@@ -69,7 +76,6 @@ VWFMENU_ROWS    = 24
 VWFMENU_COLS    = 32
 VWFMENU_COL0    = 4
 VWFPOOL_END     = $540		; the sprite table ($A800) starts here
-VWFSHOP_ROWS    = 5		; lines in every shop list window
 
 ; RAM equates: ext/ram.asm
 
@@ -95,11 +101,22 @@ VWFDia_NotMenu:
 	subi.w	#$222, d1
 	cmpi.w	#$E, d1			; a store screen ($222-$230, one per store type)
 	bhi.s	VWFDia_NotShop
-	bsr.w	VWFShop_Find		; d1 = pool tile, d2 = capacity; d1 = $FFFF if not a list line
-	cmpi.w	#VWFPOOL_END, d1
-	bcc.s	VWFDia_NotShop
+	lea	VWFShop_Table(pc), a2
+	bsr.w	VWFList_Find		; d1 = pool tile, d2 = capacity; d1 = $FFFF if not a list line
+	cmpi.w	#$FFFF, d1
+	beq.s	VWFDia_NotShop
 	bra.w	VWFMenu_Go
 VWFDia_NotShop:
+	endif
+	if vwf_battle
+	cmpi.w	#$232, (map_id).w	; the battle screen
+	bne.s	VWFDia_NotBattle
+	lea	VWFBattle_Table(pc), a2
+	bsr.w	VWFList_Find
+	cmpi.w	#$FFFF, d1
+	beq.s	VWFDia_NotBattle
+	bra.w	VWFMenu_Go
+VWFDia_NotBattle:
 	endif
 	cmpi.w	#VWFDIA_CELLS, $44(a6)
 	bne.s	VWFDia_Fixed
@@ -592,9 +609,10 @@ VWFScroll_Done:
 	rts
 
 ; ---------------------------------------------------------------------------
-; The field menu and the shop lists (VWFMenu_Go is the shared pooled-line entry).
+; The field menu, the shop lists and the battle box (VWFMenu_Go is the shared
+; pooled-line entry).
 ; ---------------------------------------------------------------------------
-	if vwf_menu|vwf_shop
+	if vwf_menu|vwf_shop|vwf_battle
 ; a1 = a mark row in the plane A buffer? Then d1 = the pool tile of its first
 ; cell and d2 = how many cells fit before column 36 (at most 24). d1 = $FFFF
 ; (past the pool's end: compare unsigned) when the row is not one the pool
@@ -685,50 +703,81 @@ VWFMenu_SetLine:
 	move.w	d1, (VWFDia_Pad).w
 	rts
 
-	if vwf_shop
-; The shop list windows: each is composed into its own buffer and copied to
-; plane A by the window animation. Low word of the first mark row, stride
-; between lines, cells ($44(a6) at the time), first pool tile.
-VWFShop_Table:
-	dc.w	$A126, $48, 16, $240	; buy list (loc_3DB34): the price is written from cell 11
-	dc.w	$9D30, $38, 11, $290	; sell list, page one (loc_3DB10)
-	dc.w	$9E80, $38, 11, $2C7	; sell list, page two (loc_3DB1C)
-	dc.w	0
-
-; a1 = the first mark row of a line of one of those windows, with $44(a6)
-; matching? Then d1 = its pool tile and d2 = the cells; d1 = $FFFF otherwise.
-VWFShop_Find:
-	lea	VWFShop_Table(pc), a2
-VWFShop_Next:
+	if vwf_shop|vwf_battle
+; List windows whose lines get a pool line each. A table entry is six words:
+; the low word of the first line's mark row, the stride between lines, the
+; number of lines, the $44(a6) the call must carry (0: any), the capacity in
+; cells, and the first pool tile; a zero row ends the table. Given a1 and a
+; table in a2, VWFList_Find returns d1 = the line's first pool tile and
+; d2 = its capacity, or d1 = $FFFF. d3-d7 are scratch.
+VWFList_Find:
 	move.w	(a2)+, d1		; first mark row (low word); 0 ends the table
-	beq.s	VWFShop_No
+	beq.s	VWFList_No
 	move.w	(a2)+, d2		; stride
-	move.w	(a2)+, d3		; cells
-	move.w	(a2)+, d4		; pool
-	cmp.w	$44(a6), d3
-	bne.s	VWFShop_Next
-	move.w	a1, d5
-	sub.w	d1, d5			; offset from the first line
-	bcs.s	VWFShop_Next
-	moveq	#0, d6			; line index: the offset must be a multiple of the stride
-VWFShop_Line:
-	tst.w	d5
-	beq.s	VWFShop_Found
-	sub.w	d2, d5
-	bcs.s	VWFShop_Next
-	addq.w	#1, d6
-	cmpi.w	#VWFSHOP_ROWS, d6
-	bcs.s	VWFShop_Line
-	bra.s	VWFShop_Next
-VWFShop_Found:
-	mulu.w	d3, d6			; line * cells
-	add.w	d4, d6
-	move.w	d6, d1
-	move.w	d3, d2
+	move.w	(a2)+, d3		; lines
+	move.w	(a2)+, d4		; $44(a6) to match, or 0
+	move.w	(a2)+, d5		; capacity
+	move.w	(a2)+, d6		; first pool tile
+	tst.w	d4
+	beq.s	+
+	cmp.w	$44(a6), d4
+	bne.s	VWFList_Find
++
+	move.w	a1, d7
+	sub.w	d1, d7			; offset from the first line
+	bcs.s	VWFList_Find
+	moveq	#0, d1			; line index: the offset must be a multiple of the stride
+VWFList_Line:
+	tst.w	d7
+	beq.s	VWFList_Found
+	sub.w	d2, d7
+	bcs.s	VWFList_Find
+	addq.w	#1, d1
+	cmp.w	d3, d1
+	bcs.s	VWFList_Line
+	bra.s	VWFList_Find
+VWFList_Found:
+	mulu.w	d5, d1			; line * capacity
+	add.w	d6, d1
+	move.w	d5, d2
 	rts
-VWFShop_No:
+VWFList_No:
 	move.w	#$FFFF, d1
 	rts
+	endif
+
+	if vwf_shop
+; The shop list windows: each is composed into its own buffer and copied to
+; plane A by the window animation.
+VWFShop_Table:
+	dc.w	$A126, $48, 5, 16, 16, $240	; buy list (loc_3DB34): the price is written from cell 11
+	dc.w	$9D30, $38, 5, 11, 11, $290	; sell list, page one (loc_3DB10)
+	dc.w	$9E80, $38, 5, 11, 11, $2C7	; sell list, page two (loc_3DB1C)
+	dc.w	0
+	endif
+
+	if vwf_battle
+; The battle screen ($232). Its VRAM: background tiles $100-$27B, the box art
+; and effects $280-$363, enemy art from $380, the sprite table at $A800, the
+; box itself on the window plane from $B986 (rows 19-26; the window is shown
+; from row 20). Free everywhere in a battle: $25C-$27F, $364-$37F, and the
+; window plane's rows 0-18, $B000-$B97F = tiles $580-$5CB, which nothing
+; writes or displays. The enemy-group lines ("{NAME} {NUM}", loc_DDDA) are
+; composed into the box buffer; the character names of the stat window
+; (Battle_WriteCharStats, $44(a6) = 4, five cells apart) and the item and
+; technique lists (loc_3D8AE positions, $44(a6) = 9, nine cells) into plane A.
+VWFBattle_Table:
+	dc.w	$9D70, 0, 1, 0, 11, $580	; enemy group 0 (front row, left)
+	dc.w	$9D86, 0, 1, 0, 11, $58B	; group 1 (front row, right)
+	dc.w	$9CE8, 0, 1, 0, 11, $596	; group 2 (back row, left)
+	dc.w	$9CFE, 0, 1, 0, 11, $5A1	; group 3 (back row, right)
+	dc.w	$2A0C, $A, 5, 4, 5, $5AC	; character names, row 20, columns 6/11/16/21/26
+	dc.w	$2A16, 0, 1, 9, 9, $25C		; item / technique list entries
+	dc.w	$2A2A, 0, 1, 9, 9, $265
+	dc.w	$2B16, 0, 1, 9, 9, $26E
+	dc.w	$2B2A, 0, 1, 9, 9, $277
+	dc.w	$2C16, 0, 1, 9, 9, $364
+	dc.w	0
 	endif
 
 ; d1 = pool tile, d2 = capacity: a pooled line (menu or shop)

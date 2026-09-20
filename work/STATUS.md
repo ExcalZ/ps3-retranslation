@@ -42,8 +42,7 @@ verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
   (which found and fixed a register clobber that truncated `{NUM}` inserts
   to one digit); battle messages (`$FFFF2C0A`, the plane-A row the battle
   box uses) - seen in BlastEm ("You've been ambushed!", "Chirper attacks!",
-  "Damage 2", "You have been defeated."). The enemy-name row stays fixed
-  width: its columns place the target cursor. A battle message is two lines
+  "Damage 2", "You have been defeated."). A battle message is two lines
   at most; the two three-line "won" messages are re-flowed in `en`. Shop
   prompts (same path as the dialogue's `$FFFF9AB6`) seen in BlastEm with the
   shop work below.
@@ -104,10 +103,26 @@ verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
   the cascaded page two, the offer and the sale; the field and the menu are
   clean afterwards.
 
+* **Battle-box VWF** (`vwf_battle`, `ext/vwf.asm`). The battle screen's
+  VRAM was mapped from its loaders (background `$100-$27B`, box art and
+  effects `$280-$363`, enemies from `$380`, the box on the window plane
+  from `$B986`): free are `$25C-$27F`, `$364-$37F` and the window plane's
+  never-shown rows 0-18 (`$580-$5CB`). The enemy-group lines, the stat
+  window's character names (five cells now, highlight widened at
+  `loc_D56C`) and the item / technique lists get pool lines there
+  (`VWFBattle_Table`). PS III has no enemy targeting - the earlier note that
+  the enemy row's columns place a cursor was wrong. Verified under the
+  interpreter and in BlastEm (`work/scripts/battlevwf.py`,
+  `work/analysis/bv2_*.png`): the enemy row, the stat window's name through
+  the command grids, the item list with its highlight, a round of combat.
+  Consequence for the translation: item and technique names are budgeted
+  at **72 px** (the battle lists' nine cells), enemy names 75 px, party
+  names 40 px - `proofread.html` enforces it.
+
 ## Not done
 
-* **Battle-list VWF.** The enemy-name and status rows of the battle box
-  remain fixed-width: their columns place the target cursor.
+* **Fixed-width leftovers.** The field menu's row-25 name plate, the
+  "Whose?" name lists and the numbers; the game-select save list.
 * **The translation itself**, and the glossary decisions
   (`work/glossary.md`).
 * **Fonts for other languages**: only ASCII plus `" ; & %` glyphs exist.

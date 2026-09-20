@@ -111,24 +111,42 @@ def main():
             else:
                 ok('menu pool tiles $%X-$%X below the sprite table at $540' % (menu_pool, menu_end - 1))
         if opts.get('vwf_shop') == '1':
-            # the shop list table: first mark row, stride, cells, pool; the pool lines must not
-            # overlap each other and must sit below the sprite table
-            rows = int(re.search(r'^VWFSHOP_ROWS\s*=\s*(\d+)', src, re.M).group(1))
-            tab = re.findall(r'^\tdc\.w\t\$([0-9A-F]+), \$([0-9A-F]+), (\d+), \$([0-9A-F]+)', src, re.M)
-            spans = sorted((int(pool, 16), int(pool, 16) + rows * int(cells)) for _, _, cells, pool in tab)
+            # the shop list table (first mark row, stride, lines, $44 to match, capacity, pool):
+            # the pool lines must not overlap each other and must sit below the sprite table
+            tab = src[src.index('VWFShop_Table:'):]
+            tab = tab[:tab.index('dc.w\t0')]
+            tab = re.findall(r'^\tdc\.w\t\$([0-9A-F]+), \$([0-9A-F]+), (\d+), (\d+), (\d+), \$([0-9A-F]+)', tab, re.M)
+            spans = sorted((int(pool, 16), int(pool, 16) + int(lines) * int(cap)) for _, _, lines, _, cap, pool in tab)
             if len(spans) != 3 or any(spans[i][1] > spans[i + 1][0] for i in range(len(spans) - 1)) or spans[-1][1] > 0x540:
                 fail('shop pool lines %s overlap or reach the sprite table' % spans)
             else:
                 ok('shop pool tiles $%X-$%X (%d lists)' % (spans[0][0], spans[-1][1] - 1, len(spans)))
+        if opts.get('vwf_battle') == '1':
+            # every battle pool line must lie in a range no battle loader touches (see VWFBattle_Table)
+            free = ((0x25C, 0x280), (0x364, 0x380), (0x580, 0x5CC))
+            tab = src[src.index('VWFBattle_Table:'):]
+            tab = tab[:tab.index('dc.w\t0')]
+            lines = re.findall(r'^\tdc\.w\t\$([0-9A-F]+), \$?([0-9A-F]+), (\d+), (\d+), (\d+), \$([0-9A-F]+)', tab, re.M)
+            spans = []
+            for _, _, n, _, cap, pool in lines:
+                for i in range(int(n)):
+                    spans.append((int(pool, 16) + i * int(cap), int(pool, 16) + (i + 1) * int(cap)))
+            spans.sort()
+            bad = [s for s in spans if not any(a <= s[0] and s[1] <= b for a, b in free)]
+            overlap = [(spans[i], spans[i + 1]) for i in range(len(spans) - 1) if spans[i][1] > spans[i + 1][0]]
+            if bad or overlap or len(spans) != 14:
+                fail('battle pool lines outside the free ranges %s or overlapping %s' % (bad, overlap))
+            else:
+                ok('battle pool: %d lines inside $25C-$27F, $364-$37F, $580-$5CB' % len(spans))
         for name in ('VWFDia_Entry', 'VWFDia_ScrollUp', 'VWFDia_Font'):
             if sym[name] < 0xC0000:
                 fail('%s at $%X is below the original end of ROM' % (name, sym[name]))
         ok('extension routines sit past $C0000')
     # 7. options
-    for k in ('scrolling_ground', 'four_save_slots', 'fix_tech_distributor', 'vwf_dialogue', 'vwf_scroll_shadow', 'vwf_menu', 'vwf_shop'):
+    for k in ('scrolling_ground', 'four_save_slots', 'fix_tech_distributor', 'vwf_dialogue', 'vwf_scroll_shadow', 'vwf_menu', 'vwf_shop', 'vwf_battle'):
         if k not in opts:
             fail('option %s missing or not 0/1' % k)
-    for k in ('vwf_menu', 'vwf_shop'):
+    for k in ('vwf_menu', 'vwf_shop', 'vwf_battle'):
         if opts.get(k) == '1' and opts.get('vwf_dialogue') != '1':
             fail('%s requires vwf_dialogue' % k)
     ok('options: ' + ', '.join('%s=%s' % kv for kv in sorted(opts.items())))

@@ -17674,16 +17674,25 @@ loc_D56C:
 	not.l	d1
 	and.l	d1, $80(a0)
 	and.l	d1, $84(a0)
+	if vwf_battle
+	and.w	d1, $88(a0)		; the proportional name may reach a fifth cell (ext/vwf.asm)
+	endif
 	rts
 loc_D57C:
 	bsr.w	loc_D598
 	eor.l	d1, $80(a0)
 	eor.l	d1, $84(a0)
+	if vwf_battle
+	eor.w	d1, $88(a0)
+	endif
 	rts
 loc_D58A:
 	bsr.w	loc_D598
 	or.l	d1, $80(a0)
 	or.l	d1, $84(a0)
+	if vwf_battle
+	or.w	d1, $88(a0)
+	endif
 	rts
 loc_D598:
 	lea	(loc_3D8D2).l, a0
