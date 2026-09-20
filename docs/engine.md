@@ -141,6 +141,15 @@ still for 8 frames between the two scrolls, so `VWFSmooth_Finish` checks
 the first completes (the counter still runs its 8 frames after the last
 line before the button is read again, as stock).
 
+The dwell of an unattended page (bit 7 of `$FFFFD286`: the attract-mode and
+game-over narration, cutscene pages, battle messages) was `$20(a6)` frames
+on the byte `$21(a6)` whatever the page held, and the translation's lines
+carry nearly twice the text of the US lines. `VWFDwell_Tick` (hooked at
+`loc_A30E`) counts on a word instead and scales the dwell by the ink of the
+two lines on show (`VWFDia_Xs`): `$20(a6)` frames up to 240 px, a US-density
+page, proportionally more beyond it - a battle message or a short page keeps
+the stock timing, a full two-line page waits about half as long again.
+
 ## Party names longer than four letters
 
 The initial stats records (`MieuInitStatsData`...) hold each name in a

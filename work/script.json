@@ -123,7 +123,7 @@
      "hex": "0282546865206c6567656e6473206f66207468652070617374fc",
      "hdr": "0282",
      "us": "The legends of the past",
-     "en": "A thousand years ago, a witch named",
+     "en": "A thousand years ago...",
      "jp": "1000ねんまえ\nライアと いう まじょが うまれた。。。\nライアは、モンスターぐんだんを つくりだし\nせかいを せいふくしようと たくらんだ。。。\nしかし、えいゆう オラキオが、ロボットぐんだんを\nひきいて ライアに たちむかった。\nふたつの ぐんだんは、せかいを ふたつにして\nたたかいを つづけ、\nさいごは、ライアと オラキオは あいうちになり、\nともに このよから きえた。\nこのとき、ライアに くみして たたかった\nひとびとの しそんは、ライアの たみと。。。\nオラキオに みかたして たたかった ひとびとの\nしそんは、オラキオの たみと なのっている。\nこの せんそうによって、ほしの せかいを\nたびするほど さかえた ぶんめいは ほろび、\nひとびとの せいかつは ちゅうせいの じだいと\nかわらぬものとなった。。。",
      "note": "The JP opening scroll (18 lines, from the JP ROM at $1A0C0-$1A38A) is attached to this first line; the 21 US lines are one fixed-width block of 24 cells each."
     },
@@ -133,7 +133,7 @@
      "hex": "02867368617065206f7572206c6976657320616e64fc",
      "hdr": "0286",
      "us": "shape our lives and",
-     "en": "Laia was born. She bred an army of"
+     "en": "A witch named Laia was born. She bred an army of"
     },
     {
      "id": "loc_1A36C",
@@ -181,7 +181,7 @@
      "hex": "029e4c617961206563686f20646f776e207468726f756768fc",
      "hdr": "029e",
      "us": "Laya echo down through",
-     "en": "other down and both vanished from it."
+     "en": "other down and both disappeared."
     },
     {
      "id": "loc_1A404",
@@ -277,7 +277,7 @@
      "hex": "02ce6c697665206f722064696520627920796f7572fc",
      "hdr": "02ce",
      "us": "live or die by your",
-     "en": " "
+     "en": "{00}"
     },
     {
      "id": "loc_1A53C",
@@ -293,7 +293,7 @@
      "hex": "02e400fc",
      "hdr": "02e4",
      "us": "{00}",
-     "en": "{00}"
+     "en": ""
     },
     {
      "id": "loc_1A55A",

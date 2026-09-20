@@ -18,8 +18,8 @@ the Japanese throughout - the user's decision of 2026-09-19, recorded in
 `work/glossary.md`. What remains is proofreading in play: only a handful of
 lines have been seen on the console side so far (see the log).
 
-Canonical experimental ROM `ps3en.bin` (every option on): 825,992 bytes,
-SHA-256 `C4F70A39FE73E8EC75B1D28E8C0108BA5A99DE2EBEF6AACAF240446D7DF07A63`;
+Canonical experimental ROM `ps3en.bin` (every option on): 826,066 bytes,
+SHA-256 `3CF9BFAD7BBEF6DDA8E04BADA81BDBCE8D7EE6CA7CCB0767425DC90B9E8F40B5`;
 `tools/checkbuild.py` prints its SHA-256 after each build.
 Stock US ROM (every option 0 and every `en` equal to `us` reproduces it -
 verified 2026-09-20 after the translation pass): 786,432 bytes, SHA-256
@@ -198,6 +198,14 @@ does not spawn the walking sprite) and wanders into the first encounter;
 `battle_win.py` plays it out with C. Still to do in BlastEm: the church save.
 
 ## Log
+
+* 2026-09-20 (night) - The attract narration read too fast: the unattended
+  dwell was a fixed `$20(a6)` frames per two lines, and the lines now hold
+  twice the text. `VWFDwell_Tick` scales it by the two lines' ink width
+  (`docs/engine.md`); pages of the narration went from ~3.2 s to ~5 s in
+  BlastEm (`work/analysis/at*.png`). The narration's trailing `{PAGE}`, a US
+  addition that scrolled the last line up alone, is gone (the JP has none).
+  The proofreader previews the pooled menu windows proportionally now.
 
 * 2026-09-20 (evening) - The user's first play notes: Buy/Sell, the
   character names, "MES", "Who?nique" and a cursor highlight. A BlastEm

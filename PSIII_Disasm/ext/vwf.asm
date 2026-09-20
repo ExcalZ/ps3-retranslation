@@ -165,6 +165,9 @@ VWFDia_Go:
 	bne.s	+			; a message starts with its first line: no scroll can be
 	clr.w	(VWFSmooth_Active).w	; running and nothing is deferred (the RAM is not zero
 	clr.w	(VWFSmooth_Defer).w	; after boot: the SEGA screen's art buffer lived here)
+	clr.w	(VWFDwell_Count).w	; and its first page's dwell is measured afresh
+	clr.l	(VWFDia_Xs).w		; no line widths from the last message
+	clr.w	(VWFDia_Xs+4).w
 +
 	tst.w	(VWFSmooth_Defer).w
 	beq.s	+
@@ -873,6 +876,41 @@ VWFSmooth_Begin_Cell:
 VWFSmooth_Rates:
 	dc.b	2, 3, 4, 6, 8, 12, 16, 24, 32	; 1/8 px per frame for speeds 1-9
 	even
+
+; The dwell of an unattended page (bit 7 of $FFFFD286: the attract-mode and
+; game-over narration, cutscene pages, battle messages). Stock counts $20(a6)
+; frames on the byte $21(a6) and then advances two lines, whatever they hold.
+; The translation's lines carry nearly twice the text of the US lines, so the
+; dwell now grows with the ink of the two lines on show: $20(a6) frames for
+; up to VWFDWELL_REF px (a US-density page), proportionally more beyond it,
+; on a word counter. Called from loc_A30E every frame of the wait; returns
+; d0 = 0 to keep waiting, 1 to advance.
+VWFDWELL_REF = 240			; two lines of about 23 US characters in this face
+VWFDwell_Tick:
+	tst.w	(VWFDwell_Count).w
+	bne.s	VWFDwell_Count_Down
+	moveq	#0, d0
+	move.b	$20(a6), d0
+	move.w	(VWFDia_Xs).w, d1
+	add.w	(VWFDia_Xs+2).w, d1
+	cmpi.w	#VWFDWELL_REF, d1
+	bls.s	+
+	mulu.w	d1, d0
+	divu.w	#VWFDWELL_REF, d0
+	cmpi.w	#$3FF, d0
+	bls.s	+
+	move.w	#$3FF, d0
++
+	addq.w	#1, d0			; the stock byte counts through zero before it wraps
+	move.w	d0, (VWFDwell_Count).w
+VWFDwell_Count_Down:
+	subq.w	#1, (VWFDwell_Count).w
+	beq.s	+
+	moveq	#0, d0
+	rts
++
+	moveq	#1, d0
+	rts
 
 ; d0 = offset in px (0-16): build the interior view from the three canvases,
 ; expand it and upload it to the scroll pool.

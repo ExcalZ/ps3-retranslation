@@ -13547,10 +13547,17 @@ loc_A2F4:
 loc_A30E:
 	btst	#7, $FFFFD286.w
 	beq.s	loc_A324
+	if smooth_scroll
+	jsr	(VWFDwell_Tick).l	; the dwell grows with the width of the two lines on show (ext/vwf.asm)
+	tst.w	d0
+	beq.s	loc_A346
+	bra.s	loc_A334
+	else
 	subq.b	#1, $21(a6)
 	bcc.s	loc_A346
 	move.b	$20(a6), $21(a6)
 	bra.s	loc_A334
+	endif
 loc_A324:
 	move.b	(joypad_pressed).w, d0
 	andi.b	#ButtonUp_Mask|ButtonDown_Mask|ButtonLeft_Mask|ButtonRight_Mask|Button_B_Mask|Button_C_Mask|Button_A_Mask, d0
@@ -34394,14 +34401,14 @@ loc_1A338:	dc.w	loc_1A7BA-loc_1A338
 ; ==========================================
 loc_1A33C:
 	dc.b	$02, $82
-	dc.b	"A thousand years ago, a witch named"
+	dc.b	"A thousand years ago..."
 	dc.b	$FC
 	
 	even
 	
 loc_1A356:
 	dc.b	$02, $86
-	dc.b	"Laia was born. She bred an army of"
+	dc.b	"A witch named Laia was born. She bred an army of"
 	dc.b	$FC
 	
 	even
@@ -34443,7 +34450,7 @@ loc_1A3D0:
 	
 loc_1A3EA:
 	dc.b	$02, $9E
-	dc.b	"other down and both vanished from it."
+	dc.b	"other down and both disappeared."
 	dc.b	$FC
 	
 	align 2
@@ -34527,7 +34534,7 @@ loc_1A50A:
 	
 loc_1A526:
 	dc.b	$02, $CE
-	dc.b	" "
+	dc.b	$00
 	dc.b	$FC
 	
 	even
@@ -34541,7 +34548,6 @@ loc_1A53C:
 	
 loc_1A556:
 	dc.b	$02, $E4
-	dc.b	$00
 	dc.b	$FC
 ; ==========================================
 	even
@@ -50137,7 +50143,6 @@ loc_25F24:
 	dc.b	"On the shore of the land where Orakio was"
 	dc.b	$EC
 	dc.b	"raised, a girl washed up, her memory gone."
-	dc.b	$EC
 	dc.b	$FC
 	
 	even
@@ -50669,7 +50674,7 @@ loc_26ED6:
 	dc.b	$EC
 	dc.b	"But I am not unhappy now."
 	dc.b	$EC
-	dc.b	"Because I am with you, Prince Kein..."
+	dc.b	"Because I am with you, my lord Kein..."
 	dc.b	$FC
 	
 	even
@@ -50687,7 +50692,7 @@ loc_26ED6:
 	dc.b	$16, $00
 	dc.b	"May the hero Orakio's blessing be upon"
 	dc.b	$F8
-	dc.b	"Prince Kein and Lady Marina..."
+	dc.b	"Lord Kein and Lady Marina..."
 	dc.b	$FC
 	
 	even
