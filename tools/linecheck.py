@@ -9,10 +9,12 @@ Proportional text (dialogue, battle, shops, credits): 192 px per line in the
 dialogue face; the first page holds two lines ({BR}), each {PAGE} one more.
 Items and techniques 72 px (the technique names repeated in `menus` too),
 enemies 75 px, party names 40 px, the two field main-menu labels 56 px (four
-lines for the first, one for the second). Other segments are fixed-width: the
-widest US line of the segment is the cell budget - the ending transmission
-(`namestrings`, drawn straight into VRAM by loc_F7F0) is 24 cells. Inserted
-names count 34 px, numbers 15 px, as the proofreader assumes.
+lines for the first, one for the second); the other menu-map windows (`menus`,
+`menus2`, `equip`) draw proportionally inside their stock cell budget, a {BR}
+moving to the next pool line. Fixed-width: the game-select lists and speed
+prompt in `shops`, `marriage`, `megido`, `title`, and the ending transmission
+(`namestrings`, 24 cells); the widest US line of the segment is the cell
+budget. Inserted names count 34 px, numbers 15 px, as the proofreader assumes.
 """
 import json, os, re, sys
 
@@ -28,7 +30,8 @@ VWF_SEGMENTS = {'items': 72, 'techs': 72, 'enemies': 75, 'charnames': 40}
 VWF_LINE_SEGMENTS = ('battle', 'shops', 'credits')
 MENU_TECHS = tuple('menus#%03d' % i for i in range(20, 36))   # technique names in the Techs screen
 MAIN_MENU = ('menus#000', 'menus#001')
-FIXED_MENUS = ('shops#011', 'shops#018', 'shops#054', 'shops#056', 'shops#064', 'shops#065', 'shops#066', 'shops#067', 'shops#068')   # game-select and shop menus: stock 8x8 layouts
+FIXED_MENUS = ('shops#054', 'shops#056', 'shops#064', 'shops#065', 'shops#066', 'shops#067', 'shops#068')   # game-select lists and the speed prompt: stock 8x8
+POOLED_SEGMENTS = ('menus', 'menus2', 'equip')   # every menu-map window draws proportionally inside its stock cell budget
 LINE = 192
 
 
@@ -118,7 +121,11 @@ def run(changed_only=False, show_widths=False):
             elif name in VWF_SEGMENTS or r['id'] in MENU_TECHS:
                 pr = check_vwf(r['en'], VWF_SEGMENTS.get(name, VWF_SEGMENTS['techs']), 2, 1, cs)
             elif name in VWF_LINE_SEGMENTS and r['id'] not in FIXED_MENUS:
-                pr = check_vwf(r['en'], LINE, 2, 1, cs)
+                pr = check_vwf(r['en'], LINE, 99 if name == 'shops' else 2, 1, cs)
+            elif name in POOLED_SEGMENTS:
+                if fixed is None:
+                    fixed = segment_budget(seg)
+                pr = check_vwf(r['en'], fixed * 8, 99, 99, cs)
             else:
                 if fixed is None:
                     fixed = segment_budget(seg)

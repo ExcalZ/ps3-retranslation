@@ -120,7 +120,8 @@ only, `--widths` to print each one's widest line).
 | enemy names | 75 px (the battle box's group line beside a two-digit count) | `proofread.html` |
 | party names | 40 px (the battle stat window's five cells); the record field itself is four letters, so the names live in `VWFName_Table` (`$E0 nn`, see engine.md) | `proofread.html` |
 | ending transmission (`namestrings`) | 24 cells, fixed-width: `loc_F7F0` writes each pair of lines straight into VRAM in the 8x8 font | `proofread.html`, `linecheck.py` |
-| fixed-width tables | the widest line of the stock table, in cells | `proofread.html` (`budget` per segment) |
+| other menu-map windows (`menus`, `menus2`, `equip`) | proportional inside the stock cell budget (widest US line x 8 px); a `{BR}` moves to the next pool line | `proofread.html`, `linecheck.py` |
+| fixed-width tables (`marriage`, `megido`, `title`, the game-select lists and speed prompt in `shops`) | the widest line of the stock table, in cells | `proofread.html` (`budget` per segment) |
 | script region | it may grow freely: everything after it is label-relative | - |
 
 The menu pool has more physical room on the left item column, but 80 px is
