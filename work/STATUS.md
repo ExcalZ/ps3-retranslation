@@ -110,11 +110,16 @@ verified 2026-09-19 after the menu-VWF work): 786,432 bytes, SHA-256
   never-shown rows 0-18 (`$580-$5CB`). The enemy-group lines, the stat
   window's character names (five cells now, highlight widened at
   `loc_D56C`) and the item / technique lists get pool lines there
-  (`VWFBattle_Table`). PS III has no enemy targeting - the earlier note that
-  the enemy row's columns place a cursor was wrong. Verified under the
-  interpreter and in BlastEm (`work/scripts/battlevwf.py`,
-  `work/analysis/bv2_*.png`): the enemy row, the stat window's name through
-  the command grids, the item list with its highlight, a round of combat.
+  (`VWFBattle_Table`). Targeting does not touch those cells (the earlier
+  note that the enemy row's columns place a cursor was wrong): an enemy
+  target is the enemy's own sprite lit up, an ally target the character's
+  name in the stat window. Verified under the interpreter and in BlastEm
+  (`work/scripts/battlevwf.py`, `work/analysis/bv2_*.png`): the enemy row,
+  the stat window's name through the command grids, attack targeting over
+  three Chirpers with the weapon name shown, the item list with its
+  highlight, a round of combat. Not yet seen: ally targeting with two
+  party members (the name highlight; its widening is the stock toggle over
+  one more cell).
   Consequence for the translation: item and technique names are budgeted
   at **72 px** (the battle lists' nine cells), enemy names 75 px, party
   names 40 px - `proofread.html` enforces it.

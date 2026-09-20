@@ -127,6 +127,18 @@ injection at `ReadJoypad`, work-RAM reads, window screenshots, a `teleport`
 that fakes a door transition and store entry by the shop-type flag - so a
 scenario is a deterministic pad script from power-on (`work/scripts/`).
 
+Snapshots make that fast: `boot_to_field` takes the 64 KB of work RAM and
+the registers at the pad breakpoint once it reaches Landen (`snapshot`,
+`work/states/landen-<romkey>.snap`) and on later runs puts them back into a
+freshly started BlastEm at its first pad read (`resume`): the CPU returns
+through the snapshot's own stack, a faked map transition makes the game
+rebuild VRAM and the VDP from RAM, and a trampoline in the unused part of
+BlastEm's ROM copy reloads the font block that only the game's start loads.
+Five seconds instead of seventy. RAM holds ROM addresses, so a snapshot is
+keyed by the ROM's hash and remade after any build that moves code (a text
+change does). A snapshot must be taken on a map the field loop can reload -
+not in a battle, a menu or a shop.
+
 ## 6. Retargeting
 
 The pipeline is language-agnostic up to the font. To translate into another

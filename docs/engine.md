@@ -130,10 +130,12 @@ those 76 tiles and the two gaps `$25C-$27F` and `$364-$37F` hold the pools of
 the stat window (`Battle_WriteCharStats`, plane A row 20, five cells apart,
 so a name may now be five cells rather than the stock four - the highlight
 in `loc_D56C` is widened to match) and the five item / technique list
-entries (`loc_3D8AE` positions, nine cells, `$44(a6) = 9`). PS III has no
-enemy targeting, so nothing is anchored to the enemy row's cells; the list
-and name highlights are palette toggles on the copied words. The battle
-message row was already on the dialogue pool.
+entries (`loc_3D8AE` positions, nine cells, `$44(a6) = 9`). Targeting does
+not touch the enemy row's cells: an enemy target is the enemy's own sprite
+lit up, an ally target the character's name in the stat window (the
+`loc_D56C` palette toggle, widened to five cells); the list highlights
+toggle the same way. The battle message row was already on the dialogue
+pool.
 
 The battle list's nine cells make **72 px the item and technique name budget
 game-wide**; the enemy line leaves 75 px for a name beside a two-digit

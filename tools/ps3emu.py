@@ -117,9 +117,79 @@ if __name__ == '__main__':
 SCREEN_TITLE, SCREEN_GAMESEL, SCREEN_MAIN = 4, 0xC, 0x10
 
 
+# ---------------------------------------------------------------- snapshots
+# A snapshot is the 64 KB of work RAM plus the CPU registers, taken at the pad
+# breakpoint, and it resumes into a fresh BlastEm at that same breakpoint: RAM
+# and registers go back, the CPU returns through the snapshot's own stack, and
+# a faked map transition makes the game rebuild VRAM, CRAM and the VDP from
+# RAM (a snapshot must therefore be taken on a map the field loop can reload,
+# not in a battle or a menu). RAM holds ROM addresses (object routines,
+# script and name pointers), so a snapshot is tied to the ROM's layout: it is
+# keyed by the ROM's SHA-256 and is remade when the ROM changes.
+STATES = os.path.join(ROOT, 'work', 'states')
+
+
+def _rom_key(rom):
+    import hashlib
+    return hashlib.sha256(open(rom, 'rb').read()).hexdigest()[:16]
+
+
+def snapshot(em, name):
+    """Save work RAM and registers under work/states/<name>-<romkey>.snap."""
+    os.makedirs(STATES, exist_ok=True)
+    path = os.path.join(STATES, '%s-%s.snap' % (name, _rom_key(em.rom)))
+    r = em.regs()
+    hdr = b''.join(v.to_bytes(4, 'big') for v in r['d'] + r['a'] + [r['sr'], r['pc'], em.frame])
+    open(path, 'wb').write(hdr + em.read(0xFF0000, 0x10000))
+    return path
+
+
+def resume(em, name):
+    """Put a snapshot back into a BlastEm that has just started (its first pad read),
+    then reload its map at the player's position so VRAM follows. Returns False when no
+    snapshot matches the ROM."""
+    path = os.path.join(STATES, '%s-%s.snap' % (name, _rom_key(em.rom)))
+    if not os.path.exists(path):
+        return False
+    data = open(path, 'rb').read()
+    v = [int.from_bytes(data[i:i + 4], 'big') for i in range(0, 19 * 4, 4)]
+    em.write_ram(data[19 * 4:])
+    for i in range(16):
+        em.setreg(i, v[i])
+    em.setreg(16, v[16])
+    em.frame = v[18]
+    teleport(em, em.word(0xFFFFD022), em.word(0xFFFFC008), em.word(0xFFFFC00A), em.word(0xFFFFD04E))
+    # the map reload rebuilt the map's art but not the font block (tiles $00-$FF, loaded
+    # once at game start by map $210): load it through the game's own routine from a
+    # trampoline in the unused part of BlastEm's 1 MB ROM copy, entered by the return
+    # address on the stack at the pad breakpoint (the stub cannot set PC)
+    font = listing_address('loc_66000')
+    loader = listing_address('LoadDataInVRAMWithOffset')
+    sp = em.regs()['a'][7]
+    ret = int.from_bytes(em.read(sp, 4), 'big')
+    tramp = 0xF0000
+    code = (bytes([0x48, 0xE7, 0xFF, 0xFE])                        # movem.l d0-d7/a0-a6, -(sp)
+            + bytes([0x41, 0xF9]) + font.to_bytes(4, 'big')          # lea (font).l, a0
+            + bytes([0x70, 0x00])                                    # moveq #0, d0
+            + bytes([0x32, 0x3C, 0x20, 0x00])                        # move.w #$2000, d1
+            + bytes([0x4E, 0xB9]) + loader.to_bytes(4, 'big')        # jsr (loader).l
+            + bytes([0x4C, 0xDF, 0x7F, 0xFF])                        # movem.l (sp)+, d0-d7/a0-a6
+            + bytes([0x4E, 0xF9]) + ret.to_bytes(4, 'big'))          # jmp (ret).l
+    em.write(tramp, code)
+    em.write(sp, tramp.to_bytes(4, 'big'))
+    em.frames(2)
+    return True
+
+
 def boot_to_field(em, saves=0):
     """Power-on -> title -> game select -> (no saves) text speed -> new game -> Landen.
-    Returns when the player controls Rhys in Landen town (map $5A)."""
+    Returns when the player controls Rhys in Landen town (map $5A). With a 'landen'
+    snapshot for this ROM (work/states/) it resumes there instead, in a few seconds; the
+    long way takes the snapshot for next time."""
+    em.frames(1)
+    if resume(em, 'landen'):
+        if em.word(0xFFFFD012) == SCREEN_MAIN and em.word(0xFFFFD022) == 0x5A:
+            return
     while em.word(0xFFFFD012) != SCREEN_TITLE:
         em.frames(1)
     em.frames(60); em.press('S')
@@ -129,6 +199,7 @@ def boot_to_field(em, saves=0):
     while not (em.word(0xFFFFD012) == SCREEN_MAIN and em.word(0xFFFFD022) == 0x5A):
         em.press('C', hold=2, release=6)
     em.frames(30)
+    snapshot(em, 'landen')
 
 
 def new_game_intro(em):

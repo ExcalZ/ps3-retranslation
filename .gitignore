@@ -24,6 +24,8 @@ PSIII_Disasm/ps3built.prev.bin
 *.state
 *.exs
 work/state/
+work/states/
+*.snap
 work/analysis/*.png
 
 # ---- Third-party binaries: link to them, do not vendor them ------------

@@ -59,10 +59,11 @@
 ;
 ; The battle box (vwf_battle): the enemy-group lines, the character names of
 ; the stat window and the item and technique lists, from VWFBattle_Table
-; (see there for the battle screen's VRAM). PS III has no enemy targeting, so
-; nothing anchors a cursor to those cells; the highlights are palette toggles
-; on the copied words, and the name highlight is widened to five cells in
-; ps3.asm (loc_D56C) to match the name's five-cell pool line.
+; (see there for the battle screen's VRAM). Targeting does not touch those
+; cells: an enemy target is the enemy's own sprite lit up, and an ally target
+; is the character's name in the stat window, a palette toggle on the copied
+; words (loc_D56C, widened to five cells in ps3.asm to match the name's
+; five-cell pool line); the list highlights toggle the same way.
 ; ===========================================================================
 	if vwf_dialogue
 
