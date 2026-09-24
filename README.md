@@ -66,6 +66,7 @@ python tools/checkbuild.py
 python tools/test_text.py
 python tools/test_vwf.py
 python tools/test_techdist.py
+python tools/test_input.py
 ```
 
 With every option in `ps3.options.asm` at 0 the assembled ROM is

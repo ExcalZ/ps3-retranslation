@@ -152,6 +152,7 @@ python tools/checkbuild.py       # JSON/asm sync, fonts, proofreader, header, RA
 python tools/test_text.py        # every original string round-trips through the codec (US and JP)
 python tools/test_vwf.py         # the VWF engine under the 68000 interpreter vs a reference composer
 python tools/test_techdist.py    # the distribution-box scaling under the interpreter
+python tools/test_input.py       # VBlank's joypad read with a modelled pad, skipped and not
 python tools/linecheck.py        # every en string against its budget (the proofreader's rules, from the shell)
 python tools/ps3emu.py ps3en.bin # boots the ROM in BlastEm and screenshots the title
 python work/scripts/menuvwf.py   # Item, Stats, Equip, Techs, Switch and generation-2 menus

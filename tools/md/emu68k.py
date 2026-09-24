@@ -1339,6 +1339,24 @@ class CPU:
             a=self.d[dn]&0xFF; b=self.rb(self.a[an])
             self.Z=(a==b); self.C=(a<b); self.N=bool((a-b)&0x80); return False
 
+        # or.b Dm,Dn
+        if (op & 0xF1F8) == 0x8000:
+            dn=(op>>9)&7; dm=op&7
+            v=(self.d[dn]|self.d[dm])&0xFF
+            self.setd_b(dn,v); self.Z=(v==0); self.N=bool(v&0x80); self.C=False; return False
+
+        # and.b Dm,Dn
+        if (op & 0xF1F8) == 0xC000:
+            dn=(op>>9)&7; dm=op&7
+            v=self.d[dn]&self.d[dm]&0xFF
+            self.setd_b(dn,v); self.Z=(v==0); self.N=bool(v&0x80); self.C=False; return False
+
+        # not.b Dn
+        if (op & 0xFFF8) == 0x4600:
+            dn=op&7
+            v=~self.d[dn]&0xFF
+            self.setd_b(dn,v); self.Z=(v==0); self.N=bool(v&0x80); self.C=False; return False
+
         # or.w Dm,Dn
         if (op & 0xF1F8) == 0x8040:
             dn=(op>>9)&7; dm=op&7

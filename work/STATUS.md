@@ -19,7 +19,7 @@ the Japanese throughout - the user's decision of 2026-09-19, recorded in
 lines have been seen on the console side so far (see the log).
 
 Canonical experimental ROM `ps3en.bin` (every option on): 826,114 bytes,
-SHA-256 `0A00503687034E33613B853257A498B431C3C72E83446E2A0AEABFDD6AD295F8`;
+SHA-256 `7A6DA248D2148B3062C971918E3D803C3ACB9CC4F16480323AAE32E7DC5D91AA`;
 `tools/checkbuild.py` prints its SHA-256 after each build.
 Stock US ROM (every option 0 and every `en` equal to `us` reproduces it -
 verified 2026-09-20 after the translation pass): 786,432 bytes, SHA-256
@@ -187,6 +187,7 @@ python tools/checkbuild.py                 # build, placement and option invaria
 python tools/test_text.py                  # 1180 US + 523 JP strings round-trip
 python tools/test_vwf.py                   # 11 engine cases under the interpreter
 python tools/test_techdist.py
+python tools/test_input.py                 # VBlank's joypad read, skipped and not
 python tools/linecheck.py                  # every en string against its budget
 python work/scripts/pagescroll.py          # BlastEm: 6 screenshots of the legend text scrolling
 python work/scripts/narration.py           # BlastEm: the opening
@@ -219,8 +220,16 @@ does not spawn the walking sprite) and wanders into the first encounter;
   vertical interrupt lands while a copy holds bit 6 of `$FFFFD006` and skips
   the joypad read but still releases the main loop, which acts on the same
   `joypad_pressed` again. `fix_input_repeat` clears the pressed bytes on
-  that path (`docs/engine.md`, the battle box). Not yet built or seen in
-  BlastEm: no ROM or assembler in the session that made it.
+  that path (`docs/engine.md`, the battle box). Checked offline: built with
+  AS 1.42 Bld 89 compiled for Linux from the `asl-releases` sources (which
+  reproduce the previous canonical hash `0A005036...` and, with every option
+  0 and `en` = `us`, the stock US ROM); `fix_input_repeat = 0` is
+  byte-identical to the build before; checkbuild, test_text, test_vwf,
+  test_techdist and linecheck pass; the new `tools/test_input.py` runs
+  `VBlank` with a modelled pad: with the option the pressed bytes clear on
+  a skipped read and a press made meanwhile is reported by the next, without
+  it the stale byte stands (the bug). The interpreter gained `or.b`/`and.b
+  Dm,Dn` and `not.b Dn` for `ReadJoypad`. Not yet seen in BlastEm.
 
 * 2026-09-20 (latest, item names) - Fibrilla for Fiblira, the Protector
   series back to "Protector" where it fits (the user's rule for names past
