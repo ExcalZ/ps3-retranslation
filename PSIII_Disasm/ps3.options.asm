@@ -18,6 +18,12 @@ fast_walk = 1
 ; live in the second 16 KB of backup RAM, so the header declares 32 KB.
 four_save_slots = 1
 
+; A press is acted on once even when a frame overruns: the vertical interrupt
+; skips the joypad read while a VRAM copy is in progress, and the stock game
+; then left the last frame's "pressed" bits standing for the next frame (a
+; technique's ally target could jump two or more places for one press).
+fix_input_repeat = 1
+
 ; Keep the Technique Distributor's cost/level box inside the window when a
 ; character's level is high (the stock game writes past the window buffer).
 fix_tech_distributor = 1

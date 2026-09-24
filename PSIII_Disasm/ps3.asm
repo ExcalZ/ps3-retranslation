@@ -253,9 +253,9 @@ VBlank:
 	movem.l	d0-a7, -(sp)
 	bset	#7, $FFFFD004.w
 	btst	#6, $FFFFD006.w	; are we moving data into VRAM?
-	bne.s	VBlank_End		; if so, return
+	bne.s	VBlank_NoInput		; if so, return
 	btst	#3, $FFFFD006.w	; has the Z80 stopped?
-	bne.s	VBlank_End		; if so, return
+	bne.s	VBlank_NoInput		; if so, return
 
 	bsr.w	ReadJoypads
 
@@ -272,6 +272,17 @@ VBlank:
 	beq.s	VBlank_End
 	bclr	#6, $FFFFD005.w
 	bsr.w	UpdateCRAM
+	if fix_input_repeat
+	bra.s	VBlank_End
+VBlank_NoInput:
+	; The joypads were not read this frame, but the main loop still runs (bit 7
+	; is set): a stale 'pressed' byte would act on the same press again. Held
+	; stays, so the next read still sees a press made meanwhile.
+	clr.b	(joypad_pressed).w
+	clr.b	(joypad_pressed+2).w	; second pad
+	else
+VBlank_NoInput:
+	endif
 VBlank_End:
 	movem.l	(sp)+, d0-a7
 	

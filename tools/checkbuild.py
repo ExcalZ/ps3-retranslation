@@ -155,7 +155,7 @@ def main():
                 fail('%s at $%X is below the original end of ROM' % (name, sym[name]))
         ok('extension routines sit past $C0000')
     # 7. options
-    for k in ('scrolling_ground', 'four_save_slots', 'fix_tech_distributor', 'vwf_dialogue', 'vwf_scroll_shadow', 'vwf_menu', 'vwf_shop', 'vwf_battle', 'smooth_scroll'):
+    for k in ('scrolling_ground', 'four_save_slots', 'fix_tech_distributor', 'fix_input_repeat', 'vwf_dialogue', 'vwf_scroll_shadow', 'vwf_menu', 'vwf_shop', 'vwf_battle', 'smooth_scroll'):
         if k not in opts:
             fail('option %s missing or not 0/1' % k)
     for k in ('vwf_menu', 'vwf_shop', 'vwf_battle', 'smooth_scroll'):

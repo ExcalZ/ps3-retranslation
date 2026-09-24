@@ -244,6 +244,19 @@ the longest translated-style names tested so far fit it. Cursor highlighting
 continues to work because its palette-bit toggle changes the attributes on the
 same pool-tile words.
 
+Choosing a technique's ally target costs more than choosing an item's: every
+direction press re-enters `loc_E712`, which redraws the whole stat window
+(`loc_CF52`, `loc_CF72`, `loc_FF30`) as the first display did, and with the
+proportional names that is up to four composed lines, each uploaded to VRAM.
+That frame can overrun into the next vertical interrupt. The interrupt skips
+`ReadJoypads` while bit 6 of `$FFFFD006` says a VRAM copy is in progress,
+but it still sets the frame flag, so the main loop runs again at once with
+the old `joypad_pressed` byte and moves the target a second time - and that
+frame overruns too. `fix_input_repeat` clears the pressed bytes on the
+skipping path (`VBlank_NoInput`); `joypad_held` is untouched, so the next
+read still reports a press made in between. The stock game has the same
+hole, only its frames rarely reach it.
+
 ## The opening scroll
 
 The new-game scroll (`loc_1A156`, text `loc_1A33C`...) is a real vertical

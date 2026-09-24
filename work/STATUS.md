@@ -212,6 +212,16 @@ does not spawn the walking sprite) and wanders into the first encounter;
 
 ## Log
 
+* 2026-09-24 - From play: a technique's single ally target jumped two or
+  more places for one left/right press (the user's BlastEm state slot 6).
+  Every direction there redraws the stat window (`loc_E712`), four
+  proportional names with a VRAM upload each; the frame overruns, the
+  vertical interrupt lands while a copy holds bit 6 of `$FFFFD006` and skips
+  the joypad read but still releases the main loop, which acts on the same
+  `joypad_pressed` again. `fix_input_repeat` clears the pressed bytes on
+  that path (`docs/engine.md`, the battle box). Not yet built or seen in
+  BlastEm: no ROM or assembler in the session that made it.
+
 * 2026-09-20 (latest, item names) - Fibrilla for Fiblira, the Protector
   series back to "Protector" where it fits (the user's rule for names past
   72 px: drop the space first, then an unpronounced letter -

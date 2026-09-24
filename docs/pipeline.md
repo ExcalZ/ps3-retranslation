@@ -32,6 +32,7 @@ The options in `ps3.options.asm`:
 | flag | effect |
 |---|---|
 | `scrolling_ground` | the JP per-row scroll tables for the battle background (`loc_780C0`) |
+| `fix_input_repeat` | when the vertical interrupt skips the joypad read (a VRAM copy in progress, `VBlank`), it clears the "pressed" bytes instead of leaving the last frame's standing, so an overrunning frame cannot act on one press twice |
 | `fix_tech_distributor` | the distribution box is drawn from values scaled to fit 24x14 cells (`ext/techdist.asm`) |
 | `vwf_dialogue` | proportional text in the dialogue window (`ext/vwf.asm`) |
 | `vwf_scroll_shadow` | the opening scroll's letters cast a 1 px black shadow (0 = plain letters like the stock scroll) |
