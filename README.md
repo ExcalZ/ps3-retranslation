@@ -95,7 +95,7 @@ original and are what the generators key on.
   non-dialogue windows remain fixed-width 8x8 cells unless the proofreader
   identifies them as proportional; the widest stock line is their budget.
 * Naming follows the Japanese (`work/glossary.md`): Kein, Marina, Ain,
-  Lein, Searren, the kingdom of Riik, Satellite and the Violet Moon, Dark
+  Lein, Searren, the kingdom of Riik, Satellite and the Purple Moon, Dark
   Falz, the Foie / Sun Force techniques, the full item names.
 * `tools/applybatch.py batch.json [--script]` merges a JSON of id -> `en`
   edits into the right file and checks each against its budget;
@@ -117,8 +117,8 @@ also accepts `.smd`, readme with every hash filled in) and zips it.
 ## Credits and legal
 
 Translation, hacking and testing by **Excalibur_Z**, with Claude (Anthropic)
-for translation and technical work. Built on lory90's Phantasy Star III
-disassembly. Tooling, engines and documentation are MIT licensed (`LICENSE`);
+for technical work. Built on lory90's Phantasy Star III disassembly.
+Tooling, engines and documentation are MIT licensed (`LICENSE`);
 third-party components and their terms are listed in `NOTICE.md`. Phantasy
 Star III is copyright SEGA; this repository contains no ROM image and no right
 to one.
