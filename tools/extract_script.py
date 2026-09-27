@@ -30,6 +30,7 @@ OUT = os.path.join(ROOT, 'work', 'dialogue.json')
 
 US_SCRIPT = 0x25F0A
 JP_SCRIPT = 0x25F0C
+JP_SCRIPT_END = 0x30E14  # first pointer table after the final $FC and alignment byte
 US_NPC_TABLE = 0x33996
 JP_NPC_TABLE = 0x33A30
 NPC_MAPS = (0x33D14 - 0x33996) // 2
@@ -271,6 +272,22 @@ def align(us_entries, jp_entries, us_rom, jp_rom):
                 i -= 1
             else:
                 j -= 1
+    # Each of these US entries has text inside the preceding JP entry: the
+    # Dark Falz introduction is shared with us_2F8BA, and the escapipe notice
+    # follows an {END} marker in loc_302CA. Order alignment places subsequent
+    # JP entries one row early until the empty entry at the end of each span.
+    def shift_after_shared_jp(start_label, end_label):
+        start = next(i for i, e in enumerate(us_entries) if e['label'] == start_label)
+        end = next(i for i, e in enumerate(us_entries) if e['label'] == end_label)
+        assert result[end] is None
+        assert not any(i in anchors for i in range(start, end + 1))
+        for i in range(end, start, -1):
+            result[i] = result[i - 1]
+        result[start] = None
+
+    shift_after_shared_jp('loc_2F8D4', 'loc_2FDEC')
+    shift_after_shared_jp('loc_30330', 'loc_30BE6')
+
     return result, anchors
 
 
@@ -279,9 +296,7 @@ def main():
     us_rom = open(US_ROM, 'rb').read()
     jp_rom = open(JP_ROM, 'rb').read()
     us_entries = parse_us(us_rom)
-    jp_entries = walk_jp(jp_rom, JP_SCRIPT, 0x31000)
-    # trim the JP walk where it leaves the script (first entry whose flags are implausible
-    # after the last plausible one)
+    jp_entries = walk_jp(jp_rom, JP_SCRIPT, JP_SCRIPT_END)
     mapping, anchors = align(us_entries, jp_entries, us_rom, jp_rom)
 
     old = {}

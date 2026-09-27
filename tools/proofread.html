@@ -35,6 +35,7 @@
   .jp{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:var(--chip);border-radius:6px;
       padding:7px 9px;white-space:pre-wrap;word-break:break-all;margin-bottom:7px}
   .jp .ctl{color:var(--accent);font-size:11px}
+  .jp .source{display:block;color:var(--muted);font:11px system-ui,-apple-system,"Segoe UI",sans-serif;margin-bottom:3px}
   textarea{width:100%;min-height:52px;resize:vertical;font:inherit;color:var(--ink);background:transparent;
     border:1px solid var(--line);border-radius:6px;padding:7px 9px}
   textarea:focus{outline:2px solid var(--accent);outline-offset:-1px}
@@ -183,6 +184,35 @@ function allEntries(){
   if(kind==='dialogue')return doc.entries.map(e=>({e,seg:'dialogue'}));
   const out=[];for(const [s,seg] of Object.entries(doc.segments))for(const r of seg.runs)out.push({e:r,seg:s});return out;
 }
+// These two US entries split a single JP source entry. Other {END} continuations
+// stay visible as separate passages in their source row, without changing JSON.
+const JP_LINKS={loc_2F8D4:'us_2F8BA',loc_30330:'loc_302CA'};
+const JP_EXTRA_LABELS={
+  loc_2CBE0:'JP-only Lein passage (no US entry)',
+  loc_2CF42:'JP continuation for this entry',
+  loc_2EF0A:'JP variant of loc_2EF3E',
+};
+function jpParts(source){
+  if(!source?.jp)return [];
+  if(source.id==='us_2F8BA'){
+    const boundary=source.jp.indexOf('{PAGE}');
+    if(boundary<0)return [source.jp];
+    const cut=boundary+'{PAGE}'.length;
+    return [source.jp.slice(0,cut),source.jp.slice(cut)];
+  }
+  return source.jp.split('{END}').filter(Boolean);
+}
+function jpPassages(e){
+  if(kind!=='dialogue')return e.jp?[{text:e.jp}]:[];
+  const linked=JP_LINKS[e.id];
+  if(linked){
+    const source=doc.entries.find(r=>r.id===linked), parts=jpParts(source);
+    return parts[1]?[{text:parts[1],source:linked}]:[];
+  }
+  const parts=jpParts(e);
+  if(Object.values(JP_LINKS).includes(e.id))return parts[0]?[{text:parts[0]}]:[];
+  return parts.map((part,i)=>({text:part,source:i?(JP_EXTRA_LABELS[e.id]||'JP text after {END}'):null}));
+}
 function budgetOf(seg,e){ // fixed-width segments: the widest US line of the segment is the cell budget
   const seginfo=doc.segments[seg]; if(seginfo._budget===undefined){
     let w=0;for(const r of seginfo.runs)for(const p of lines(encode(r.us)))for(const l of p)w=Math.max(w,lineCells(l));
@@ -215,9 +245,9 @@ const POOLED_SEGMENTS=['menus','menus2','equip'];
 function isPooled(seg,e){return POOLED_SEGMENTS.includes(seg)&&!isMainMenu(seg,e)&&!isMenuTech(seg,e);}
 // shop text still drawn by the stock renderer: the game-select lists and the speed prompt
 const FIXED_SHOP=['shops#054','shops#056','shops#064','shops#065','shops#066','shops#067','shops#068'];
-function isVWF(seg,e){return kind==='dialogue'||seg==='battle'||(seg==='shops'&&!FIXED_SHOP.includes(e.id))||seg==='credits'||seg in VWF_SEGMENTS||isMainMenu(seg,e)||isMenuTech(seg,e)||isPooled(seg,e);}
+function isVWF(seg,e){return kind==='dialogue'||seg==='battle'||(seg==='shops'&&!FIXED_SHOP.includes(e.id))||seg==='credits'||seg==='namestrings'||seg in VWF_SEGMENTS||isMainMenu(seg,e)||isMenuTech(seg,e)||isPooled(seg,e);}
 function vwfLimit(seg,e){return seg in VWF_SEGMENTS?VWF_SEGMENTS[seg]:isMainMenu(seg,e)?56:isMenuTech(seg,e)?VWF_SEGMENTS.techs:isPooled(seg,e)?budgetOf(seg,e)*8:192;}
-function vwfLines(seg,e,page){return isMainMenu(seg,e)?(e.id==='menus#000'?4:1):isPooled(seg,e)||seg==='shops'?99:(page?1:2);}
+function vwfLines(seg,e,page){return isMainMenu(seg,e)?(e.id==='menus#000'?4:1):seg==='namestrings'?1:isPooled(seg,e)||seg==='shops'?99:(page?1:2);}
 function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 function fmtJP(s){return esc(s).replace(/\{([^}]*)\}/g,'<span class="ctl">{$1}</span>');}
 
@@ -229,9 +259,10 @@ function render(){
     total++;
     const isOver=over(seg,e); if(isOver)overCount++;
     const translated=e.en!==e.us; if(translated)done++;
-    if(q&&!((e.en||'')+(e.us||'')+(e.jp||'')+e.id).toLowerCase().includes(q))continue;
+    const passages=jpPassages(e);
+    if(q&&!((e.en||'')+(e.us||'')+passages.map(p=>p.text).join(' ')+e.id).toLowerCase().includes(q))continue;
     if(f==='todo'&&translated)continue; if(f==='done'&&!translated)continue;
-    if(f==='over'&&!isOver)continue; if(f==='nojp'&&e.jp)continue; if(f==='flag'&&!e.note)continue;
+    if(f==='over'&&!isOver)continue; if(f==='nojp'&&passages.length)continue; if(f==='flag'&&!e.note)continue;
     if(seg!==lastSeg){const h=document.createElement('div');h.className='seghdr';
       h.innerHTML=`<b>${esc(seg)}</b><span>${kind==='dialogue'?'':esc(doc.segments[seg].note||'')}</span>`;list.appendChild(h);lastSeg=seg;}
     shown++;
@@ -239,7 +270,7 @@ function render(){
     const tags=[]; if(translated)tags.push('<span class="tag done">translated</span>'); if(isOver)tags.push('<span class="tag over">over budget</span>');
     if(e.header_only)tags.push('<span class="tag">header only (no text)</span>'); if(e.anchor)tags.push('<span class="tag anchor">NPC-anchored</span>');
     row.innerHTML=`<div class="meta"><span class="id">${esc(e.id)}</span>${e.addr?'<span>$'+esc(e.addr)+'</span>':''}${e.flags?'<span>flags '+esc(e.flags)+'</span>':''}${tags.join('')}</div>`
-      +(e.jp?`<div class="jp">${fmtJP(e.jp)}</div>`:(kind==='dialogue'&&!e.header_only?'<div class="jp" style="color:var(--bad)">no Japanese counterpart aligned - check work/dialogue.json jp_unmatched</div>':''))
+      +(passages.length?passages.map(p=>`<div class="jp">${p.source?`<span class="source">${esc(JP_LINKS[e.id]?'JP continuation from '+p.source:p.source)}</span>`:''}${fmtJP(p.text)}</div>`).join(''):(kind==='dialogue'&&!e.header_only?'<div class="jp" style="color:var(--bad)">no Japanese counterpart aligned - check work/dialogue.json jp_unmatched</div>':''))
       +(e.header_only?'':`<textarea spellcheck="true">${esc(e.en)}</textarea><div class="preview"><div class="label"></div><div class="pages"></div></div>`
       +`<div class="us">${esc(e.us)}</div><input class="note" placeholder="note for the proofreader" value="${esc(e.note||'')}">`);
     list.appendChild(row);
@@ -257,7 +288,7 @@ function render(){
 function preview(row,seg,e){
   const host=row.querySelector('.pages'), label=row.querySelector('.preview .label'); host.innerHTML='';
   const bytes=encode(e.en), pages=lines(bytes), vwf=isVWF(seg,e), limit=vwf?vwfLimit(seg,e):null, budget=vwf?null:budgetOf(seg,e);
-  label.textContent=vwf?(seg in VWF_SEGMENTS?`${seg}: ${limit} px (the tightest window this table is drawn in)`:isMainMenu(seg,e)?`field main-menu label: ${limit} px`:`dialogue window: ${limit} px per line; two lines, then one new line per {PAGE}`):`fixed 8x8 cells, budget ${budget} cells (widest stock line)`;
+  label.textContent=vwf?(seg in VWF_SEGMENTS?`${seg}: ${limit} px (the tightest window this table is drawn in)`:seg==='namestrings'?`ending transmission: ${limit} px per line`:isMainMenu(seg,e)?`field main-menu label: ${limit} px`:`dialogue window: ${limit} px per line; two lines, then one new line per {PAGE}`):`fixed 8x8 cells, budget ${budget} cells (widest stock line)`;
   pages.forEach((p,k)=>{
     const pg=document.createElement('div'); pg.className='page'; let bad=p.length>vwfLines(seg,e,k);
     p.forEach(l=>{const c=document.createElement('canvas'); if(vwf)drawVWF(c,l,2,limit); else drawFixed(c,l,2,budget); pg.appendChild(c);

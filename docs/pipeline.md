@@ -32,15 +32,19 @@ The options in `ps3.options.asm`:
 | flag | effect |
 |---|---|
 | `scrolling_ground` | the JP per-row scroll tables for the battle background (`loc_780C0`) |
-| `fix_tech_distributor` | the distribution box is drawn from values scaled to fit 24x14 cells (`ext/techdist.asm`) |
+| `fast_transitions` | screen fades retain all seven palette levels but hold each for two frames instead of four, cutting ordinary menu and map fades from 29 to 15 frames |
+| `fix_technique_confirm` | the Technique list ignores A/C for its first eight interactive frames so a rapid character-selection double-tap cannot choose row 0 |
+| `fix_tech_distributor` | the distribution box uses the full 24x14 space with proportional scaling and clears its old outline (`ext/techdist.asm`) |
+| `extended_script` | resolves the late space-scene dialogue with full offsets after the translated script exceeds 64 KB (`ext/scriptbank.asm`) |
+| `fix_ending_transmission` | preserves a queued ending transmission while translated space-scene dialogue finishes (`ext/ending.asm`) |
 | `vwf_dialogue` | proportional text in the dialogue window (`ext/vwf.asm`) |
 | `vwf_scroll_shadow` | the opening scroll's letters cast a 1 px black shadow (0 = plain letters like the stock scroll) |
 | `vwf_menu` | proportional item, equipment, technique and label text in the field menu; requires `vwf_dialogue` (`ext/vwf.asm`) |
-| `vwf_shop` | proportional item names in the shops' buy and sell lists; requires `vwf_dialogue` (`ext/vwf.asm`) |
+| `vwf_shop` | proportional item names in shops and, with `four_save_slots`, proportional saved-character names in the game-select/church list; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `vwf_battle` | proportional enemy-group row, stat-window names and item / technique lists in the battle box; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `smooth_scroll` | a page advance in the dialogue window scrolls the text up smoothly at the rate of the "message scrolling speed" option; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `four_save_slots` | four save slots with safety copies in 32 KB of backup RAM (`ext/saveslots.asm`) |
-| `fast_walk` | the party walks twice as fast on foot: 2 px a frame, four frames a step (`loc_2DE0`, `loc_3036`, the party sprites at `loc_4C42`); the walking animation keeps its pace, and the scripted walks (the demo-script player `loc_11CE8`, the dock's `loc_1993A`) count steps, so cutscenes end on the same tiles (`work/scripts/walkspeed.py` compares against a `fast_walk = 0` build) |
+| `fast_walk` | the party walks at a steady 2x speed on foot: every 8-px step takes four frames of 2 px (`FastWalk_UpdateStep`); followers use the same delta, the animation keeps its pace, and scripted walks/dock timing count the same steps. Save loading preserves vehicle speed 4. `work/scripts/walkspeed.py` asserts the cadence and can compare endpoints with a `fast_walk = 0` build. |
 
 New code lives in `PSIII_Disasm/ext/*.asm`, included just before `EndOfRom`,
 so it sits past the original 768 KB and nothing in the original image moves
@@ -55,10 +59,11 @@ this.
   the two: NPC-table anchors (the level NPC tables are identical between
   regions, so each NPC's script offset pairs a US entry with a JP one),
   then flag-branch targets, then order within each gap. 542 of 546 entries
-  are matched; the four unmatched on each side (the wedding sequence the US
-  restructured) are listed in the JSON. JP text pieces that follow an `$FC`
-  with no header - unreachable in the JP game, folded into the previous
-  entry by the US script - are appended to the JP text after an `{END}`.
+  are matched to distinct JP script entries; two more share a JP source
+  with the preceding US entry. The remaining unmatched entries are listed
+  in the JSON. Four JP text pieces follow an `$FC` without a header and
+  are kept in the source entry's `jp` after an `{END}`. The proofreader
+  separates them.
 * `tools/extract_text.py` reads the same listing for the other tables,
   each bounded by two labels; a run is a group of consecutive `dc.b` lines
   ending in `$FC`. The credits keep their two position bytes in `hdr`.
@@ -105,12 +110,16 @@ makes the generator emit the text (and an empty `en` removes it again), so
 those lines are restored rather than left as dead redirects.
 
 The pairing with the JP is by NPC-table anchors and, between anchors, by
-order. Two places break the order: the US split the Dark Falz speech into one
-entry fewer than the JP (from `loc_2F8D4` to `loc_2FDEC` the JP text of an
-entry is the one shown at the *previous* index) and the escapipe "press Reset"
-notice sits inside an `{END}` orphan (from `loc_30330` on, likewise). The
-translation follows the game's actual sequence, not the paired `jp` field,
-through that stretch.
+order. The JP Dark Falz introduction paired with `us_2F8BA` contains text that the US
+splits across that entry and `loc_2F8D4`. The latter therefore has no separate
+JP entry; the remaining JP entries pair with the following US entries through
+`loc_2FDEC`. The escapipe "press Reset" notice sits after an `{END}` marker
+in the JP entry paired with `loc_302CA`, so `loc_30330` also has no separate
+JP entry. The remaining JP entries pair with the following US entries through
+`loc_30BE6`. The continuation after `loc_2CF42` belongs to that same entry;
+`loc_2CBE0` has a JP-only Lein passage, and `loc_2EF0A` has a variant of the
+next entry's JP text. The JP GameScript ends at `$30E14`; the data after it is
+a different ending text table.
 
 Text edits go through `tools/applybatch.py batch.json [--script]`: a JSON
 object of ids to new `en` strings, merged into the file (keeping its CRLF
@@ -128,21 +137,30 @@ only, `--widths` to print each one's widest line).
 | item and technique names | 72 px (the battle lists' nine cells; the menu allows 80, the shops 88) | `proofread.html` |
 | enemy names | 75 px (the battle box's group line beside a two-digit count) | `proofread.html` |
 | party names | 40 px (the battle stat window's five cells); the record field itself is four letters, so the names live in `VWFName_Table` (`$E0 nn`, see engine.md) | `proofread.html` |
-| ending transmission (`namestrings`) | 24 cells, fixed-width: `loc_F7F0` writes each pair of lines straight into VRAM in the 8x8 font | `proofread.html`, `linecheck.py` |
+| ending transmission (`namestrings`) | 192 px per line: `VWFScroll_Entry` writes each pair to plane A from tiles `$500-$52F` | `proofread.html`, `linecheck.py`, `test_vwf.py` |
 | other menu-map windows (`menus`, `menus2`, `equip`) | proportional inside the stock cell budget (widest US line x 8 px); a `{BR}` moves to the next pool line | `proofread.html`, `linecheck.py` |
-| fixed-width tables (`marriage`, `megido`, `title`, the game-select lists and speed prompt in `shops`) | the widest line of the stock table, in cells | `proofread.html` (`budget` per segment) |
-| script region | it may grow freely: everything after it is label-relative | - |
+| fixed-width tables (`marriage`, `megido`, `title`, and the speed prompt in `shops`) | the widest line of the stock table, in cells | `proofread.html` (`budget` per segment) |
+| script region | most dialogue offsets stay below 64 KB from `GameScript`; late space scenes, intro narration and Wren transformations use `extended_script` | `checkbuild.py`, `test_scriptbank.py` |
+
+Technique names are a special case: extraction reads the stock names embedded
+in `TechniqueData`, but generation writes translated names to
+`TechniqueNameData`. The former must remain 24 fixed 16-byte gameplay records;
+the latter is a parallel display-only table used by the VWF renderer.
 
 The menu pool has more physical room on the left item column, but 80 px is
 the item authoring limit: it preserves the stock two-column layout and the
 existing 10-cell name box. The proofreader enforces that stricter limit.
 
-The script region has no hard address ceiling: the disassembly is fully
-label-relative (assembling it with the text regenerated is bit-exact), and
-`checkbuild.py` verifies the header end and the extension's placement after
-each build. What does move when the script grows is every address after it,
-which only matters for savestates and for the addresses quoted in these
-documents.
+Most dialogue references use 16-bit offsets from `GameScript`. The translated
+space-scene entries cross that 64 KB boundary; `extended_script` uses a full
+offset table and a high-word-aware resolver for those entries. The intro
+narration at `loc_307B0`, Wren transformation messages, and the ending event
+at `loc_305FE` use the same resolver when they cross that boundary.
+`checkbuild.py` flags word-sized references that cross it, and
+`test_scriptbank.py` verifies every dialogue entry and assembled script word
+pointer. Growing the
+script also moves every address after it, which matters for savestates and
+for the addresses quoted in these documents.
 
 ## 5. Verification
 
@@ -151,6 +169,8 @@ python tools/checkbuild.py       # JSON/asm sync, fonts, proofreader, header, RA
 python tools/test_text.py        # every original string round-trips through the codec (US and JP)
 python tools/test_vwf.py         # the VWF engine under the 68000 interpreter vs a reference composer
 python tools/test_techdist.py    # the distribution-box scaling under the interpreter
+python tools/test_scriptbank.py  # all dialogue entries, script pointers, and banked selectors
+python tools/test_battle.py      # battle music, targets, and enemy result setup
 python tools/linecheck.py        # every en string against its budget (the proofreader's rules, from the shell)
 python tools/ps3emu.py ps3en.bin # boots the ROM in BlastEm and screenshots the title
 python work/scripts/menuvwf.py   # Item, Stats, Equip, Techs, Switch and generation-2 menus

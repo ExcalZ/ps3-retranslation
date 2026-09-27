@@ -8,12 +8,15 @@ Reads the last assembly (PSIII_Disasm/ps3built.bin and ps3.lst) and the sources:
  2. the generated font binaries match a fresh generation (diafont.py);
  3. tools/proofread.html is in sync with its template and the font binaries;
  4. the ROM's header end address and checksum match the file;
- 5. the VWF RAM block stays inside the boot-only SEGA-screen area ($FFFFE400-$FFFFFBFF),
+ 5. TechniqueData remains 24 fixed 16-byte gameplay records, and translated
+    display-name slots keep the same stride;
+    the compressed enemy-art block remains byte-for-byte stock;
+ 6. the VWF RAM block stays inside the boot-only SEGA-screen area ($FFFFE400-$FFFFFBFF),
     the dialogue pool stays inside the font block's blank tiles ($C0-$FF), and the menu
     pool stays below the sprite table at tile $540;
- 6. no extension routine sits below the original end of ROM ($C0000): the retranslation
+ 7. no extension routine sits below the original end of ROM ($C0000): the retranslation
     adds code past it so nothing in the original image moves;
- 7. the option flags are all 0 or 1 and vwf_dialogue implies the diafont binaries exist.
+ 8. the option flags are all 0 or 1 and vwf_dialogue implies the diafont binaries exist.
 """
 import hashlib
 import os
@@ -80,6 +83,115 @@ def main():
     lst = open(os.path.join(DISASM, 'ps3.lst'), encoding='latin-1').read()
     opts = dict(re.findall(r'^(\w+)\s*=\s*([01])\s*$', open(os.path.join(DISASM, 'ps3.options.asm')).read(), re.M))
     sym = Symbols()
+    # 5. Technique records are gameplay data, not variable-length text. Enemy
+    # records such as Molmos store fixed IDs ($48 for enemy Foie), so growing
+    # an embedded name silently redirects the AI into another record.
+    techniques = (
+        'Foi', 'Zan', 'Gra', 'Tsu', 'Res', 'Gires', 'Rever', 'Anti',
+        'Ner', 'Rimit', 'Shiza', 'Deban', 'Fanbi', 'Forsa', 'Nasak', 'Shu',
+        'Megido', 'Grantz', 'FoiCopy', 'ZanCopy', 'GraCopy', 'TsuCopy',
+        'GiresCopy', 'Poison',
+    )
+    tech_base = sym['TechniqueData']
+    bad = []
+    for i, name in enumerate(techniques):
+        addr = sym['Tech_' + name]
+        if addr != tech_base + i * 16:
+            bad.append('%s@$%X' % (name, addr))
+    if sym['TechniqueData_End'] != tech_base + len(techniques) * 16:
+        bad.append('end@$%X' % sym['TechniqueData_End'])
+    if bad:
+        fail('TechniqueData lost its 16-byte record layout: ' + ', '.join(bad))
+    else:
+        ok('TechniqueData: 24 fixed 16-byte records')
+    tech_bytes = rom[tech_base:sym['TechniqueData_End']]
+    stock_tech_sha256 = 'e45f32c383a1a5bf24dd47924dc32503e2c42258e4694623e5dc4106c0f29a89'
+    if hashlib.sha256(tech_bytes).hexdigest() != stock_tech_sha256:
+        fail('TechniqueData metadata differs from the stock 384-byte table')
+    else:
+        ok('TechniqueData bytes match stock')
+    # Extension includes must not split compressed art. A previous placement
+    # landed inside Neo Madder's stream and gave it a shredded battle sprite.
+    art_start, art_end = sym['loc_8D57C'], sym['loc_9371C']
+    stock = open(os.path.join(DISASM, 'ps3original.bin'), 'rb').read()
+    if (art_end - art_start != 0x9371C - 0x8D57C or
+            rom[art_start:art_end] != stock[0x8D57C:0x9371C]):
+        fail('compressed enemy art from loc_8D57C to loc_9371C differs from stock')
+    else:
+        ok('compressed enemy art is contiguous and matches stock')
+    if opts.get('vwf_dialogue') == '1':
+        name_base = sym['TechniqueNameData']
+        name_end = sym['TechniqueNameData_End']
+        malformed = []
+        for i, name in enumerate(techniques):
+            slot = rom[name_base + i * 16:name_base + (i + 1) * 16]
+            if b'\xFC' not in slot:
+                malformed.append(name)
+        if name_end != name_base + len(techniques) * 16 or malformed:
+            fail('TechniqueNameData lost its 16-byte slots%s' % (
+                ': missing terminator in ' + ', '.join(malformed) if malformed else ''))
+        else:
+            ok('TechniqueNameData: 24 translated 16-byte display slots')
+    # Dialogue offsets are words. The translated script crosses $10000;
+    # late scenes and the intro's closing narration use the banked resolver.
+    if opts.get('extended_script') == '1':
+        base = sym['GameScript']
+        if sym['loc_30C70'] - base >= 0x20000:
+            fail('dialogue exceeds the two-bank resolver')
+        if sym['loc_304DA'] - base >= 0x10000:
+            fail('unbanked loc_304DA script call has crossed the 16-bit limit')
+        if sym['loc_30330'] - base >= 0x10000:
+            fail('NPC loc_30330 has crossed the 16-bit table limit')
+        scriptbank_high = int(re.search(r'=\$([0-9A-F]+)\s+ScriptBank_High', lst).group(1), 16)
+        if not (0xFFFFE8CA <= scriptbank_high and scriptbank_high + 2 <= 0xFFFFE900):
+            fail('ScriptBank_High overlaps another extension RAM block')
+        else:
+            ok('ScriptBank_High $%X lies between menu and save-slot RAM' % scriptbank_high)
+        ending_pending = int(re.search(r'=\$([0-9A-F]+)\s+Ending_Pending', lst).group(1), 16)
+        if not (ending_pending == scriptbank_high + 2 and ending_pending + 2 <= 0xFFFFE900):
+            fail('Ending_Pending overlaps another extension RAM block')
+        else:
+            ok('Ending_Pending $%X follows ScriptBank_High' % ending_pending)
+        source = open(os.path.join(DISASM, 'ps3.asm'), encoding='latin-1').read()
+        intro_call = source.split('loc_1656:', 1)[1].split('Screen_Intro:', 1)[0]
+        if ('jsr\t(ScriptBank_Set307B0).l' not in intro_call or
+                'jmp\t(ScriptBank_Dialogue).l' not in intro_call):
+            fail('intro closing narration is not routed through the banked loader')
+        else:
+            ok('intro closing narration uses the banked loader')
+        wren_select = source.split('loc_18B22:', 1)[1].split('loc_18B5C:', 1)[0]
+        wren_dialogue = source.split('loc_18B76:', 1)[1].split('loc_18B8A:', 1)[0]
+        if ('jsr\t(ScriptBank_SelectWrenScript).l' not in wren_select or
+                'jsr\t(ScriptBank_Dialogue).l' not in wren_dialogue):
+            fail('Wren transformation dialogue is not routed through the banked loader')
+        else:
+            ok('Wren transformation dialogue uses the banked loader')
+        ending_select = source.split('loc_152C6:', 1)[1].split('loc_152F4:', 1)[0]
+        ending_exit = source.split('loc_A1A2:', 1)[1].split('loc_A1B4:', 1)[0]
+        if ('jsr\t(ScriptBank_Set305FE).l' not in ending_select or
+                'clr.w\t(ScriptBank_High).w' not in ending_exit):
+            fail('ending event script does not set and clear its script bank')
+        else:
+            ok('ending event script sets and clears its script bank')
+        # Any word-sized source reference is unsafe once its target exceeds
+        # the relative 64 KB range, including map/NPC tables and future text.
+        labels = {m.group(2): int(m.group(1), 16) for m in re.finditer(
+            r'^\s*\d+/\s*([0-9A-F]+)\s*:.*?\s(loc_[0-9A-F]+):', lst, re.M)}
+        script_bases = {'GameScript': base, 'GameScript2': sym['GameScript2']}
+        word_refs = []
+        for path in (os.path.join(DISASM, 'ps3.asm'),
+                     os.path.join(DISASM, 'ext', 'scriptbank.asm')):
+            for line in open(path, encoding='latin-1'):
+                if not re.search(r'\b(?:dc\.w|move\.w|cmpi\.w)\b', line):
+                    continue
+                for name, basis in re.findall(r'(loc_[0-9A-F]+)-(GameScript2?)\b', line):
+                    if labels[name] - script_bases[basis] >= 0x10000:
+                        word_refs.append('%s (%s)' % (name, basis))
+        if word_refs:
+            fail('16-bit script references beyond $10000: ' + ', '.join(sorted(set(word_refs))))
+        else:
+            ok('all word-sized script references fit their base')
+    # 6. VWF placement
     if opts.get('vwf_dialogue') == '1':
         src = open(os.path.join(DISASM, 'ext', 'vwf.asm'), encoding='utf-8').read()
         ram = open(os.path.join(DISASM, 'ext', 'ram.asm'), encoding='utf-8').read()
@@ -95,12 +207,27 @@ def main():
             fail('VWF RAM $%X-$%X leaves the boot-only area' % (base, base + endoff))
         else:
             ok('VWF RAM $%X-$%X inside $FFFFE400-$FFFFFBFF' % (base, base + endoff))
+        if opts.get('fix_technique_confirm') == '1':
+            moff = int(re.search(r'^MenuTech_RAM_End\s*=\s*MenuTech_RAM\+(\d+)', ram, re.M).group(1))
+            mbase = base + endoff
+            mend = mbase + moff
+            if mend > sbase:
+                fail('Technique-input RAM $%X-$%X overlaps SaveSlots RAM' % (mbase, mend))
+            else:
+                ok('Technique-input RAM $%X-$%X' % (mbase, mend))
         pool = int(re.search(r'^VWFDIA_POOL\s*=\s*\$([0-9A-F]+)', src, re.M).group(1), 16)
         cells = int(re.search(r'^VWFDIA_CELLS\s*=\s*(\d+)', src, re.M).group(1))
         if not (0xC0 <= pool and pool + 2 * cells <= 0x100):
             fail('pool tiles $%X-$%X leave the blank font tiles $C0-$FF' % (pool, pool + 2 * cells - 1))
         else:
             ok('pool tiles $%X-$%X' % (pool, pool + 2 * cells - 1))
+        ending_pool = int(re.search(r'^VWFENDING_POOL\s*=\s*\$([0-9A-F]+)', src, re.M).group(1), 16)
+        if not (0x400 <= ending_pool and ending_pool + 2 * cells <= 0x540):
+            fail('ending pool tiles $%X-$%X overlap scene art or the sprite table' % (
+                ending_pool, ending_pool + 2 * cells - 1))
+        else:
+            ok('ending pool tiles $%X-$%X below the sprite table' % (
+                ending_pool, ending_pool + 2 * cells - 1))
         if opts.get('vwf_menu') == '1':
             menu_pool = int(re.search(r'^VWFMENU_POOL\s*=\s*\$([0-9A-F]+)', src, re.M).group(1), 16)
             menu_rows = int(re.search(r'^VWFMENU_ROWS\s*=\s*(\d+)', src, re.M).group(1))
@@ -122,8 +249,10 @@ def main():
             else:
                 ok('shop pool tiles $%X-$%X (%d windows)' % (spans[0][0], spans[-1][1] - 1, len(spans)))
         if opts.get('vwf_battle') == '1':
-            # every battle pool line must lie in a range no battle loader touches (see VWFBattle_Table)
-            free = ((0x25C, 0x280), (0x364, 0x380), (0x580, 0x5CC))
+            # The inherited background can use $25C-$27B. The remaining ranges
+            # are outside its art, the active sprite table and visible window rows.
+            free = ((0x364, 0x380), (0x554, 0x560),
+                    (0x580, 0x5CC), (0x5F0, 0x600))
             tab = src[src.index('VWFBattle_Table:'):]
             tab = tab[:tab.index('dc.w\t0')]
             lines = re.findall(r'^\tdc\.w\t\$([0-9A-F]+), \$?([0-9A-F]+), (\d+), (\d+), (\d+), \$([0-9A-F]+)', tab, re.M)
@@ -134,10 +263,10 @@ def main():
             spans.sort()
             bad = [s for s in spans if not any(a <= s[0] and s[1] <= b for a, b in free)]
             overlap = [(spans[i], spans[i + 1]) for i in range(len(spans) - 1) if spans[i][1] > spans[i + 1][0]]
-            if bad or overlap or len(spans) != 14:
+            if bad or overlap or len(spans) != 15:
                 fail('battle pool lines outside the free ranges %s or overlapping %s' % (bad, overlap))
             else:
-                ok('battle pool: %d lines inside $25C-$27F, $364-$37F, $580-$5CB' % len(spans))
+                ok('battle pool: %d lines outside background art and active tilemaps' % len(spans))
         if opts.get('smooth_scroll') == '1':
             sbase = int(re.search(r'^VWFSmooth_RAM\s*=\s*\$([0-9A-F]+)', ram, re.M).group(1), 16)
             sendoff = int(re.search(r'^VWFSmooth_RAM_End\s*=\s*VWFSmooth_RAM\+\$([0-9A-F]+)', ram, re.M).group(1), 16)
@@ -150,17 +279,36 @@ def main():
                 fail('smooth-scroll pool $%X-$%X leaves the window plane area ($580-$5FF, off on every dialogue screen)' % (spool, spool + 95))
             else:
                 ok('smooth-scroll pool $%X-$%X on the window plane' % (spool, spool + 95))
-        for name in ('VWFDia_Entry', 'VWFDia_ScrollUp', 'VWFDia_Font'):
+        extension_labels = ['VWFDia_Entry', 'VWFDia_ScrollUp',
+                            'VWFDia_Font', 'TechniqueNameData']
+        for option, label in (('fast_walk', 'FastWalk_Init'),
+                              ('fast_transitions', 'Battle_SaveMusic'),
+                              ('extended_script', 'ScriptBank_Resolve'),
+                              ('fix_ending_transmission', 'Ending_Queue'),
+                              ('battle_target_left', 'BattleTarget_Prev')):
+            if opts.get(option) == '1':
+                extension_labels.append(label)
+        for name in extension_labels:
             if sym[name] < 0xC0000:
                 fail('%s at $%X is below the original end of ROM' % (name, sym[name]))
         ok('extension routines sit past $C0000')
     # 7. options
-    for k in ('scrolling_ground', 'four_save_slots', 'fix_tech_distributor', 'vwf_dialogue', 'vwf_scroll_shadow', 'vwf_menu', 'vwf_shop', 'vwf_battle', 'smooth_scroll'):
+    for k in ('scrolling_ground', 'fast_transitions', 'fast_walk', 'extended_script',
+              'fix_ending_transmission', 'fix_stale_input', 'battle_target_left',
+              'fix_technique_confirm', 'four_save_slots', 'fix_tech_distributor',
+              'vwf_dialogue', 'vwf_scroll_shadow', 'vwf_menu', 'vwf_shop',
+              'vwf_battle', 'smooth_scroll'):
         if k not in opts:
             fail('option %s missing or not 0/1' % k)
     for k in ('vwf_menu', 'vwf_shop', 'vwf_battle', 'smooth_scroll'):
         if opts.get(k) == '1' and opts.get('vwf_dialogue') != '1':
             fail('%s requires vwf_dialogue' % k)
+    fade_wait = b'\x76\x02' if opts.get('fast_transitions') == '1' else b'\x76\x04'
+    for label in ('loc_80F6', 'loc_8142', 'loc_817E', 'loc_820E'):
+        if rom[sym[label]:sym[label] + 2] != fade_wait:
+            fail('%s does not use the configured transition dwell' % label)
+    if not any(label in ' '.join(problems) for label in ('loc_80F6', 'loc_8142', 'loc_817E', 'loc_820E')):
+        ok('transition fades use %d-frame palette dwell' % (2 if opts.get('fast_transitions') == '1' else 4))
     ok('options: ' + ', '.join('%s=%s' % kv for kv in sorted(opts.items())))
     print('sha256', hashlib.sha256(rom).hexdigest())
     if problems:

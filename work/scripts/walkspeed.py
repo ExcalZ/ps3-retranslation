@@ -72,7 +72,11 @@ print('field walk (dx, step counter, anim frame) per frame:')
 print(' ', steps[:24])
 dx = [b[0] - a[0] for a, b in zip(steps, steps[1:])]
 anim = [s[2] for s in steps]
-print('  px/frame', sorted(set(dx)), 'anim frames', anim[:20])
+expected = [2] * 16
+assert dx[:16] == expected, ('steady 2x cadence', dx[:16])
+assert sum(dx[:16]) == 32, ('16 frames must cover four tiles', sum(dx[:16]))
+print('  px/frame', sorted(set(dx)), '16-frame distance', sum(dx[:16]),
+      'anim frames', anim[:20])
 if len(sys.argv) > 2:
     slow, slow_steps = trace(sys.argv[2])
     a = [(m, d, x, y) for _, m, d, x, y in log]
@@ -81,4 +85,5 @@ if len(sys.argv) > 2:
     if a != b:
         for i, (p, q) in enumerate(zip(a, b)):
             if p != q: print('  ', i, p, q)
+    assert a == b, ('scripted walk endpoints differ', a, b)
     print('  slow walk', slow_steps[:24])

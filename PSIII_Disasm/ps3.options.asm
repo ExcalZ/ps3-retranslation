@@ -8,19 +8,49 @@
 ; speed tables at loc_780C0).
 scrolling_ground = 1
 
-; The party walks twice as fast on foot: 2 px a frame, four frames a step
-; instead of 1 px and eight (vehicles keep their speeds). The walking
+; Halve the dwell between palette levels during screen fades. All seven
+; brightness levels are retained; only the duplicated frames are reduced.
+fast_transitions = 1
+
+; The party walks at a steady 2x speed on foot: 2 px per frame, with each
+; 8-px step kept intact for collision (vehicles keep their speeds). The walking
 ; animation runs at its stock pace; the scripted walks (demo input, the dock)
 ; count steps, so cutscenes cover the same ground.
 fast_walk = 1
+
+; Ignore confirm presses for the first eight frames after a character's
+; Technique list opens, so a rapid double-tap cannot select its first entry.
+fix_technique_confirm = 1
+
+; A frame whose VBlank skips the pad read (VRAM being written, as the
+; proportional redraws often are) carries no new presses, instead of the
+; previous frame's again: one tap moves a target cursor one step.
+fix_stale_input = 1
+
+; Left in a battle target picker (a Technique's, an item's or Defend's target)
+; steps back to the previous target; the stock game steps forward for any
+; direction.
+battle_target_left = 1
 
 ; Four save slots instead of two. The two extra slots (and their backup copies)
 ; live in the second 16 KB of backup RAM, so the header declares 32 KB.
 four_save_slots = 1
 
+; Use the "Successors of Time" title subtitle art and put a space between
+; STAR and III in the title-screen caption.
+successors_title = 1
+
 ; Keep the Technique Distributor's cost/level box inside the window when a
 ; character's level is high (the stock game writes past the window buffer).
 fix_tech_distributor = 1
+
+; Let late dialogue address more than 64 KB from GameScript. The original
+; 16-bit script offsets wrap after translation expands the final scenes.
+extended_script = 1
+
+; Preserve each ending transmission cue when its animation reaches that point
+; before the translated dialogue has finished.
+fix_ending_transmission = 1
 
 ; Proportional (variable-width) text in the dialogue window, the battle message
 ; row and the opening scroll.

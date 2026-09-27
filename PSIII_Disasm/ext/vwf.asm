@@ -51,10 +51,13 @@
 ; the field art is reloaded on exit and the map itself loads one picture at
 ; tiles $101-$131 - and its buy and sell lists are composed into a window
 ; buffer (buy list $FFFFA126, five lines of 16 cells, stride $48; sell list
-; pages $FFFF9D30 and $FFFF9E80, five lines of 11 cells, stride $38) that the
-; window animation copies to plane A. Those rows take the same path with a
-; pool line per list line at $240-$2FD (VWFShop_Table); the buy list's price
-; is written after the name from cell 11, so a name has 88 px on every list.
+; pages $FFFF9D30, $FFFF9E80 and $FFFF9FD0, five lines of 11 cells, stride
+; $38) that the window animation copies to plane A. Those rows take the same
+; path with a pool line per list line (VWFShop_Table); the party-name rows
+; and other small windows occupy $300-$321, the four-slot save/load list uses
+; four 12-cell lines at $322-$351, and the Technique Distributor's four
+; direct-to-plane name rows use $352-$371. The buy list's price is written
+; after the name from cell 11, so a name has 88 px on every list.
 ; A $F8 in a list line hands the rest to the stock renderer (the pool locate
 ; fails outside plane A), which no list uses.
 ;
@@ -76,12 +79,12 @@
 ; The battle box (vwf_battle): the victory and level-up messages, drawn from
 ; the box's top row ($FFFF2A0A) after loc_CF52 clears it, take the dialogue
 ; path as two lines; the enemy-group lines, the character names of
-; the stat window and the item and technique lists, from VWFBattle_Table
+; the stat window and the item, equipment and technique lists, from VWFBattle_Table
 ; (see there for the battle screen's VRAM). Targeting does not touch those
 ; cells: an enemy target is the enemy's own sprite lit up, and an ally target
 ; is the character's name in the stat window, a palette toggle on the copied
-; words (loc_D56C, widened to five cells in ps3.asm to match the name's
-; five-cell pool line); the list highlights toggle the same way.
+; words (loc_D56C, four name cells); the fifth position is the box's right
+; border and is never highlighted. The list highlights toggle the same way.
 ; ===========================================================================
 	if vwf_dialogue
 
@@ -103,15 +106,72 @@ VWFMENU_PLATE   = 5		; cells of a status-box name plate before its level digits
 ; RAM equates: ext/ram.asm
 
 ; ---------------------------------------------------------------------------
+; Saved character records contain absolute ROM pointers. Text growth before
+; the character data can move every target between builds, so a battery save
+; made by an earlier build may otherwise feed unrelated bytes to the sprite,
+; experience and technique readers. The first character's sprite descriptor
+; identifies the old build's relocation; all five descriptors share the same
+; source table, and the other persisted pointers move by the same delta.
+; Called by loc_148FA after the save image has been restored.
+; ---------------------------------------------------------------------------
+VWFSave_RestorePointers:
+	move.l	#loc_1E000, d0
+	sub.l	(char_stats+$10).w, d0	; current address - saved-build address
+	lea	(char_stats).w, a0
+	lea	(loc_1E4C6).l, a1
+	moveq	#4, d7
+VWFSave_RestorePointers_Char:
+	move.l	(a1)+, $10(a0)		; sprite descriptor for this party slot
+	move.w	(a1)+, $14(a0)		; its palette / attribute bits
+	move.l	exp_addr(a0), d1
+	beq.s	VWFSave_RestorePointers_NoExp
+	add.l	d0, d1
+	move.l	d1, exp_addr(a0)
+VWFSave_RestorePointers_NoExp:
+	move.l	tech_power_addr(a0), d1
+	beq.s	VWFSave_RestorePointers_NoTech
+	add.l	d0, d1
+	move.l	d1, tech_power_addr(a0)
+VWFSave_RestorePointers_NoTech:
+	lea	$80(a0), a0
+	dbf	d7, VWFSave_RestorePointers_Char
+	rts
+
+; ---------------------------------------------------------------------------
 ; Entry: registers as loc_10038 (a0 text, a1 mark-row pointer, d0 attribute,
 ; a6 window context). Falls through to the stock renderer for other windows.
 ; ---------------------------------------------------------------------------
 VWFDia_Entry:
 	clr.w	(VWFDia_Skew).w
+	bsr.w	VWFTechnique_RemapName
+	bra.s	VWFDia_AfterTechnique
+
+; TechniqueData's records must retain their stock names and exact 16-byte
+; gameplay layout. Any renderer-facing pointer to a record start instead uses
+; the translated name in the parallel table. This is also called after an
+; $E8 {NAME} insert loads its pointer (enemy/party "used" announcements).
+VWFTechnique_RemapName:
+	move.l	d1, -(sp)
+	move.l	a0, d1
+	subi.l	#TechniqueData, d1
+	bcs.s	VWFTechnique_NotRecord
+	cmpi.l	#TechniqueData_End-TechniqueData, d1
+	bcc.s	VWFTechnique_NotRecord
+	andi.w	#$F, d1			; only the start of a fixed 16-byte record is a name
+	bne.s	VWFTechnique_NotRecord
+	move.l	a0, d1
+	subi.l	#TechniqueData, d1
+	lea	(TechniqueNameData).l, a0
+	adda.w	d1, a0			; translated display names use the same 16-byte slots
+VWFTechnique_NotRecord:
+	move.l	(sp)+, d1
+	rts
+
+VWFDia_AfterTechnique:
 	if vwf_menu
 	move.w	(map_id).w, d1
 	subi.w	#$202, d1
-	cmpi.w	#$A, d1			; a menu screen ($202-$20C, one per generation)
+	cmpi.w	#$C, d1			; a menu screen ($202-$20E, one per generation)
 	bhi.s	VWFDia_NotMenu
 	bsr.w	VWFMenu_Locate		; d1 = pool tile, d2 = capacity; d1 = $FFFF if not pooled
 	cmpi.w	#$FFFF, d1
@@ -134,8 +194,11 @@ VWFDia_NotMenu:
 VWFDia_NotShop:
 	endif
 	if vwf_battle
-	cmpi.w	#$232, (map_id).w	; the battle screen
+	cmpi.w	#$232, (map_id).w	; ordinary battle
+	beq.s	VWFDia_Battle
+	cmpi.w	#$3B2, (map_id).w	; Dark Falz battle
 	bne.s	VWFDia_NotBattle
+VWFDia_Battle:
 	lea	VWFBattle_Table(pc), a2
 	move.l	a2, (VWFDia_List).w
 	bsr.w	VWFList_Find
@@ -220,6 +283,7 @@ VWFDia_Insert:
 	move.l	a0, -(sp)
 	lea	(char_name_saved).w, a2
 	movea.l	(a2,d1.w), a0
+	bsr.w	VWFTechnique_RemapName
 	bset	#4, $1(a6)
 	bra.s	VWFDia_Loop
 
@@ -240,7 +304,7 @@ VWFDia_Page:				; $EC
 	bclr	#4, $1(a6)
 	beq.s	+
 	movea.l	(sp)+, a0		; inside an insert it only ends the insert
-	bra.s	VWFDia_Loop
+	bra.w	VWFDia_Loop
 +
 	bset	#5, $1(a6)
 	move.l	a0, $3E(a6)
@@ -432,9 +496,9 @@ VWFDia_Draw_Ink:
 	move.w	(VWFDia_X).w, d2
 	move.w	d2, d5
 	add.w	d4, d5
-	subq.w	#1, d5			; ink right edge (advance includes the 1 px gap)
+	subq.w	#2, d5			; actual ink right edge (advance includes the 1 px gap)
 	cmp.w	(VWFDia_MaxPx).w, d5
-	bhi.s	VWFDia_Draw_Done
+	bcc.s	VWFDia_Draw_Done
 	bsr.s	VWFDia_CanvasPtr
 	move.w	d2, d5
 	lsr.w	#3, d5
@@ -456,6 +520,10 @@ VWFDia_Draw_Ink:
 	lea	VWFDIA_STRIDE(a2), a2
 	dbf	d5, -
 	add.w	d4, d2
+	cmp.w	(VWFDia_MaxPx).w, d2
+	bls.s	+
+	move.w	(VWFDia_MaxPx).w, d2	; do not flush a new tile for a gap beyond the right edge
++
 	move.w	d2, (VWFDia_X).w
 VWFDia_Draw_Done:
 	movem.l	(sp)+, d4-d7/a2/a5
@@ -653,7 +721,7 @@ VWFDia_ScrollUp:
 	rts
 
 ; ---------------------------------------------------------------------------
-; The opening scroll. loc_1A156 scrolls plane A upward and, as each line's row
+; The opening scroll and ending transmissions. loc_1A156 scrolls plane A upward and, as each line's row
 ; comes around, writes it straight into VRAM with loc_F7F0 (a0 text, d1 column,
 ; d2 plane row, d3 attribute $6000). Hooked at loc_F7F0 when the script offset
 ; is the new-game intro's: the line is composed like a dialogue line and its
@@ -662,10 +730,20 @@ VWFDia_ScrollUp:
 ; slot is (row/4) mod 8: a slot is reused 32 rows after it was written, and a
 ; line has scrolled off the 28-row screen by then. Blank cells get tile 0
 ; (transparent), as the stock writer's spaces do.
+; The endings use the same composer at rows $14/$16, with two 24-tile slots
+; at $500-$52F and the caller's palette-0 attribute.
 ; ---------------------------------------------------------------------------
 VWFSCROLL_POOL  = $200
+VWFENDING_POOL  = $500
 
 VWFScroll_Entry:
+	cmpa.l	#loc_30CD8, a0
+	bcs.s	VWFScroll_Intro
+	cmpa.l	#loc_31136, a0
+	bcc.s	VWFScroll_Intro
+	tst.w	d3
+	beq.s	VWFScroll_Go
+VWFScroll_Intro:
 	cmpi.w	#loc_304DA-GameScript2, (script_offset).w
 	bne.s	VWFScroll_Fixed
 	cmpi.w	#$6000, d3
@@ -700,15 +778,25 @@ VWFScroll_Glyph:
 +
 	bsr.w	VWFDia_ExpandOpen
 	move.w	10(sp), d2		; the entry's row, from the saved frame
+	tst.w	14(sp)			; palette 0 is the ending transmission
+	bne.s	VWFScroll_Slot
+	move.w	d2, d3
+	subi.w	#$14, d3
+	lsr.w	#1, d3			; rows $14/$16 -> slots 0/1
+	mulu.w	#VWFDIA_CELLS, d3
+	addi.w	#VWFENDING_POOL, d3
+	bra.s	VWFScroll_TileReady
+VWFScroll_Slot:
 	move.w	d2, d3
 	lsr.w	#2, d3
 	andi.w	#7, d3			; slot
 	mulu.w	#VWFDIA_CELLS, d3
 	addi.w	#VWFSCROLL_POOL, d3	; first pool tile of this line
+VWFScroll_TileReady:
 	move.w	d3, d0
 	lsl.w	#5, d0			; its VRAM address
-	move.w	d3, d4
-	ori.w	#$6000, d4		; tile word: palette 3
+	move.w	14(sp), d4		; caller's palette bits
+	or.w	d3, d4			; tile word with pool index
 	lea	(VWFDia_Scratch).w, a0
 	move.w	#VWFDIA_CELLS*32, d1
 	move.w	d4, -(sp)
@@ -1205,8 +1293,11 @@ VWFMenu_SetLine:
 ; number of lines, the $44(a6) the call must carry (0: any), the capacity in
 ; cells, and the first pool tile; a zero row ends the table. Given a1 and a
 ; table in a2, VWFList_Find returns d1 = the line's first pool tile and
-; d2 = its capacity, or d1 = $FFFF. d3-d7 are scratch.
+; d2 = its capacity, or d1 = $FFFF. d3-d6 are scratch; d7 is preserved because
+; stock loc_10038 preserves it and callers use it as a loop counter.
 VWFList_Find:
+	move.l	d7, -(sp)
+VWFList_Next:
 	move.w	(a2)+, d1		; first mark row (low word); 0 ends the table
 	beq.s	VWFList_No
 	move.w	(a2)+, d2		; stride
@@ -1217,28 +1308,30 @@ VWFList_Find:
 	tst.w	d4
 	beq.s	+
 	cmp.w	$44(a6), d4
-	bne.s	VWFList_Find
+	bne.s	VWFList_Next
 +
 	move.w	a1, d7
 	sub.w	d1, d7			; offset from the first line
-	bcs.s	VWFList_Find
+	bcs.s	VWFList_Next
 	moveq	#0, d1			; line index: the offset must be a multiple of the stride
 VWFList_Line:
 	tst.w	d7
 	beq.s	VWFList_Found
 	sub.w	d2, d7
-	bcs.s	VWFList_Find
+	bcs.s	VWFList_Next
 	addq.w	#1, d1
 	cmp.w	d3, d1
 	bcs.s	VWFList_Line
-	bra.s	VWFList_Find
+	bra.s	VWFList_Next
 VWFList_Found:
 	mulu.w	d5, d1			; line * capacity
 	add.w	d6, d1
 	move.w	d5, d2
+	move.l	(sp)+, d7
 	rts
 VWFList_No:
 	move.w	#$FFFF, d1
+	move.l	(sp)+, d7
 	rts
 	endif
 
@@ -1249,33 +1342,42 @@ VWFShop_Table:
 	dc.w	$A126, $48, 5, 16, 16, $240	; buy list (loc_3DB34): the price is written from cell 11
 	dc.w	$9D30, $38, 5, 11, 11, $290	; sell list, page one (loc_3DB10)
 	dc.w	$9E80, $38, 5, 11, 11, $2C7	; sell list, page two (loc_3DB1C)
-	dc.w	$9C8E, $18, 5, 4, 4, $300	; the party name list, "Who will carry it?" (loc_3DD68)
+	dc.w	$9FD0, $38, 5, 11, 11, $372	; sell list, page three (loc_B40A); all three pages can be visible
+	dc.w	$9C8E, $18, 5, 4, 4, $300	; party names: Searren's ink fits four cells; its trailing gap is clipped
 	dc.w	$9BC6, $18, 2, 4, 4, $314	; Buy / Sell, Yes / No (one string, {BR} to the second line)
 	dc.w	$9C22, 0, 1, 14, 6, $31C	; the Meseta label; the amount is written from cell 6 (loc_FFDC at $9C4A)
+	if four_save_slots
+	dc.w	$9C9E, $38, 4, 12, 12, $322	; four-slot save/load list (game select and church)
+	endif
+	dc.w	$268A, $100, 4, 8, 8, $352	; Technique Distributor's four translated technique names
 	dc.w	0
 	endif
 
 	if vwf_battle
-; The battle screen ($232). Its VRAM: background tiles $100-$27B, the box art
-; and effects $280-$363, enemy art from $380, the sprite table at $A800, the
-; box itself on the window plane from $B986 (rows 19-26; the window is shown
-; from row 20). Free everywhere in a battle: $25C-$27F, $364-$37F, and the
-; window plane's rows 0-18, $B000-$B97F = tiles $580-$5CB, which nothing
-; writes or displays. The enemy-group lines ("{NAME} {NUM}", loc_DDDA) are
+; The ordinary and Dark Falz battle screens ($232/$3B2). Their VRAM:
+; background tiles $100-$27B (including
+; $25C-$27B on some maps), box art and effects $280-$363, enemy art from
+; $380, the sprite table at $A800, and the box on the window plane from
+; $B986 (rows 19-26; shown from row 20). The pools use the gaps $364-$37F,
+; the sprite table's unused bytes $AA80-$ABFF ($554-$55F), the window plane's
+; untouched rows 0-18 ($580-$5CB), and its offscreen rows 28-31 ($5F0-$5FF).
+; The enemy-group lines ("{NAME} {NUM}", loc_DDDA) are
 ; composed into the box buffer; the character names of the stat window
 ; (Battle_WriteCharStats, $44(a6) = 4, five cells apart) and the item and
-; technique lists (loc_3D8AE positions, $44(a6) = 9, nine cells) into plane A.
+; technique lists (loc_3D8AE positions, plus the centre equipped-weapon slot
+; at $FFFF2A20; $44(a6) = 9, nine cells) into plane A.
 VWFBattle_Table:
 	dc.w	$9D70, 0, 1, 0, 11, $580	; enemy group 0 (front row, left)
 	dc.w	$9D86, 0, 1, 0, 11, $58B	; group 1 (front row, right)
 	dc.w	$9CE8, 0, 1, 0, 11, $596	; group 2 (back row, left)
-	dc.w	$9CFE, 0, 1, 0, 11, $5A1	; group 3 (back row, right)
-	dc.w	$2A0C, $A, 5, 4, 5, $5AC	; character names, row 20, columns 6/11/16/21/26
-	dc.w	$2A16, 0, 1, 9, 9, $25C		; item / technique list entries
-	dc.w	$2A2A, 0, 1, 9, 9, $265
-	dc.w	$2B16, 0, 1, 9, 9, $26E
-	dc.w	$2B2A, 0, 1, 9, 9, $277
-	dc.w	$2C16, 0, 1, 9, 9, $364
+	dc.w	$9CFE, 0, 1, 0, 11, $554	; group 3 (back row, right)
+	dc.w	$2A0C, $A, 5, 4, 4, $5A1	; four-cell names, spaced five cells; column 30 is the box border
+	dc.w	$2A16, 0, 1, 9, 9, $5BA		; item / technique list entries
+	dc.w	$2A20, 0, 1, 9, 9, $5C3		; centre equipped weapon (loc_CFCC)
+	dc.w	$2A2A, 0, 1, 9, 9, $364
+	dc.w	$2B16, 0, 1, 9, 9, $36D
+	dc.w	$2B2A, 0, 1, 9, 9, $376
+	dc.w	$2C16, 0, 1, 9, 9, $5F0
 	dc.w	0
 	endif
 

@@ -12,8 +12,8 @@ enemies 75 px, party names 40 px, the two field main-menu labels 56 px (four
 lines for the first, one for the second); the other menu-map windows (`menus`,
 `menus2`, `equip`) draw proportionally inside their stock cell budget, a {BR}
 moving to the next pool line. Fixed-width: the game-select lists and speed
-prompt in `shops`, `marriage`, `megido`, `title`, and the ending transmission
-(`namestrings`, 24 cells); the widest US line of the segment is the cell
+prompt in `shops`, `marriage`, `megido`, and `title`. The ending transmission
+(`namestrings`) uses 192 proportional pixels per line. The widest US line is the cell
 budget. Inserted names count 34 px, numbers 15 px, as the proofreader assumes.
 """
 import json, os, re, sys
@@ -27,7 +27,7 @@ WIDTH = diafont.build()[1]
 INSERT_PX = {0xE8: 34, 0xE4: 15}
 INSERT_CELLS = {0xE8: 6, 0xE4: 3}
 VWF_SEGMENTS = {'items': 72, 'techs': 72, 'enemies': 75, 'charnames': 40}
-VWF_LINE_SEGMENTS = ('battle', 'shops', 'credits')
+VWF_LINE_SEGMENTS = ('battle', 'shops', 'credits', 'namestrings')
 MENU_TECHS = tuple('menus#%03d' % i for i in range(20, 36))   # technique names in the Techs screen
 MAIN_MENU = ('menus#000', 'menus#001')
 FIXED_MENUS = ('shops#054', 'shops#056', 'shops#064', 'shops#065', 'shops#066', 'shops#067', 'shops#068')   # game-select lists and the speed prompt: stock 8x8
@@ -121,7 +121,8 @@ def run(changed_only=False, show_widths=False):
             elif name in VWF_SEGMENTS or r['id'] in MENU_TECHS:
                 pr = check_vwf(r['en'], VWF_SEGMENTS.get(name, VWF_SEGMENTS['techs']), 2, 1, cs)
             elif name in VWF_LINE_SEGMENTS and r['id'] not in FIXED_MENUS:
-                pr = check_vwf(r['en'], LINE, 99 if name == 'shops' else 2, 1, cs)
+                first_lines = 99 if name == 'shops' else 1 if name == 'namestrings' else 2
+                pr = check_vwf(r['en'], LINE, first_lines, 1, cs)
             elif name in POOLED_SEGMENTS:
                 if fixed is None:
                     fixed = segment_budget(seg)

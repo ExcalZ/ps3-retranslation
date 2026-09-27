@@ -583,7 +583,9 @@ class CPU:
         # tst.w (xxx).w
         if op == 0x4A78:
             ea = self._s16(self.fetch()) & 0xFFFFFF
-            self.Z = (self.rw(ea) == 0)
+            v = self.rw(ea)
+            self.Z = (v == 0)
+            self.N = bool(v & 0x8000)
             self.C = False
             return False
 

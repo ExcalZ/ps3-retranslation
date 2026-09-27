@@ -253,9 +253,9 @@ VBlank:
 	movem.l	d0-a7, -(sp)
 	bset	#7, $FFFFD004.w
 	btst	#6, $FFFFD006.w	; are we moving data into VRAM?
-	bne.s	VBlank_End		; if so, return
+	bne.s	VBlank_NoPad		; if so, return
 	btst	#3, $FFFFD006.w	; has the Z80 stopped?
-	bne.s	VBlank_End		; if so, return
+	bne.s	VBlank_NoPad		; if so, return
 
 	bsr.w	ReadJoypads
 
@@ -272,6 +272,15 @@ VBlank:
 	beq.s	VBlank_End
 	bclr	#6, $FFFFD005.w
 	bsr.w	UpdateCRAM
+	if fix_stale_input
+	bra.s	VBlank_End
+VBlank_NoPad:
+	; the pads were not read: this frame has no new presses (the main loop
+	; would otherwise act on the previous frame's edges a second time)
+	andi.l	#$FF00FF00, (joypad_held).w
+	else
+VBlank_NoPad:
+	endif
 VBlank_End:
 	movem.l	(sp)+, d0-a7
 	
@@ -1517,7 +1526,11 @@ loc_145A:
 	move.b	#0, $FFFFD016.w
 	addq.w	#4, (game_screen_routine).w
 	move.w	#$6000, d3
+	if successors_title
+	lea	(TitleSpacedText).l, a0
+	else
 	lea	(loc_1B48).l, a0
+	endif
 	bsr.w	loc_14D6
 	lea	(loc_1B6C).l, a0
 	bsr.w	loc_14D6
@@ -1648,11 +1661,17 @@ loc_1638:
 	jsr	(BuildSprites).l
 	bra.s	loc_1632
 loc_1656:
+	if extended_script
+	jsr	(ScriptBank_Set307B0).l
+	bset	#7, $FFFFD007.w
+	jmp	(ScriptBank_Dialogue).l
+	else
 	moveq	#0, d0
 	move.l	#loc_307B0-GameScript, d0
 	move.w	d0, (script_offset).w
 	bset	#7, $FFFFD007.w
 	jmp	(loc_18C1A).l
+	endif
 
 Screen_Intro:
 	move.w	(game_screen_routine).w, d0
@@ -1731,7 +1750,11 @@ loc_174A:
 	bsr.w	VDPEnableVInterrupt
 	bsr.w	VDPEnableDisplay
 	move.w	#$4000, d3
+	if successors_title
+	lea	(TitleSpacedText).l, a0
+	else
 	lea	(loc_1B48).l, a0
+	endif
 	bsr.w	loc_14D6
 	lea	(loc_1B6C).l, a0
 	bsr.w	loc_14D6
@@ -3564,7 +3587,7 @@ loc_2DE0:
 	dbf	d3, -
 
 	if fast_walk
-	move.w	#2, $FFFFD242.w		; 2 px a frame on foot, four frames a step (loc_3036)
+	jsr	(FastWalk_Init).l		; steady 2 px per frame on foot
 	else
 	move.w	#1, $FFFFD242.w
 	endif
@@ -3736,7 +3759,7 @@ loc_3016:
 loc_3036:
 	addq.b	#1, $C(a5)
 	if fast_walk
-	andi.b	#3, $C(a5)		; a step is 8 px: four frames at 2 px
+	jsr	(FastWalk_UpdateStep).l	; Z at an 8-px boundary
 	else
 	andi.b	#7, $C(a5)
 	endif
@@ -5993,18 +6016,26 @@ loc_4C42:
 	move.b	d1, $E(a5)
 	lea	loc_4E4A(pc), a0
 	add.w	d3, d3
+	if fast_walk
+	jsr	(FastWalk_MoveFollowerX).l
+	nop
+	nop
+	nop
+	else
 	move.b	(a0,d3.w), d1
 	ext.w	d1
-	if fast_walk
-	add.w	d1, d1			; 2 px a frame, as the manager moves (loc_2DE0)
-	endif
 	add.w	d1, $8(a5)
+	endif
+	if fast_walk
+	jsr	(FastWalk_MoveFollowerY).l
+	nop
+	nop
+	nop
+	else
 	move.b	$1(a0,d3.w), d1
 	ext.w	d1
-	if fast_walk
-	add.w	d1, d1
-	endif
 	add.w	d1, $A(a5)
+	endif
 	move.w	$C(a5), d0		; the walking animation counts frames, not steps: its pace stays
 	lsr.w	#2, d0
 	andi.w	#6, d0
@@ -7405,13 +7436,13 @@ loc_5F86:
 
 ; ====================	
 loc_5F8B:
-	dc.b	"R-Hand"
+	dc.b	"Right Hand"
 	dc.b	$FC
 ; ====================
 
 ; ====================	
 loc_5F92:
-	dc.b	"L-Hand"
+	dc.b	"Left Hand"
 	dc.b	$FC
 ; ====================
 	
@@ -10589,7 +10620,11 @@ ProcessFadeIn:
 	bset	#3, $FFFFD004.w
 	moveq	#6, d7
 loc_80F6:
+	if fast_transitions
+	moveq	#2, d3
+	else
 	moveq	#4, d3
+	endif
 loc_80F8:
 	bsr.w	WaitVBlankAndGamePause
 	subq.b	#1, d3
@@ -10617,7 +10652,11 @@ ProcessFadeOut:
 	bset	#3, $FFFFD004.w
 	moveq	#6, d7
 loc_8142:
+	if fast_transitions
+	moveq	#2, d3
+	else
 	moveq	#4, d3
+	endif
 loc_8144:
 	bsr.w	WaitVBlankAndGamePause
 	subq.b	#1, d3
@@ -10641,7 +10680,11 @@ loc_815C:
 loc_817C:
 	moveq	#6, d7
 loc_817E:
+	if fast_transitions
+	moveq	#2, d3
+	else
 	moveq	#4, d3
+	endif
 loc_8180:
 	bsr.w	WaitVBlankAndGamePause
 	subq.b	#1, d3
@@ -10697,7 +10740,11 @@ loc_81EC:
 loc_820C:
 	moveq	#6, d7
 loc_820E:
+	if fast_transitions
+	moveq	#2, d3
+	else
 	moveq	#4, d3
+	endif
 loc_8210:
 	bsr.w	WaitVBlankAndGamePause
 	subq.b	#1, d3
@@ -11574,7 +11621,7 @@ MenuItem_ItemAction:
 	btst	#Button_B, d7
 	beq.s	loc_8AFE
 	move.b	#0, $C(a6)
-	bsr.w	loc_10A94
+	jsr	(loc_10A94).l
 	bra.w	loc_8834
 loc_8AFE:
 	move.b	d7, d6
@@ -11940,9 +11987,19 @@ loc_8F5A:
 	bsr.w	loc_A0D6
 	move.w	#8, $2(a6)
 	clr.w	$C(a6)
+	if fix_technique_confirm
+	move.b	#8, (MenuTech_ConfirmCooldown).w
+	endif
 	bra.w	loc_FC18
 loc_8F72:
 	move.b	(joypad_pressed).w, d7
+	if fix_technique_confirm
+	tst.b	(MenuTech_ConfirmCooldown).w
+	beq.s	MenuTech_ConfirmReady
+	subq.b	#1, (MenuTech_ConfirmCooldown).w
+	andi.b	#$9F, d7		; preserve directions/B/Start; ignore A/C during handoff
+MenuTech_ConfirmReady:
+	endif
 	btst	#Button_B, d7
 	beq.s	loc_8F90
 	jsr	(GetSelectionSound).l
@@ -13462,6 +13519,9 @@ loc_A18E:
 	bra.w	loc_A3D2
 loc_A1A2:
 	clr.w	(script_offset).w
+	if extended_script
+	clr.w	(ScriptBank_High).w
+	endif
 	bclr	#6, $FFFFD286.w
 	bclr	#7, $FFFFD007.w
 	rts
@@ -13507,8 +13567,13 @@ loc_A222:
 	moveq	#0, d0
 	move.w	(script_offset).w, d0
 loc_A230:
+	if extended_script
+	jsr	(ScriptBank_Resolve).l
+	nop
+	else
 	lea	(GameScript).l, a0
 	adda.l	d0, a0
+	endif
 	moveq	#0, d1
 	move.w	(a0)+, d0
 	move.b	(a0)+, d1
@@ -17068,7 +17133,11 @@ MainGame_Battle:
 	bsr.w	loc_FC9A
 	clr.w	$7C(a6)
 	move.w	$42(a6), $7E(a6)
+	if fast_transitions
+	jsr	(Battle_SaveMusic).l
+	else
 	move.b	(sound_queue).w, (sound_queue_saved).w
+	endif
 	bset	#1, (primary_obj_table).w
 	btst	#1, $FFFFD008.w
 	beq.s	loc_CD74
@@ -17131,7 +17200,11 @@ MainGameBattle_Exit:
 	jsr	(loc_57CA).l
 loc_CE4A:
 	move.w	$18(a6), (map_id).w
+	if fast_transitions
+	; Do not leave a Z80 music fade pending when the field theme is queued.
+	else
 	jsr	(loc_147E0).l
+	endif
 	bsr.w	ProcessFadeOut
 	bsr.w	VDPDisableDisplay
 	bsr.w	VDPDisableVInterrupt
@@ -17362,6 +17435,9 @@ Battle_WriteCharStats:
 	move.w	#4, $44(a6)
 	move.w	#$80, $42(a6)
 	bsr.w	loc_10038
+	if vwf_battle
+	move.w	#$8898, $FFFF2ABC	; restore the right border after loading an older savestate
+	endif
 	movem.l	(sp)+, d0/a4
 	lea	$FFFF2B0E, a0
 	adda.w	d0, a0
@@ -17726,25 +17802,16 @@ loc_D56C:
 	not.l	d1
 	and.l	d1, $80(a0)
 	and.l	d1, $84(a0)
-	if vwf_battle
-	and.w	d1, $88(a0)		; the proportional name may reach a fifth cell (ext/vwf.asm)
-	endif
 	rts
 loc_D57C:
 	bsr.w	loc_D598
 	eor.l	d1, $80(a0)
 	eor.l	d1, $84(a0)
-	if vwf_battle
-	eor.w	d1, $88(a0)
-	endif
 	rts
 loc_D58A:
 	bsr.w	loc_D598
 	or.l	d1, $80(a0)
 	or.l	d1, $84(a0)
-	if vwf_battle
-	or.w	d1, $88(a0)
-	endif
 	rts
 loc_D598:
 	lea	(loc_3D8D2).l, a0
@@ -19038,7 +19105,11 @@ loc_E3FA:
 	bne.s	loc_E402
 	rts
 loc_E402:
+	if battle_target_left
+	jsr	(ItemTarget_Direction).l
+	else
 	addq.b	#1, $D(a6)
+	endif
 	bra.w	loc_E364
 loc_E40A:
 	bsr.w	loc_CF52
@@ -19364,7 +19435,11 @@ loc_E808:
 	bne.s	loc_E810
 	rts
 loc_E810:
+	if battle_target_left
+	jsr	(TechTarget_Direction).l
+	else
 	addq.b	#1, $D(a6)
+	endif
 	bra.w	loc_E712
 loc_E818:
 	move.w	#$20, (game_general_routine).w	
@@ -19416,7 +19491,11 @@ loc_E8B8:
 	bne.s	loc_E8C0
 	rts
 loc_E8C0:
+	if battle_target_left
+	jsr	(DefendTarget_Direction).l
+	else
 	addq.b	#1, $D(a6)
+	endif
 	move.w	#$148, (game_general_routine).w
 	rts
 	
@@ -19743,6 +19822,7 @@ loc_EC26:
 loc_EC30:
 	movea.w	$72(a6), a0
 	bset	#6, $25(a0)
+	move.l	$34(a0), (char_name_saved).w	; result message names the enemy target
 	moveq	#0, d0
 	move.w	$74(a6), d0
 	move.l	d0, $FFFFD4A0.w
@@ -20146,55 +20226,158 @@ loc_F0FA:
 loc_F104:
 	movea.w	$6C(a6), a0
 	move.w	$4A(a0), d0
+	cmpi.w	#$2B0, (game_general_routine).w	; items store an InventoryData offset in $4A
+	bne.s	+
+	movea.l	$6E(a6), a1
+	moveq	#0, d0
+	move.b	$B(a1), d0		; item technique ID is twice the TechniqueData index
+	lsr.w	#1, d0
++
 	add.w	d0, d0
 	jmp	loc_F112(pc,d0.w)
 loc_F112:
-	bra.w	loc_F152
-	bra.w	loc_F152
-	bra.w	loc_F152
-	bra.w	loc_F152
-	bra.w	loc_F17E
-	bra.w	loc_F17E
-	bra.w	loc_F19E
-	bra.w	loc_F19E
-	bra.w	loc_F17E
-	bra.w	loc_F17E
-	bra.w	loc_F19E
-	bra.w	loc_F19E
-	bra.w	loc_F17E
-	bra.w	loc_F18C
-	bra.w	loc_F19E
-	bra.w	loc_F17E
-loc_F152:
+	bra.w	BattleResult_PlayerDamage	; Foi
+	bra.w	BattleResult_PlayerDamage	; Zan
+	bra.w	BattleResult_PlayerDamage	; Gra
+	bra.w	BattleResult_PlayerDamage	; Tsu
+	bra.w	BattleResult_PlayerHeal		; Res
+	bra.w	BattleResult_PlayerHeal		; Gires
+	bra.w	BattleResult_PlayerRevive	; Rever
+	bra.w	BattleResult_PlayerCure		; Anti
+	bra.w	BattleResult_PlayerSpeed	; Ner
+	bra.w	BattleResult_Escape		; Rimit
+	bra.w	BattleResult_PlayerShiza	; Shiza
+	bra.w	BattleResult_PlayerDeban	; Deban
+	bra.w	BattleResult_PlayerAttack	; Fanbi
+	bra.w	BattleResult_PlayerForsa	; Forsa
+	bra.w	BattleResult_PlayerRestore	; Nasak
+	bra.w	BattleResult_PlayerDefense	; Shu
+
+BattleResult_PlayerDamage:
 	movea.w	$72(a6), a0
 	bset	#6, $25(a0)
-	addq.w	#4, (game_general_routine).w
+	move.l	$34(a0), (char_name_saved).w
+	bsr.w	BattleResult_SetAmount
+	lea	(loc_3D972).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_PlayerHeal:
+	bset	#2, $FFFFD00A.w
+	bsr.w	BattleResult_LoadPartyTarget
+	bsr.w	BattleResult_SetAmount
+	lea	(loc_3DA63).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_PlayerSpeed:
+	bset	#2, $FFFFD00A.w
+	bsr.w	BattleResult_LoadPartyTarget
+	bsr.w	BattleResult_SetAmount
+	lea	(BattleMsgSpeedIncreased).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_Escape:
+	bset	#2, $FFFFD00A.w
+	bsr.w	BattleResult_SetAmount
+	lea	(BattleMsgEscapeIncreased).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_PlayerAttack:
+	bset	#2, $FFFFD00A.w
+	bsr.w	BattleResult_LoadPartyTarget
+	bsr.w	BattleResult_SetAmount
+	lea	(BattleMsgAttackIncreased).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_PlayerDefense:
+	bset	#2, $FFFFD00A.w
+	bsr.w	BattleResult_LoadPartyTarget
+	bsr.w	BattleResult_SetAmount
+	lea	(BattleMsgDefenseIncreased).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_PlayerRevive:
+	bset	#2, $FFFFD00A.w
+	bsr.w	BattleResult_LoadPartyTarget
+	tst.b	$9B(a6)
+	bne.w	BattleResult_PartyUnaffected
+	lea	(BattleMsgRevived).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_PlayerCure:
+	bset	#2, $FFFFD00A.w
+	bsr.w	BattleResult_LoadPartyTarget
+	tst.b	$9B(a6)
+	bne.w	BattleResult_PartyUnaffected
+	lea	(BattleMsgPoisonCured).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_PlayerShiza:
+	tst.b	$9B(a6)
+	bne.s	BattleResult_EnemyResisted
+	movea.w	$72(a6), a0
+	bset	#6, $25(a0)
+	move.l	$34(a0), (char_name_saved).w
+	lea	(BattleMsgTechniquesBlocked).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_PlayerDeban:
+	tst.b	$9B(a6)
+	bne.s	BattleResult_EnemyResisted
+	movea.w	$72(a6), a0
+	bset	#6, $25(a0)
+	move.l	$34(a0), (char_name_saved).w
+	lea	(BattleMsgAttackBlocked).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_PlayerForsa:
+	tst.b	$9B(a6)
+	bne.s	BattleResult_EnemyResisted
+	movea.w	$72(a6), a0
+	bset	#6, $25(a0)
+	move.l	$34(a0), (char_name_saved).w
+	lea	(BattleMsgDestroyed).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_EnemyResisted:
+	bset	#2, $FFFFD00A.w
+	movea.w	$72(a6), a0
+	move.l	$34(a0), (char_name_saved).w
+	lea	(BattleMsgResisted).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_PlayerRestore:
+	bset	#2, $FFFFD00A.w
+	bsr.w	BattleResult_LoadPartyTarget
+	tst.b	$9B(a6)
+	bne.s	BattleResult_PartyUnaffected
+	move.w	$72(a6), d0
+	cmp.w	$6C(a6), d0		; Nasak sacrifices its caster when it reaches them
+	beq.s	+
+	bsr.w	BattleResult_SetAmount
+	lea	(loc_3DA63).l, a0
+	bra.w	BattleResult_ShowAndAdvance
++
+	lea	(loc_3DA78).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_PartyUnaffected:
+	lea	(BattleMsgPartyUnaffected).l, a0
+	bra.w	BattleResult_ShowAndAdvance
+
+BattleResult_SetAmount:
 	moveq	#0, d0
 	move.w	$74(a6), d0
 	move.l	d0, $FFFFD4A0.w
-	lea	(loc_3DA63).l, a0
-	lea	$FFFF2C0A, a1
-	bsr.w	loc_FF0A
-	bra.w	loc_E952
-loc_F17E:
-	bset	#2, $FFFFD00A.w
-	addq.w	#4, (game_general_routine).w
-	bra.w	loc_E952
-loc_F18C:
-	tst.b	$9B(a6)
-	bne.s	loc_F19E
+	rts
+
+BattleResult_LoadPartyTarget:
 	movea.w	$72(a6), a0
-	bset	#6, $25(a0)
-	bra.s	loc_F1A4
-loc_F19E:
-	bset	#2, $FFFFD00A.w
-loc_F1A4:
+	lea	$27(a0), a0
+	move.l	a0, (char_name_saved).w
+	rts
+
+BattleResult_ShowAndAdvance:
 	addq.w	#4, (game_general_routine).w
-	lea	(loc_3DABD).l, a0
-	tst.b	$9B(a6)
-	beq.s	loc_F1BA
-	lea	(loc_3DAC8).l, a0
-loc_F1BA:
 	lea	$FFFF2C0A, a1
 	bsr.w	loc_FF0A
 	bra.w	loc_E952
@@ -21512,6 +21695,9 @@ loc_1009E:		; $E0
 	lea	(char_name_saved).w, a0
 	adda.w	d1, a0
 	movea.l	(a0), a0
+	if vwf_dialogue
+	jsr	(VWFTechnique_RemapName).l	; translated Technique name inside an $E8 insert
+	endif
 	bset	#4, $1(a6)
 	bsr.s	loc_10048
 	movem.l	(sp)+, a0
@@ -21811,6 +21997,8 @@ loc_1032C:
 	bra.s	loc_1037E
 loc_10362:
 	move.w	d0, $32(a0)
+	lea	$27(a0), a0
+	move.l	a0, (char_name_saved).w
 	moveq	#0, d0
 	move.w	$74(a6), d0
 	move.l	d0, $FFFFD4A0.w
@@ -21934,6 +22122,8 @@ loc_10502:
 	bra.w	loc_1051A
 	bra.w	loc_10538
 loc_1051A:
+	movea.w	$72(a6), a0
+	move.l	$34(a0), (char_name_saved).w	; an enemy battle object stores its name pointer here
 	moveq	#0, d0
 	move.w	$74(a6), d0
 	move.l	d0, $FFFFD4A0.w
@@ -21968,12 +22158,14 @@ loc_1055E:
 	bra.s	loc_105B0
 loc_10594:
 	move.w	d0, $32(a0)
+	lea	$27(a0), a0
+	move.l	a0, (char_name_saved).w
 	moveq	#0, d0
 	move.w	$74(a6), d0
 	move.l	d0, $FFFFD4A0.w
 	move.w	(party_members_num).w, d0
 	bsr.w	loc_CF72
-	lea	(loc_3DA63).l, a0
+	lea	(loc_3D972).l, a0
 loc_105B0:
 	lea	$FFFF2C0A, a1
 	bsr.w	loc_FF0A
@@ -22784,6 +22976,7 @@ loc_10E74:
 	move.w	$2E(a1), $32(a1)	; move max HP to current HP
 	rts
 loc_10E84:
+	clr.w	$74(a6)
 	btst	#1, (primary_obj_table).w
 	beq.s	loc_10E92
 	tst.b	$9A(a6)
@@ -22809,18 +23002,22 @@ loc_10EBA:
 	bne.s	loc_10EDE	; branch if character's dead
 	btst	#6, $1(a1)
 	bne.s	loc_10EDE	; branch if character's poisoned
-	move.w	$32(a1), d1	; get current HP
+	move.w	$32(a1), d2	; get current HP
+	move.w	d2, d1
 	add.w	d0, d1		; add tech power to current HP
 	cmp.w	$2E(a1), d1	; is new current HP value lower than max HP
 	bcs.s	loc_10EDA	; if so, branch
 	move.w	$2E(a1), d1	; otherwise limit it to max HP
 loc_10EDA:
 	move.w	d1, $32(a1)	; update current HP
+	sub.w	d2, d1		; report the actual gain after the max-HP cap
+	move.w	d1, $74(a6)
 loc_10EDE:
 	lea	$80(a1), a1		; next character
 	dbf	d7, loc_10EBA
 	rts
 loc_10EE8:
+	clr.w	$74(a6)
 	move.w	$34(a0), d7
 	subq.w	#5, d7
 	bcc.s	loc_10EF2
@@ -22843,13 +23040,15 @@ loc_10F18:
 	add.w	d0, d0
 	add.w	d0, d0
 	add.w	d1, d0
-	move.w	$32(a1), d1
-	add.w	d1, d0
+	move.w	$32(a1), d2
+	add.w	d2, d0
 	cmp.w	$2E(a1), d0
 	bcs.s	loc_10F30
 	move.w	$2E(a1), d0
 loc_10F30:
 	move.w	d0, $32(a1)
+	sub.w	d2, d0		; actual HP restored, not nominal technique power
+	move.w	d0, $74(a6)
 	rts
 loc_10F36:
 	move.w	$34(a0), d7
@@ -22870,6 +23069,7 @@ loc_10F5A:
 	bclr	#6, $1(a1)	; remove poison status
 	rts
 loc_10F62:
+	clr.w	$74(a6)
 	move.w	$34(a0), d7
 	subq.w	#1, d7
 	bcc.s	loc_10F6C
@@ -22878,12 +23078,19 @@ loc_10F6C:
 	move.w	d7, $34(a0)
 	moveq	#TechID_Ner, d0
 	bsr.w	loc_1117E
+	moveq	#0, d2
+	move.b	$70(a1), d2
 	add.b	d0, $70(a1)
 	bcc.s	loc_10F82
 	move.b	#$FF, $70(a1)	
 loc_10F82:
+	moveq	#0, d0
+	move.b	$70(a1), d0
+	sub.w	d2, d0
+	move.w	d0, $74(a6)
 	rts
 loc_10F84:
+	clr.w	$74(a6)
 	move.w	$34(a0), d7
 	subq.w	#1, d7
 	bcc.s	loc_10F8E
@@ -22892,6 +23099,8 @@ loc_10F8E:
 	move.w	d7, $34(a0)
 	moveq	#TechID_Rimit, d0
 	bsr.w	loc_1117E
+	moveq	#0, d2
+	move.b	$6A(a6), d2
 	move.b	d0, d1
 	add.b	d0, d0
 	bcs.s	loc_10FA8
@@ -22902,6 +23111,10 @@ loc_10F8E:
 loc_10FA8:
 	move.b	#$FF, $6A(a6)	
 loc_10FAE:
+	moveq	#0, d0
+	move.b	$6A(a6), d0
+	sub.w	d2, d0
+	move.w	d0, $74(a6)
 	rts
 loc_10FB0:
 	move.w	$34(a0), d7
@@ -22958,6 +23171,7 @@ loc_1102A:
 	move.b	d0, $F(a1)
 	rts
 loc_11040:
+	clr.w	$74(a6)
 	move.w	$34(a0), d7
 	subq.w	#1, d7
 	bcc.s	loc_1104A
@@ -22966,12 +23180,17 @@ loc_1104A:
 	move.w	d7, $34(a0)
 	moveq	#TechID_Fanbi, d0
 	bsr.w	loc_1117E
+	move.w	$6C(a1), d2
 	add.w	d0, $6C(a1)
 	bcc.s	loc_11060
 	move.w	#$FF, $6C(a1)	
 loc_11060:
+	move.w	$6C(a1), d0
+	sub.w	d2, d0
+	move.w	d0, $74(a6)
 	rts
 loc_11062:
+	clr.w	$74(a6)
 	move.w	$34(a0), d7
 	subq.w	#1, d7
 	bcc.s	loc_1106C
@@ -22980,12 +23199,17 @@ loc_1106C:
 	move.w	d7, $34(a0)
 	moveq	#TechID_Shu, d0
 	bsr.w	loc_1117E
+	move.w	$6E(a1), d2
 	add.w	d0, $6E(a1)
 	bcc.s	loc_11082
 	move.w	#$FF, $6E(a1)	
 loc_11082:
+	move.w	$6E(a1), d0
+	sub.w	d2, d0
+	move.w	d0, $74(a6)
 	rts
 loc_11084:
+	clr.w	$74(a6)
 	tst.b	$9A(a6)
 	bne.s	loc_110AE
 	move.w	$34(a0), d7
@@ -23009,10 +23233,15 @@ loc_110AE:
 	beq.s	loc_110C8
 	btst	#7, -$3680(a1)
 	bne.s	loc_110C6
+	move.w	$32(a1), d2
 	move.w	$2E(a1), $32(a1)
+	move.w	$32(a1), d0
+	sub.w	d2, d0
+	move.w	d0, $74(a6)
 loc_110C6:
 	rts
 loc_110C8:
+	clr.w	$74(a6)
 	clr.w	$32(a0)
 	bset	#7, $1(a0)
 	rts
@@ -24064,13 +24293,9 @@ loc_11CC8:
 	rts
 loc_11CE8:
 	if fast_walk
-	tst.b	(a0)			; a walk entry counts steps, now four frames each;
-	beq.s	+			; a pause (no input) keeps its 8 frames a unit
-	lsl.b	#2, d0
-	bra.s	++
-+
-	lsl.b	#3, d0
-+
+	jsr	(FastWalk_DemoFrames).l	; four frames per step; pauses stay stock
+	nop
+	nop
 	else
 	lsl.b	#3, d0			; units of one 8-frame step
 	endif
@@ -27414,6 +27639,16 @@ loc_1494A:
 	move.w	d0, $8(a0)	
 	move.w	d1, $A(a0)	
 	dbf	d7, loc_1494A	
+	if vwf_dialogue
+	jsr	(VWFSave_RestorePointers).l
+	endif
+	if fast_walk
+	jsr	(FastWalk_Restore).l	; old saves restore $D242; raise on-foot speed to 2
+	nop
+	nop
+	nop
+	nop
+	endif
 	jsr	(loc_3146).l	
 	jsr	(VDPEnableVInterrupt).l	
 	moveq	#0, d0	
@@ -27718,7 +27953,11 @@ loc_14D4C:
 	clr.w	$FFFFD202.w
 	clr.w	$FFFFD206.w
 	clr.w	$FFFFD15E.w
+	if fix_ending_transmission
+	jsr	(Ending_SpaceInit).l
+	else
 	jsr	(loc_6EA0).l
+	endif
 	jsr	(ClearSprites).l
 	jsr	(EmptyTertiaryObjTable).l
 	cmpi.w	#$13, $FFFFD124.w
@@ -27728,7 +27967,11 @@ loc_14D94:
 	jsr	(ProcessMapData).l
 	bsr.w	loc_15FFA
 	move.w	$FFFFD124.w, d0
+	if extended_script
+	jmp	(ScriptBank_SelectSpaceScript).l
+	else
 	lea	(loc_15F90).l, a0
+	endif
 	move.w	(a0,d0.w), d1
 	bmi.w	loc_14DC0
 	bset	#2, $FFFFD005.w
@@ -27772,8 +28015,16 @@ loc_14E46:
 	beq.w	loc_14E64
 	bset	#7, $FFFFD008.w
 loc_14E64:
+	if extended_script
+	jsr	(ScriptBank_Dialogue).l
+	else
 	jsr	(loc_18C1A).l
+	endif
+	if fix_ending_transmission
+	jsr	(Ending_AfterDialogue).l
+	else
 	bclr	#7, $FFFFD286.w
+	endif
 	bclr	#7, $FFFFD008.w
 	cmpi.w	#$11, $FFFFD124.w
 	bcs.w	loc_14E84
@@ -27815,7 +28066,11 @@ loc_14EE0:
 	adda.w	d1, a0
 	cmpi.w	#$FFFF, $4(a0)
 	bne.w	loc_14F0E
+	if fix_ending_transmission
+	jsr	(Ending_Complete).l
+	else
 	bclr	#7, $FFFFD286.w
+	endif
 loc_14F0E:
 	adda.w	(a0), a0
 	move.w	#0, d3
@@ -27956,7 +28211,7 @@ loc_1515E:
 	move.w	d0, (a0)
 	adda.w	#$20, a0
 	dbf	d1, loc_1515E
-	bra.w	loc_D27E
+	jmp	(loc_D27E).l
 loc_1516C:
 	subq.w	#1, $C(a6)
 	bcs.s	loc_1517C
@@ -28012,7 +28267,11 @@ loc_15204:
 	asr.w	#5, d0
 	cmpi.w	#$23, d0
 	bne.w	loc_1521E
+	if fix_ending_transmission
+	jsr	(Ending_Queue).l
+	else
 	bset	#7, $FFFFD286.w
+	endif
 loc_1521E:
 	cmpi.w	#$90, d0
 	bne.w	loc_1522A
@@ -28066,8 +28325,12 @@ loc_152C6:
 	jsr	(ProcessFadeOut).l
 	addi.w	#4, $2(a5)
 	move.w	#0, $C(a5)
+	if extended_script
+	jsr	(ScriptBank_Set305FE).l
+	else
 	move.l	#loc_305FE-GameScript, d0
 	move.w	d0, (script_offset).w
+	endif
 loc_152F4:
 	andi.w	#$F, d0
 	bne.w	loc_15308
@@ -28093,7 +28356,11 @@ loc_1534C:
 	move.w	$C(a5), d0
 	cmpi.w	#$600, d0
 	bne.w	loc_15364
+	if fix_ending_transmission
+	jsr	(Ending_Queue).l
+	else
 	bset	#7, $FFFFD286.w
+	endif
 loc_15364:
 	cmpi.w	#$1500, d0
 	bmi.w	loc_15370
@@ -28308,10 +28575,18 @@ loc_1563E:
 	jsr	(loc_FC30).l
 	bra.w	loc_154FA
 loc_15652:
+	if extended_script
+	jsr	(ScriptBank_Set30A3E).l
+	else
 	move.l	#loc_30A3E-GameScript, d0
+	endif
 	move.w	d0, (script_offset).w
 	bset	#7, $FFFFD286.w
+	if extended_script
+	jsr	(ScriptBank_Dialogue).l
+	else
 	jsr	(loc_18C1A).l
+	endif
 	st	(game_general_routine).w
 	bclr	#7, $FFFFD286.w
 	jsr	(SetSpriteVisibility).l
@@ -28762,7 +29037,11 @@ loc_15C98:
 loc_15CBA:
 	cmpi.w	#$460, d0
 	bne.w	loc_15CC8
+	if fix_ending_transmission
+	jsr	(Ending_Queue).l
+	else
 	bset	#7, $FFFFD286.w
+	endif
 loc_15CC8:
 	andi.w	#$1F, d0
 	bne.w	loc_15CDC
@@ -28802,7 +29081,11 @@ loc_15D30:
 	move.w	d0, $FFFFD202.w
 	cmpi.w	#$24, $FFFFD202.w
 	bne.w	loc_15D64
+	if fix_ending_transmission
+	jsr	(Ending_Queue).l
+	else
 	bset	#7, $FFFFD286.w
+	endif
 loc_15D64:
 	cmpi.w	#$90, $FFFFD202.w
 	bne.w	loc_15D72
@@ -32268,10 +32551,14 @@ loc_18AF4:
 	move.w	#$18, $C(a5)
 loc_18B22:
 	move.w	(wren_transform_index).w, d0
+	if extended_script
+	jsr	(ScriptBank_SelectWrenScript).l
+	else
 	lea	(loc_18CF2).l, a0
 	move.w	(a0,d0.w), (script_offset).w
 	move.l	#GameScript2-GameScript, d1
 	add.w	d1, (script_offset).w
+	endif
 	moveq	#0, d1
 	cmpi.w	#6, d0
 	bmi.w	loc_18B5C
@@ -32289,7 +32576,11 @@ loc_18B5C:
 	bsr.w	loc_18BCC
 	bra.w	loc_18AE8
 loc_18B76:
+	if extended_script
+	jsr	(ScriptBank_Dialogue).l
+	else
 	bsr.w	loc_18C1A
+	endif
 	st	(game_general_routine).w
 	jsr	(SetSpriteVisibility).l
 	jmp	(DisplaySprite).l
@@ -33465,10 +33756,12 @@ loc_1992E:
 	jsr	(SetSpriteVisibility).l
 	jmp	(DisplaySprite).l
 loc_1993A:
-	addq.b	#1, $C(a5)
 	if fast_walk
-	andi.b	#$1F, $C(a5)		; the eight steps onto the dock, four frames each
+	jsr	(FastWalk_DockTick).l	; 32 frames for the eight steps onto the dock
+	nop
+	nop
 	else
+	addq.b	#1, $C(a5)
 	andi.b	#$3F, $C(a5)
 	endif
 	bne.s	loc_19964
@@ -40511,7 +40804,7 @@ loc_1F744:
 loc_1F750:
 	dc.w	$03A0
 	dc.w	$2000
-	dc.b	" ToWhom?"
+	dc.b	" To Whom?"
 	dc.b	$F8
 	dc.b	$F8
 	dc.b	$FC
@@ -40593,10 +40886,10 @@ loc_1F7C0:
 	dc.b	"Head"
 	dc.b	$F8
 	dc.b	$F8
-	dc.b	"R Hand"
+	dc.b	"Right Hand"
 	dc.b	$F8
 	dc.b	$F8
-	dc.b	"L Hand"
+	dc.b	"Left Hand"
 	dc.b	$FC
 	
 	even
@@ -40604,7 +40897,7 @@ loc_1F7C0:
 loc_1F7DA:
 	dc.w	$068A
 	dc.w	0
-	dc.b	"Torso"
+	dc.b	"Chest"
 	dc.b	$F8
 	dc.b	$F8
 	dc.b	"Feet"
@@ -40645,10 +40938,10 @@ loc_1F816:
 	dc.b	"Level"
 	dc.b	$F8
 	dc.b	$F8
-	dc.b	"XP"
+	dc.b	"Experience"
 	dc.b	$F8
 	dc.b	$F8
-	dc.b	"Next Lv"
+	dc.b	"Next Level"
 	dc.b	$FC
 	
 	even
@@ -40670,7 +40963,7 @@ loc_1F82E:
 loc_1F84A:
 	dc.w	$00B6
 	dc.w	0
-	dc.b	"Intel"
+	dc.b	"Wits"
 	dc.b	$F8
 	dc.b	$F8
 	dc.b	"Stamina"
@@ -40685,7 +40978,7 @@ loc_1F85E:
 	dc.b	"Luck"
 	dc.b	$F8
 	dc.b	$F8
-	dc.b	"Skill"
+	dc.b	"Dexterity"
 	dc.b	$FC
 	
 	even
@@ -50158,7 +50451,7 @@ GameScript:
 loc_25F0A:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Nothing unusual here."
+	dc.b	"There seems to be nothing unusual here."
 	dc.b	$FC
 	
 	even
@@ -50271,9 +50564,9 @@ loc_26296:
 loc_26306:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"If you have business here, please"
+	dc.b	"For those needing assistance, please speak"
 	dc.b	$F8
-	dc.b	"speak to me across the counter."
+	dc.b	"to the shopkeeper across the counter."
 	dc.b	$FC
 	
 	even
@@ -50315,9 +50608,9 @@ loc_26396:
 loc_263C4:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"\IHa ha ha! We are of Laia's clan!"
+	dc.b	"\IHa ha ha! I am of Laia's clan!"
 	dc.b	$F8
-	dc.b	"Princess Marina comes with us!\I"
+	dc.b	"Princess Marina comes with me!\I"
 	dc.b	$FC
 	
 	even
@@ -50361,17 +50654,17 @@ loc_26456:
 loc_2648C:	
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"KING \IYou fool! You would call up the"
+	dc.b	"KING \IYou fool! You would mobilize the"
 	dc.b	$F8
 	dc.b	"kingdom's knights and start a war on"
 	dc.b	$EC
 	dc.b	"your own, to chase Laia's clan when"
 	dc.b	$EC
-	dc.b	"you don't even know where they are!"
+	dc.b	"you don't even know where they are?!"
 	dc.b	$EC
-	dc.b	"Cool your head in the dungeon, and"
+	dc.b	"Go cool your head in the dungeon, and"
 	dc.b	$EC
-	dc.b	"think on your duties as a prince!\I"
+	dc.b	"reflect on your responsibilities as a prince!\I"
 	dc.b	$FC
 	
 	even
@@ -50415,7 +50708,7 @@ loc_265D2:
 	dc.b	$FF, $00
 	dc.b	"LENA \IPlease, go quickly and"
 	dc.b	$F8
-	dc.b	"save Lady Marina.\I"
+	dc.b	"save Miss Marina.\I"
 	dc.b	$FC
 	
 	even
@@ -50430,7 +50723,7 @@ loc_265D2:
 loc_265FE:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"I am king of this land of Cille!"
+	dc.b	"I am the king of this land of Cille!"
 	dc.b	$F8
 	dc.b	"Hounding my daughter Marina... there are"
 	dc.b	$EC
@@ -50456,16 +50749,16 @@ loc_26652:
 	dc.b	$EC
 	dc.b	"a princess raised to be your betrothed."
 	dc.b	$EC
-	dc.b	"If you still want my daughter Marina"
+	dc.b	"Knowing this, if you still want my daughter"
 	dc.b	$EC
-	dc.b	"even so, then take her with you..."
+	dc.b	"Marina, then by all means take her with you..."
 	dc.b	$FC
 	
 	align 2
 	
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Prince Kein, Prince Kein..."
+	dc.b	"Lord Kein, Lord Kein..."
 	dc.b	$F8
 	dc.b	"I have been waiting for you..."
 	dc.b	$FC
@@ -50477,23 +50770,23 @@ loc_2677A:
 	dc.b	$FF, $00
 	dc.b	"OLD MAN \ILook at the bottom of the sea..."
 	dc.b	$F8
-	dc.b	"You can see a sunken castle, can't you?"
+	dc.b	"You see that sunken castle, right?"
 	dc.b	$EC
 	dc.b	"The tale of that castle became a song,"
 	dc.b	$EC
 	dc.b	"a song handed down in legend."
 	dc.b	$EC
-	dc.b	"The folk of the fort craved the evil"
+	dc.b	"'O, the folk of the fortress craved the evil"
 	dc.b	$EC
-	dc.b	"god's power, and called its name from"
+	dc.b	"god's power, and summoned its name forth"
 	dc.b	$EC
-	dc.b	"the dark. Orakio, in his wrath, cast"
+	dc.b	"from the darkness. Orakio, in his wrath, cast"
 	dc.b	$EC
 	dc.b	"down his black sword and sealed the"
 	dc.b	$EC
 	dc.b	"evil god's name beneath the waves,"
 	dc.b	$EC
-	dc.b	"fort and all... or so it went, I think.\I"
+	dc.b	"fortress and all...' or so it went, I think.\I"
 	dc.b	$FC
 	
 	even
@@ -50543,7 +50836,6 @@ loc_268D8:
 	dc.b	$EC
 	dc.b	"...the world... and you..."
 	dc.b	$EC
-	dc.b	$EC
 	dc.b	"But there's something I have to do"
 	dc.b	$EC
 	dc.b	"to save my people..."
@@ -50560,7 +50852,7 @@ loc_2699C:
 	dc.b	$F8
 	dc.b	"It's Lyle, the sapphire thief..."
 	dc.b	$EC
-	dc.b	"I've been travelling to save my world,"
+	dc.b	"I've been traveling to save my world,"
 	dc.b	$EC
 	dc.b	"which lies sealed under ice, but this"
 	dc.b	$EC
@@ -50659,11 +50951,11 @@ loc_26C44:
 loc_26D36:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"LENA \IPrince Kein! Have you forgotten me?"
+	dc.b	"LENA \IPrince Kein! Do you remember me?"
 	dc.b	$F8
 	dc.b	"I'm Lena, from the dungeon of Riik."
 	dc.b	$EC
-	dc.b	"Lady Marina was carried out through the"
+	dc.b	"Miss Marina was carried out through the"
 	dc.b	$EC
 	dc.b	"back gate of this castle to the island"
 	dc.b	$EC
@@ -50675,11 +50967,11 @@ loc_26D36:
 	dc.b	$EC
 	dc.b	"monsters attacked me on the way and I"
 	dc.b	$EC
-	dc.b	"could go no further, until Lord Lyle"
+	dc.b	"froze up, until Lord Lyle here rescued"
 	dc.b	$EC
-	dc.b	"here rescued me and brought me this far."
+	dc.b	"me and brought me this far."
 	dc.b	$EC
-	dc.b	"Now, let us go and save Lady Marina!\I"
+	dc.b	"Now, let us go and save Miss Marina!\I"
 	dc.b	$FC
 	
 	even
@@ -50956,7 +51248,7 @@ loc_27362:
 loc_27396:
 	dc.w	loc_273BE-GameScript
 	dc.b	$07, $00
-	dc.b	"Everyone in this castle town of Riik is"
+	dc.b	"Everyone in this royal city of Riik is"
 	dc.b	$F8
 	dc.b	"giddy over the prince's wedding."
 	dc.b	$FC
@@ -50968,7 +51260,7 @@ loc_273BE:
 	dc.b	$16, $00
 	dc.b	"Prince Kein! Will you truly abandon Riik"
 	dc.b	$F8
-	dc.b	"and the people of this castle town?"
+	dc.b	"and the people of this royal city?"
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -50978,7 +51270,7 @@ loc_273E2:
 	dc.b	$07, $00
 	dc.b	"Heading back to Riik Castle?"
 	dc.b	$F8
-	dc.b	"Or off into the castle town?"
+	dc.b	"Or off into the royal city?"
 	dc.b	$FC
 	
 	even
@@ -51002,7 +51294,7 @@ loc_27430:
 	dc.b	$EC
 	dc.b	"When the prince of Orakio's castle"
 	dc.b	$EC
-	dc.b	"forsakes his castle, the violet moon"
+	dc.b	"forsakes his castle, the purple moon"
 	dc.b	$EC
 	dc.b	"and the blue moon shall draw near!"
 	dc.b	$EC
@@ -51018,7 +51310,7 @@ loc_27430:
 	dc.b	$EC
 	dc.b	"And the prince's descendants"
 	dc.b	$EC
-	dc.b	"shall wander evermore!"
+	dc.b	"shall wander forevermore!"
 	dc.b	$FC
 	
 	even
@@ -51028,7 +51320,7 @@ loc_2750A:
 	dc.b	$FF, $00
 	dc.b	"May Orakio's blessing be upon you"
 	dc.b	$F8
-	dc.b	"and upon the port town of Yaata!"
+	dc.b	"and upon this port town of Yaata!"
 	dc.b	$FC
 	
 	even
@@ -51092,9 +51384,9 @@ loc_2765E:
 		
 	dc.w	loc_261FC-GameScript
 	dc.b	$16, $00
-	dc.b	"And yet a thousand years ago, Lord Orakio"
+	dc.b	"A thousand years ago, Lord Orakio"
 	dc.b	$F8
-	dc.b	"gave his life to defeat Laia's clan..."
+	dc.b	"gave his life to defeat Laia's clan, and yet..."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -51138,9 +51430,9 @@ loc_27720:
 	dc.b	$FF, $00
 	dc.b	"In the world that was lost, they say"
 	dc.b	$F8
-	dc.b	"even people could fly."
+	dc.b	"even humans could fly."
 	dc.b	$EC
-	dc.b	"If it takes my whole life, I want to"
+	dc.b	"Even if it takes my whole life, I want to"
 	dc.b	$EC
 	dc.b	"build a machine that flies..."
 	dc.b	$FC
@@ -51177,7 +51469,7 @@ loc_277DA:
 	dc.b	$EC
 	dc.b	"and he won't let me on."
 	dc.b	$EC
-	dc.b	"Isn't there a girl somewhere?"
+	dc.b	"Oh, isn't there a girl somewhere?"
 	dc.b	$FC
 	
 	even
@@ -51191,9 +51483,9 @@ loc_2783A:
 	dc.b	$EC
 	dc.b	"If only we had the Forest Sapphire, we"
 	dc.b	$EC
-	dc.b	"could open the gate and strike at the"
+	dc.b	"could open the gate and launch an attack"
 	dc.b	$EC
-	dc.b	"other worlds!"
+	dc.b	"on that world!"
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -51255,13 +51547,13 @@ loc_2797A:
 loc_279B0:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"If you would meet the girl of the desert,"
+	dc.b	"'If you would meet the girl of the desert,"
 	dc.b	$F8
-	dc.b	"go to the midst of the four forts."
+	dc.b	"go to the center of the four fortresses."
 	dc.b	$EC
 	dc.b	"If you would meet the girl of the sea,"
 	dc.b	$EC
-	dc.b	"go on the night the two moons shine."
+	dc.b	"go on the night the two moons shine.'"
 	dc.b	$EC
 	dc.b	"I am Mai, a wandering minstrel."
 	dc.b	$EC
@@ -51273,7 +51565,7 @@ loc_279B0:
 loc_27A94:
 	dc.w	loc_261F8-GameScript
 	dc.b	$16, $00
-	dc.b	"To the south stood the forts where"
+	dc.b	"To the south stood the fortresses where"
 	dc.b	$F8
 	dc.b	"Orakio's army was once garrisoned."
 	dc.b	$EC
@@ -51320,7 +51612,7 @@ loc_27BE0:
 	dc.b	$16, $00
 	dc.b	"We're saved at last!"
 	dc.b	$F8
-	dc.b	"The ferry can put out to sea again!"
+	dc.b	"The ferry can head out to sea again, too!"
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -51328,9 +51620,9 @@ loc_27BE0:
 loc_27C14:
 	dc.w	loc_27C78-GameScript
 	dc.b	$10, $00
-	dc.b	"Am I really going to die,"
+	dc.b	"But I'm so cute..."
 	dc.b	$F8
-	dc.b	"pretty as I am...?"
+	dc.b	"am I really going to die...?"
 	dc.b	$EC
 	dc.b	"I heard there's a tower that can stop"
 	dc.b	$EC
@@ -51371,9 +51663,9 @@ loc_27CAE:
 loc_27CB2:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Travelers are a rare sight in Hazatak,"
+	dc.b	"TRAVELERS ARE A RARE SIGHT IN HASATAKA,"
 	dc.b	$F8
-	dc.b	"the forgotten desert town."
+	dc.b	"THE FORGOTTEN DESERT TOWN."
 	dc.b	$FC
 	
 	even
@@ -51382,9 +51674,9 @@ loc_27CB2:
 loc_27CE6:
 	dc.w	loc_27D16-GameScript
 	dc.b	$10, $00
-	dc.b	"The weather control tower lies to the"
+	dc.b	"THE WEATHER CONTROL TOWER LIES TO THE"
 	dc.b	$F8
-	dc.b	"east, but only a Searren can repair it."
+	dc.b	"EAST, BUT ONLY A SEARREN CAN REPAIR IT."
 	dc.b	$FC
 	
 	even
@@ -51392,17 +51684,17 @@ loc_27CE6:
 loc_27D16:	
 	dc.w	loc_2B5EC-GameScript
 	dc.b	$18, $00
-	dc.b	"A thousand years ago, during the war"
+	dc.b	"A THOUSAND YEARS AGO, DURING THE WAR"
 	dc.b	$F8
-	dc.b	"between Laia and Orakio, the Moon Stone"
+	dc.b	"BETWEEN LAIA AND ORAKIO, THE MOON STONE"
 	dc.b	$EC
-	dc.b	"and the Moon Tear, which move the two"
+	dc.b	"AND THE MOON TEAR, WHICH MOVE THE TWO"
 	dc.b	$EC
-	dc.b	"moons, were removed from the satellite"
+	dc.b	"MOONS, WERE REMOVED FROM THE SATELLITE"
 	dc.b	$EC
-	dc.b	"system on the second floor of the"
+	dc.b	"SYSTEM ON THE SECOND FLOOR OF THE"
 	dc.b	$EC
-	dc.b	"weather control tower."
+	dc.b	"WEATHER CONTROL TOWER."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -51410,9 +51702,9 @@ loc_27D16:
 loc_27DEC:
 	dc.w	loc_27E22-GameScript
 	dc.b	$10, $00
-	dc.b	"A world beset by blizzards...?"
+	dc.b	"A WORLD BESET BY BLIZZARDS...? DID"
 	dc.b	$F8
-	dc.b	"Has the weather control tower broken down?"
+	dc.b	"THE WEATHER CONTROL TOWER BREAK DOWN?"
 	dc.b	$FC
 	
 	align 2
@@ -51420,9 +51712,9 @@ loc_27DEC:
 loc_27E22:
 	dc.w	loc_2B492-GameScript
 	dc.b	$18, $00
-	dc.b	"Once, two moons shone in the heavens:"
+	dc.b	"ONCE, TWO MOONS SHONE IN THE HEAVENS:"
 	dc.b	$F8
-	dc.b	"the Violet Moon and the Blue Moon."
+	dc.b	"THE PURPLE MOON AND THE BLUE MOON."
 	dc.b	$FC
 ; -------------------------------------------------
 	align 2
@@ -51430,9 +51722,9 @@ loc_27E22:
 loc_27E4E:
 	dc.w	loc_27E7E-GameScript
 	dc.b	$10, $0D
-	dc.b	"I hear our fellow Searren dwells"
+	dc.b	"I HEAR OUR FELLOW SEARREN DWELLS"
 	dc.b	$F8
-	dc.b	"in a cave to the west..."
+	dc.b	"IN A CAVE TO THE WEST..."
 	dc.b	$FC
 	
 	align 2
@@ -51440,9 +51732,9 @@ loc_27E4E:
 loc_27E7E:
 	dc.w	loc_2B3A2-GameScript
 	dc.b	$18, $00
-	dc.b	"Set the two stones into the panel,"
+	dc.b	"SET THE TWO STONES INTO THE PANEL,"
 	dc.b	$F8
-	dc.b	"and the distant moon will return..."
+	dc.b	"AND THE DISTANT MOON WILL RETURN..."
 	dc.b	$FC
 ; -------------------------------------------------
 	align 2
@@ -51450,9 +51742,9 @@ loc_27E7E:
 loc_27EE2:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"A deranged android"
+	dc.b	"A DERANGED ANDROID IS"
 	dc.b	$F8
-	dc.b	"wanders the desert..."
+	dc.b	"WANDERING THE DESERT..."
 	dc.b	$FC
 	
 	align 2
@@ -51470,7 +51762,7 @@ loc_27F10:
 loc_27F44:
 	dc.w	loc_26204-GameScript
 	dc.b	$16, $00
-	dc.b	"When I sneaked into their castle town,"
+	dc.b	"When I snuck into their royal city,"
 	dc.b	$F8
 	dc.b	"I saw a monster come out of the fountain!"
 	dc.b	$FC
@@ -51490,9 +51782,9 @@ loc_27FA0:
 loc_27FD4:
 	dc.w	loc_26204-GameScript
 	dc.b	$16, $00
-	dc.b	"Laia's people create monsters and set"
+	dc.b	"Laia's people create monsters to attack"
 	dc.b	$F8
-	dc.b	"them on us, and we Orakians fight back"
+	dc.b	"us, and we Orakians fight back"
 	dc.b	$EC
 	dc.b	"with the machines and robots of old."
 	dc.b	$FC
@@ -51514,7 +51806,7 @@ loc_28088:
 	dc.b	$16, $00
 	dc.b	"We're locked in battle with Laia's people,"
 	dc.b	$F8
-	dc.b	"but whether we can win..."
+	dc.b	"but whether we can win remains to be seen..."
 	dc.b	$FC
 	
 	even
@@ -51524,7 +51816,7 @@ loc_280BE:
 	dc.b	$16, $00
 	dc.b	"If Laia's people attack,"
 	dc.b	$F8
-	dc.b	"whatever will become of us?"
+	dc.b	"what will become of us?"
 	dc.b	$FC
 	
 	even
@@ -51534,7 +51826,7 @@ loc_280EC:
 	dc.b	$16, $00
 	dc.b	"Go to their town and Laia's people just"
 	dc.b	$F8
-	dc.b	"stay hidden; they never show themselves."
+	dc.b	"stay hidden, they never show themselves."
 	dc.b	$FC
 	
 	even
@@ -51542,7 +51834,7 @@ loc_280EC:
 loc_28120:
 	dc.w	loc_26204-GameScript
 	dc.b	$16, $00
-	dc.b	"Their castle is shut behind stout doors"
+	dc.b	"Their castle is shut behind sturdy doors"
 	dc.b	$F8
 	dc.b	"that we cannot break through!"
 	dc.b	$FC
@@ -51562,10 +51854,8 @@ loc_28158:
 loc_28188:
 	dc.w	loc_281B8-GameScript
 	dc.b	$16, $00
-	dc.b	"I don't know what Lord Lyle"
+	dc.b	"I don't know what Lord Lyle has in mind."
 	dc.b	$F8
-	dc.b	"has in mind."
-	dc.b	$EC
 	dc.b	"But I believe in him."
 	dc.b	$FC
 	
@@ -51608,9 +51898,7 @@ loc_28214:
 loc_28246:
 	dc.w	loc_26204-GameScript
 	dc.b	$16, $00
-	dc.b	"Prince Lyle! Welcome home"
-	dc.b	$F8
-	dc.b	"to Shusoran!"
+	dc.b	"Prince Lyle! Welcome home to Shusoran!"
 	dc.b	$FC
 	
 	even
@@ -51654,7 +51942,7 @@ loc_282C8:
 loc_28356:
 	dc.w	loc_26236-GameScript
 	dc.b	$16, $00
-	dc.b	"Lord Lyle! Shall we cut"
+	dc.b	"Lord Lyle! Shall I cut"
 	dc.b	$F8
 	dc.b	"these people down?"
 	dc.b	$FC
@@ -51856,7 +52144,7 @@ loc_28702:
 loc_28734:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"The ", $E8, $00, " glowed!"
+	dc.b	"The ", $E8, $00, " shone brightly!"
 	dc.b	$FC
 	
 	even
@@ -51877,7 +52165,7 @@ loc_2875A:
 loc_287AA:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"The Laia Pendant glowed!"
+	dc.b	"The Laia Pendant shone brightly!"
 	dc.b	$FC
 	
 	even
@@ -51889,7 +52177,7 @@ loc_287DE:
 	dc.b	$F8
 	dc.b	"and my claim to the throne.\I"
 	dc.b	$EC
-	dc.b	"MARINA \IThen in their place, I give you"
+	dc.b	"MARINA \IThen, in return, I dedicate to you"
 	dc.b	$EC
 	dc.b	"my country and all that I am.\I"
 	dc.b	$FC
@@ -51909,9 +52197,9 @@ loc_28892:
 	dc.b	$EC
 	dc.b	"was born to the two of them."
 	dc.b	$EC
-	dc.b	"More than ten years of peace went by."
+	dc.b	"More than a decade of peace passed."
 	dc.b	$EC
-	dc.b	"But now that peace..."
+	dc.b	"However, that peace now is..."
 	dc.b	$EC
 	dc.b	"This is the story of Kein and Marina's"
 	dc.b	$EC
@@ -51965,21 +52253,21 @@ loc_28A3A:
 	dc.b	$F8
 	dc.b	"What I feared has come to pass..."
 	dc.b	$EC
-	dc.b	"On my journey I learned that this"
+	dc.b	"On my journey, I learned that many"
 	dc.b	$EC
-	dc.b	"world of ours holds many worlds..."
+	dc.b	"different worlds exist..."
 	dc.b	$EC
 	dc.b	"and I have worried that one day the"
 	dc.b	$EC
-	dc.b	"people of another would come for us..."
+	dc.b	"people of another would come and invade..."
 	dc.b	$EC
-	dc.b	"Ain! I will defend this country!"
+	dc.b	"Ain! I will defend these lands!"
 	dc.b	$EC
-	dc.b	"You must leave it, with Mieu and Searren!"
+	dc.b	"But, you must leave with Mieu and Searren!"
 	dc.b	$EC
-	dc.b	"Go and seek Satellite, the world"
+	dc.b	"Go and seek Satellite, the 'world"
 	dc.b	$EC
-	dc.b	"of eternal peace...\I"
+	dc.b	"of eternal peace...'\I"
 	dc.b	$FC
 	
 	even
@@ -51991,7 +52279,7 @@ loc_28B4C:
 	dc.b	$F8
 	dc.b	"You came all this way for me..."
 	dc.b	$EC
-	dc.b	"The robots wanted to know how to"
+	dc.b	"The robots sought to know how to"
 	dc.b	$EC
 	dc.b	"use my Twins' Ruby..."
 	dc.b	$EC
@@ -52015,9 +52303,9 @@ loc_28BF4:
 	dc.b	$F8
 	dc.b	"took up the throne of heirless Riik!"
 	dc.b	$EC
-	dc.b	"What do you want, you who betrayed"
+	dc.b	"What do you want, you wretches who have"
 	dc.b	$EC
-	dc.b	"Orakio's people?"
+	dc.b	"betrayed the people of Orakio?"
 	dc.b	$EC
 	dc.b	"Hand over the Power Topaz, the"
 	dc.b	$EC
@@ -52033,7 +52321,7 @@ loc_28BF4:
 loc_28C7C:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"LYNN \II am beaten..."
+	dc.b	"LYNN \II admit defeat..."
 	dc.b	$F8
 	dc.b	"The Power Topaz is yours."
 	dc.b	$EC
@@ -52051,7 +52339,7 @@ loc_28CF4:
 	dc.b	$FF, $00
 	dc.b	"DRAGON \IClimb onto my back..."
 	dc.b	$F8
-	dc.b	"I will carry you to Frotrahn.\I"
+	dc.b	"I will carry you to Flotraan.\I"
 	dc.b	$FC
 	
 	even
@@ -52067,7 +52355,7 @@ loc_28D2A:
 	dc.b	$EC
 	dc.b	"Marina... away....."
 	dc.b	$EC
-	dc.b	"Keep it... a secret... from Kein..."
+	dc.b	"Please keep it... a secret... from Kein..."
 	dc.b	$EC
 	dc.b	"Take care... of Lann.....\I"
 	dc.b	$FC
@@ -52087,21 +52375,21 @@ loc_28DE8:
 loc_28E18:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Laia's people, in a place like this..."
+	dc.b	"To think, Laia's people, in a place like this..."
 	dc.b	$F8
-	dc.b	"You could never reach Satellite...??"
+	dc.b	"Surely, you could never reach Satellite...??"
 	dc.b	$EC
 	dc.b	"Oh! That is the Power Topaz!"
 	dc.b	$EC
-	dc.b	"The mark of the spaceship's owner!"
+	dc.b	"The mark of the spaceship's rightful owner!"
 	dc.b	$EC
 	dc.b	"Then use the spaceship that lies"
 	dc.b	$EC
-	dc.b	"deeper within..."
+	dc.b	"further ahead..."
 	dc.b	$EC
 	dc.b	"And learn the true form of this world,"
 	dc.b	$EC
-	dc.b	"the Alisa III..."
+	dc.b	"the 'Alisa III'..."
 	dc.b	$FC
 	
 	align 2
@@ -52158,19 +52446,19 @@ loc_28F9C:
 	dc.b	$EC
 	dc.b	"Your companion Searren was built"
 	dc.b	$EC
-	dc.b	"in imitation of me."
+	dc.b	"in my image."
 	dc.b	$EC
 	dc.b	"A thousand years ago, I served Lord"
 	dc.b	$EC
 	dc.b	"Orakio alongside the android Miun!"
 	dc.b	$EC
-	dc.b	"But Laia, with her strange power, cast"
+	dc.b	"But Laia, with her strange powers, cast"
 	dc.b	$EC
 	dc.b	"me away, Satellite and all!"
 	dc.b	$EC
-	dc.b	"For a thousand years I have waited!"
+	dc.b	"For a thousand years I have waited..."
 	dc.b	$EC
-	dc.b	"For the day I take my revenge on Laia!\I"
+	dc.b	"for the day I could take my revenge on Laia!\I"
 	dc.b	$FC
 	
 	even
@@ -52182,13 +52470,11 @@ loc_29084:
 	dc.b	$F8
 	dc.b	"Does Laia's law forbid you to kill?"
 	dc.b	$EC
-	dc.b	"But unless you destroy me,"
+	dc.b	"If you don't destroy me, I will return!"
 	dc.b	$EC
-	dc.b	"I will come again!"
+	dc.b	"I won't stop until I have avenged Lord"
 	dc.b	$EC
-	dc.b	"Until I have avenged Lord Orakio,"
-	dc.b	$EC
-	dc.b	"who gave me a heart!\I"
+	dc.b	"Orakio, who gave me my very heart!\I"
 	dc.b	$EC
 	dc.b	"Siren fled."
 	dc.b	$EC
@@ -52196,9 +52482,9 @@ loc_29084:
 	dc.b	"Ain's journey was over..."
 	dc.b	$EC
 	dc.b	$EC
-	dc.b	"Laia's people were to make"
+	dc.b	"Laia's people made preparations to"
 	dc.b	$EC
-	dc.b	"their new home on Satellite."
+	dc.b	"relocate to their new home on Satellite."
 	dc.b	$EC
 	dc.b	"And for Ain, the time had come"
 	dc.b	$EC
@@ -52209,11 +52495,13 @@ loc_29084:
 	
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"And so the Laians, long missed, came to"
+	dc.b	"And so the Laians, bearing the living memory"
 	dc.b	$F8
-	dc.b	"settle on Satellite, the world of legend."
+	dc.b	"of their homeland, came to settle on"
 	dc.b	$EC
-	dc.b	"Ain's journey of discovery was over!"
+	dc.b	"Satellite, the world of legend."
+	dc.b	$EC
+	dc.b	"Ain's journey of exploration was over!"
 	dc.b	$FC
 	
 	align 2
@@ -52267,7 +52555,7 @@ loc_29356:
 loc_2937E:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"\IQueen Lena! A great army of monsters"
+	dc.b	"\IQueen Lena! A massive army of monsters"
 	dc.b	$F8
 	dc.b	"has invaded the kingdom of Satera!"
 	dc.b	$EC
@@ -52398,7 +52686,7 @@ loc_296A2:
 	dc.b	$FF, $00
 	dc.b	"DAN \IIt seems I was mistaken."
 	dc.b	$F8
-	dc.b	"If you fight Lune, let me join you!"
+	dc.b	"If you seek to fight Lune, let me join you!"
 	dc.b	$EC
 	dc.b	"I have parts from a robot that once"
 	dc.b	$EC
@@ -52454,7 +52742,7 @@ loc_29778:
 loc_297D0:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"SEARREN \IBoarding Satellite.\I"
+	dc.b	"SEARREN \IBoarding the satellite.\I"
 	dc.b	$FC
 	
 	even
@@ -52472,28 +52760,28 @@ loc_297FC:
 loc_2982C:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"LUNE \IThis violet moon was given"
+	dc.b	"LUNE \IThis purple moon was given"
 	dc.b	$F8
 	dc.b	"to us by Lady Laia."
 	dc.b	$EC
 	dc.b	"A thousand years ago, Orakio banished"
 	dc.b	$EC
-	dc.b	"us, violet moon and all."
+	dc.b	"us, purple moon and all."
 	dc.b	$EC
-	dc.b	"I went into frozen sleep to await the"
+	dc.b	"I went into cryosleep to await the"
 	dc.b	$EC
 	dc.b	"day I would fight at her side again."
 	dc.b	$EC
 	dc.b	"When I awoke, a thousand years had"
 	dc.b	$EC
-	dc.b	"passed, and she had fallen with Orakio..\I"
+	dc.b	"passed, and she had perished with Orakio...\I"
 	dc.b	$EC
 	dc.b	"LEIN \ILune! Listen to me!\I"
 	dc.b	$EC
 	dc.b	$EC
 	dc.b	"LUNE \IFilthy Orakians!"
 	dc.b	$EC
-	dc.b	"Let my Lune Slicer speak my wrath!\I"
+	dc.b	"Hear the wrath of my Lune Slicer!\I"
 	dc.b	$FC
 	
 	even
@@ -52517,11 +52805,11 @@ loc_298E8:
 	dc.b	$EC
 	dc.b	"from my elder sister."
 	dc.b	$EC
-	dc.b	"I too have crossed a thousand years."
+	dc.b	"I, too, have transcended a thousand years."
 	dc.b	$EC
 	dc.b	"Please, hear me out, Lune.\I"
 	dc.b	$EC
-	dc.b	"Laia and the pendant told everything."
+	dc.b	"Laia and the pendant told the whole story."
 	dc.b	$EC
 	dc.b	"Lune sank to his knees..."
 	dc.b	$EC
@@ -52529,7 +52817,7 @@ loc_298E8:
 	dc.b	$EC
 	dc.b	"side by side with Orakio..."
 	dc.b	$EC
-	dc.b	"...And you are the treasure she"
+	dc.b	"...And you are the very treasure she"
 	dc.b	$EC
 	dc.b	"left behind for the future...\I"
 	dc.b	$EC
@@ -52553,7 +52841,7 @@ loc_299F8:
 	dc.b	$EC
 	dc.b	"It seems Luise has had you on her"
 	dc.b	$EC
-	dc.b	"mind all this while..."
+	dc.b	"mind ever since..."
 	dc.b	$EC
 	dc.b	"Well... would you consider"
 	dc.b	$EC
@@ -52605,7 +52893,7 @@ loc_29B0A:
 	dc.b	$EC
 	dc.b	"the Blue Moon admirably."
 	dc.b	$EC
-	dc.b	"In time a boy was born to them,"
+	dc.b	"In time, a boy was born to them,"
 	dc.b	$EC
 	dc.b	"and he was named Shiin Le Cille."
 	dc.b	$EC
@@ -52624,7 +52912,7 @@ loc_29BFE:
 	dc.b	$F8
 	dc.b	"my father could not!\I"
 	dc.b	$EC
-	dc.b	"LYNN \IIf it's you..."
+	dc.b	"LYNN \IIf it's with you..."
 	dc.b	$EC
 	dc.b	"I suppose I have no complaints...\I"
 	dc.b	$FC
@@ -52644,7 +52932,7 @@ loc_29C5E:
 	dc.b	$EC
 	dc.b	"defended Riik."
 	dc.b	$EC
-	dc.b	"The days of war continued, but a prince"
+	dc.b	"Yet, amidst these days of war, a prince"
 	dc.b	$EC
 	dc.b	"named Noin was born to the two of them."
 	dc.b	$EC
@@ -52662,9 +52950,9 @@ loc_29D4C:
 	dc.b	$F8
 	dc.b	"Orakio and Laia could not...\I"
 	dc.b	$EC
-	dc.b	"LAIA \INow I am grateful that I woke"
+	dc.b	"LAIA \INow I am grateful that I awoke"
 	dc.b	$EC
-	dc.b	"a thousand years on...\I"
+	dc.b	"a thousand years later...\I"
 	dc.b	$FC
 	
 	even
@@ -52674,13 +52962,13 @@ loc_29DAC:
 	dc.b	$FF, $00
 	dc.b	"And so Lein Sa Riik was wed to the girl"
 	dc.b	$F8
-	dc.b	"who had crossed a thousand years..."
+	dc.b	"who had transcended a thousand years..."
 	dc.b	$EC
 	dc.b	"Laia's people and Orakio's people"
 	dc.b	$EC
 	dc.b	"ceased their strife."
 	dc.b	$EC
-	dc.b	"To the two were born twins,"
+	dc.b	"To the couple were born twins,"
 	dc.b	$EC
 	dc.b	"a prince and a princess."
 	dc.b	$EC
@@ -52696,7 +52984,7 @@ loc_29DAC:
 	dc.b	$EC
 	dc.b	"But Fuin's sister Laia began to dream,"
 	dc.b	$EC
-	dc.b	"every night, of falling into a dark pit."
+	dc.b	"every night, of falling into a dark abyss."
 	dc.b	$EC
 	dc.b	"This is the story of Fuin Sa Riik"
 	dc.b	$EC
@@ -52719,13 +53007,13 @@ loc_29EF6:
 loc_29F4C:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Lein became king of the satellite, the"
+	dc.b	"Lein became king of the purple moon, and"
 	dc.b	$F8
-	dc.b	"Violet Moon, and told all; Laia's people"
+	dc.b	"divulged everything; Laia's people"
 	dc.b	$EC
 	dc.b	"and Orakio's people sheathed their swords."
 	dc.b	$EC
-	dc.b	"In time a prince named Luin was born to"
+	dc.b	"In time, a prince named Luin was born to"
 	dc.b	$EC
 	dc.b	"Lein and Luise, and Lune became father"
 	dc.b	$EC
@@ -52764,7 +53052,7 @@ loc_2A0D0:
 	dc.b	$EC
 	dc.b	"Satellite, which we defended for so"
 	dc.b	$EC
-	dc.b	"many years, is finished."
+	dc.b	"many years, is doomed."
 	dc.b	$EC
 	dc.b	"As its king, I will share the fate"
 	dc.b	$EC
@@ -52780,7 +53068,7 @@ loc_2A0D0:
 	dc.b	$EC
 	dc.b	"Farewell, Shiin."
 	dc.b	$EC
-	dc.b	"Live...\I"
+	dc.b	"You must live on...\I"
 	dc.b	$FC
 	
 	even
@@ -52790,7 +53078,7 @@ loc_2A194:
 	dc.b	$FF, $00
 	dc.b	"LANN \II will stay with Ain..."
 	dc.b	$F8
-	dc.b	"You take the people and go, quickly!"
+	dc.b	"You take the citizenry and go, quickly!"
 	dc.b	$EC
 	dc.b	"Mieu! Searren! I leave Shiin to you!"
 	dc.b	$EC
@@ -52875,7 +53163,7 @@ loc_2A32A:
 	dc.b	"LAIA \IMy name is Laia..."
 	dc.b	$F8
 	dc.b	$EC
-	dc.b	"I once travelled with your father,"
+	dc.b	"I once traveled with your father,"
 	dc.b	$EC
 	dc.b	"Lord Lein..."
 	dc.b	$EC
@@ -52912,7 +53200,7 @@ loc_2A404:
 	dc.b	$EC
 	dc.b	"I come to make my report, as one"
 	dc.b	$EC
-	dc.b	"of the survivors of Satellite."
+	dc.b	"of the survivors from Satellite."
 	dc.b	$EC
 	dc.b	"Siren, whom you defeated, appeared"
 	dc.b	$EC
@@ -52920,15 +53208,15 @@ loc_2A404:
 	dc.b	$EC
 	dc.b	"slaughtered nearly everyone, Lady"
 	dc.b	$EC
-	dc.b	"Lann among them. At the last he laughed"
+	dc.b	"Lann among them. Laughing triumphantly,"
 	dc.b	$EC
-	dc.b	"aloud and said that, to root out the"
+	dc.b	"he vowed to exterminate the traitors,"
 	dc.b	$EC
-	dc.b	"traitors, he had set this spaceship,"
+	dc.b	"and said he had set this spaceship,"
 	dc.b	$EC
-	dc.b	"the Alisa III, on a course into the"
+	dc.b	"the Alisa III, on a heading toward the"
 	dc.b	$EC
-	dc.b	"sun, and then he vanished without trace."
+	dc.b	"sun, before he vanished without a trace."
 	dc.b	$FC
 	
 	align 2
@@ -52936,19 +53224,19 @@ loc_2A404:
 loc_2A494:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"AIN \IWhen I was young, I travelled and"
+	dc.b	"AIN \IWhen I was young, I traveled and"
 	dc.b	$F8
 	dc.b	"learned that our world is a spaceship."
 	dc.b	$EC
-	dc.b	"Somewhere there must be pilots who can"
+	dc.b	"Somewhere, there must be pilots who can"
 	dc.b	$EC
-	dc.b	"put this spaceship back on course!"
+	dc.b	"steer this ship back on course!"
 	dc.b	$EC
 	dc.b	"Tell those pilots that Siren has"
 	dc.b	$EC
 	dc.b	"changed our heading!"
 	dc.b	$EC
-	dc.b	"Otherwise this spaceship will burn"
+	dc.b	"Otherwise, this spaceship will burn"
 	dc.b	$EC
 	dc.b	"up inside the sun.\I"
 	dc.b	$FC
@@ -52959,7 +53247,7 @@ loc_2A494:
 	dc.b	$FF, $00
 	dc.b	"LAIA \IBrother Fuin! That earthquake just"
 	dc.b	$F8
-	dc.b	"now was no ordinary thing!"
+	dc.b	"now was no ordinary tremor!"
 	dc.b	$EC
 	dc.b	"It may have something to do with my"
 	dc.b	$EC
@@ -53005,7 +53293,7 @@ loc_2A642:
 loc_2A66E:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"LUNA \ILord Luin. What can have happened"
+	dc.b	"LUNA \ILord Luin. What could have happened"
 	dc.b	$F8
 	dc.b	"to our world..."
 	dc.b	$EC
@@ -53013,7 +53301,7 @@ loc_2A66E:
 	dc.b	$EC
 	dc.b	"taught how to fight..."
 	dc.b	$EC
-	dc.b	"But I too am the daughter"
+	dc.b	"Nevertheless, I am the daughter"
 	dc.b	$EC
 	dc.b	"of Lune Kay Eshyr."
 	dc.b	$EC
@@ -53055,7 +53343,7 @@ loc_2A6B8:
 	dc.b	$EC
 	dc.b	"Orakio's people, who wield machines..."
 	dc.b	$EC
-	dc.b	"There was an evil power setting"
+	dc.b	"There was a dark force pitting"
 	dc.b	$EC
 	dc.b	"our two peoples against each other..."
 	dc.b	$EC
@@ -53063,7 +53351,7 @@ loc_2A6B8:
 	dc.b	$EC
 	dc.b	"we had lost friends such as Lune."
 	dc.b	$EC
-	dc.b	"Now Orakio and I go alone"
+	dc.b	"Now Orakio and I will go alone"
 	dc.b	$EC
 	dc.b	"to challenge that evil."
 	dc.b	$EC
@@ -53123,7 +53411,7 @@ loc_2A924:
 loc_2A952:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"If you would know the truth, use Lady"
+	dc.b	"If you wish to know the truth, use Lady"
 	dc.b	$F8
 	dc.b	"Laia's Mystery Star to pass through the"
 	dc.b	$EC
@@ -53146,7 +53434,7 @@ loc_2A952:
 loc_2AA0E:
 	dc.w	loc_2AA3A-GameScript
 	dc.b	$1B, $00
-	dc.b	"The castle town of Riik"
+	dc.b	"The royal city of Riik"
 	dc.b	$F8
 	dc.b	"welcomes Lord Shiin Le Cille."
 	dc.b	$FC
@@ -53156,7 +53444,7 @@ loc_2AA0E:
 loc_2AA3A:	
 	dc.w	loc_2AA62-GameScript
 	dc.b	$1C, $00
-	dc.b	"The people of Riik's castle town"
+	dc.b	"The people of the royal city of Riik"
 	dc.b	$F8
 	dc.b	"await Lord Noin's return."
 	dc.b	$FC
@@ -53166,7 +53454,7 @@ loc_2AA3A:
 loc_2AA62:
 	dc.w	loc_2AA88-GameScript
 	dc.b	$1D, $00
-	dc.b	"The people of Riik await the return"
+	dc.b	"The citizens of Riik will await the return"
 	dc.b	$F8
 	dc.b	"of Lord Fuin and Lady Laia."
 	dc.b	$FC
@@ -53176,9 +53464,7 @@ loc_2AA62:
 loc_2AA88:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Lord Luin, welcome to"
-	dc.b	$F8
-	dc.b	"the castle town of Riik!"
+	dc.b	"Lord Luin, welcome to the royal city of Riik!"
 	dc.b	$FC
 	
 	align 2
@@ -53213,9 +53499,9 @@ loc_2AAD0:
 	dc.b	$F8
 	dc.b	"The man who was once Laia's right hand..."
 	dc.b	$EC
-	dc.b	"Returned across a thousand years, the"
+	dc.b	"He's the greatest enemy of us Orakians,"
 	dc.b	$EC
-	dc.b	"greatest enemy of us Orakians!"
+	dc.b	"back after a thousand years!"
 	dc.b	$FC
 	
 	align 2
@@ -53223,7 +53509,7 @@ loc_2AAD0:
 loc_2AB26:
 	dc.w	loc_2AB58-GameScript
 	dc.b	$1D, $00
-	dc.b	"Lord Lune on Satellite"
+	dc.b	"Lord Lune on the satellite"
 	dc.b	$F8
 	dc.b	"might know something..."
 	dc.b	$FC
@@ -53281,7 +53567,7 @@ loc_2AC46:
 loc_2AC7C:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"The strife between Laia's people and"
+	dc.b	"The struggle between Laia's people and"
 	dc.b	$F8
 	dc.b	"Orakio's is supposed to be over, so who..."
 	dc.b	$FC
@@ -53301,7 +53587,7 @@ loc_2ACB0:
 loc_2ACE0:
 	dc.w	loc_2AD0C-GameScript
 	dc.b	$1C, $00
-	dc.b	"Never mind Satellite, the blue moon;"
+	dc.b	"Never mind Satellite, the Blue Moon..."
 	dc.b	$F8
 	dc.b	"we have to do something about Lune's army!"
 	dc.b	$FC
@@ -53333,9 +53619,9 @@ loc_2AD70:
 	dc.b	$F8
 	dc.b	"hand a thousand years ago."
 	dc.b	$EC
-	dc.b	"Lord Orakio banished him, Satellite, the"
+	dc.b	"Lord Orakio banished him, Purple Moon"
 	dc.b	$EC
-	dc.b	"Violet Moon, and all, but I hear he crossed"
+	dc.b	"satellite and all, but I hear he crossed"
 	dc.b	$EC
 	dc.b	"the ages in frozen sleep and has now"
 	dc.b	$EC
@@ -53409,7 +53695,7 @@ loc_2AF58:
 	dc.b	$FF, $00
 	dc.b	"Lord Luin!"
 	dc.b	$F8
-	dc.b	"Do come back to this country!"
+	dc.b	"Please come back to this country!"
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -53419,7 +53705,7 @@ loc_2AF8C:
 	dc.b	$FF, $00
 	dc.b	"Lune's monsters have been appearing"
 	dc.b	$F8
-	dc.b	"around the port town of Yaata as well."
+	dc.b	"around this port town of Yaata as well."
 	dc.b	$FC
 	
 	even
@@ -53453,7 +53739,7 @@ loc_2AFF4:
 loc_2B020:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Welcome to the port town of Yaata"
+	dc.b	"Welcome to the port town of Yaata."
 	dc.b	$FC
 	
 	even
@@ -53475,7 +53761,7 @@ loc_2B080:
 	dc.b	$F8
 	dc.b	"seems to be controlling the robots and"
 	dc.b	$EC
-	dc.b	"monsters and setting them on people."
+	dc.b	"monsters and terrorizing the populace."
 	dc.b	$FC
 	
 	even
@@ -53545,7 +53831,7 @@ loc_2B1EE:
 	dc.b	$EC
 	dc.b	"By now, your country might be..."
 	dc.b	$EC
-	dc.b	"Anyway, you'd better hurry back!"
+	dc.b	"At any rate, you'd better hurry back!"
 	dc.b	$FC
 	
 	even
@@ -53585,7 +53871,7 @@ loc_2B2E4:
 	dc.b	$FF, $00
 	dc.b	"There used to be Laian kingdoms across"
 	dc.b	$F8
-	dc.b	"the sea, but they say they've fallen!"
+	dc.b	"the sea, I've heard, but they've fallen!"
 	dc.b	$FC
 	
 	even
@@ -53593,9 +53879,9 @@ loc_2B2E4:
 loc_2B312:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Humans are a rare sight in Hazatak,"
+	dc.b	"HUMANS ARE A RARE SIGHT IN HASATAKA,"
 	dc.b	$F8
-	dc.b	"the forgotten village of robots."
+	dc.b	"THE FORGOTTEN VILLAGE OF ROBOTS."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -53603,17 +53889,17 @@ loc_2B312:
 loc_2B346:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"The Power Topaz, I hear, has been handed"
+	dc.b	"THE POWER TOPAZ, I HEAR, HAS BEEN HANDED"
 	dc.b	$F8
-	dc.b	"down in the land of Satera."
+	dc.b	"DOWN IN THE LAND OF SATERA."
 	dc.b	$EC
-	dc.b	"The homeland of Lena, who once"
+	dc.b	"IT IS THE HOMELAND OF LENA, WHO ONCE"
 	dc.b	$EC
-	dc.b	"came to this town too."
+	dc.b	"CAME TO THIS TOWN, AS WELL."
 	dc.b	$EC
-	dc.b	"But now, rumor has it, Lena's daughter"
+	dc.b	"BUT NOW, RUMOR HAS IT, LENA'S DAUGHTER"
 	dc.b	$EC
-	dc.b	"holds it, and lives in the castle of Riik."
+	dc.b	"HOLDS IT, AND LIVES IN THE CASTLE OF RIIK."
 	dc.b	$FC
 	
 	even
@@ -53621,9 +53907,9 @@ loc_2B346:
 loc_2B3A2:
 	dc.w	loc_2B346-GameScript
 	dc.b	$20, $00
-	dc.b	"South of this town, water wells up"
+	dc.b	"SOUTH OF THIS TOWN, WATER WELLS UP"
 	dc.b	$F8
-	dc.b	"from out of nowhere..."
+	dc.b	"FROM OUT OF NOWHERE..."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -53631,9 +53917,9 @@ loc_2B3A2:
 loc_2B3D4:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"South of this town, water wells up"
+	dc.b	"SOUTH OF THIS TOWN, WATER WELLS UP"
 	dc.b	$F8
-	dc.b	"from out of nowhere..."
+	dc.b	"FROM OUT OF NOWHERE..."
 	dc.b	$FC
 	
 	even
@@ -53641,9 +53927,9 @@ loc_2B3D4:
 loc_2B408:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"A deranged robot"
+	dc.b	"A DERANGED ROBOT"
 	dc.b	$F8
-	dc.b	"wanders the desert..."
+	dc.b	"WANDERS THE DESERT..."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -53651,13 +53937,13 @@ loc_2B408:
 loc_2B43A:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"In Frotrahn, to the east, there is a way"
+	dc.b	"IN FLOTRAAN, TO THE EAST, THERE IS A WAY"
 	dc.b	$F8
-	dc.b	"to reach Satellite."
+	dc.b	"TO REACH SATELLITE."
 	dc.b	$EC
-	dc.b	"But without the Power Topaz, you"
+	dc.b	"BUT WITHOUT THE POWER TOPAZ, YOU"
 	dc.b	$EC
-	dc.b	"likely cannot get there..."
+	dc.b	"LIKELY COULDN'T GET THERE..."
 	dc.b	$FC
 	
 	even
@@ -53665,9 +53951,9 @@ loc_2B43A:
 loc_2B492:
 	dc.w	loc_2B43A-GameScript
 	dc.b	$20, $00
-	dc.b	"With the Submarine Parts, you could dive"
+	dc.b	"WITH THE SUBMARINE PARTS, YOU COULD DIVE"
 	dc.b	$F8
-	dc.b	"and find out where that water comes from."
+	dc.b	"AND FIND OUT WHERE THAT WATER COMES FROM."
 	dc.b	$FC
 ; -------------------------------------------------	
 	even
@@ -53675,9 +53961,9 @@ loc_2B492:
 loc_2B4F8:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"With the Submarine Parts, you could dive"
+	dc.b	"WITH THE SUBMARINE PARTS, YOU COULD DIVE"
 	dc.b	$F8
-	dc.b	"and find out where that water comes from."
+	dc.b	"AND FIND OUT WHERE THAT WATER COMES FROM."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -53685,9 +53971,9 @@ loc_2B4F8:
 loc_2B55A:
 	dc.w	loc_2B58C-GameScript
 	dc.b	$24, $00
-	dc.b	"Are the humans still foolishly"
+	dc.b	"ARE THE FOOLISH HUMANS STILL"
 	dc.b	$F8
-	dc.b	"fighting one another..."
+	dc.b	"FIGHTING AMONGST THEMSELVES...?"
 	dc.b	$FC
 	
 	even
@@ -53695,17 +53981,17 @@ loc_2B55A:
 loc_2B58C:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Refugees who seemed to be Laia's people"
+	dc.b	"REFUGEES WHO SEEMED TO BE LAIA'S PEOPLE"
 	dc.b	$F8
-	dc.b	"fled toward the west."
+	dc.b	"FLED TOWARD THE WEST."
 	dc.b	$EC
-	dc.b	"Among them was the man who, twenty"
+	dc.b	"AMONG THEM WAS THE MAN WHO, TWENTY"
 	dc.b	$EC
-	dc.b	"years ago, stole the Twins' Ruby from"
+	dc.b	"YEARS AGO, STOLE THE TWINS' RUBY FROM"
 	dc.b	$EC
-	dc.b	"us and slipped through the northwest"
+	dc.b	"US AND SLIPPED THROUGH THE NORTHWEST"
 	dc.b	$EC
-	dc.b	"cave to Riik."
+	dc.b	"CAVE TO RIIK."
 	dc.b	$FC
 
 	even
@@ -53713,9 +53999,9 @@ loc_2B58C:
 loc_2B5EC:
 	dc.w	loc_2B55A-GameScript
 	dc.b	$20, $00
-	dc.b	"We fear to see our fellows broken."
+	dc.b	"WE FEAR SEEING OUR COMRADES BROKEN."
 	dc.b	$F8
-	dc.b	"That is why we do not fight."
+	dc.b	"THAT IS WHY WE DO NOT FIGHT."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -53723,9 +54009,9 @@ loc_2B5EC:
 loc_2B616:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"We fear to see our fellows broken."
+	dc.b	"WE FEAR SEEING OUR COMRADES BROKEN."
 	dc.b	$F8
-	dc.b	"That is why we do not fight."
+	dc.b	"THAT IS WHY WE DO NOT FIGHT."
 	dc.b	$FC
 	
 	even
@@ -53796,11 +54082,9 @@ loc_2B74E:
 	dc.b	$FF, $00
 	dc.b	"Lyle, the legendary one-eyed knight who"
 	dc.b	$F8
-	dc.b	"fought on amid the flames..."
+	dc.b	"fought on amidst the flames..."
 	dc.b	$EC
-	dc.b	"I met him once, just once,"
-	dc.b	$EC
-	dc.b	"when I was young..."
+	dc.b	"I met him just once, when I was young..."
 	dc.b	$FC
 	
 	align 2
@@ -53893,7 +54177,7 @@ loc_2B91A:
 loc_2B97C:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"This is the castle town of Frotrahn,"
+	dc.b	"This is the royal city of Flotraan,"
 	dc.b	$F8
 	dc.b	"the Castle of Power..."
 	dc.b	$FC
@@ -53921,9 +54205,9 @@ loc_2BA08:
 	dc.b	$F8
 	dc.b	"that appeared out of nowhere..."
 	dc.b	$EC
-	dc.b	"The robots go out from here"
+	dc.b	"The robots will spread out from here"
 	dc.b	$EC
-	dc.b	"to the whole world..."
+	dc.b	"across every world..."
 	dc.b	$FC
 	
 	even
@@ -53941,13 +54225,13 @@ loc_2BA34:
 loc_2BA62:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Satellite?"
+	dc.b	"\ISatellite\I?"
 	dc.b	$F8
-	dc.b	"I see... So that's where you're headed."
+	dc.b	"I see... So that's what you're after."
 	dc.b	$EC
-	dc.b	"Did you know? The robot army running"
+	dc.b	"Did you know? The rampaging robot army"
 	dc.b	$EC
-	dc.b	"wild right now came from there!"
+	dc.b	"came from there!"
 	dc.b	$FC
 	
 	even
@@ -53959,7 +54243,7 @@ loc_2BA94:
 	dc.b	$F8
 	dc.b	"Look up at the sky..."
 	dc.b	$EC
-	dc.b	"You see the moon shining blue..."
+	dc.b	"You see the moon shining blue...?"
 	dc.b	$EC
 	dc.b	"Flung far away by Laia a thousand"
 	dc.b	$EC
@@ -53975,7 +54259,7 @@ loc_2BA94:
 loc_2BAC4:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Do you know why Frotrahn is called"
+	dc.b	"Do you know why Flotraan is called"
 	dc.b	$F8
 	dc.b	"the Castle of Power?"
 	dc.b	$FC
@@ -54003,9 +54287,9 @@ loc_2BB5C:
 	dc.b	$F8
 	dc.b	"the descendants of its pilots."
 	dc.b	$EC
-	dc.b	"Bossy lot, always ordering us to do"
+	dc.b	"They're so bossy,"
 	dc.b	$EC
-	dc.b	"this and do that!"
+	dc.b	"always barking orders at us!"
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -54023,7 +54307,7 @@ loc_2BBB4:
 loc_2BBEA:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Sleep forever in Lashute,"
+	dc.b	"Sleep for eternity in Lashute,"
 	dc.b	$F8
 	dc.b	"the city of evil!"
 	dc.b	$FC
@@ -54043,13 +54327,13 @@ loc_2BC1E:
 loc_2BC4E:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"It was we who stole Marina's memory"
+	dc.b	"It was we who stole Marina's memories"
 	dc.b	$F8
 	dc.b	"and sent her off to Riik!"
 	dc.b	$EC
 	dc.b	"Your grandfather, seeking Marina, called"
 	dc.b	$EC
-	dc.b	"Satellite back just as we planned!"
+	dc.b	"the satellites back just as we planned!"
 	dc.b	$EC
 	dc.b	"Thanks to that, Siren and Lune awoke,"
 	dc.b	$EC
@@ -54061,9 +54345,9 @@ loc_2BC4E:
 loc_2BCD8:
 	dc.w	loc_2BD0A-GameScript
 	dc.b	$E7, $00
-	dc.b	"Lord Rulakir crossed a thousand years"
+	dc.b	"Lord Rulakir survived a thousand years"
 	dc.b	$F8
-	dc.b	"by a certain mysterious power..."
+	dc.b	"through a certain mysterious power..."
 	dc.b	$FC
 	
 	even
@@ -54099,9 +54383,9 @@ loc_2BDF8:
 	dc.b	$F8
 	dc.b	"our god, Dark Falz!"
 	dc.b	$EC
-	dc.b	"Thanks to you, our god can now"
+	dc.b	"It's thanks to you that our god could now"
 	dc.b	$EC
-	dc.b	"show itself once more."
+	dc.b	"manifest once more."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -54119,13 +54403,9 @@ loc_2BE20:
 loc_2BE48:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"You did everything exactly"
+	dc.b	"You did everything exactly as we planned!"
 	dc.b	$F8
-	dc.b	"as we planned!"
-	dc.b	$EC
-	dc.b	"Now perish, along with"
-	dc.b	$EC
-	dc.b	"your own foolishness!"
+	dc.b	"Now perish along with your own foolishness!"
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -54137,7 +54417,7 @@ loc_2BE76:
 	dc.b	$F8
 	dc.b	"onto the shining shore..."
 	dc.b	$EC
-	dc.b	"...But those waves, too..."
+	dc.b	"...Yet those very waves..."
 	dc.b	$EC
 	dc.b	"are dragged back to the dark sea floor..."
 	dc.b	$EC
@@ -54147,7 +54427,7 @@ loc_2BE76:
 	dc.b	$EC
 	dc.b	"beaten down... That is what we are..."
 	dc.b	$EC
-	dc.b	"you who carry the blood of my line.\I"
+	dc.b	"O you who carry the blood of my lineage.\I"
 	dc.b	$FC
 	
 	even
@@ -54205,7 +54485,7 @@ loc_2BFE2:
 	dc.b	$EC
 	dc.b	"From Pilotta, south of Grandirecta,"
 	dc.b	$EC
-	dc.b	"go to Lune's Violet Moon."
+	dc.b	"go to Lune's Purple Moon."
 	dc.b	$FC
 	
 	even
@@ -54213,9 +54493,9 @@ loc_2BFE2:
 loc_2C042:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Here in Foundry, the hidden village,"
+	dc.b	"Here in Foundaury, the secret village,"
 	dc.b	$F8
-	dc.b	"you shall learn the lost history."
+	dc.b	"you shall learn of lost history."
 	dc.b	$FC
 	
 	even
@@ -54225,7 +54505,7 @@ loc_2C072:
 	dc.b	$FF, $00
 	dc.b	"Listen to the tales of the"
 	dc.b	$F8
-	dc.b	"keepers of history."
+	dc.b	"storytellers of history."
 	dc.b	$FC
 	
 	even
@@ -54233,7 +54513,7 @@ loc_2C072:
 loc_2C0A8:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"What business have Laia's people in Lott,"
+	dc.b	"What business do Laia's people have in Lott,"
 	dc.b	$F8
 	dc.b	"the artisans' village of Orakio's people?"
 	dc.b	$FC
@@ -54247,9 +54527,9 @@ loc_2C0C0:
 	dc.b	$F8
 	dc.b	"the Dragon's Tail."
 	dc.b	$EC
-	dc.b	"Across the sea from there lies Frotrahn,"
+	dc.b	"Across the sea from there lies Flotraan,"
 	dc.b	$EC
-	dc.b	"the Castle of Power of the engineer folk."
+	dc.b	"the Castle of Power of the engineers."
 	dc.b	$FC
 	
 	even
@@ -54257,7 +54537,7 @@ loc_2C0C0:
 loc_2C124:
 	dc.w	loc_2C17C-GameScript
 	dc.b	$28, $00
-	dc.b	"They say a beautiful princess was carried"
+	dc.b	"It seems a beautiful princess was carried"
 	dc.b	$F8
 	dc.b	"off to the castle of Lensol, to the south..."
 	dc.b	$EC
@@ -54271,7 +54551,7 @@ loc_2C124:
 loc_2C17C:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Someday, I just know, Quisto will"
+	dc.b	"Someday, surely, Quisto will"
 	dc.b	$F8
 	dc.b	"notice how I feel about him!"
 	dc.b	$FC
@@ -54291,19 +54571,17 @@ loc_2C1AE:
 	dc.b	$EC
 	dc.b	"I wanted to save her, and I did manage"
 	dc.b	$EC
-	dc.b	"to get the castle gate open, but inside"
+	dc.b	"to get the castle gate open, but beyond"
 	dc.b	$EC
 	dc.b	"it was full of fearsome-looking robots,"
 	dc.b	$EC
-	dc.b	"far more than I could handle."
+	dc.b	"and I'd never stand a chance."
 	dc.b	$EC
-	dc.b	"I got scared and ran all the way back"
+	dc.b	"I got scared and ran all the way here"
 	dc.b	$EC
-	dc.b	"here without a backward glance."
+	dc.b	"without even looking back."
 	dc.b	$EC
-	dc.b	"I'm just no good... I could never be"
-	dc.b	$EC
-	dc.b	"a hero..."
+	dc.b	"I'm hopeless... I could never be a hero..."
 	dc.b	$FC
 	
 	align 2
@@ -54343,7 +54621,7 @@ loc_2C2E4:
 	dc.b	$FF, $00
 	dc.b	"I am Elina, wife of Quisto,"
 	dc.b	$F8
-	dc.b	"the chief of this village."
+	dc.b	"the leader of this village."
 	dc.b	$FC
 	
 	even
@@ -54351,7 +54629,7 @@ loc_2C2E4:
 loc_2C33E:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"I am Quisto, the chief of this village."
+	dc.b	"I am Quisto, the leader of this village."
 	dc.b	$F8
 	dc.b	$EC
 	dc.b	"I believe I met that robot and that"
@@ -54380,7 +54658,7 @@ loc_2C36A:
 	dc.b	$EC
 	dc.b	"My wife Elina is the only one who"
 	dc.b	$EC
-	dc.b	"believes that story, mind you."
+	dc.b	"believes that story, though."
 	dc.b	$FC
 	
 	even
@@ -54398,7 +54676,7 @@ loc_2C3D0:
 loc_2C3FA:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"The folk of this land fought Laia's people"
+	dc.b	"The people of this land fought Laia's clan"
 	dc.b	$F8
 	dc.b	"for generations."
 	dc.b	$EC
@@ -54428,11 +54706,11 @@ loc_2C45A:
 loc_2C4DC:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"These days, about the only place that"
+	dc.b	"These days, it seems the only place that"
 	dc.b	$F8
-	dc.b	"keeps the old science alive is Frotrahn,"
+	dc.b	"keeps science and technology alive is"
 	dc.b	$EC
-	dc.b	"on the island offshore..."
+	dc.b	"Flotraan, on the island offshore..."
 	dc.b	$FC
 	
 	even
@@ -54448,17 +54726,17 @@ loc_2C52E:
 	dc.b	$EC
 	dc.b	"years ago as Lady Laia's right hand."
 	dc.b	$EC
-	dc.b	"Banished by Orakio along with Satellite,"
+	dc.b	"Banished by Orakio along with this satellite,"
 	dc.b	$EC
-	dc.b	"I crossed the ages in frozen sleep..."
+	dc.b	"I traversed the ages in cryosleep..."
 	dc.b	$EC
-	dc.b	"When I woke, I burned for revenge, and"
+	dc.b	"When I awoke, I burned for revenge, and"
 	dc.b	$EC
-	dc.b	"I tormented Orakio's people without end."
+	dc.b	"I continued to torment Orakio's people."
 	dc.b	$EC
 	dc.b	"But I was wrong..."
 	dc.b	$EC
-	dc.b	"I have done what cannot be undone...\I"
+	dc.b	"What I have done cannot be undone...\I"
 	dc.b	$FC
 	
 	even
@@ -54468,23 +54746,21 @@ loc_2C61E:
 	dc.b	$FF, $00
 	dc.b	"LUISE \II am Luise, Lune's sister."
 	dc.b	$F8
-	dc.b	"I crossed the thousand years with him."
+	dc.b	"I transcended the thousand years with him."
 	dc.b	$EC
-	dc.b	"As soon as I woke, I was captured"
+	dc.b	"As soon as I awoke, I was captured"
 	dc.b	$EC
 	dc.b	"by Orakio's people..."
 	dc.b	$EC
-	dc.b	"And that only made my brother"
+	dc.b	"And that only enraged my brother further..."
 	dc.b	$EC
-	dc.b	"angrier still..."
+	dc.b	"I beg you, please forgive my brother!"
 	dc.b	$EC
-	dc.b	"Please forgive my brother!"
+	dc.b	"It is true that we were the ones who"
 	dc.b	$EC
-	dc.b	"Yes, it was we who destroyed Satera"
+	dc.b	"destroyed the kingdom of Satera..."
 	dc.b	$EC
-	dc.b	"and the other lands..."
-	dc.b	$EC
-	dc.b	"But the monsters running wild now were"
+	dc.b	"But the rampaging monsters now were"
 	dc.b	$EC
 	dc.b	"made by some other power!\I"
 	dc.b	$FC
@@ -54494,9 +54770,9 @@ loc_2C61E:
 loc_2C76A:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"So Lady Laia's sister there was"
+	dc.b	"So Lady Laia's little sister there was"
 	dc.b	$F8
-	dc.b	"the treasure of Laia all along..."
+	dc.b	"the 'Treasure of Laia' all along, then..."
 	dc.b	$FC
 	
 	align 2
@@ -54504,15 +54780,15 @@ loc_2C76A:
 loc_2C7A0:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Below here are the parts that let"
+	dc.b	"Below here are the parts that enable"
 	dc.b	$F8
-	dc.b	"a robot fly."
+	dc.b	"robots to fly."
 	dc.b	$EC
 	dc.b	"We Laians cannot use them, but you"
 	dc.b	$EC
 	dc.b	"could manage something, couldn't you?"
 	dc.b	$EC
-	dc.b	"Use them to reach the city in the sky"
+	dc.b	"Use them to reach the floating city"
 	dc.b	$EC
 	dc.b	"that is said to be in the world of snow."
 	dc.b	$EC
@@ -54526,9 +54802,9 @@ loc_2C7A0:
 loc_2C832:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Lord Lune, emperor of Satellite, the"
+	dc.b	"Lord Lune, emperor of the Purple Moon"
 	dc.b	$F8
-	dc.b	"Violet Moon, is utterly dispirited."
+	dc.b	"satellite, is utterly dispirited."
 	dc.b	$FC
 	
 	even
@@ -54536,7 +54812,7 @@ loc_2C832:
 loc_2C864:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"LUNE \IAn age of strife once more..."
+	dc.b	"LUNE \IIn an era of conflict once more..."
 	dc.b	$F8
 	dc.b	"And I had thought peace had come at last!"
 	dc.b	$EC
@@ -54546,7 +54822,7 @@ loc_2C864:
 	dc.b	$EC
 	dc.b	"But my clan, the house of Eshyr, has"
 	dc.b	$EC
-	dc.b	"been a warrior clan for generations!"
+	dc.b	"been a line of warriors for generations!"
 	dc.b	$EC
 	dc.b	"Take her with you into battle,"
 	dc.b	$EC
@@ -54554,9 +54830,9 @@ loc_2C864:
 	dc.b	$EC
 	dc.b	"But Luna is a gentle, timid girl,"
 	dc.b	$EC
-	dc.b	"ill-suited to fighting!"
+	dc.b	"ill-suited for combat!"
 	dc.b	$EC
-	dc.b	"Fuin! Protect her!\I"
+	dc.b	"Fuin! Please protect her!\I"
 	dc.b	$FC
 	
 	even
@@ -54568,9 +54844,9 @@ loc_2C8F4:
 	dc.b	$F8
 	dc.b	"came to my rescue..."
 	dc.b	$EC
-	dc.b	"Lord Fuin, as his son, will surely"
+	dc.b	"Lord Fuin, as his son, you will surely"
 	dc.b	$EC
-	dc.b	"protect my niece Luna."
+	dc.b	"protect my niece, Luna."
 	dc.b	$EC
 	dc.b	"That is what I believe...\I"
 	dc.b	$FC
@@ -54581,19 +54857,19 @@ loc_2C8F4:
 	dc.b	$FF, $00
 	dc.b	"Back when I was searching for the"
 	dc.b	$F8
-	dc.b	"treasure of Laia, I heard that in the"
+	dc.b	"'Treasure of Laia', I heard that in the"
 	dc.b	$EC
 	dc.b	"world of snow there is a flying city"
 	dc.b	$EC
-	dc.b	"where sages dwell."
+	dc.b	"where sages reside."
 	dc.b	$EC
 	dc.b	"Those sages might know something"
 	dc.b	$EC
 	dc.b	"about the evil power."
 	dc.b	$EC
-	dc.b	"Below here are flight parts for a robot;"
+	dc.b	"Below here are flight parts for a robot"
 	dc.b	$EC
-	dc.b	"they might help you get there."
+	dc.b	"which might help you get there."
 	dc.b	$EC
 	dc.b	"But there are monsters and robots down"
 	dc.b	$EC
@@ -54620,9 +54896,9 @@ loc_2C8F4:
 	dc.b	$EC
 	dc.b	"in retaliation."
 	dc.b	$EC
-	dc.b	"We took damage from it, and our"
+	dc.b	"We sustained damage from it, and we"
 	dc.b	$EC
-	dc.b	"course was thrown off."
+	dc.b	"were thrown off-course."
 	dc.b	$EC
 	dc.b	"Who on earth were they, and who was"
 	dc.b	$EC
@@ -54644,7 +54920,7 @@ loc_2CAC4:
 	dc.b	$EC
 	dc.b	"What was that second spaceship?"
 	dc.b	$EC
-	dc.b	"Why did they fire on each other...\I"
+	dc.b	"Why did they fire on each other...?\I"
 	dc.b	$FC
 	
 	align 2
@@ -54654,13 +54930,13 @@ loc_2CB56:
 	dc.b	$FF, $00
 	dc.b	"LUNE \ILuin, my nephew..."
 	dc.b	$F8
-	dc.b	"An age of strife has come again..."
+	dc.b	"An era of conflict has come again..."
 	dc.b	$EC
 	dc.b	"And I believed the peace of this world"
 	dc.b	$EC
 	dc.b	"would last forever..."
 	dc.b	$EC
-	dc.b	"And so I raised my daughter Luna"
+	dc.b	"That is why I raised my daughter Luna"
 	dc.b	$EC
 	dc.b	"as a princess..."
 	dc.b	$EC
@@ -54688,7 +54964,7 @@ loc_2CBE0:
 	dc.b	$EC
 	dc.b	"My brother and Lein meant for the two"
 	dc.b	$EC
-	dc.b	"of you to inherit this Satellite..."
+	dc.b	"of you to inherit this satellite..."
 	dc.b	$EC
 	dc.b	"You must come back safely...\I"
 	dc.b	$FC
@@ -54753,7 +55029,7 @@ loc_2CD60:
 loc_2CD8A:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"I am the messenger from Satera."
+	dc.b	"I am a messenger from Satera."
 	dc.b	$F8
 	dc.b	"The enemy called themselves Lune's army."
 	dc.b	$FC
@@ -54763,7 +55039,7 @@ loc_2CD8A:
 loc_2CDBC:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"They say the Laians' monster army"
+	dc.b	"They say the Laians' army of monsters"
 	dc.b	$F8
 	dc.b	"attacked from the south of Satera."
 	dc.b	$FC
@@ -54797,14 +55073,14 @@ loc_2CE50:
 	dc.b	$EC
 	dc.b	"One after another, people fall"
 	dc.b	$EC
-	dc.b	"because of this strife..."
+	dc.b	"because of this conflict..."
 	dc.b	$EC
-	dc.b	"Somehow the fighting must be stopped..."
+	dc.b	"Somehow, the fighting must be stopped..."
 	dc.b	$EC
 	dc.b	$EC
 	dc.b	"Rumor has it that an ancient machine"
 	dc.b	$EC
-	dc.b	"for obtaining the treasure of Laia,"
+	dc.b	"for obtaining the 'Treasure of Laia',"
 	dc.b	$EC
 	dc.b	"which has the power to end strife, lies"
 	dc.b	$EC
@@ -54816,13 +55092,13 @@ loc_2CE50:
 loc_2CF10:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Lune's monsters, who destroyed our"
+	dc.b	"Lune's monsters, who destroyed the"
 	dc.b	$F8
-	dc.b	"neighbor Satera, have bridged the"
+	dc.b	"neighboring kingdom of Satera,"
 	dc.b	$EC
-	dc.b	"river to the west and are"
+	dc.b	"have built a bridge over the western river"
 	dc.b	$EC
-	dc.b	"attacking us here!"
+	dc.b	"and are attacking us!"
 	dc.b	$FC
 	
 	align 2
@@ -54836,7 +55112,7 @@ loc_2CF42:
 	dc.b	$EC
 	dc.b	"If you are heading that way,"
 	dc.b	$EC
-	dc.b	"do take care..."
+	dc.b	"please take care..."
 	dc.b	$FC
 	
 	align 2
@@ -54844,7 +55120,7 @@ loc_2CF42:
 loc_2CF9E:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Lune was after the treasure of Laia,"
+	dc.b	"Lune was after the 'Treasure of Laia',"
 	dc.b	$F8
 	dc.b	"which lies in the desert world."
 	dc.b	$EC
@@ -54884,7 +55160,7 @@ loc_2D0BA:
 	dc.b	$FF, $00
 	dc.b	"LYNN \INoin, my son!"
 	dc.b	$F8
-	dc.b	"Go and do your duty as a prince!"
+	dc.b	"Go and fulfill your duties as a prince!"
 	dc.b	$EC
 	dc.b	"But do not throw your life away."
 	dc.b	$EC
@@ -54899,9 +55175,9 @@ loc_2D0BA:
 loc_2D0EE:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"According to legend, the pilots are in"
+	dc.b	"Legend has it that the pilots are in"
 	dc.b	$F8
-	dc.b	"the world beyond our neighbor Satera."
+	dc.b	"the world beyond neighboring Satera."
 	dc.b	$FC
 	
 	even
@@ -54927,9 +55203,7 @@ loc_2D14A:
 	dc.b	$EC
 	dc.b	"is about to happen!"
 	dc.b	$EC
-	dc.b	"My friend Lune may"
-	dc.b	$EC
-	dc.b	"know something.\I"
+	dc.b	"My friend Lune may know something.\I"
 	dc.b	$FC
 	
 	align 2
@@ -54955,9 +55229,9 @@ loc_2D1CE:
 	dc.b	$F8
 	dc.b	"power that even her mother lacks..."
 	dc.b	$EC
-	dc.b	"Might her dream of falling into a dark"
+	dc.b	"Could her dream of falling into a dark"
 	dc.b	$EC
-	dc.b	"pit point to some ill-omened future?"
+	dc.b	"pit be an ominous premonition?"
 	dc.b	$FC
 	
 	even
@@ -54975,9 +55249,7 @@ loc_2D204:
 loc_2D228:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Perhaps Lord Lune might"
-	dc.b	$F8
-	dc.b	"know something."
+	dc.b	"Perhaps Lord Lune might know something."
 	dc.b	$FC
 	
 	even
@@ -55079,9 +55351,9 @@ loc_2D41E:
 loc_2D450:
 	dc.w	loc_2D47C-GameScript
 	dc.b	$23, $00
-	dc.b	"How do you mean to search for Satellite,"
+	dc.b	"How do you expect to search for Satellite"
 	dc.b	$F8
-	dc.b	"which exists only in legend?"
+	dc.b	"if it only exists in legend?"
 	dc.b	$FC
 	
 	even
@@ -55091,7 +55363,7 @@ loc_2D47C:
 	dc.b	$FF, $00
 	dc.b	"I pray that you find Satellite,"
 	dc.b	$F8
-	dc.b	"the world of legend..."
+	dc.b	"the place of legend..."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -55119,11 +55391,11 @@ loc_2D4FC:
 	dc.b	$FF, $00
 	dc.b	"I hear there is an island in this dome"
 	dc.b	$F8
-	dc.b	"called the Isle of the Sage..."
+	dc.b	"called the Isle of Sages..."
 	dc.b	$EC
-	dc.b	"I should like to borrow the wisdom"
+	dc.b	"I would love to receive the wisdom"
 	dc.b	$EC
-	dc.b	"of the sage who lives there."
+	dc.b	"of the sages who live there."
 	dc.b	$FC
 	
 	even
@@ -55131,7 +55403,7 @@ loc_2D4FC:
 loc_2D524:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Someone says they saw robots"
+	dc.b	"Apparently, some have said they saw robots"
 	dc.b	$F8
 	dc.b	"crossing the sea..."
 	dc.b	$FC
@@ -55147,7 +55419,7 @@ loc_2D552:
 	dc.b	$EC
 	dc.b	"I'd like to help you, as I did when"
 	dc.b	$EC
-	dc.b	"I travelled with Kein..."
+	dc.b	"I traveled with Kein..."
 	dc.b	$EC
 	dc.b	"But as king of this land, it is my"
 	dc.b	$EC
@@ -55159,7 +55431,7 @@ loc_2D552:
 loc_2D5AE:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"LANN \IHave you forgotten, Lord Ain?"
+	dc.b	"LANN \IDo you remember me, Lord Ain?"
 	dc.b	$F8
 	dc.b	"I'm Lyle's daughter, Lann La Miller!\I"
 	dc.b	$FC
@@ -55201,9 +55473,9 @@ loc_2D672:
 	dc.b	$F8
 	dc.b	"fighting the robot army..."
 	dc.b	$EC
-	dc.b	"He tells no one, and no doubt he'll go"
+	dc.b	"He's told no one, and no doubt he'll still"
 	dc.b	$EC
-	dc.b	"out to fight again without a word..."
+	dc.b	"go out to fight without a word..."
 	dc.b	$FC
 	
 	even
@@ -55284,15 +55556,15 @@ loc_2D7EE:
 	dc.b	$F8
 	dc.b	"both Orakio's people and Laia's..."
 	dc.b	$EC
-	dc.b	"You continue your journey of discovery,"
+	dc.b	"You yet continue your journey of discovery,"
 	dc.b	$EC
-	dc.b	"it seems, but take care."
+	dc.b	"it seems, but take heed."
 	dc.b	$EC
 	dc.b	"Hordes of robots and monsters have been"
 	dc.b	$EC
 	dc.b	"emerging from the eastern cave."
 	dc.b	$EC
-	dc.b	"There is something in the world"
+	dc.b	"Something lies in the world"
 	dc.b	$EC
 	dc.b	"beyond that cave..."
 	dc.b	$FC
@@ -55304,7 +55576,7 @@ loc_2D848:
 	dc.b	$FF, $00
 	dc.b	"Long ago, when I was young, a man who"
 	dc.b	$F8
-	dc.b	"looked a lot like you got into the castle"
+	dc.b	"looked a lot like you crept into the castle"
 	dc.b	$EC
 	dc.b	"and spirited a captive woman right"
 	dc.b	$EC
@@ -55333,13 +55605,11 @@ loc_2D926:
 	dc.b	"Lord Rulakir is Orakio's elder brother..."
 	dc.b	$F8
 	dc.b	$EC
-	dc.b	"To bring absolute peace"
+	dc.b	"To bring absolute peace to this world,"
 	dc.b	$EC
-	dc.b	"to this world,"
+	dc.b	"he survived for a thousand years"
 	dc.b	$EC
-	dc.b	"he crossed a thousand years"
-	dc.b	$EC
-	dc.b	"by a mysterious power..."
+	dc.b	"through a mysterious power..."
 	dc.b	$EC
 	dc.b	"So why do the ones who attack people"
 	dc.b	$EC
@@ -55365,7 +55635,7 @@ loc_2D94C:
 loc_2D9D0:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Long ago, this castle of Frotrahn was"
+	dc.b	"Long ago, this castle of Flotraan was"
 	dc.b	$F8
 	dc.b	"taken over by a robot army..."
 	dc.b	$EC
@@ -55403,9 +55673,9 @@ loc_2DA34:
 	dc.b	$EC
 	dc.b	"They say there was a small spaceship"
 	dc.b	$EC
-	dc.b	"there for going to Satellite, the blue"
+	dc.b	"there for going to Satellite, the Blue"
 	dc.b	$EC
-	dc.b	"moon... but where it's got to now..."
+	dc.b	"Moon... but who knows where it is now...?"
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -55456,9 +55726,9 @@ loc_2DB48:
 loc_2DB70:
 	dc.w	loc_2DBA4-GameScript
 	dc.b	$49, $00
-	dc.b	"It was me who caught Lune's sister,"
+	dc.b	"It was I who caught Lune's sister,"
 	dc.b	$F8
-	dc.b	"wandering about in a daze!"
+	dc.b	"who was wandering around aimlessly!"
 	dc.b	$FC
 	
 	even
@@ -55466,7 +55736,7 @@ loc_2DB70:
 loc_2DBA4:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"I don't know anything! It wasn't me"
+	dc.b	"I don't know anything! I wasn't the one"
 	dc.b	$F8
 	dc.b	"who captured Luise..."
 	dc.b	$FC
@@ -55498,7 +55768,7 @@ loc_2DC28:
 	dc.b	$49, $00
 	dc.b	"If not for Orakio's law, \IYou must not"
 	dc.b	$F8
-	dc.b	"kill,\I I'd have that Luise...!"
+	dc.b	"kill,\I then someone like that Luise would...!"
 	dc.b	$FC
 	
 	even
@@ -55506,7 +55776,7 @@ loc_2DC28:
 loc_2DC54:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Will Lune keep Laia's law,"
+	dc.b	"Will Lune uphold Laia's law,"
 	dc.b	$F8
 	dc.b	"\IYou must not kill,\I I wonder..."
 	dc.b	$FC
@@ -55531,9 +55801,7 @@ loc_2DC7A:
 	
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Rulakir has returned! He"
-	dc.b	$F8
-	dc.b	"is Orakio's twin!"
+	dc.b	"Rulakir has returned! He is Orakio's twin!"
 	dc.b	$FC
 	
 	align 2
@@ -55541,9 +55809,7 @@ loc_2DC7A:
 loc_2DD10:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Oh, isn't that a"
-	dc.b	$F8
-	dc.b	"Searren-type robot!"
+	dc.b	"Oh, isn't that a Searren-type robot?!"
 	dc.b	$EC
 	dc.b	"With Submarine Parts it dives underwater,"
 	dc.b	$EC
@@ -55573,15 +55839,15 @@ loc_2DDA0:
 loc_2DE32:
 	dc.w	loc_2DEEE-GameScript
 	dc.b	$28, $00
-	dc.b	"LYLE \IAin... Look at me, the one they"
+	dc.b	"LYLE \IAin... They once called me the dragon"
 	dc.b	$F8
-	dc.b	"called the dragon knight..."
+	dc.b	"knight, and now look at me..."
 	dc.b	$EC
-	dc.b	"I beg you, Ain! Save my daughter; she"
+	dc.b	"I beg you, Ain! Save my daughter... she"
 	dc.b	$EC
 	dc.b	"was carried off to the eastern world!"
 	dc.b	$EC
-	dc.b	"Getting hold of the key to the eastern"
+	dc.b	"Getting ahold of the key to the eastern"
 	dc.b	$EC
 	dc.b	"world was all I could manage..."
 	dc.b	$EC
@@ -55629,7 +55895,7 @@ loc_2DFAA:
 	dc.b	$28, $00
 	dc.b	"KEIN \IAin! Grant Lyle's wish..."
 	dc.b	$F8
-	dc.b	"my dearest friend's wish!\I"
+	dc.b	"grant the wish of my dearest friend!\I"
 	dc.b	$FC
 	
 	even
@@ -55715,7 +55981,7 @@ loc_2E140:
 	dc.b	$FF, $00
 	dc.b	"Lord Lyle was gravely wounded."
 	dc.b	$F8
-	dc.b	"I'm afraid he doesn't have long..."
+	dc.b	"Alas, I'm afraid he doesn't have long..."
 	dc.b	$FC
 	
 	even
@@ -55731,7 +55997,7 @@ loc_2E174:
 	dc.b	$EC
 	dc.b	"by the robots."
 	dc.b	$EC
-	dc.b	"The people were scattered too..."
+	dc.b	"Citizens were also scattered far and wide..."
 	dc.b	$FC
 	
 	align 2
@@ -55781,9 +56047,7 @@ loc_2E1AA:
 	dc.b	$EC
 	dc.b	"was carried off by the robot army,"
 	dc.b	$EC
-	dc.b	"and Lord Lyle went all alone"
-	dc.b	$EC
-	dc.b	"to win her back..."
+	dc.b	"and Lord Lyle went all alone to rescue her..."
 	dc.b	$FC
 	
 	even
@@ -55816,11 +56080,11 @@ loc_2E2FA:
 	dc.b	$FF, $00
 	dc.b	"Somebody somewhere went and called"
 	dc.b	$F8
-	dc.b	"the Violet Moon back."
+	dc.b	"the Purple Moon back."
 	dc.b	$EC
-	dc.b	"And so Lune, who was sleeping on the"
+	dc.b	"And so Lune, who was slumbering on the"
 	dc.b	$EC
-	dc.b	"Violet Moon, woke up."
+	dc.b	"Purple Moon, woke up."
 	dc.b	$EC
 	dc.b	"What a truly foolish thing to do!"
 	dc.b	$FC
@@ -55860,11 +56124,11 @@ loc_2E40A:
 	dc.b	$FF, $00
 	dc.b	"Orakio banished Lune and Luise, who lived"
 	dc.b	$F8
-	dc.b	"on the Violet Moon, moon and all, but Lune"
+	dc.b	"on the Purple Moon, along with the moon"
 	dc.b	$EC
-	dc.b	"swore revenge and went into frozen"
+	dc.b	"itself, but Lune swore revenge and went into"
 	dc.b	$EC
-	dc.b	"sleep, taking Luise with him!"
+	dc.b	"cryosleep, taking Luise with him!"
 	dc.b	$FC
 	
 	even
@@ -55872,9 +56136,9 @@ loc_2E40A:
 loc_2E4A2:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Welcome to the wandering castle of"
+	dc.b	"WELCOME TO THE WANDERING CASTLE OF"
 	dc.b	$F8
-	dc.b	"Crancrea, you of Orakio's and Laia's blood."
+	dc.b	"CRANCLAIR, KIN OF ORAKIO AND LAIA."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -55882,9 +56146,9 @@ loc_2E4A2:
 loc_2E4D0:
 	dc.w	loc_2E4FE-GameScript
 	dc.b	$E6, $00
-	dc.b	"Please do not take my"
+	dc.b	"PLEASE DO NOT TAKE MY"
 	dc.b	$F8
-	dc.b	"masters from me..."
+	dc.b	"MASTERS FROM ME..."
 	dc.b	$FC
 	
 	even
@@ -55892,7 +56156,7 @@ loc_2E4D0:
 loc_2E4FE:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Already, my masters' lives too..."
+	dc.b	"ALREADY, MY MASTERS' LIVES TOO..."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -55912,9 +56176,7 @@ loc_2E52A:
 loc_2E590:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Well done; you have obtained"
-	dc.b	$F8
-	dc.b	"the lost name."
+	dc.b	"You have done well to obtain the lost name."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -55922,9 +56184,7 @@ loc_2E590:
 loc_2E5C0:
 	dc.w	loc_2E622-GameScript
 	dc.b	$E6, $00
-	dc.b	"The ultimate weapons bear"
-	dc.b	$F8
-	dc.b	"a special name!"
+	dc.b	"The ultimate weapons bear a special name!"
 	dc.b	$EC
 	dc.b	"So terrible were those weapons that"
 	dc.b	$EC
@@ -55938,11 +56198,11 @@ loc_2E622:
 	dc.b	$FF, $E7
 	dc.b	"Now, through the prayer we offer with our"
 	dc.b	$F8
-	dc.b	"lives, the ultimate weapons are born."
+	dc.b	"very lives, the ultimate weapons are borm."
 	dc.b	$EC
-	dc.b	"The legendary weapons have become"
+	dc.b	"The legendary weapons have transformed"
 	dc.b	$EC
-	dc.b	"the weapons that bear the name of Nei!"
+	dc.b	"into weapons that bear the name of Nei!"
 	dc.b	$FC
 ; -------------------------------------------------	
 	even
@@ -55962,7 +56222,7 @@ loc_2E64A:
 loc_2E6A2:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"It seems our task, too, is at an end"
+	dc.b	"It seems our task, too, is at an end."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -55972,7 +56232,7 @@ loc_2E6D0:
 	dc.b	$E6, $00
 	dc.b	"The legendary weapons are the ones the"
 	dc.b	$F8
-	dc.b	"heroes of old put their hearts into!"
+	dc.b	"heroes of old put their very souls into!"
 	dc.b	$EC
 	dc.b	"Orakio's Sword, the Miun Claw,"
 	dc.b	$EC
@@ -55980,7 +56240,7 @@ loc_2E6D0:
 	dc.b	$EC
 	dc.b	"Laia's Bow and the Lune Slicer:"
 	dc.b	$EC
-	dc.b	"those five!"
+	dc.b	"those are the five!"
 	dc.b	$FC
 	
 	even
@@ -56002,19 +56262,19 @@ loc_2E788:
 	dc.b	$F8
 	dc.b	"meaning \Ia weapon, yet not a weapon,\I"
 	dc.b	$EC
-	dc.b	"is sealed on the Isle of the Sage, in the"
+	dc.b	"is sealed on the Isle of Sages, in the"
 	dc.b	$EC
 	dc.b	"world where the Laian kingdoms your"
 	dc.b	$EC
 	dc.b	"grandfather once visited stood!"
 	dc.b	$EC
-	dc.b	"To reach the Isle of the Sage you will need"
+	dc.b	"To reach the Isle of Sages you will need"
 	dc.b	$EC
 	dc.b	"the ancient machine on the floor below,"
 	dc.b	$EC
-	dc.b	"but can you fetch it?"
+	dc.b	"but can you retrieve it?"
 	dc.b	$EC
-	dc.b	"If you are confident, then go."
+	dc.b	"If you have the confidence, then go."
 	dc.b	$FC
 	
 	even
@@ -56022,9 +56282,7 @@ loc_2E788:
 loc_2E874:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Equip the Nei-series weapons"
-	dc.b	$F8
-	dc.b	"you carry!"
+	dc.b	"Equip the Nei-series weapons you carry!"
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -56108,7 +56366,7 @@ loc_2E9BE:
 loc_2EA1E:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Welcome to the north town"
+	dc.b	"Welcome to the northern town"
 	dc.b	$F8
 	dc.b	"of glorious Grandirecta!"
 	dc.b	$FC
@@ -56120,7 +56378,7 @@ loc_2EA40:
 	dc.b	$FF, $00
 	dc.b	"On the other side of the castle lies"
 	dc.b	$F8
-	dc.b	"the south town of Grandirecta."
+	dc.b	"the southern half of Grandirecta."
 	dc.b	$EC
 	dc.b	"Leave from there and cross the river,"
 	dc.b	$EC
@@ -56136,7 +56394,7 @@ loc_2EA9C:
 	dc.b	$F8
 	dc.b	"to the west, who set this ship's course."
 	dc.b	$EC
-	dc.b	"With the treasure of Laia, you could"
+	dc.b	"With the 'Treasure of Laia', you could"
 	dc.b	$EC
 	dc.b	"cross over to that village."
 	dc.b	$FC
@@ -56164,7 +56422,7 @@ loc_2EACA:
 loc_2EBAE:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Welcome to Pilotta, the guiding village,"
+	dc.b	"Welcome to Pilotta, village of guidance,"
 	dc.b	$F8
 	dc.b	"keeper of the lost technology."
 	dc.b	$FC
@@ -56176,7 +56434,7 @@ loc_2EBD4:
 	dc.b	$FF, $00
 	dc.b	"Lune's stronghold is on a satellite:"
 	dc.b	$F8
-	dc.b	"the Violet Moon in the sky."
+	dc.b	"the Purple Moon in the sky."
 	dc.b	$FC
 	
 	even
@@ -56184,9 +56442,9 @@ loc_2EBD4:
 loc_2EC08:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"You want to go to Satellite, the Violet"
+	dc.b	"You wish to go to the Purple Moon satellite?"
 	dc.b	$F8
-	dc.b	"Moon? Then use the rocket underground."
+	dc.b	"Then use the rocket underground."
 	dc.b	$EC
 	dc.b	"At the end of this town's footpath is a"
 	dc.b	$EC
@@ -56198,9 +56456,9 @@ loc_2EC08:
 loc_2EC68:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Once, the two satellites, the Blue Moon"
+	dc.b	"Long ago, the two satellites, the Blue Moon"
 	dc.b	$F8
-	dc.b	"and the Violet Moon, were artificial"
+	dc.b	"and the Purple Moon, were artificial"
 	dc.b	$EC
 	dc.b	"satellites orbiting this world,"
 	dc.b	$EC
@@ -56212,7 +56470,7 @@ loc_2EC68:
 loc_2ECC0:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"You shall learn the true form of"
+	dc.b	"You are about to learn the true form of"
 	dc.b	$F8
 	dc.b	"our world, the Alisa III!"
 	dc.b	$FC
@@ -56228,11 +56486,11 @@ loc_2ECF4:
 	dc.b	$EC
 	dc.b	"You want to go to Lune's satellite,"
 	dc.b	$EC
-	dc.b	"the Violet Moon?"
+	dc.b	"the Purple Moon?"
 	dc.b	$EC
-	dc.b	"At the end of the footpath south of the"
+	dc.b	"The end of the path in the south of the"
 	dc.b	$EC
-	dc.b	"village is the entrance to the launch pad."
+	dc.b	"village leads to the rocket launch pad."
 	dc.b	$FC
 	
 	even
@@ -56284,9 +56542,9 @@ loc_2EE1A:
 loc_2EEA4:
 	dc.w	loc_2EF0A-GameScript
 	dc.b	$1B, $00
-	dc.b	"The beam that struck Satellite, the Blue"
+	dc.b	"The beam that struck the Blue Moon Satellite"
 	dc.b	$F8
-	dc.b	"Moon, came from a dome that is supposed"
+	dc.b	"came from a dome that is supposed"
 	dc.b	$EC
 	dc.b	"to have no village or castle at all..."
 	dc.b	$FC
@@ -56308,7 +56566,7 @@ loc_2EF3E:
 	dc.b	$FF, $00
 	dc.b	"Ahead on the spaceship's new course"
 	dc.b	$F8
-	dc.b	"there's nothing at all, just empty space.."
+	dc.b	"there's nothing at all, just empty space..."
 	dc.b	$FC
 	
 	even
@@ -56320,11 +56578,9 @@ loc_2EF6A:
 	dc.b	$F8
 	dc.b	"spaceship off its course..."
 	dc.b	$EC
-	dc.b	"Judging from the dream you saw, esper"
+	dc.b	"Since you're an esper, judging from your"
 	dc.b	$EC
-	dc.b	"that you are, what lies ahead of us"
-	dc.b	$EC
-	dc.b	"is a black hole..."
+	dc.b	"dream, what lies ahead is a black hole..."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -56332,9 +56588,9 @@ loc_2EF6A:
 loc_2EFCC:
 	dc.w	loc_2EFF8-GameScript
 	dc.b	$1B, $00
-	dc.b	"The explosion of Satellite, the Blue"
+	dc.b	"The explosion of the Blue Moon Satellite"
 	dc.b	$F8
-	dc.b	"Moon, was a terrible thing to see..."
+	dc.b	"was a terrible thing to see..."
 	dc.b	$FC
 	
 	even
@@ -56354,7 +56610,7 @@ loc_2F056:
 	dc.b	$FF, $00
 	dc.b	"We tried to change course, but some"
 	dc.b	$F8
-	dc.b	"power is getting in the way!"
+	dc.b	"force is interfering!"
 	dc.b	$EC
 	dc.b	"We have no means of removing"
 	dc.b	$EC
@@ -56368,7 +56624,7 @@ loc_2F0B4:
 	dc.b	$1D, $00
 	dc.b	"We tried to change course, but some"
 	dc.b	$F8
-	dc.b	"power is getting in the way!"
+	dc.b	"force is interfering!"
 	dc.b	$EC
 	dc.b	"We have no means of removing"
 	dc.b	$EC
@@ -56392,7 +56648,7 @@ loc_2F13E:
 	dc.b	$1C, $00
 	dc.b	"The Alisa III is headed right into the"
 	dc.b	$F8
-	dc.b	"middle of the sun. Gonna be hot, I bet..."
+	dc.b	"middle of the sun. It must be scorching..."
 	dc.b	$FC
 	
 	even
@@ -56400,11 +56656,11 @@ loc_2F13E:
 loc_2F16E:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Well, whichever way we go, it's much"
+	dc.b	"Well, whichever way we go, it's pretty much"
 	dc.b	$F8
-	dc.b	"the same! The ship's helm won't even"
+	dc.b	"the same! The ship's controls won't respond,"
 	dc.b	$EC
-	dc.b	"answer, for some reason..."
+	dc.b	"for some reason..."
 	dc.b	$FC
 	
 	even
@@ -56424,9 +56680,7 @@ loc_2F19C:
 loc_2F1CE:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"People call this place"
-	dc.b	$F8
-	dc.b	"the Isle of the Sage..."
+	dc.b	"People call this place the Isle of Sages..."
 	dc.b	$FC
 	
 	even
@@ -56454,9 +56708,9 @@ loc_2F252:
 loc_2F282:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"They say that in the purest of places,"
+	dc.b	"It is said that in the purest of places,"
 	dc.b	$F8
-	dc.b	"the most defiled of things is born..."
+	dc.b	"the most defiled things are born..."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -56484,7 +56738,7 @@ loc_2F364:
 	dc.b	$FF, $00
 	dc.b	"Orakio's twin brother..."
 	dc.b	$F8
-	dc.b	"Pitifully, he has been stained by evil..."
+	dc.b	"Tragically, he has been corrupted by evil..."
 	dc.b	$FC
 ; -------------------------------------------------
 	even
@@ -56494,9 +56748,9 @@ loc_2F394:
 	dc.b	$E9, $00
 	dc.b	"Once there were those who bore the five"
 	dc.b	$F8
-	dc.b	"weapons that are the token for breaking"
+	dc.b	"weapons that are the keys to breaking"
 	dc.b	$EC
-	dc.b	"this seal. But they split into two camps,"
+	dc.b	"this seal. But they split into two factions,"
 	dc.b	$EC
 	dc.b	"and the weapons were scattered all over..."
 	dc.b	$FC
@@ -56526,7 +56780,7 @@ loc_2F41E:
 loc_2F44E:
 	dc.w	loc_2F484-GameScript
 	dc.b	$E9, $00
-	dc.b	"If you would break this seal and learn"
+	dc.b	"If you wish to break this seal and learn"
 	dc.b	$F8
 	dc.b	"the lost word, then gather the legendary"
 	dc.b	$EC
@@ -56540,18 +56794,18 @@ loc_2F44E:
 loc_2F484:
 	dc.w	loc_2F4E0-GameScript
 	dc.b	$E6, $E6
-	dc.b	"Listen well! I now break the seal!"
+	dc.b	"Listen well! I shall now break the seal!"
 	dc.b	$F8
-	dc.b	"\IA weapon, yet no weapon of this world...\I"
+	dc.b	"\IA weapon, yet not a weapon of this world...\I"
 	dc.b	$EC
 	dc.b	"Brought into this world for"
 	dc.b	$EC
-	dc.b	"a single instant's brilliance..."
+	dc.b	"a fleeting moment of brilliance..."
 	dc.b	$EC
 	dc.b	"Its name is \INei\I..."
 	dc.b	$EC
 	dc.b	$EC
-	dc.b	"...The beautiful word of old lived"
+	dc.b	"...The beautiful ancient word lives"
 	dc.b	$EC
 	dc.b	"again, and through its power,"
 	dc.b	$EC
@@ -56563,7 +56817,7 @@ loc_2F484:
 loc_2F4E0:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"And now the history of a thousand"
+	dc.b	"And with this, the history of a thousand"
 	dc.b	$F8
 	dc.b	"years ago repeats itself!"
 	dc.b	$FC
@@ -56595,19 +56849,19 @@ loc_2F568:
 	dc.b	$F8
 	dc.b	"from its seal!"
 	dc.b	$EC
-	dc.b	"Thanks to you, I too can show"
+	dc.b	"Thanks to you, I can now manifest"
 	dc.b	$EC
 	dc.b	"myself in this world!"
 	dc.b	$EC
-	dc.b	"In thanks, I shall destroy you,"
+	dc.b	"In return, I shall destroy you,"
 	dc.b	$EC
-	dc.b	"world and all! Ha ha ha ha ha!!\I"
+	dc.b	"along with this world! Ha ha ha ha ha!!\I"
 	dc.b	$EC
 	dc.b	"You released the name \IDark Falz\I"
 	dc.b	$EC
 	dc.b	"and revived an evil power."
 	dc.b	$EC
-	dc.b	"In rage and despair, you mastered"
+	dc.b	"In your rage and despair, you mastered"
 	dc.b	$EC
 	dc.b	"the ultimate technique of destruction:"
 	dc.b	$EC
@@ -56623,23 +56877,23 @@ loc_2F62A:
 	dc.b	$F8
 	dc.b	"at Lord Orakio's side, but Laia"
 	dc.b	$EC
-	dc.b	"shut me away on Satellite."
+	dc.b	"locked me away on that satellite."
 	dc.b	$EC
 	dc.b	"I swore revenge on Laia."
 	dc.b	$EC
-	dc.b	"When Satellite drew near, I had my"
+	dc.b	"When the satellite drew near, I had my"
 	dc.b	$EC
-	dc.b	"chance at last, and I went on killing"
+	dc.b	"chance at last, and I continued killing"
 	dc.b	$EC
 	dc.b	"Laia's people."
 	dc.b	$EC
-	dc.b	"Breaking Lord Orakio's law..."
+	dc.b	"I had broken Lord Orakio's law..."
 	dc.b	$EC
-	dc.b	"But here on the Isle of the Sage I"
+	dc.b	"But here on the Isle of Sages, I"
 	dc.b	$EC
 	dc.b	"learned who Lord Orakio's true enemy was."
 	dc.b	$EC
-	dc.b	"In the next world, I wish to beg"
+	dc.b	"In the afterlife, I wish to beg"
 	dc.b	$EC
 	dc.b	"forgiveness of Lord Orakio and Laia...\I"
 	dc.b	$FC
@@ -56667,7 +56921,7 @@ loc_2F700:
 	dc.b	$EC
 	dc.b	"You do not have the black sword!"
 	dc.b	$EC
-	dc.b	"Ah! Where is my Lord Orakio?"
+	dc.b	"Ah! Where is my Lord Orakio?\I"
 	dc.b	$FC
 	
 	even
@@ -56697,7 +56951,7 @@ loc_2F7CC:
 	dc.b	$EC
 	dc.b	"I am the man who sold his soul to"
 	dc.b	$EC
-	dc.b	"Dark Falz, the god of ruin..."
+	dc.b	"Dark Falz, the god of destruction..."
 	dc.b	$EC
 	dc.b	"Do you understand why"
 	dc.b	$EC
@@ -56709,7 +56963,7 @@ loc_2F7CC:
 	dc.b	$EC
 	dc.b	"And I thought, then:"
 	dc.b	$EC
-	dc.b	"I have no need of the world! Let it perish!\I"
+	dc.b	"I have no need of the world! Let it find ruin!\I"
 	dc.b	$FC
 	
 	align 2
@@ -56719,9 +56973,9 @@ loc_2F85C:
 	dc.b	$FF, $00
 	dc.b	"RULAKIR \IDo you truly believe so"
 	dc.b	$F8
-	dc.b	"strongly that happiness exists..."
+	dc.b	"strongly that happiness exists...?"
 	dc.b	$EC
-	dc.b	"Then go on ahead, and destroy"
+	dc.b	"Then proceed further, and destroy"
 	dc.b	$EC
 	dc.b	"the god of evil..."
 	dc.b	$EC
@@ -56729,9 +56983,9 @@ loc_2F85C:
 	dc.b	$EC
 	dc.b	"you who bear my brother's blood!\I"
 	dc.b	$EC
-	dc.b	"Rulakir went on to the world where"
+	dc.b	"Rulakir departed for the world where"
 	dc.b	$EC
-	dc.b	"his wife and child were waiting..."
+	dc.b	"his wife and child awaited him..."
 	dc.b	$FC
 	
 	align 2
@@ -56748,7 +57002,7 @@ loc_2F8D4:
 	dc.b	$FF, $00
 	dc.b	"DARK FALZ \II am Dark Falz!"
 	dc.b	$F8
-	dc.b	"I was brought forth for ruin!"
+	dc.b	"That which is summoned to bring about ruin!"
 	dc.b	$FC
 	
 	even
@@ -56758,7 +57012,7 @@ loc_2F906:
 	dc.b	$FF, $00
 	dc.b	"The anger, the suffering, the sorrow of"
 	dc.b	$F8
-	dc.b	"people... these are my delight!"
+	dc.b	"people... these are my joy!"
 	dc.b	$FC
 	
 	even
@@ -56776,9 +57030,9 @@ loc_2F938:
 loc_2F96A:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"You too shall die in agony"
+	dc.b	"You, too, shall die in agony"
 	dc.b	$F8
-	dc.b	"within my arms!\I"
+	dc.b	"within my clutches!\I"
 	dc.b	$FC
 	
 	align 2
@@ -56788,9 +57042,9 @@ loc_2F99A:
 	dc.b	$FF, $00
 	dc.b	"DARK FALZ \IThis time, I shall be content"
 	dc.b	$F8
-	dc.b	"with having erased one Satellite..."
+	dc.b	"with having erased one satellite..."
 	dc.b	$EC
-	dc.b	"But I am a demon lord who gains life"
+	dc.b	"But I am a demon lord who rises anew"
 	dc.b	$EC
 	dc.b	"once every thousand years..."
 	dc.b	$EC
@@ -56808,17 +57062,17 @@ loc_2FA74:
 	dc.b	$FF, $00
 	dc.b	"DARK FALZ \II meant for your peaceful"
 	dc.b	$F8
-	dc.b	"world to burn up in the sun, but"
+	dc.b	"world to be incinerated by the sun, but"
 	dc.b	$EC
 	dc.b	"no matter! I am a demon lord who gains"
 	dc.b	$EC
-	dc.b	"life once every thousand years..."
+	dc.b	"new life once every thousand years..."
 	dc.b	$EC
 	dc.b	"I shall sleep once more, and look"
 	dc.b	$EC
-	dc.b	"forward to my next chance...\I"
+	dc.b	"forward to my next opportunity...\I"
 	dc.b	$EC
-	dc.b	"Dark Falz vanished"
+	dc.b	"Dark Falz vanished!"
 	dc.b	$FC
 	
 	even
@@ -56826,20 +57080,20 @@ loc_2FA74:
 loc_2FB1A:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"DARK FALZ \IA pity!"
+	dc.b	"DARK FALZ \IWhat a pity!"
 	dc.b	$F8
 	dc.b	$EC
 	dc.b	"A little more time, and I could have"
 	dc.b	$EC
-	dc.b	"dropped you into the black hole!"
+	dc.b	"plunged you into the black hole!"
 	dc.b	$EC
 	dc.b	"...But no matter..."
 	dc.b	$EC
-	dc.b	"I am reborn every thousand years!"
+	dc.b	"I shall revive every thousand years!"
 	dc.b	$EC
-	dc.b	"This ship, the only one left, I shall"
+	dc.b	"I'll save this last remaining ship as my"
 	dc.b	$EC
-	dc.b	"save as my next amusement.\I"
+	dc.b	"next amusement.\I"
 	dc.b	$EC
 	dc.b	"Dark Falz vanished!"
 	dc.b	$FC
@@ -56857,19 +57111,19 @@ loc_2FB98:
 	dc.b	$EC
 	dc.b	"that set the last two spaceships against"
 	dc.b	$EC
-	dc.b	"each other, destroyed one, and bent"
+	dc.b	"each other, destroyed one, and disrupted"
 	dc.b	$EC
 	dc.b	"the other's course!"
 	dc.b	$EC
 	dc.b	"But do you know where I have"
 	dc.b	$EC
-	dc.b	"sent this ship?"
+	dc.b	"steered this ship?"
 	dc.b	$EC
-	dc.b	"Into the unseen pitfall, the black hole!"
+	dc.b	"Into the cosmic unseen pit, a black hole!"
 	dc.b	$EC
 	dc.b	"That is this ship's destination!\I"
 	dc.b	$EC
-	dc.b	"Dark Falz vanished"
+	dc.b	"Dark Falz vanished!"
 	dc.b	$FC
 	
 	even
@@ -56877,13 +57131,13 @@ loc_2FB98:
 loc_2FC74:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"LUNA \IFather has lost all"
+	dc.b	"LUNA \ILord father has lost all"
 	dc.b	$F8
 	dc.b	"of his strength..."
 	dc.b	$EC
-	dc.b	"But I too am a daughter of the house of"
+	dc.b	"But as his daughter, I, too, am of the Eshyr"
 	dc.b	$EC
-	dc.b	"Eshyr, warriors for generations!"
+	dc.b	"clan, warriors for generations!"
 	dc.b	$EC
 	dc.b	"I shall atone for my father's"
 	dc.b	$EC
@@ -56899,7 +57153,7 @@ loc_2FC74:
 loc_2FCEA:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"One day, without warning, the peaceful"
+	dc.b	"One day, without warning, in the peaceful"
 	dc.b	$F8
 	dc.b	"great hall of Riik Castle..."
 	dc.b	$FC
@@ -56921,7 +57175,7 @@ loc_2FD46:
 	dc.b	$F8
 	dc.b	"that earthquake!"
 	dc.b	$EC
-	dc.b	"What can have happened"
+	dc.b	"What could have happened"
 	dc.b	$EC
 	dc.b	"to this spaceship..."
 	dc.b	$EC
@@ -56937,7 +57191,7 @@ loc_2FDA8:
 	dc.b	$FF, $00
 	dc.b	"LAIA \IBrother Fuin! That earthquake just"
 	dc.b	$F8
-	dc.b	"now was no ordinary thing!"
+	dc.b	"now was no ordinary tremor!"
 	dc.b	$EC
 	dc.b	"It may have something to do with my"
 	dc.b	$EC
@@ -56959,11 +57213,11 @@ loc_2FDEC:
 	dc.b	$F8
 	dc.b	"fire on each other..."
 	dc.b	$EC
-	dc.b	"I grew up in peace, never"
+	dc.b	"I grew up in times of peace,"
 	dc.b	$EC
-	dc.b	"taught how to fight..."
+	dc.b	"and was never taught how to fight..."
 	dc.b	$EC
-	dc.b	"But I too am the daughter"
+	dc.b	"Nevertheless, I am the daughter"
 	dc.b	$EC
 	dc.b	"of Lune Kay Eshyr."
 	dc.b	$EC
@@ -56971,7 +57225,7 @@ loc_2FDEC:
 	dc.b	$EC
 	dc.b	"fulfill his duties as king, I will"
 	dc.b	$EC
-	dc.b	"join you on your journey of discovery.\I"
+	dc.b	"join you on your quest.\I"
 	dc.b	$EC
 	dc.b	"Princess Luna joined the party!"
 	dc.b	$FC
@@ -56993,17 +57247,15 @@ loc_2FEBC:
 	dc.b	$FF, $00
 	dc.b	"Back when I was searching for the"
 	dc.b	$F8
-	dc.b	"treasure of Laia, I heard that in the"
+	dc.b	"'Treasure of Laia', I heard that in the"
 	dc.b	$EC
 	dc.b	"world of snow there are people"
 	dc.b	$EC
 	dc.b	"of great knowledge."
 	dc.b	$EC
-	dc.b	"Those people might just"
+	dc.b	"Those people might just know something..."
 	dc.b	$EC
-	dc.b	"know something..."
-	dc.b	$EC
-	dc.b	"There are robot parts below here; with"
+	dc.b	"There are robot parts below here, and with"
 	dc.b	$EC
 	dc.b	"them, I think you could get there."
 	dc.b	$FC
@@ -57013,7 +57265,7 @@ loc_2FEBC:
 loc_2FF4C:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Lady Laia, who once travelled with Lord"
+	dc.b	"Lady Laia, who once traveled with Lord"
 	dc.b	$F8
 	dc.b	"Lein, has gone back to sleep, but why not"
 	dc.b	$EC
@@ -57041,15 +57293,13 @@ loc_2FFAA:
 loc_2FFDA:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"Oh! I cannot believe"
-	dc.b	$F8
-	dc.b	"what I saw!"
+	dc.b	"Oh! I cannot believe what I saw!"
 	dc.b	$EC
 	dc.b	"A ship exactly the same shape"
 	dc.b	$EC
 	dc.b	"as this one appeared."
 	dc.b	$EC
-	dc.b	"Then they fired beam cannons at each"
+	dc.b	"Then we fired beam cannons at each"
 	dc.b	$EC
 	dc.b	"other, and the other ship was reduced"
 	dc.b	$EC
@@ -57109,9 +57359,9 @@ loc_30154:
 loc_301B2:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"SEARREN \IThe explosion of Megid is"
+	dc.b	"SEARREN \IThe explosion from Megid is"
 	dc.b	$F8
-	dc.b	"bringing down the city in the sky!\I"
+	dc.b	"bringing down this floating city!\I"
 	dc.b	$EC
 	dc.b	"LUNA \IHurry!"
 	dc.b	$EC
@@ -57129,7 +57379,7 @@ loc_3023E:
 	dc.b	$FF, $00
 	dc.b	"MIEU \IDon't make the people I love"
 	dc.b	$F8
-	dc.b	"suffer any more!\I"
+	dc.b	"suffer anymore!\I"
 	dc.b	$EC
 	dc.b	"Mieu's heartfelt wish unleashed"
 	dc.b	$EC
@@ -57137,7 +57387,7 @@ loc_3023E:
 	dc.b	$EC
 	dc.b	"By the power of Grantz, Mieu and the"
 	dc.b	$EC
-	dc.b	"others teleported out of the sky city!"
+	dc.b	"others teleported out of the aerial city!"
 	dc.b	$FC
 	
 	even
@@ -57145,7 +57395,7 @@ loc_3023E:
 loc_302CA:
 	dc.w	0
 	dc.b	$FF, $00
-	dc.b	"The sky city of the evil ones"
+	dc.b	"The floating city of the evil one"
 	dc.b	$F8
 	dc.b	"sank to the bottom of the lake..."
 	dc.b	$FC
@@ -57185,9 +57435,9 @@ loc_303C0:
 	dc.b	$EC
 	dc.b	"as our own.....\I"
 	dc.b	$EC
-	dc.b	"LUNA \ICould it be the other surviving"
+	dc.b	"LUNA \ICould it be the last surviving"
 	dc.b	$EC
-	dc.b	"ship of the fleet, down to just two?\I"
+	dc.b	"ship besides ours?\I"
 	dc.b	$EC
 	dc.b	"SEARREN \IA transmission is coming in"
 	dc.b	$EC
@@ -57207,7 +57457,7 @@ loc_3044E:
 	dc.b	$EC
 	dc.b	"Were we too late?\I"
 	dc.b	$EC
-	dc.b	"LUNA \IYou pilots!"
+	dc.b	"LUNA \IHey, you pilots!"
 	dc.b	$EC
 	dc.b	"Change course, quickly!\I"
 	dc.b	$FC
@@ -57235,7 +57485,7 @@ loc_3052C:
 	dc.b	$EC
 	dc.b	"LAIA \IThe black hole..."
 	dc.b	$EC
-	dc.b	"The pitfall of darkness is receding...\I"
+	dc.b	"The pit of darkness... is receding...\I"
 	dc.b	$EC
 	dc.b	"LUNA \IThe people of Pilotta"
 	dc.b	$EC
@@ -57255,7 +57505,7 @@ loc_305CE:
 	dc.b	$FF, $00
 	dc.b	"MIEU \ILook at the sky! Luin!\I"
 	dc.b	$EC
-	dc.b	"LAIA \IThe ship... into the black hole..."
+	dc.b	"LAIA \IThe black hole... our ship is..."
 	dc.b	$EC
 	dc.b	"It's... all over....\I"
 	dc.b	$FC
@@ -57341,15 +57591,15 @@ loc_307D2:
 	dc.b	$F8
 	dc.b	"of a planet called Palma..."
 	dc.b	$EC
-	dc.b	"Palma, once said to shine most"
+	dc.b	"Palma, once said to shine the most"
 	dc.b	$EC
-	dc.b	"beautifully of all the Algol system..."
+	dc.b	"beautifully in all the Algol star system..."
 	dc.b	$EC
 	dc.b	"Its people asked no more than their"
 	dc.b	$EC
 	dc.b	"loved ones gave, and gave more than"
 	dc.b	$EC
-	dc.b	"their loved ones asked.."
+	dc.b	"their loved ones asked..."
 	dc.b	$EC
 	dc.b	"That was the joy of the people of Palma..."
 	dc.b	$EC
@@ -57443,17 +57693,17 @@ loc_30A9E:
 	dc.b	$EC
 	dc.b	"The 400 spaceships tried to flee"
 	dc.b	$EC
-	dc.b	"from the evil power."
+	dc.b	"from the Malevolent Force."
 	dc.b	$EC
-	dc.b	"But a part of the evil power had"
+	dc.b	"But a part of the Malevolent Force had"
 	dc.b	$EC
-	dc.b	"already slipped aboard our ships."
+	dc.b	"already infiltrated our ships."
 	dc.b	$EC
-	dc.b	"And so they perished, one ship after"
+	dc.b	"And so they were destroyed, one ship after"
 	dc.b	$EC
-	dc.b	"another, until by the age of Orakio"
+	dc.b	"another, until by the Era of Orakio"
 	dc.b	$EC
-	dc.b	"and Laia only two were left: this"
+	dc.b	"and Laia, only two were left: this"
 	dc.b	$EC
 	dc.b	"Alisa III, and the Neo Palma..."
 	dc.b	$FC
@@ -57553,19 +57803,19 @@ loc_30CD8:
 	even
 	
 loc_30CF0:
-	dc.b	"kin lost 1,000 years..."
+	dc.b	"kin lost for 1,000 years..."
 	dc.b	$FC
 	
 	even
 	
 loc_30D08:
-	dc.b	"..This is the pilot room"
+	dc.b	"...This is the pilot room"
 	dc.b	$FC
 	
 	align 2
 	
 loc_30D20:
-	dc.b	"of the ship Neo Palma..."
+	dc.b	"of the ship \INeo Palma\I..."
 	dc.b	$FC
 	
 	even
@@ -57595,37 +57845,37 @@ loc_30D82:
 	even
 	
 loc_30D98:
-	dc.b	"Was that the blast......"
+	dc.b	"Was that the reason......?"
 	dc.b	$FC
 	
 	align 2
 	
 loc_30DB2:
-	dc.b	"...Still, we rejoice to"
+	dc.b	"...In any case, we rejoice at"
 	dc.b	$FC
 	
 	even
 	
 loc_30DC8:
-	dc.b	"find friends once more"
+	dc.b	"having reunited with friends once more"
 	dc.b	$FC
 	
 	align 2
 	
 loc_30DDE:
-	dc.b	"in this vast space."
+	dc.b	"in the vastness of space."
 	dc.b	$FC
 	
 	even
 	
 loc_30DF6:
-	dc.b	"...Together, let us live"
+	dc.b	"...Let us continue to live for the next"
 	dc.b	$FC
 	
 	even
 	
 loc_30E0E:
-	dc.b	"1,000 years more."
+	dc.b	"1,000 years of our journey, together."
 	dc.b	$FC
 	
 	even
@@ -57643,13 +57893,13 @@ loc_30E36:
 	even
 	
 loc_30E4C:
-	dc.b	"...Our thanks for ending"
+	dc.b	"...Our thanks for defeating"
 	dc.b	$FC
 	
 	even
 	
 loc_30E66:
-	dc.b	"the power that blocked"
+	dc.b	"the force that blocked"
 	dc.b	$FC
 	
 	even
@@ -57661,7 +57911,7 @@ loc_30E7C:
 	even
 	
 loc_30E94:
-	dc.b	"...We find this system"
+	dc.b	"...We learned this system"
 	dc.b	$FC
 	
 	even
@@ -57679,19 +57929,19 @@ loc_30EC2:
 	even
 	
 loc_30EDC:
-	dc.b	"for us to settle..."
+	dc.b	"for habitation..."
 	dc.b	$FC
 	
 	even
 	
 loc_30EF6:
-	dc.b	"...We head there now."
+	dc.b	"...We are heading there now."
 	dc.b	$FC
 	
 	align 2
 	
 loc_30F0E:
-	dc.b	"You can see it too!..."
+	dc.b	"You may be able to see it too!..."
 	dc.b	$FC
 	
 	even
@@ -57709,7 +57959,7 @@ loc_30F40:
 	even
 	
 loc_30F58:
-	dc.b	"...We have survived..."
+	dc.b	"...We survived..."
 	dc.b	$FC
 	
 	even
@@ -57727,13 +57977,13 @@ loc_30F7E:
 	even
 	
 loc_30F94:
-	dc.b	"...Our thanks for ending"
+	dc.b	"...Our thanks for defeating"
 	dc.b	$FC
 	
 	align 2
 	
 loc_30FAE:
-	dc.b	"the power that blocked"
+	dc.b	"the force that blocked"
 	dc.b	$FC
 	
 	align 2
@@ -57745,7 +57995,7 @@ loc_30FC4:
 	even
 	
 loc_30FDC:
-	dc.b	"...The evil is gone..."
+	dc.b	"...The evil power is gone..."
 	dc.b	$FC
 	
 	even
@@ -57763,31 +58013,31 @@ loc_3100A:
 	even
 	
 loc_31024:
-	dc.b	"new king of Alisa III..."
+	dc.b	"new king of the Alisa III..."
 	dc.b	$FC
 	
 	even
 	
 loc_3103E:
-	dc.b	"...Guide us through the"
+	dc.b	"...Guide us on our journey"
 	dc.b	$FC
 	
 	align 2
 	
 loc_31056:
-	dc.b	"coming 1,000 years...."
+	dc.b	"through the next 1,000 years...."
 	dc.b	$FC
 	
 	even
 	
 loc_3106E:
-	dc.b	"...On to Phantasy Star,"
+	dc.b	"Toward the Phantasy Star..."
 	dc.b	$FC
 	
 	even
 	
 loc_31084:
-	dc.b	"where no god envies"
+	dc.b	"where no god will envy"
 	dc.b	$FC
 	
 	even
@@ -57799,37 +58049,37 @@ loc_3109A:
 	even
 ; -----------------------------------------------------	
 loc_310B2:
-	dc.b	"...To the ship drawing"
+	dc.b	"...To the approaching ship"
 	dc.b	$FC
 	
 	even
 	
 loc_310CA:
-	dc.b	"near, origin unknown..."
+	dc.b	"from unknown origin:"
 	dc.b	$FC
 	
 	even
 	
 loc_310E0:
-	dc.b	"...We welcome you, folk"
+	dc.b	"Visitors from space..."
 	dc.b	$FC
 	
 	even
 	
 loc_310F4:
-	dc.b	"of space. Please reply."
+	dc.b	"...We welcome you."
 	dc.b	$FC
 	
 	even
 	
 loc_3110E:
-	dc.b	"...Earth Federation,"
+	dc.b	"Please respond to us..."
 	dc.b	$FC
 	
 	align 2
 	
 loc_31128:
-	dc.b	"London Comms Center..."
+	dc.b	" "
 	dc.b	$FC
 	
 	even
@@ -66209,7 +66459,7 @@ ItemName_LaconSwd:	dc.b	"Laconia Sword"
 	dc.b	$FC
 ItemName_RoyalSwd:	dc.b	"Emperor Sword"
 	dc.b	$FC
-ItemName_PlanarSwd:	dc.b	"Planar Sword"
+ItemName_PlanarSwd:	dc.b	"Dimension Sword"
 	dc.b	$FC
 ItemName_OrakioSwd:	dc.b	"Orakio's Sword"
 	dc.b	$FC
@@ -66261,7 +66511,7 @@ ItemName_NeiSlicr:	dc.b	"Nei Slicer"
 	dc.b	$FC
 ItemName_Claw:	dc.b	"Claw"
 	dc.b	$FC
-ItemName_HuntgClw:	dc.b	"Ailuros Claw"
+ItemName_HuntgClw:	dc.b	"Cat's Claw"
 	dc.b	$FC
 ItemName_SteelClw:	dc.b	"Lynx Claw"
 	dc.b	$FC
@@ -66269,11 +66519,11 @@ ItemName_CeramClw:	dc.b	"Ceramic Claw"
 	dc.b	$FC
 ItemName_LaserClw:	dc.b	"Laser Claw"
 	dc.b	$FC
-ItemName_ForceClw:	dc.b	"Lament Claw"
+ItemName_ForceClw:	dc.b	"LamentationClaw"
 	dc.b	$FC
 ItemName_LaconClw:	dc.b	"Laconia Claw"
 	dc.b	$FC
-ItemName_RoyalClw:	dc.b	"Panthera Claw"
+ItemName_RoyalClw:	dc.b	"Panther's Claw"
 	dc.b	$FC
 ItemName_PlanarClw:	dc.b	"Chaos Claw"
 	dc.b	$FC
@@ -66303,7 +66553,7 @@ ItemName_CeramShot:	dc.b	"Shotgun"
 	dc.b	$FC
 ItemName_LaserShot:	dc.b	"Cannon"
 	dc.b	$FC
-ItemName_LaconShot:	dc.b	"Grenade Gun"
+ItemName_LaconShot:	dc.b	"GrenadeLaunchr"
 	dc.b	$FC
 ItemName_Cannon:	dc.b	"Laser Shot"
 	dc.b	$FC
@@ -66531,7 +66781,7 @@ ItemName_LayaPndnt:	dc.b	"Laia Pendant"
 TechniqueData:
 
 Tech_Foi:
-	dc.b	"Foie"
+	dc.b	"Foi"
 	dc.b	$FC
 	dc.b	$00, $00, $00, $00, $40 ;0x0 (0x000398B4-0x000398B9, Entry count: 0x00000005) [Unknown data]
 	dc.b	$0A
@@ -66549,7 +66799,7 @@ Tech_Zan:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x000398CC-0x000398D0, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Gra:
-	dc.b	"Gravt"
+	dc.b	"Gra"
 	dc.b	$FC
 	dc.b	$00, $00, $00, $00, $40 ;0x0 (0x000398D4-0x000398D9, Entry count: 0x00000005) [Unknown data]
 	dc.b	$10
@@ -66558,7 +66808,7 @@ Tech_Gra:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x000398DC-0x000398E0, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Tsu:
-	dc.b	"Barta"
+	dc.b	"Tsu"
 	dc.b	$FC
 	dc.b	$00, $00, $00, $00, $40 ;0x0 (0x000398E4-0x000398E9, Entry count: 0x00000005) [Unknown data]
 	dc.b	$0E
@@ -66567,7 +66817,7 @@ Tech_Tsu:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x000398EC-0x000398F0, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Res:
-	dc.b	"Sun Force"
+	dc.b	"Res"
 	dc.b	$FC
 	dc.b	$00, $00, $00, $00, $C0 ;0x0 (0x000398F4-0x000398F9, Entry count: 0x00000005) [Unknown data]
 	dc.b	$02
@@ -66576,7 +66826,7 @@ Tech_Res:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x000398FC-0x00039900, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Gires:
-	dc.b	"Star Force"
+	dc.b	"Gires"
 	dc.b	$FC
 	dc.b	$00, $00, $C0 ;0x0 (0x00039906-0x00039909, Entry count: 0x00000003) [Unknown data]
 	dc.b	$04
@@ -66585,7 +66835,7 @@ Tech_Gires:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x0003990C-0x00039910, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Rever:
-	dc.b	"Moon Force"
+	dc.b	"Rever"
 	dc.b	$FC
 	dc.b	$00, $00, $C0 ;0x0 (0x00039916-0x00039919, Entry count: 0x00000003) [Unknown data]
 	dc.b	$06
@@ -66594,7 +66844,7 @@ Tech_Rever:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x0003991C-0x00039920, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Anti:
-	dc.b	"Sea Force"
+	dc.b	"Anti"
 	dc.b	$FC
 	dc.b	$00, $00, $00, $C0 ;0x0 (0x00039925-0x00039929, Entry count: 0x00000004) [Unknown data]
 	dc.b	$02
@@ -66603,7 +66853,7 @@ Tech_Anti:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x0003992C-0x00039930, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Ner:
-	dc.b	"Rising"
+	dc.b	"Ner"
 	dc.b	$FC
 	dc.b	$00, $00, $00, $00, $40 ;0x0 (0x00039934-0x00039939, Entry count: 0x00000005) [Unknown data]
 	dc.b	$02
@@ -66612,7 +66862,7 @@ Tech_Ner:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x0003993C-0x00039940, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Rimit:
-	dc.b	"Noon"
+	dc.b	"Rimit"
 	dc.b	$FC
 	dc.b	$00, $00, $40 ;0x0 (0x00039946-0x00039949, Entry count: 0x00000003) [Unknown data]
 	dc.b	$12
@@ -66621,7 +66871,7 @@ Tech_Rimit:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x0003994C-0x00039950, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Shiza:
-	dc.b	"Fall"
+	dc.b	"Shiza"
 	dc.b	$FC
 	dc.b	$00, $00, $40 ;0x0 (0x00039956-0x00039959, Entry count: 0x00000003) [Unknown data]
 	dc.b	$0A
@@ -66630,7 +66880,7 @@ Tech_Shiza:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x0003995C-0x00039960, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Deban:
-	dc.b	"Night"
+	dc.b	"Deban"
 	dc.b	$FC
 	dc.b	$00, $00, $40 ;0x0 (0x00039966-0x00039969, Entry count: 0x00000003) [Unknown data]
 	dc.b	$0A
@@ -66639,7 +66889,7 @@ Tech_Deban:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x0003996C-0x00039970, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Fanbi:
-	dc.b	"Law"
+	dc.b	"Fanbi"
 	dc.b	$FC
 	dc.b	$00, $00, $40 ;0x0 (0x00039976-0x00039979, Entry count: 0x00000003) [Unknown data]
 	dc.b	$02
@@ -66648,7 +66898,7 @@ Tech_Fanbi:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x0003997C-0x00039980, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Forsa:
-	dc.b	"Unbalance"
+	dc.b	"Forsa"
 	dc.b	$FC
 	dc.b	$00, $00, $40 ;0x0 (0x00039986-0x00039989, Entry count: 0x00000003) [Unknown data]
 	dc.b	$0A
@@ -66657,7 +66907,7 @@ Tech_Forsa:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x0003998C-0x00039990, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Nasak:
-	dc.b	"Balance"
+	dc.b	"Nasak"
 	dc.b	$FC
 	dc.b	$00, $00, $40 ;0x0 (0x00039996-0x00039999, Entry count: 0x00000003) [Unknown data]
 	dc.b	$04
@@ -66666,7 +66916,7 @@ Tech_Nasak:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x0003999C-0x000399A0, Entry count: 0x00000004) [Unknown data]
 	
 Tech_Shu:
-	dc.b	"Chaos"
+	dc.b	"Shu"
 	dc.b	$FC
 	dc.b	$00, $00, $00, $00, $40 ;0x0 (0x000399A4-0x000399A9, Entry count: 0x00000005) [Unknown data]
 	dc.b	$02
@@ -66675,7 +66925,7 @@ Tech_Shu:
 	dc.b	$00, $00, $00, $00
 	
 Tech_Megido:
-	dc.b	"Megid"
+	dc.b	"Megido"
 	dc.b	$FC
 	dc.b	$00, $40, $02, $01, $40
 	dc.b	$00, $00, $00, $00
@@ -66687,7 +66937,7 @@ Tech_Grantz:
 	dc.b	$00, $00, $00, $00 ;0x20
 	
 Tech_FoiCopy:
-	dc.b	"Foie"
+	dc.b	"Foi"
 	dc.b	$FC
 	dc.b	$00, $00, $00, $00, $00 ;0x0 (0x000399D4-0x000399D9, Entry count: 0x00000005) [Unknown data]
 	dc.b	$02
@@ -66705,7 +66955,7 @@ Tech_ZanCopy:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x000399EC-0x000399F0, Entry count: 0x00000004) [Unknown data]
 	
 Tech_GraCopy:
-	dc.b	"Gravt"
+	dc.b	"Gra"
 	dc.b	$FC
 	dc.b	$00, $00, $00, $00, $00 ;0x0 (0x000399F4-0x000399F9, Entry count: 0x00000005) [Unknown data]
 	dc.b	$04
@@ -66714,7 +66964,7 @@ Tech_GraCopy:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x000399FC-0x00039A00, Entry count: 0x00000004) [Unknown data]
 	
 Tech_TsuCopy:
-	dc.b	"Barta"
+	dc.b	"Tsu"
 	dc.b	$FC
 	dc.b	$00, $00, $00, $00, $00 ;0x0 (0x00039A04-0x00039A09, Entry count: 0x00000005) [Unknown data]
 	dc.b	$04
@@ -66723,7 +66973,7 @@ Tech_TsuCopy:
 	dc.b	$00, $00, $00, $00 ;0x0 (0x00039A0C-0x00039A10, Entry count: 0x00000004) [Unknown data]
 	
 Tech_GiresCopy:
-	dc.b	"Star Force"
+	dc.b	"Gires"
 	dc.b	$FC
 	dc.b	$00, $00, $00 ;0x0 (0x00039A16-0x00039A19, Entry count: 0x00000003) [Unknown data]
 	dc.b	$10
@@ -66739,6 +66989,8 @@ Tech_Poison:
 	dc.b	$00 ;0x0 (0x00039A2A-0x00039A2B, Entry count: 0x00000001) [Unknown data]
 	dc.b	$5C
 	dc.b	$00, $00, $00, $00 ;0x0 (0x00039A2C-0x00039A30, Entry count: 0x00000004) [Unknown data]
+
+TechniqueData_End:
 	
 	even
 
@@ -69978,17 +70230,17 @@ EnemyName_Ooze:	dc.b	"Light Jelly"
 	dc.b	$FC
 EnemyName_Slime:	dc.b	"Dark Jelly"
 	dc.b	$FC
-EnemyName_Fire:	dc.b	"Fial"
+EnemyName_Fire:	dc.b	"Fiar"
 	dc.b	$FC
-EnemyName_Murafire:	dc.b	"Fialma"
+EnemyName_Murafire:	dc.b	"Fiarma"
 	dc.b	$FC
-EnemyName_Azufire:	dc.b	"Blue Fial"
+EnemyName_Azufire:	dc.b	"Blue Fiar"
 	dc.b	$FC
-EnemyName_Nayl:	dc.b	"Cham"
+EnemyName_Nayl:	dc.b	"Chum"
 	dc.b	$FC
-EnemyName_Flayl:	dc.b	"Dolcham"
+EnemyName_Flayl:	dc.b	"Dolchum"
 	dc.b	$FC
-EnemyName_Slayl:	dc.b	"Grucham"
+EnemyName_Slayl:	dc.b	"Gruchum"
 	dc.b	$FC
 EnemyName_Dryad:	dc.b	"Butterfly"
 	dc.b	$FC
@@ -70000,7 +70252,7 @@ EnemyName_Buzzgull:	dc.b	"Cheepcock"
 	dc.b	$FC
 EnemyName_Lashgull:	dc.b	"Racheepcock"
 	dc.b	$FC
-EnemyName_Hackgull:	dc.b	"Docheepcock"
+EnemyName_Hackgull:	dc.b	"Mega Cheepcock"
 	dc.b	$FC
 EnemyName_Eindon:	dc.b	"Sheela"
 	dc.b	$FC
@@ -70012,7 +70264,7 @@ EnemyName_Clump:	dc.b	"Gran"
 	dc.b	$FC
 EnemyName_Cluster:	dc.b	"Glare"
 	dc.b	$FC
-EnemyName_Clique:	dc.b	"Gleros"
+EnemyName_Clique:	dc.b	"Glaros"
 	dc.b	$FC
 EnemyName_Chirper:	dc.b	"Rappy"
 	dc.b	$FC
@@ -70026,11 +70278,11 @@ EnemyName_Blizrd:	dc.b	"Death Lizard"
 	dc.b	$FC
 EnemyName_Grizrd:	dc.b	"Gel Lizard"
 	dc.b	$FC
-EnemyName_Spinner:	dc.b	"Ort Medusa"
+EnemyName_Spinner:	dc.b	"Orthomedusa"
 	dc.b	$FC
-EnemyName_Twirler:	dc.b	"Meta Medusa"
+EnemyName_Twirler:	dc.b	"Metamedusa"
 	dc.b	$FC
-EnemyName_Wizzer:	dc.b	"Para Medusa"
+EnemyName_Wizzer:	dc.b	"Paramedusa"
 	dc.b	$FC
 EnemyName_Imp:	dc.b	"Cule"
 	dc.b	$FC
@@ -70060,19 +70312,19 @@ EnemyName_Arachne:	dc.b	"Octoleg"
 	dc.b	$FC
 EnemyName_Darachne:	dc.b	"Ice Octoleg"
 	dc.b	$FC
-EnemyName_Zarachne:	dc.b	"Raid Octoleg"
+EnemyName_Zarachne:	dc.b	"Red Octoleg"
 	dc.b	$FC
-EnemyName_Blink:	dc.b	"Naruga"
+EnemyName_Blink:	dc.b	"Naruuga"
 	dc.b	$FC
-EnemyName_Flash:	dc.b	"Beeloruga"
+EnemyName_Flash:	dc.b	"Beeloruuga"
 	dc.b	$FC
-EnemyName_Strobe:	dc.b	"Balmruga"
+EnemyName_Strobe:	dc.b	"Balmuruuga"
 	dc.b	$FC
-EnemyName_Minimech:	dc.b	"Wezal"
+EnemyName_Minimech:	dc.b	"Wezzaar"
 	dc.b	$FC
-EnemyName_Mech:	dc.b	"Wezal 2"
+EnemyName_Mech:	dc.b	"Wezzaar 2"
 	dc.b	$FC
-EnemyName_Maxmech:	dc.b	"Wezal 12"
+EnemyName_Maxmech:	dc.b	"Wezzaar 12"
 	dc.b	$FC
 EnemyName_Lazrbot:	dc.b	"Hand Walker"
 	dc.b	$FC
@@ -70082,9 +70334,9 @@ EnemyName_Fazrbot:	dc.b	"Death Walker"
 	dc.b	$FC
 EnemyName_Emir:	dc.b	"Cryon"
 	dc.b	$FC
-EnemyName_Sheik:	dc.b	"Sholdeem"
+EnemyName_Sheik:	dc.b	"Sholdim"
 	dc.b	$FC
-EnemyName_Caliph:	dc.b	"Muhadeem"
+EnemyName_Caliph:	dc.b	"Muhadim"
 	dc.b	$FC
 EnemyName_Harpy:	dc.b	"Naruhi"
 	dc.b	$FC
@@ -70092,17 +70344,17 @@ EnemyName_Griffin:	dc.b	"Naruhim"
 	dc.b	$FC
 EnemyName_Gryphon:	dc.b	"Garuhim"
 	dc.b	$FC
-EnemyName_Banshee:	dc.b	"Flam"
+EnemyName_Banshee:	dc.b	"Flamme"
 	dc.b	$FC
-EnemyName_Ghost:	dc.b	"Teraflam"
+EnemyName_Ghost:	dc.b	"Teraflamme"
 	dc.b	$FC
 EnemyName_Haunt:	dc.b	"Neromink"
 	dc.b	$FC
-EnemyName_Beastess:	dc.b	"Wells"
+EnemyName_Beastess:	dc.b	"Welz"
 	dc.b	$FC
-EnemyName_Trogess:	dc.b	"Gawells"
+EnemyName_Trogess:	dc.b	"Gawelz"
 	dc.b	$FC
-EnemyName_Demoness:	dc.b	"Daswells"
+EnemyName_Demoness:	dc.b	"Daswelz"
 	dc.b	$FC
 EnemyName_Bushi:	dc.b	"Valkyrie"
 	dc.b	$FC
@@ -70110,23 +70362,23 @@ EnemyName_Kensai:	dc.b	"Fara Valkyrie"
 	dc.b	$FC
 EnemyName_Samurai:	dc.b	"Omega Valkyrie"
 	dc.b	$FC
-EnemyName_Irisa:	dc.b	"Flanie"
+EnemyName_Irisa:	dc.b	"Frannie"
 	dc.b	$FC
-EnemyName_Rosa:	dc.b	"Megiflanie"
+EnemyName_Rosa:	dc.b	"Megifrannie"
 	dc.b	$FC
-EnemyName_Viola:	dc.b	"Dymaflanie"
+EnemyName_Viola:	dc.b	"Evil Frannie"
 	dc.b	$FC
 EnemyName_Moos:	dc.b	"Molmos"
 	dc.b	$FC
 EnemyName_Fearmoos:	dc.b	"Ralmos"
 	dc.b	$FC
-EnemyName_Diremoos:	dc.b	"Domolmos"
+EnemyName_Diremoos:	dc.b	"Mega Molmos"
 	dc.b	$FC
 EnemyName_Blueroot:	dc.b	"Ghost Tree"
 	dc.b	$FC
 EnemyName_Pinkroot:	dc.b	"Hero Tree"
 	dc.b	$FC
-EnemyName_Goldroot:	dc.b	"Grief Tree"
+EnemyName_Goldroot:	dc.b	"Tree of Grief"
 	dc.b	$FC
 EnemyName_Catwoman:	dc.b	"Teiki"
 	dc.b	$FC
@@ -70144,7 +70396,7 @@ EnemyName_Hopliz:	dc.b	"Draconian"
 	dc.b	$FC
 EnemyName_Leapliz:	dc.b	"Hellzard"
 	dc.b	$FC
-EnemyName_Jumpliz:	dc.b	"Zardeen"
+EnemyName_Jumpliz:	dc.b	"Zardine"
 	dc.b	$FC
 EnemyName_Glowtoad:	dc.b	"Nanofrog"
 	dc.b	$FC
@@ -70158,17 +70410,17 @@ EnemyName_Hunter:	dc.b	"Keed Lord"
 	dc.b	$FC
 EnemyName_Killer:	dc.b	"Keed Star"
 	dc.b	$FC
-EnemyName_Roboman:	dc.b	"Bustard"
+EnemyName_Roboman:	dc.b	"Bastard"
 	dc.b	$FC
 EnemyName_Mechman:	dc.b	"Dustorm"
 	dc.b	$FC
-EnemyName_Droidman:	dc.b	"Rem Bustard"
+EnemyName_Droidman:	dc.b	"Rem Bastard"
 	dc.b	$FC
 EnemyName_Fatale:	dc.b	"Astilus"
 	dc.b	$FC
 EnemyName_Morte:	dc.b	"Del Astilus"
 	dc.b	$FC
-EnemyName_Finis:	dc.b	"Midel Astilus"
+EnemyName_Finis:	dc.b	"Mideli Astilus"
 	dc.b	$FC
 EnemyName_Stickle:	dc.b	"Nan Waiter"
 	dc.b	$FC
@@ -70202,21 +70454,21 @@ EnemyName_Wyrm:	dc.b	"Red Dragon King"
 	dc.b	$FC
 EnemyName_Skeleton:	dc.b	"Skeleton"
 	dc.b	$FC
-EnemyName_Spectre:	dc.b	"Skelt Master"
+EnemyName_Spectre:	dc.b	"Skeleto Master"
 	dc.b	$FC
-EnemyName_Wraith:	dc.b	"Skelt Knight"
+EnemyName_Wraith:	dc.b	"Skeleto Knight"
 	dc.b	$FC
-EnemyName_Grinder:	dc.b	"Bazul"
+EnemyName_Grinder:	dc.b	"Bazuul"
 	dc.b	$FC
-EnemyName_Smasher:	dc.b	"Gefbazul"
+EnemyName_Smasher:	dc.b	"Gef Bazuul"
 	dc.b	$FC
-EnemyName_Crusher:	dc.b	"Dust Bazul"
+EnemyName_Crusher:	dc.b	"Dust Bazuul"
 	dc.b	$FC
-EnemyName_Clops:	dc.b	"Lutera"
+EnemyName_Clops:	dc.b	"Lootera"
 	dc.b	$FC
-EnemyName_Biclops:	dc.b	"Death Lutera"
+EnemyName_Biclops:	dc.b	"Death Lootera"
 	dc.b	$FC
-EnemyName_Triclops:	dc.b	"Blue Lutera"
+EnemyName_Triclops:	dc.b	"Blue Lootera"
 	dc.b	$FC
 EnemyName_Dogbot:	dc.b	"Hell Armor"
 	dc.b	$FC
@@ -70224,21 +70476,21 @@ EnemyName_Feralbot:	dc.b	"Gel Armor"
 	dc.b	$FC
 EnemyName_Wolfbot:	dc.b	"Death Armor"
 	dc.b	$FC
-EnemyName_Amazon:	dc.b	"Nasca"
+EnemyName_Amazon:	dc.b	"Nazca"
 	dc.b	$FC
-EnemyName_Erinye:	dc.b	"Bloody Nasca"
+EnemyName_Erinye:	dc.b	"Bloody Nazca"
 	dc.b	$FC
-EnemyName_Valkyrie:	dc.b	"Gordin Nasca"
+EnemyName_Valkyrie:	dc.b	"Gordin Nazca"
 	dc.b	$FC
-EnemyName_Giant:	dc.b	"Dimur"
+EnemyName_Giant:	dc.b	"Dimuur"
 	dc.b	$FC
-EnemyName_Titan:	dc.b	"Rezamur"
+EnemyName_Titan:	dc.b	"Rezamuur"
 	dc.b	$FC
-EnemyName_Colossus:	dc.b	"Gidzasgedra"
+EnemyName_Colossus:	dc.b	"Gidozath Gedora"
 	dc.b	$FC
 EnemyName_Primus:	dc.b	"Flow"
 	dc.b	$FC
-EnemyName_Secundus:	dc.b	"Nalflow"
+EnemyName_Secundus:	dc.b	"Narflow"
 	dc.b	$FC
 EnemyName_Tertius:	dc.b	"Delflow"
 	dc.b	$FC
@@ -70248,13 +70500,13 @@ EnemyName_Slasher:	dc.b	"Metal Tail"
 	dc.b	$FC
 EnemyName_Gnasher:	dc.b	"Fuzzy Tail"
 	dc.b	$FC
-EnemyName_Doomfly:	dc.b	"Killer Bead"
+EnemyName_Doomfly:	dc.b	"Killer Beed"
 	dc.b	$FC
-EnemyName_Demonfly:	dc.b	"And Bead"
+EnemyName_Demonfly:	dc.b	"Beedroid"
 	dc.b	$FC
 EnemyName_Deathfly:	dc.b	"Pivot Shot"
 	dc.b	$FC
-EnemyName_Blotter:	dc.b	"Beyon Nagi"
+EnemyName_Blotter:	dc.b	"Biyon Nagi"
 	dc.b	$FC
 EnemyName_Flutter:	dc.b	"Mate Nagi"
 	dc.b	$FC
@@ -70270,7 +70522,7 @@ EnemyName_Agribot:	dc.b	"Ural"
 	dc.b	$FC
 EnemyName_Guardbot:	dc.b	"Gaural"
 	dc.b	$FC
-EnemyName_Warbot:	dc.b	"Begiural"
+EnemyName_Warbot:	dc.b	"Vegiural"
 	dc.b	$FC
 EnemyName_Flopper:	dc.b	"Panel"
 	dc.b	$FC
@@ -70284,11 +70536,11 @@ EnemyName_Torturer:	dc.b	"Neo Madder"
 	dc.b	$FC
 EnemyName_Executer:	dc.b	"Death Madder"
 	dc.b	$FC
-EnemyName_Fatima:	dc.b	"Kitoarha"
+EnemyName_Fatima:	dc.b	"Kito Arha"
 	dc.b	$FC
-EnemyName_Zafirah:	dc.b	"Lightarha"
+EnemyName_Zafirah:	dc.b	"Light Arha"
 	dc.b	$FC
-EnemyName_Khalidah:	dc.b	"Trahitarha"
+EnemyName_Khalidah:	dc.b	"Trahite Arha"
 	dc.b	$FC
 EnemyName_Watcher:	dc.b	"Dark Side"
 	dc.b	$FC
@@ -70302,11 +70554,11 @@ EnemyName_Baneful:	dc.b	"Illusionist"
 	dc.b	$FC
 EnemyName_Malific:	dc.b	"Imagio Mage"
 	dc.b	$FC
-EnemyName_Conjurer:	dc.b	"Gu Ran Ga"
+EnemyName_Conjurer:	dc.b	"Gu-Ran-Ga"
 	dc.b	$FC
-EnemyName_Wizard:	dc.b	"Ril Ha Ma"
+EnemyName_Wizard:	dc.b	"Ril-Ha-Ma"
 	dc.b	$FC
-EnemyName_Sorcerer:	dc.b	"Giga Ra Rug"
+EnemyName_Sorcerer:	dc.b	"Giga-Ra-Lug"
 	dc.b	$FC
 EnemyName_Goatman:	dc.b	"Goatman"
 	dc.b	$FC
@@ -71300,7 +71552,7 @@ loc_3D966:
 	dc.b	$FC
 	
 loc_3D972:
-	dc.b	"Damage ", $E4, $00
+	dc.b	"Damage to ", $E8, $00, " is ", $E4, $00, "."
 	dc.b	$FC
 
 loc_3D97C:
@@ -71328,11 +71580,11 @@ loc_3D9F1:
 	dc.b	$FC
 	
 loc_3DA01:
-	dc.b	$E8, $00, "'s defense increased."
+	dc.b	$E8, $00, " enters a defensive posture."
 	dc.b	$FC
 	
 loc_3DA18:
-	dc.b	$E8, $00, " has no techniques."
+	dc.b	$E8, $00, " knows no techniques!"
 	dc.b	$FC
 	
 loc_3DA2E:
@@ -71348,11 +71600,11 @@ loc_3DA57:
 	dc.b	$FC
 
 loc_3DA63:
-	dc.b	"Effectiveness is ", $E4, $00, "."
+	dc.b	$E8, $00, " heals for ", $E4, $00, "."
 	dc.b	$FC
 	
 loc_3DA78:
-	dc.b	$E8, $00, " can no longer fight"
+	dc.b	$E8, $00, " can no longer fight."
 	dc.b	$FC
 	
 loc_3DA8F:
@@ -71369,6 +71621,50 @@ loc_3DABD:
 	
 loc_3DAC8:
 	dc.b	"Failed!"
+	dc.b	$FC
+
+BattleMsgSpeedIncreased:
+	dc.b	$E8, $00, "'s speed increased by ", $E4, $00, "."
+	dc.b	$FC
+
+BattleMsgEscapeIncreased:
+	dc.b	"Escape chance increased by ", $E4, $00, "."
+	dc.b	$FC
+
+BattleMsgAttackIncreased:
+	dc.b	$E8, $00, "'s attack increased by ", $E4, $00, "."
+	dc.b	$FC
+
+BattleMsgDefenseIncreased:
+	dc.b	$E8, $00, "'s defense increased by ", $E4, $00, "."
+	dc.b	$FC
+
+BattleMsgRevived:
+	dc.b	$E8, $00, " is revived."
+	dc.b	$FC
+
+BattleMsgPoisonCured:
+	dc.b	$E8, $00, "'s poison was cured."
+	dc.b	$FC
+
+BattleMsgTechniquesBlocked:
+	dc.b	$E8, $00, " cannot use Techniques."
+	dc.b	$FC
+
+BattleMsgAttackBlocked:
+	dc.b	$E8, $00, " cannot attack."
+	dc.b	$FC
+
+BattleMsgDestroyed:
+	dc.b	$E8, $00, " is destroyed."
+	dc.b	$FC
+
+BattleMsgResisted:
+	dc.b	$E8, $00, " resists the effect."
+	dc.b	$FC
+
+BattleMsgPartyUnaffected:
+	dc.b	$E8, $00, " was unaffected."
 	dc.b	$FC
 
 	even
@@ -71524,19 +71820,19 @@ loc_3DD88:	dc.w	loc_3DD96-loc_3DD88
 ; ============================================
 
 loc_3DD8A:	
-	dc.b	"Attack Tech."
+	dc.b	"Attack Techniques"
 	dc.b	$FC
 	
 loc_3DD96:
-	dc.b	"Balance Tech."
+	dc.b	"Balance Techniques"
 	dc.b	$FC
 	
 loc_3DDA2:
-	dc.b	"Recovery Tech."
+	dc.b	"Recovery Techniques"
 	dc.b	$FC
 	
 loc_3DDAD:
-	dc.b	"Time Tech."
+	dc.b	"Time Techniques"
 	dc.b	$FC
 	
 	even
@@ -71577,7 +71873,7 @@ loc_3DE20:
 	even
 	
 loc_3DE4C:
-	dc.b	"Who needs the poison cured?"
+	dc.b	"Who needs to be cured of poison?"
 	dc.b	$F8
 	dc.b	$FC
 	
@@ -71599,7 +71895,7 @@ loc_3DE8A:
 	even
 	
 loc_3DEB2:
-	dc.b	"You want to hear my fortune?"
+	dc.b	"You want to hear your fortune?"
 	dc.b	$F8
 	dc.b	"It costs ", $E4, $00, " meseta. All right?"
 	dc.b	$FC
@@ -71683,7 +71979,7 @@ loc_3E005:
 	dc.b	$FC
 	
 loc_3E01B:
-	dc.b	"It's better not to, then."
+	dc.b	"I'm better off not taking that."
 	dc.b	$F8
 	dc.b	$FC
 	
@@ -71699,7 +71995,7 @@ loc_3E060:
 	dc.b	$FC
 	
 loc_3E08E:
-	dc.b	"That's the end of the old woman's tale."
+	dc.b	"That's the end of this old woman's tale."
 	dc.b	$F8
 	dc.b	"Go carefully now."
 	dc.b	$FC
@@ -71762,7 +72058,7 @@ loc_3E1E2:
 	dc.b	$F8
 	dc.b	"Is that all right?"
 	dc.b	$FC
-	dc.b	"Who wants to change their power?"
+	dc.b	"Who seeks to alter their power?"
 	dc.b	$F8
 	dc.b	$FC
 	
@@ -116419,9 +116715,107 @@ loc_BFE34:
 ; Retranslation extension: new code and data live past the end of the original
 ; ROM so nothing above moves. Each file is guarded by its option flag.
 ; ===========================================================================
+	include "ext/fastwalk.asm"
+	include "ext/battlefix.asm"
+	if successors_title
+TitleSpacedText:
+	dc.w	8, $13
+	dc.b	$AF, $A7, $A0, $AD, $B3, $A0, $B2, $B8, $00
+	dc.b	$B2, $B3, $A0, $B1, $00, $BE, $BF, $FC
+	even
+	endif
+	if extended_script
+	include "ext/scriptbank.asm"
+	endif
+
+	if vwf_dialogue
+; Display names are separate from TechniqueData: the game indexes that table as
+; 24 fixed 16-byte gameplay records, while translated names can exceed the
+; stock six-byte name field. VWFDia_Entry maps record pointers to these slots.
+	align 16
+TechniqueNameData:
+	dc.b	"Foie"
+	dc.b	$FC
+	align 16
+	dc.b	"Zan"
+	dc.b	$FC
+	align 16
+	dc.b	"Gravt"
+	dc.b	$FC
+	align 16
+	dc.b	"Barta"
+	dc.b	$FC
+	align 16
+	dc.b	"Sun Force"
+	dc.b	$FC
+	align 16
+	dc.b	"Star Force"
+	dc.b	$FC
+	align 16
+	dc.b	"Moon Force"
+	dc.b	$FC
+	align 16
+	dc.b	"Sea Force"
+	dc.b	$FC
+	align 16
+	dc.b	"Rising"
+	dc.b	$FC
+	align 16
+	dc.b	"Noon"
+	dc.b	$FC
+	align 16
+	dc.b	"Fall"
+	dc.b	$FC
+	align 16
+	dc.b	"Night"
+	dc.b	$FC
+	align 16
+	dc.b	"Law"
+	dc.b	$FC
+	align 16
+	dc.b	"Unbalance"
+	dc.b	$FC
+	align 16
+	dc.b	"Balance"
+	dc.b	$FC
+	align 16
+	dc.b	"Chaos"
+	dc.b	$FC
+	align 16
+	dc.b	"Megid"
+	dc.b	$FC
+	align 16
+	dc.b	"Grantz"
+	dc.b	$FC
+	align 16
+	dc.b	"Foie"
+	dc.b	$FC
+	align 16
+	dc.b	"Zan"
+	dc.b	$FC
+	align 16
+	dc.b	"Gravt"
+	dc.b	$FC
+	align 16
+	dc.b	"Barta"
+	dc.b	$FC
+	align 16
+	dc.b	"Star Force"
+	dc.b	$FC
+	align 16
+	dc.b	"Poison"
+	dc.b	$FC
+	align 16
+TechniqueNameData_End:
+	dc.w	$FFFF			; keep the last slot's alignment in the flat binary
+	endif
+
 	include "ext/techdist.asm"
 	include "ext/saveslots.asm"
 	include "ext/vwf.asm"
+	if fix_ending_transmission
+	include "ext/ending.asm"
+	endif
 	even
 
 EndOfRom:

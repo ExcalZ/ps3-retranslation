@@ -172,8 +172,20 @@ stock one through `VWFName_Fixed`, jumped to from its control table (`$E0`
 lands right after the table, where the stock code fell through into the
 `{NAME}` handler), which restores the insert flag afterwards. Saved games
 carry the `$E0 nn` bytes in the record, so a save made with the option on
-shows the long names too. The battle stat window's five cells (40 px)
+shows the long names too. The battle stat window's four name cells (32 px)
 remain the budget.
+
+The save image also includes the five `$80`-byte character records, whose
+sprite descriptor (`$10`) and experience / technique growth pointers (`$54` /
+`$58`) are absolute ROM addresses. Text edits before those tables move the
+targets between builds. After `loc_148FA` restores a save,
+`VWFSave_RestorePointers` derives the old-to-current relocation from the first
+sprite descriptor, refreshes every slot's descriptor and attributes from
+`loc_1E4C6`, and applies the relocation to the non-null growth pointers. This
+keeps battery saves playable across translated builds without changing the
+on-cartridge save format. The four-row game-select/church list at
+`$FFFF9C9E` also uses `VWFShop_Table`, with four 12-cell pool lines at
+`$322-$351`, so saved character names render proportionally.
 
 The 96 tiles are the window plane's nametable rows 0-18 (`$B000-$B97F`):
 the window plane is off on every screen with the dialogue box (the field,
@@ -188,13 +200,14 @@ not zero after boot, so a message's first line clears them.
 A store screen is a map of the same kind (`$222-$230`, one per store type,
 table `loc_BA1C`): the field art is reloaded on exit and the map itself loads
 one picture at tiles `$101-$131`, so the same free range is available. With
-`vwf_shop = 1` the three list windows take the pooled path: the buy list
+`vwf_shop = 1` the four list windows take the pooled path: the buy list
 (`loc_A9A2`, buffer `$FFFFA126`, five lines of 16 cells, stride `$48`) and the
-two sell-list pages (`loc_AE86` / `loc_B1C8`, buffers `$FFFF9D30` and
-`$FFFF9E80`, five lines of 11 cells, stride `$38`). `VWFShop_Table` gives each
-list a pool line per list line at `$240-$2FD` - and, since the party names
+three sell-list pages (`loc_AE86` / `loc_B1C8` / `loc_B40A`, buffers
+`$FFFF9D30`, `$FFFF9E80` and `$FFFF9FD0`, five lines of 11 cells, stride
+`$38`). `VWFShop_Table` gives each list a separate pool line. Since the party names
 grew past four letters, the "Who will carry it?" name list (`$FFFF9C8E`,
-four cells: Searren's ink ends exactly at 32 px), the Buy/Sell - Yes/No
+four cells: Searren's ink ends at pixel 31; only its trailing gap reaches 33),
+the Buy/Sell - Yes/No
 window (`$FFFF9BC6`, one string whose `{BR}` line is found through the same
 table: `VWFDia_List` remembers the table a line came from) and the Meseta
 label (`$FFFF9C22`, six cells of pool ahead of the amount at cell 6) at
@@ -209,7 +222,7 @@ prompts were already proportional (the dialogue rows).
 
 ## The battle box
 
-The battle screen (`map_id` `$232`) loads its art itself: the shared
+The battle screens (`map_id` `$232` and Dark Falz's `$3B2`) load their art: the shared
 background tileset at `$2000-$4B7F` (380 tiles, every terrain draws from it),
 the box art and effects from the map descriptor at `$5000-$6C7F`, enemy art
 into slots at `$7000`, `$7400`, `$7800` and `$9000` (an enemy is up to 115
@@ -218,17 +231,20 @@ and a per-line scroll table at `$AC00`. The box is drawn on the **window
 plane** at `$B000`, but only from its row 19 (`loc_FC4E` copies to `$B986`)
 and the window is shown from row 20, so the plane's rows 0-18 - `$B000-$B97F`,
 tiles `$580-$5CB` - are never written or displayed. With `vwf_battle = 1`
-those 76 tiles and the two gaps `$25C-$27F` and `$364-$37F` hold the pools of
-`VWFBattle_Table`: the four enemy-group lines (`{NAME} {NUM}` from
+those 76 tiles, the gap `$364-$37F`, the unused sprite-table tail `$AA80-$ABFF`
+(tiles `$554-$55F`), and the offscreen window rows 28-31 `$BE00-$BFFF`
+(tiles `$5F0-$5FF`) hold the pools of `VWFBattle_Table`: the four enemy-group lines (`{NAME} {NUM}` from
 `loc_DDDA` into the box buffer, 11 cells each), the five character names of
 the stat window (`Battle_WriteCharStats`, plane A row 20, five cells apart,
-so a name may now be five cells rather than the stock four - the highlight
-in `loc_D56C` is widened to match) and the five item / technique list
-entries (`loc_3D8AE` positions, nine cells, `$44(a6) = 9`). Targeting does
+with four cells per name; the fifth position is the box's right border), the five item / technique list entries
+(`loc_3D8AE` positions, nine cells, `$44(a6) = 9`) and the centre equipped-
+weapon slot at `$FFFF2A20` (`loc_CFCC`). Targeting does
 not touch the enemy row's cells: an enemy target is the enemy's own sprite
 lit up, an ally target the character's name in the stat window (the
-`loc_D56C` palette toggle, widened to five cells); the list highlights
-toggle the same way. The battle message row was already on the dialogue
+`loc_D56C` palette toggle over four name cells); the list highlights
+toggle the same way. The inherited battle background can use tiles `$25C-$27B`,
+so list glyphs must never upload there: Lune's scrolling ground exposed the
+collision as spell names moving across its lower rows. The battle message row was already on the dialogue
 pool, and the victory and level-up messages (`loc_ED2C`, `loc_EEF4`), which
 `loc_CF52` clears the whole box for and draws from its top row `$FFFF2A0A`,
 take the same path as two dialogue lines (the US "won" message had three;
@@ -236,7 +252,19 @@ the translation re-flows it into two).
 
 The battle list's nine cells make **72 px the item and technique name budget
 game-wide**; the enemy line leaves 75 px for a name beside a two-digit
-count, and the stat window 40 px for a party member's name.
+count, and the stat window 32 px for a party member's name.
+
+`TechniqueData` is also gameplay data: its 24 records are exactly 16 bytes
+each, and enemy records store fixed offsets into it (`$48` is the enemy Foie
+record used by Molmos). Translated names therefore live in the parallel
+16-byte-slot `TechniqueNameData` table after the original ROM. At
+`VWFDia_Entry`, an exact `TechniqueData` record pointer is remapped to the
+same slot in that display table. The `$E8` string-insert handler applies the
+same remap after loading its pointer; this covers enemy and party "used"
+announcements such as Rappy's `$50` Gra (`Gravt`). Effect, targeting and AI
+code continue to read the fixed stock records. `checkbuild.py` enforces both
+strides and `test_vwf.py` verifies both rendering paths, including Molmos's
+`$48` lookup.
 
 Numeric fields still use the game's direct digit renderer, and the row-25
 character name plate remains fixed width. The item window is 10 cells (80 px);
@@ -273,17 +301,32 @@ themselves - for the eight frames its counter `$C(a5)` runs (`loc_3036`,
 `andi.b #7`), one 8-px tile a step. The visible party sprites (`loc_4C42`)
 move 1 px a frame from `loc_4E4A` while the manager's stepping bit is set and
 pick their walking frame from their own free-running frame counter (`$22(a5)
-= ($C(a5) >> 2) & 6`). With `fast_walk = 1` the step is 2 px a frame over
-four frames and the sprites move 2 px too, so a step is still one tile and
-the animation, counting frames, keeps its pace. Two scripted walks count
-frames and are scaled to match: the demo-script player `loc_11CE8` (an
-entry's count is steps; `<< 2` instead of `<< 3`, a pause keeps its 8-frame
-unit) and the dock's eight steps onto the boat (`loc_1993A`, 32 frames
-instead of 64). The other demo-mode objects wait on positions or on their
-own timers without walking. Verified in BlastEm (`work/scripts/walkspeed.py`)
-against a `fast_walk = 0` build: `Demo_LandenWalkToPrison` run from the town
-ends every entry on the same tile, the field walk is 2 px a frame with the
-animation frame changing every eighth frame in both.
+= ($C(a5) >> 2) & 6`). With `fast_walk = 1`, `FastWalk_UpdateStep` moves
+2 px on every frame. Four frames cover each 8-px tile step, so scrolling
+has a uniform cadence while collision still occurs on tile boundaries. The
+visible sprites use the same frame delta and their animation still counts
+frames. Scripted walks ask `FastWalk_FramesForSteps` for four frames per step;
+pauses keep their stock eight-frame unit, and the dock still covers exactly
+eight steps. Loading an older save raises its on-foot delta to 2 while
+vehicle speed 4 is preserved. Verified in BlastEm
+(`work/scripts/walkspeed.py`): the field cadence is asserted exactly, and
+`Demo_LandenWalkToPrison` ends every entry on the same tile as a
+`fast_walk = 0` build.
+
+## Screen transitions and menu input handoffs
+
+The stock palette ramps use seven brightness steps, dwelling four VBlanks on
+each step plus a final synchronization frame (29 frames total). With
+`fast_transitions = 1`, the ordinary fade-in, fade-out, map return and menu
+entry ramps dwell for two VBlanks instead, taking 15 frames without skipping
+palette levels or changing the synchronous map/VRAM loading work.
+
+The Technique character-selection path builds and uploads the selected
+character's list before the list routine becomes interactive. A second A/C
+edge during that handoff used to survive into `loc_8F72`, where it immediately
+selected row 0 (Sun Force for Mieu). With `fix_technique_confirm = 1`, A/C is
+masked for the first eight interactive frames; B and directional input remain
+available.
 
 ## What the JP release does differently
 

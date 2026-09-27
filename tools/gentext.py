@@ -29,6 +29,13 @@ ASM = os.path.join(ROOT, 'PSIII_Disasm', 'ps3.asm')
 DIALOGUE = os.path.join(ROOT, 'work', 'dialogue.json')
 SCRIPT = os.path.join(ROOT, 'work', 'script.json')
 
+# Extraction reads names from the stock ROM's fixed TechniqueData records. In a
+# translated build those records must keep their 16-byte gameplay layout, so
+# only generation is redirected to the extension's long-name display table.
+GEN_SEGMENT_BOUNDS = {
+    'techs': ('TechniqueNameData', 'TechniqueNameData_End'),
+}
+
 LABEL_RE = re.compile(r'^([A-Za-z_.][A-Za-z0-9_.]*):\s*(.*)$')
 CTRL_BYTES = ('$F8', '$EC', '$E4', '$E8', '$F4', '$F0', '$BE')
 
@@ -110,8 +117,12 @@ class Source:
         self.path = path
         with open(path, encoding='latin-1', newline='') as f:
             self.text = f.read()
-        self.nl = '\r\n' if '\r\n' in self.text[:2000] else '\n'
-        self.lines = self.text.split(self.nl)
+        # apply_patch and some editors can leave a predominantly-CRLF source
+        # with isolated LF-only lines. Splitting on only the dominant newline
+        # would fold everything between those mixed endings into giant logical
+        # lines and corrupt unrelated binary-data regions on writeback.
+        self.nl = '\r\n' if self.text.count('\r\n') >= self.text.count('\n') - self.text.count('\r\n') else '\n'
+        self.lines = re.split(r'\r\n|\n|\r', self.text)
         self.edits = []   # (start, end_exclusive, new_lines)
 
     def label_index(self):
@@ -179,6 +190,7 @@ def gen_segments(src, doc, problems):
     regions = src.charset_regions()
     for spec in SEGMENTS:
         name, l0, l1 = spec[:3]
+        l0, l1 = GEN_SEGMENT_BOUNDS.get(name, (l0, l1))
         opts = spec[4] if len(spec) > 4 else {}
         seg = doc['segments'].get(name)
         if seg is None:

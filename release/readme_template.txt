@@ -32,6 +32,10 @@ which is what lets the Japanese script be carried over in full.
   Technique Distributor the distribution box stays on screen at high levels
                         (the original could crash there)
 
+The Technique Distributor's graph is scaled to fit at high levels. Its shape
+shows the relative allocation; the displayed numbers are the exact values,
+so one graph square may represent more than one point.
+
 --------------------------------------------------------------------------------
   2. HOW TO APPLY
 --------------------------------------------------------------------------------

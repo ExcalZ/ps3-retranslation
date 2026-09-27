@@ -26,6 +26,23 @@ VWFDwell_Count  = VWFDia_RAM+$4C4	; word: frames left before an unattended page 
 VWFDia_Lead     = VWFDia_RAM+$4C6	; word: a pooled line's leading spaces keep their 8-px cell (cleared by the first ink)
 VWFDia_RAM_End  = VWFDia_RAM+$4C8
 
+; A short confirm-only guard after the Technique character -> list handoff.
+MenuTech_RAM             = VWFDia_RAM_End
+MenuTech_ConfirmCooldown = MenuTech_RAM	; byte: frames before A/C can select a technique
+MenuTech_RAM_End         = MenuTech_RAM+2
+
+; High word of a script offset while a late scene's dialogue is being loaded.
+; Only the value 1 is recognized; older emulator states contain SEGA-screen
+; pixels here, so other values must behave like bank 0.
+ScriptBank_High           = MenuTech_RAM_End
+ScriptBank_RAM_End        = ScriptBank_High+2
+
+; Space-scene animations can reach their transmission cue while translated
+; dialogue is still running. Keep that cue across loc_18C1A's temporary use of
+; $FFFFD286 bit 7, then clear it after the last transmission pair.
+Ending_Pending            = ScriptBank_RAM_End
+Ending_RAM_End            = Ending_Pending+2
+
 ; The smooth page scroll (smooth_scroll): a third line canvas, the 32-px view of
 ; the box interior, its 96 expanded tiles, and the animation state.
 VWFSmooth_RAM     = $FFFFEA00

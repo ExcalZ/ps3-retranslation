@@ -39,7 +39,7 @@
      "addr": "05F8B",
      "hex": "522d48616e64fc",
      "us": "R-Hand",
-     "en": "R-Hand"
+     "en": "Right Hand"
     },
     {
      "id": "equip#002",
@@ -48,7 +48,7 @@
      "addr": "05F92",
      "hex": "4c2d48616e64fc",
      "us": "L-Hand",
-     "en": "L-Hand"
+     "en": "Left Hand"
     }
    ]
   },
@@ -902,7 +902,7 @@
      "addr": "1F754",
      "hex": "20546f57686f6d3ff8f8fc",
      "us": " ToWhom?{BR}{BR}",
-     "en": " ToWhom?{BR}{BR}",
+     "en": " To Whom?{BR}{BR}",
      "jp": "だれに ？{BR}{BR}"
     },
     {
@@ -982,7 +982,7 @@
      "addr": "1F7C4",
      "hex": "48656164f8f8522048616e64f8f84c2048616e64fc",
      "us": "Head{BR}{BR}R Hand{BR}{BR}L Hand",
-     "en": "Head{BR}{BR}R Hand{BR}{BR}L Hand",
+     "en": "Head{BR}{BR}Right Hand{BR}{BR}Left Hand",
      "jp": "あたま{BR}{BR}みぎて{BR}{BR}ひだりて"
     },
     {
@@ -992,7 +992,7 @@
      "addr": "1F7DE",
      "hex": "546f72736ff8f846656574f8f84275636b6c65fc",
      "us": "Torso{BR}{BR}Feet{BR}{BR}Buckle",
-     "en": "Torso{BR}{BR}Feet{BR}{BR}Bracelet",
+     "en": "Chest{BR}{BR}Feet{BR}{BR}Bracelet",
      "jp": "むね{BR}{BR}あし{BR}{BR}うでわ"
     },
     {
@@ -1012,7 +1012,7 @@
      "addr": "1F81A",
      "hex": "4c6576656cf8f85850f8f852657164205850fc",
      "us": "Level{BR}{BR}XP{BR}{BR}Reqd XP",
-     "en": "Level{BR}{BR}XP{BR}{BR}Next Lv",
+     "en": "Level{BR}{BR}Experience{BR}{BR}Next Level",
      "jp": "レベル{BR}{BR}けいけんち{BR}{BR}レベルアップ"
     },
     {
@@ -1032,7 +1032,7 @@
      "addr": "1F84E",
      "hex": "496e74656cf8f85374616d696e61f8fc",
      "us": "Intel{BR}{BR}Stamina{BR}",
-     "en": "Intel{BR}{BR}Stamina{BR}",
+     "en": "Wits{BR}{BR}Stamina{BR}",
      "jp": "かしこさ{BR}{BR}たいりょく{BR}"
     },
     {
@@ -1042,7 +1042,7 @@
      "addr": "1F862",
      "hex": "4c75636bf8f8536b696c6cfc",
      "us": "Luck{BR}{BR}Skill",
-     "en": "Luck{BR}{BR}Skill",
+     "en": "Luck{BR}{BR}Dexterity",
      "jp": "こううん{BR}{BR}きようさ"
     },
     {
@@ -1224,7 +1224,7 @@
    ]
   },
   "namestrings": {
-   "note": "the ending transmission: pairs of lines drawn straight into VRAM by loc_F7F0 (fixed-width, 24 cells)",
+   "note": "the ending transmission: pairs of proportional 192-px lines drawn to plane A by VWFScroll_Entry",
    "start": "loc_30CD8",
    "end": "loc_31136",
    "runs": [
@@ -1235,7 +1235,8 @@
      "addr": "30CD8",
      "hex": "48656c6c6f20416c69736120bebf2e2054686973206973fc",
      "us": "Hello Alisa {III}. This is",
-     "en": "...To the Alisa III, our"
+     "en": "...To the Alisa III, our",
+     "jp": "。。。1000ねんの あいだ はなればなれだった"
     },
     {
      "id": "namestrings#001",
@@ -1244,7 +1245,8 @@
      "addr": "30CF0",
      "hex": "74686520737061636573686970204e656f2050616c6d2efc",
      "us": "the spaceship Neo Palm.",
-     "en": "kin lost 1,000 years..."
+     "en": "kin lost for 1,000 years...",
+     "jp": "「アリサ3せい」へ。。。。。。"
     },
     {
      "id": "namestrings#002",
@@ -1253,7 +1255,8 @@
      "addr": "30D08",
      "hex": "54686174206578706c6f73696f6e206561726c696572fc",
      "us": "That explosion earlier",
-     "en": "..This is the pilot room"
+     "en": "...This is the pilot room",
+     "jp": "。。こちらは、うちゅうせん 「ネオパルマ」の"
     },
     {
      "id": "namestrings#003",
@@ -1262,7 +1265,8 @@
      "addr": "30D20",
      "hex": "617474726163746564206f757220617474656e74696f6e2efc",
      "us": "attracted our attention.",
-     "en": "of the ship Neo Palma..."
+     "en": "of the ship \"Neo Palma\"...",
+     "jp": "パイロット ルーム。。。。。"
     },
     {
      "id": "namestrings#004",
@@ -1271,7 +1275,8 @@
      "addr": "30D3A",
      "hex": "576520677565737365642074686174204461726bfc",
      "us": "We guessed that Dark",
-     "en": "....We saw an explosion"
+     "en": "....We saw an explosion",
+     "jp": "。。。。うちゅうに かがやく ばくはつを みて"
     },
     {
      "id": "namestrings#005",
@@ -1280,7 +1285,8 @@
      "addr": "30D50",
      "hex": "466f726365206861642061726973656e20616761696efc",
      "us": "Force had arisen again",
-     "en": "flare in space, and came"
+     "en": "flare in space, and came",
+     "jp": "。。。。うちゅうに かがやく ばくはつを みて / それを たよりに ちかづいた。。。。"
     },
     {
      "id": "namestrings#006",
@@ -1289,7 +1295,8 @@
      "addr": "30D68",
      "hex": "616e642077652063616d65206f76657220746f206c656e64fc",
      "us": "and we came over to lend",
-     "en": "to find its source...."
+     "en": "to find its source....",
+     "jp": "それを たよりに ちかづいた。。。。"
     },
     {
      "id": "namestrings#007",
@@ -1298,7 +1305,8 @@
      "addr": "30D82",
      "hex": "616e792068656c7020796f75206e65656465642efc",
      "us": "any help you needed.",
-     "en": "...A satellite is gone."
+     "en": "...A satellite is gone.",
+     "jp": "。。。サテライトが ひとつ きえているが、"
     },
     {
      "id": "namestrings#008",
@@ -1307,7 +1315,8 @@
      "addr": "30D98",
      "hex": "53696e636520796f75277265207374696c6c20686572652cfc",
      "us": "Since you're still here,",
-     "en": "Was that the blast......"
+     "en": "Was that the reason......?",
+     "jp": "その ばくはつだったのか。。。。。。。。。"
     },
     {
      "id": "namestrings#009",
@@ -1316,7 +1325,8 @@
      "addr": "30DB2",
      "hex": "776520617373756d6520796f7527766520776f6e2efc",
      "us": "we assume you've won.",
-     "en": "...Still, we rejoice to"
+     "en": "...In any case, we rejoice at",
+     "jp": "。。。ともかくも、ひろい うちゅうで、ふたたび"
     },
     {
      "id": "namestrings#010",
@@ -1325,7 +1335,8 @@
      "addr": "30DC8",
      "hex": "496e20312c3030302079656172732c204461726bfc",
      "us": "In 1,000 years, Dark",
-     "en": "find friends once more"
+     "en": "having reunited with friends once more",
+     "jp": "ともを えたことを よろこんでいる。"
     },
     {
      "id": "namestrings#011",
@@ -1334,7 +1345,8 @@
      "addr": "30DDE",
      "hex": "466f7263652077696c6c20617269736520616761696e2efc",
      "us": "Force will arise again.",
-     "en": "in this vast space."
+     "en": "in the vastness of space.",
+     "jp": "。。。ともかくも、ひろい うちゅうで、ふたたび"
     },
     {
      "id": "namestrings#012",
@@ -1343,7 +1355,8 @@
      "addr": "30DF6",
      "hex": "4c657427732067657420726964206f6620697420666f72fc",
      "us": "Let's get rid of it for",
-     "en": "...Together, let us live"
+     "en": "...Let us continue to live for the next",
+     "jp": "。。。ともに、さらなる 1000ねんの たびを"
     },
     {
      "id": "namestrings#013",
@@ -1352,7 +1365,8 @@
      "addr": "30E0E",
      "hex": "676f6f64206e6578742074696d6521fc",
      "us": "good next time!",
-     "en": "1,000 years more."
+     "en": "1,000 years of our journey, together.",
+     "jp": "いきのびよう。"
     },
     {
      "id": "namestrings#014",
@@ -1361,7 +1375,8 @@
      "addr": "30E1E",
      "hex": "48656c6c6f2c2074686973206973204165726f6e652efc",
      "us": "Hello, this is Aerone.",
-     "en": "...From Pilotta to the"
+     "en": "...From Pilotta to the",
+     "jp": "。。。パイロッタから えいゆうたちへ。。。"
     },
     {
      "id": "namestrings#015",
@@ -1370,7 +1385,8 @@
      "addr": "30E36",
      "hex": "5468616e6b7320666f7220796f75722068656c702efc",
      "us": "Thanks for your help.",
-     "en": "heroes..."
+     "en": "heroes...",
+     "jp": "。。。パイロッタから えいゆうたちへ。。。"
     },
     {
      "id": "namestrings#016",
@@ -1379,7 +1395,8 @@
      "addr": "30E4C",
      "hex": "5765277265206f6e636520616761696e206261636b206f6efc",
      "us": "We're once again back on",
-     "en": "...Our thanks for ending"
+     "en": "...Our thanks for defeating",
+     "jp": "。。。しんろへんこうを じゃまする ちからを / うちたおしてくれたことを かんしゃする。。。"
     },
     {
      "id": "namestrings#017",
@@ -1388,7 +1405,8 @@
      "addr": "30E66",
      "hex": "6f7572206f726967696e616c20636f757273652efc",
      "us": "our original course.",
-     "en": "the power that blocked"
+     "en": "the force that blocked",
+     "jp": "。。。しんろへんこうを じゃまする ちからを"
     },
     {
      "id": "namestrings#018",
@@ -1397,7 +1415,8 @@
      "addr": "30E7C",
      "hex": "576974686f757420796f752c204461726b20466f726365fc",
      "us": "Without you, Dark Force",
-     "en": "our change of course..."
+     "en": "our change of course...",
+     "jp": "うちたおしてくれたことを かんしゃする。。。"
     },
     {
      "id": "namestrings#019",
@@ -1406,7 +1425,8 @@
      "addr": "30E94",
      "hex": "776f756c642068617665207072657661696c65642efc",
      "us": "would have prevailed.",
-     "en": "...We find this system"
+     "en": "...We learned this system",
+     "jp": "。。。この たいようけいには、いくつかの"
     },
     {
      "id": "namestrings#020",
@@ -1415,7 +1435,8 @@
      "addr": "30EAA",
      "hex": "576527726520676f696e6720746f7761726420746865fc",
      "us": "We're going toward the",
-     "en": "has several planets..."
+     "en": "has several planets...",
+     "jp": "わくせいがあることが、わかった。。。"
     },
     {
      "id": "namestrings#021",
@@ -1424,7 +1445,8 @@
      "addr": "30EC2",
      "hex": "62726967687465737420737461722075702061686561642efc",
      "us": "brightest star up ahead.",
-     "en": "...One of them seems fit"
+     "en": "...One of them seems fit",
+     "jp": "。。。そのうちの ひとつは、どうやら"
     },
     {
      "id": "namestrings#022",
@@ -1433,7 +1455,8 @@
      "addr": "30EDC",
      "hex": "57652772652068656164696e6720666f72206f6e65206f66fc",
      "us": "We're heading for one of",
-     "en": "for us to settle..."
+     "en": "for habitation...",
+     "jp": "われわれが、うつりすめそうな わくせいだ。。。"
     },
     {
      "id": "namestrings#023",
@@ -1442,7 +1465,8 @@
      "addr": "30EF6",
      "hex": "69747320706c616e6574732d2d746865207468697264fc",
      "us": "its planets--the third",
-     "en": "...We head there now."
+     "en": "...We are heading there now.",
+     "jp": "。。。いま、そこに むかっている。"
     },
     {
      "id": "namestrings#024",
@@ -1451,7 +1475,8 @@
      "addr": "30F0E",
      "hex": "6f6e65206f75742066726f6d2074686520737461722efc",
      "us": "one out from the star.",
-     "en": "You can see it too!..."
+     "en": "You may be able to see it too!...",
+     "jp": "そちらからも みえるだろう！。。。"
     },
     {
      "id": "namestrings#025",
@@ -1460,7 +1485,8 @@
      "addr": "30F26",
      "hex": "4974207365656d73207065726665637420666f722075732efc",
      "us": "It seems perfect for us.",
-     "en": "...Our 2,000-year voyage"
+     "en": "...Our 2,000-year voyage",
+     "jp": "。。。2000ねんの たびは、おわりそうだ。。。"
     },
     {
      "id": "namestrings#026",
@@ -1469,7 +1495,8 @@
      "addr": "30F40",
      "hex": "4174206c6173742c206f7572206a6f75726e6579206973fc",
      "us": "At last, our journey is",
-     "en": "is nearly over..."
+     "en": "is nearly over...",
+     "jp": "。。。2000ねんの たびは、おわりそうだ。。。"
     },
     {
      "id": "namestrings#027",
@@ -1478,7 +1505,8 @@
      "addr": "30F58",
      "hex": "616c6d6f7374206f76657221fc",
      "us": "almost over!",
-     "en": "...We have survived..."
+     "en": "...We survived...",
+     "jp": "。。。われわれは、いきのびた。。。"
     },
     {
      "id": "namestrings#028",
@@ -1487,7 +1515,8 @@
      "addr": "30F66",
      "hex": "48656c6c6f2c2074686973206973204165726f6e652efc",
      "us": "Hello, this is Aerone.",
-     "en": "...From Pilotta to the"
+     "en": "...From Pilotta to the",
+     "jp": "。。。パイロッタから えいゆうたちへ。。。"
     },
     {
      "id": "namestrings#029",
@@ -1496,7 +1525,8 @@
      "addr": "30F7E",
      "hex": "5468616e6b7320666f7220796f75722068656c702efc",
      "us": "Thanks for your help.",
-     "en": "heroes..."
+     "en": "heroes...",
+     "jp": "。。。パイロッタから えいゆうたちへ。。。"
     },
     {
      "id": "namestrings#030",
@@ -1505,7 +1535,8 @@
      "addr": "30F94",
      "hex": "5765277265206f6e636520616761696e206261636b206f6efc",
      "us": "We're once again back on",
-     "en": "...Our thanks for ending"
+     "en": "...Our thanks for defeating",
+     "jp": "。。。しんろへんこうを じゃまする ちからを / うちたおしてくれたことを かんしゃする。。。"
     },
     {
      "id": "namestrings#031",
@@ -1514,7 +1545,8 @@
      "addr": "30FAE",
      "hex": "6f7572206f726967696e616c20636f757273652efc",
      "us": "our original course.",
-     "en": "the power that blocked"
+     "en": "the force that blocked",
+     "jp": "。。。しんろへんこうを じゃまする ちからを"
     },
     {
      "id": "namestrings#032",
@@ -1523,7 +1555,8 @@
      "addr": "30FC4",
      "hex": "576974686f757420796f752c204461726b20466f726365fc",
      "us": "Without you, Dark Force",
-     "en": "our change of course..."
+     "en": "our change of course...",
+     "jp": "うちたおしてくれたことを かんしゃする。。。"
     },
     {
      "id": "namestrings#033",
@@ -1532,7 +1565,8 @@
      "addr": "30FDC",
      "hex": "776f756c642068617665207072657661696c65642efc",
      "us": "would have prevailed.",
-     "en": "...The evil is gone..."
+     "en": "...The evil power is gone...",
+     "jp": "。。。じゃあくな ちからは、さった。。。"
     },
     {
      "id": "namestrings#034",
@@ -1541,7 +1575,9 @@
      "addr": "30FF2",
      "hex": "576527726520676f696e6720746f7761726420746865fc",
      "us": "We're going toward the",
-     "en": " "
+     "en": " ",
+     "jp": "",
+     "note": "Intentional blank line; the Japanese source is blank here."
     },
     {
      "id": "namestrings#035",
@@ -1550,7 +1586,8 @@
      "addr": "3100A",
      "hex": "62726967687465737420737461722075702061686561642efc",
      "us": "brightest star up ahead.",
-     "en": "...We welcome King Fuin,"
+     "en": "...We welcome King Fuin,",
+     "jp": "。。。われわれは、この 「アリサ3せい」の"
     },
     {
      "id": "namestrings#036",
@@ -1559,7 +1596,8 @@
      "addr": "31024",
      "hex": "57652772652068656164696e6720666f72206f6e65206f66fc",
      "us": "We're heading for one of",
-     "en": "new king of Alisa III..."
+     "en": "new king of the Alisa III...",
+     "jp": "あらたなる フインおうを かんげいする。。。"
     },
     {
      "id": "namestrings#037",
@@ -1568,7 +1606,8 @@
      "addr": "3103E",
      "hex": "69747320706c616e6574732d2d746865207468697264fc",
      "us": "its planets--the third",
-     "en": "...Guide us through the"
+     "en": "...Guide us on our journey",
+     "jp": "。。。さらなる 1000ねんの たびを"
     },
     {
      "id": "namestrings#038",
@@ -1577,7 +1616,8 @@
      "addr": "31056",
      "hex": "6f6e65206f75742066726f6d2074686520737461722efc",
      "us": "one out from the star.",
-     "en": "coming 1,000 years...."
+     "en": "through the next 1,000 years....",
+     "jp": "みちびいてほしい。。。。"
     },
     {
      "id": "namestrings#039",
@@ -1586,7 +1626,8 @@
      "addr": "3106E",
      "hex": "4974206973207065726665637420666f722075732efc",
      "us": "It is perfect for us.",
-     "en": "...On to Phantasy Star,"
+     "en": "Toward the Phantasy Star...",
+     "jp": "ファンタシースターへ。。。"
     },
     {
      "id": "namestrings#040",
@@ -1595,7 +1636,8 @@
      "addr": "31084",
      "hex": "4174206c617374207765277265206e656172696e67fc",
      "us": "At last we're nearing",
-     "en": "where no god envies"
+     "en": "where no god will envy",
+     "jp": "。。。こうふくを ねたむ かみの いない"
     },
     {
      "id": "namestrings#041",
@@ -1604,7 +1646,8 @@
      "addr": "3109A",
      "hex": "74686520656e64206f66206f7572206a6f75726e657921fc",
      "us": "the end of our journey!",
-     "en": "our happiness..."
+     "en": "our happiness...",
+     "jp": "。。。こうふくを ねたむ かみの いない"
     },
     {
      "id": "namestrings#042",
@@ -1613,7 +1656,8 @@
      "addr": "310B2",
      "hex": "4772656574696e67732c20616c69656e20637261667421fc",
      "us": "Greetings, alien craft!",
-     "en": "...To the ship drawing"
+     "en": "...To the approaching ship",
+     "jp": "。。。どこから きたのかは しりませんが、"
     },
     {
      "id": "namestrings#043",
@@ -1622,7 +1666,8 @@
      "addr": "310CA",
      "hex": "4964656e7469667920796f757273656c7665732efc",
      "us": "Identify yourselves.",
-     "en": "near, origin unknown..."
+     "en": "from unknown origin:",
+     "jp": "こちらに むかっている うちゅうせんへ。。。"
     },
     {
      "id": "namestrings#044",
@@ -1631,7 +1676,8 @@
      "addr": "310E0",
      "hex": "5468697320697320746865204c6f6e646f6efc",
      "us": "This is the London",
-     "en": "...We welcome you, folk"
+     "en": "Visitors from space...",
+     "jp": "。。。わたしたちは、あなたたち うちゅうのかたを / かんげいします。どうか おうとうしてください。"
     },
     {
      "id": "namestrings#045",
@@ -1640,7 +1686,8 @@
      "addr": "310F4",
      "hex": "436f6d6d756e69636174696f6e732043656e746572206f6efc",
      "us": "Communications Center on",
-     "en": "of space. Please reply."
+     "en": "...We welcome you.",
+     "jp": "。。。わたしたちは、あなたたち うちゅうのかたを"
     },
     {
      "id": "namestrings#046",
@@ -1649,7 +1696,8 @@
      "addr": "3110E",
      "hex": "4561727468206f662074686520536f6c2073797374656d2efc",
      "us": "Earth of the Sol system.",
-     "en": "...Earth Federation,"
+     "en": "Please respond to us...",
+     "jp": "かんげいします。どうか おうとうしてください。"
     },
     {
      "id": "namestrings#047",
@@ -1658,53 +1706,10 @@
      "addr": "31128",
      "hex": "4f76657220616e64206f75742efc",
      "us": "Over and out.",
-     "en": "London Comms Center..."
+     "en": " ",
+     "jp": "かんげいします。どうか おうとうしてください。",
+     "note": "Blank padding preserves the six-line ending table; the Japanese message ends after the reply request."
     }
-   ],
-   "jp_extra": [
-    "{FF}　きくがよい！{BR}われらは パルマという ほしの まつえい。。。{PAGE}400せきの うちゅうせんは{PAGE}「じゃあくな ちから」から のがれようとした。{PAGE}しかし、「じゃあくな ちから」の いちぶは{PAGE}すでに われらの ふねに はいりこんでいた。{PAGE}そのため、1せき、また1せきと ほろんでゆき{PAGE}「オラキオとライアの じだい」には{PAGE}この 「アリサ3せい」と、「ネオパルマ」の{PAGE}2せきだけに なってしまった。。。",
-    "{FF}　わっ{BR}ひかりの たばが、こちらに！{PAGE}うちゅうせんから ビームこうげきです！{PAGE}サテライトの エネルギーろに めいちゅう！{PAGE}サテライトが、ばくはつします！{PAGE}はやく だっしゅつを！",
-    "0",
-    "。。。1000ねんの あいだ はなればなれだった",
-    "「アリサ3せい」へ。。。。。。",
-    "。。こちらは、うちゅうせん 「ネオパルマ」の",
-    "パイロット ルーム。。。。。",
-    "。。。。うちゅうに かがやく ばくはつを みて",
-    "それを たよりに ちかづいた。。。。",
-    "。。。サテライトが ひとつ きえているが、",
-    "その ばくはつだったのか。。。。。。。。。",
-    "。。。ともかくも、ひろい うちゅうで、ふたたび",
-    "ともを えたことを よろこんでいる。",
-    "。。。ともに、さらなる 1000ねんの たびを",
-    "いきのびよう。",
-    "。。。パイロッタから えいゆうたちへ。。。",
-    "",
-    "。。。しんろへんこうを じゃまする ちからを",
-    "うちたおしてくれたことを かんしゃする。。。",
-    "。。。この たいようけいには、いくつかの",
-    "わくせいがあることが、わかった。。。",
-    "。。。そのうちの ひとつは、どうやら",
-    "われわれが、うつりすめそうな わくせいだ。。。",
-    "。。。いま、そこに むかっている。",
-    "そちらからも みえるだろう！。。。",
-    "。。。2000ねんの たびは、おわりそうだ。。。",
-    "。。。われわれは、いきのびた。。。",
-    "。。。パイロッタから えいゆうたちへ。。。",
-    "",
-    "。。。しんろへんこうを じゃまする ちからを",
-    "うちたおしてくれたことを かんしゃする。。。",
-    "。。。じゃあくな ちからは、さった。。。",
-    "",
-    "。。。われわれは、この 「アリサ3せい」の",
-    "あらたなる フインおうを かんげいする。。。",
-    "。。。さらなる 1000ねんの たびを",
-    "みちびいてほしい。。。。",
-    "。。。こうふくを ねたむ かみの いない",
-    "ファンタシースターへ。。。",
-    "。。。どこから きたのかは しりませんが、",
-    "こちらに むかっている うちゅうせんへ。。。",
-    "。。。わたしたちは、あなたたち うちゅうのかたを",
-    "かんげいします。どうか おうとうしてください。"
    ]
   },
   "items": {
@@ -1879,7 +1884,7 @@
      "addr": "392D3",
      "hex": "506c616e6172537764fc",
      "us": "PlanarSwd",
-     "en": "Planar Sword",
+     "en": "Dimension Sword",
      "jp": "じげんのけん"
     },
     {
@@ -2139,7 +2144,7 @@
      "addr": "393CE",
      "hex": "48756e746720436c77fc",
      "us": "Huntg Clw",
-     "en": "Ailuros Claw",
+     "en": "Cat's Claw",
      "jp": "アイルーロスのつめ"
     },
     {
@@ -2179,7 +2184,7 @@
      "addr": "393F6",
      "hex": "466f72636520436c77fc",
      "us": "Force Clw",
-     "en": "Lament Claw",
+     "en": "LamentationClaw",
      "jp": "なげきのつめ"
     },
     {
@@ -2199,7 +2204,7 @@
      "addr": "3940A",
      "hex": "526f79616c20436c77fc",
      "us": "Royal Clw",
-     "en": "Panthera Claw",
+     "en": "Panther's Claw",
      "jp": "バンテーラのつめ"
     },
     {
@@ -2349,7 +2354,7 @@
      "addr": "3949D",
      "hex": "4c61636f6e53686f74fc",
      "us": "LaconShot",
-     "en": "Grenade Gun",
+     "en": "GrenadeLaunchr",
      "jp": "グレネードランチャ"
     },
     {
@@ -3733,7 +3738,7 @@
      "addr": "3BE24",
      "hex": "46697265fc",
      "us": "Fire",
-     "en": "Fial",
+     "en": "Fiar",
      "jp": "フィアル"
     },
     {
@@ -3743,7 +3748,7 @@
      "addr": "3BE29",
      "hex": "4d75726166697265fc",
      "us": "Murafire",
-     "en": "Fialma",
+     "en": "Fiarma",
      "jp": "フィアルマ"
     },
     {
@@ -3753,7 +3758,7 @@
      "addr": "3BE32",
      "hex": "417a7566697265fc",
      "us": "Azufire",
-     "en": "Blue Fial",
+     "en": "Blue Fiar",
      "jp": "ブルーフィアル"
     },
     {
@@ -3763,7 +3768,7 @@
      "addr": "3BE3A",
      "hex": "4e61796cfc",
      "us": "Nayl",
-     "en": "Cham",
+     "en": "Chum",
      "jp": "チャム"
     },
     {
@@ -3773,7 +3778,7 @@
      "addr": "3BE3F",
      "hex": "466c61796cfc",
      "us": "Flayl",
-     "en": "Dolcham",
+     "en": "Dolchum",
      "jp": "ドルチャム"
     },
     {
@@ -3783,7 +3788,7 @@
      "addr": "3BE45",
      "hex": "536c61796cfc",
      "us": "Slayl",
-     "en": "Grucham",
+     "en": "Gruchum",
      "jp": "グルーチャム"
     },
     {
@@ -3843,7 +3848,7 @@
      "addr": "3BE70",
      "hex": "4861636b67756c6cfc",
      "us": "Hackgull",
-     "en": "Docheepcock",
+     "en": "Mega Cheepcock",
      "jp": "ドチープコック"
     },
     {
@@ -3903,7 +3908,7 @@
      "addr": "3BE9F",
      "hex": "436c69717565fc",
      "us": "Clique",
-     "en": "Gleros",
+     "en": "Glaros",
      "jp": "グレロス"
     },
     {
@@ -3973,7 +3978,7 @@
      "addr": "3BED3",
      "hex": "5370696e6e6572fc",
      "us": "Spinner",
-     "en": "Ort Medusa",
+     "en": "Orthomedusa",
      "jp": "オルトクラゲ"
     },
     {
@@ -3983,7 +3988,7 @@
      "addr": "3BEDB",
      "hex": "547769726c6572fc",
      "us": "Twirler",
-     "en": "Meta Medusa",
+     "en": "Metamedusa",
      "jp": "メタクラゲ"
     },
     {
@@ -3993,7 +3998,7 @@
      "addr": "3BEE3",
      "hex": "57697a7a6572fc",
      "us": "Wizzer",
-     "en": "Para Medusa",
+     "en": "Paramedusa",
      "jp": "パラクラゲ"
     },
     {
@@ -4143,7 +4148,7 @@
      "addr": "3BF54",
      "hex": "5a61726163686e65fc",
      "us": "Zarachne",
-     "en": "Raid Octoleg",
+     "en": "Red Octoleg",
      "jp": "レィドオクトレグ"
     },
     {
@@ -4153,7 +4158,7 @@
      "addr": "3BF5D",
      "hex": "426c696e6bfc",
      "us": "Blink",
-     "en": "Naruga",
+     "en": "Naruuga",
      "jp": "ナルーガ"
     },
     {
@@ -4163,7 +4168,7 @@
      "addr": "3BF63",
      "hex": "466c617368fc",
      "us": "Flash",
-     "en": "Beeloruga",
+     "en": "Beeloruuga",
      "jp": "ビーロルーガ"
     },
     {
@@ -4173,7 +4178,7 @@
      "addr": "3BF69",
      "hex": "5374726f6265fc",
      "us": "Strobe",
-     "en": "Balmruga",
+     "en": "Balmuruuga",
      "jp": "バームルーガ"
     },
     {
@@ -4183,7 +4188,7 @@
      "addr": "3BF70",
      "hex": "4d696e696d656368fc",
      "us": "Minimech",
-     "en": "Wezal",
+     "en": "Wezzaar",
      "jp": "ウェザール"
     },
     {
@@ -4193,7 +4198,7 @@
      "addr": "3BF79",
      "hex": "4d656368fc",
      "us": "Mech",
-     "en": "Wezal 2",
+     "en": "Wezzaar 2",
      "jp": "ウェザール2"
     },
     {
@@ -4203,7 +4208,7 @@
      "addr": "3BF7E",
      "hex": "4d61786d656368fc",
      "us": "Maxmech",
-     "en": "Wezal 12",
+     "en": "Wezzaar 12",
      "jp": "ウェザール12"
     },
     {
@@ -4253,7 +4258,7 @@
      "addr": "3BFA3",
      "hex": "536865696bfc",
      "us": "Sheik",
-     "en": "Sholdeem",
+     "en": "Sholdim",
      "jp": "ショルディーム"
     },
     {
@@ -4263,7 +4268,7 @@
      "addr": "3BFA9",
      "hex": "43616c697068fc",
      "us": "Caliph",
-     "en": "Muhadeem",
+     "en": "Muhadim",
      "jp": "ムハーディム"
     },
     {
@@ -4303,7 +4308,7 @@
      "addr": "3BFC6",
      "hex": "42616e73686565fc",
      "us": "Banshee",
-     "en": "Flam",
+     "en": "Flamme",
      "jp": "フラム"
     },
     {
@@ -4313,7 +4318,7 @@
      "addr": "3BFCE",
      "hex": "47686f7374fc",
      "us": "Ghost",
-     "en": "Teraflam",
+     "en": "Teraflamme",
      "jp": "テラフラム"
     },
     {
@@ -4333,7 +4338,7 @@
      "addr": "3BFDA",
      "hex": "4265617374657373fc",
      "us": "Beastess",
-     "en": "Wells",
+     "en": "Welz",
      "jp": "ウェルズ"
     },
     {
@@ -4343,7 +4348,7 @@
      "addr": "3BFE3",
      "hex": "54726f67657373fc",
      "us": "Trogess",
-     "en": "Gawells",
+     "en": "Gawelz",
      "jp": "ガウェルズ"
     },
     {
@@ -4353,7 +4358,7 @@
      "addr": "3BFEB",
      "hex": "44656d6f6e657373fc",
      "us": "Demoness",
-     "en": "Daswells",
+     "en": "Daswelz",
      "jp": "ダスウェルズ"
     },
     {
@@ -4393,7 +4398,7 @@
      "addr": "3C009",
      "hex": "4972697361fc",
      "us": "Irisa",
-     "en": "Flanie",
+     "en": "Frannie",
      "jp": "フラニー"
     },
     {
@@ -4403,7 +4408,7 @@
      "addr": "3C00F",
      "hex": "526f7361fc",
      "us": "Rosa",
-     "en": "Megiflanie",
+     "en": "Megifrannie",
      "jp": "メギフラニー"
     },
     {
@@ -4413,7 +4418,7 @@
      "addr": "3C014",
      "hex": "56696f6c61fc",
      "us": "Viola",
-     "en": "Dymaflanie",
+     "en": "Evil Frannie",
      "jp": "ダイマフラニー"
     },
     {
@@ -4443,7 +4448,7 @@
      "addr": "3C028",
      "hex": "446972656d6f6f73fc",
      "us": "Diremoos",
-     "en": "Domolmos",
+     "en": "Mega Molmos",
      "jp": "ドモルモス"
     },
     {
@@ -4473,7 +4478,7 @@
      "addr": "3C043",
      "hex": "476f6c64726f6f74fc",
      "us": "Goldroot",
-     "en": "Grief Tree",
+     "en": "Tree of Grief",
      "jp": "なげきのき"
     },
     {
@@ -4563,7 +4568,7 @@
      "addr": "3C08E",
      "hex": "4a756d706c697afc",
      "us": "Jumpliz",
-     "en": "Zardeen",
+     "en": "Zardine",
      "jp": "ザーヂィーン"
     },
     {
@@ -4633,7 +4638,7 @@
      "addr": "3C0C6",
      "hex": "526f626f6d616efc",
      "us": "Roboman",
-     "en": "Bustard",
+     "en": "Bastard",
      "jp": "バスタード"
     },
     {
@@ -4653,7 +4658,7 @@
      "addr": "3C0D6",
      "hex": "44726f69646d616efc",
      "us": "Droidman",
-     "en": "Rem Bustard",
+     "en": "Rem Bastard",
      "jp": "レムバスタード"
     },
     {
@@ -4683,7 +4688,7 @@
      "addr": "3C0EC",
      "hex": "46696e6973fc",
      "us": "Finis",
-     "en": "Midel Astilus",
+     "en": "Mideli Astilus",
      "jp": "ミデリアスチルス"
     },
     {
@@ -4853,7 +4858,7 @@
      "addr": "3C163",
      "hex": "53706563747265fc",
      "us": "Spectre",
-     "en": "Skelt Master",
+     "en": "Skeleto Master",
      "jp": "スケルトマスター"
     },
     {
@@ -4863,7 +4868,7 @@
      "addr": "3C16B",
      "hex": "577261697468fc",
      "us": "Wraith",
-     "en": "Skelt Knight",
+     "en": "Skeleto Knight",
      "jp": "スケルトナイト"
     },
     {
@@ -4873,7 +4878,7 @@
      "addr": "3C172",
      "hex": "4772696e646572fc",
      "us": "Grinder",
-     "en": "Bazul",
+     "en": "Bazuul",
      "jp": "バズール"
     },
     {
@@ -4883,7 +4888,7 @@
      "addr": "3C17A",
      "hex": "536d6173686572fc",
      "us": "Smasher",
-     "en": "Gefbazul",
+     "en": "Gef Bazuul",
      "jp": "ゲフバズール"
     },
     {
@@ -4893,7 +4898,7 @@
      "addr": "3C182",
      "hex": "43727573686572fc",
      "us": "Crusher",
-     "en": "Dust Bazul",
+     "en": "Dust Bazuul",
      "jp": "ダストバズール"
     },
     {
@@ -4903,7 +4908,7 @@
      "addr": "3C18A",
      "hex": "436c6f7073fc",
      "us": "Clops",
-     "en": "Lutera",
+     "en": "Lootera",
      "jp": "ルーテラ"
     },
     {
@@ -4913,7 +4918,7 @@
      "addr": "3C190",
      "hex": "4269636c6f7073fc",
      "us": "Biclops",
-     "en": "Death Lutera",
+     "en": "Death Lootera",
      "jp": "デスルーテラ"
     },
     {
@@ -4923,7 +4928,7 @@
      "addr": "3C198",
      "hex": "547269636c6f7073fc",
      "us": "Triclops",
-     "en": "Blue Lutera",
+     "en": "Blue Lootera",
      "jp": "ブルールレラ"
     },
     {
@@ -4963,7 +4968,7 @@
      "addr": "3C1B9",
      "hex": "416d617a6f6efc",
      "us": "Amazon",
-     "en": "Nasca",
+     "en": "Nazca",
      "jp": "ナスカ"
     },
     {
@@ -4973,7 +4978,7 @@
      "addr": "3C1C0",
      "hex": "4572696e7965fc",
      "us": "Erinye",
-     "en": "Bloody Nasca",
+     "en": "Bloody Nazca",
      "jp": "ブラッディナスカ"
     },
     {
@@ -4983,7 +4988,7 @@
      "addr": "3C1C7",
      "hex": "56616c6b79726965fc",
      "us": "Valkyrie",
-     "en": "Gordin Nasca",
+     "en": "Gordin Nazca",
      "jp": "ゴーディンナスカ"
     },
     {
@@ -4993,7 +4998,7 @@
      "addr": "3C1D0",
      "hex": "4769616e74fc",
      "us": "Giant",
-     "en": "Dimur",
+     "en": "Dimuur",
      "jp": "ディムール"
     },
     {
@@ -5003,7 +5008,7 @@
      "addr": "3C1D6",
      "hex": "546974616efc",
      "us": "Titan",
-     "en": "Rezamur",
+     "en": "Rezamuur",
      "jp": "レザムール"
     },
     {
@@ -5013,7 +5018,7 @@
      "addr": "3C1DC",
      "hex": "436f6c6f73737573fc",
      "us": "Colossus",
-     "en": "Gidzasgedra",
+     "en": "Gidozath Gedora",
      "jp": "ギドザスゲドラ"
     },
     {
@@ -5033,7 +5038,7 @@
      "addr": "3C1EC",
      "hex": "536563756e647573fc",
      "us": "Secundus",
-     "en": "Nalflow",
+     "en": "Narflow",
      "jp": "ナルフロウ"
     },
     {
@@ -5083,7 +5088,7 @@
      "addr": "3C214",
      "hex": "446f6f6d666c79fc",
      "us": "Doomfly",
-     "en": "Killer Bead",
+     "en": "Killer Beed",
      "jp": "キラービード"
     },
     {
@@ -5093,7 +5098,7 @@
      "addr": "3C21C",
      "hex": "44656d6f6e666c79fc",
      "us": "Demonfly",
-     "en": "And Bead",
+     "en": "Beedroid",
      "jp": "アンドビード"
     },
     {
@@ -5113,7 +5118,7 @@
      "addr": "3C22E",
      "hex": "426c6f74746572fc",
      "us": "Blotter",
-     "en": "Beyon Nagi",
+     "en": "Biyon Nagi",
      "jp": "ビヨンナーギ"
     },
     {
@@ -5193,7 +5198,7 @@
      "addr": "3C271",
      "hex": "576172626f74fc",
      "us": "Warbot",
-     "en": "Begiural",
+     "en": "Vegiural",
      "jp": "ベギウラル"
     },
     {
@@ -5263,7 +5268,7 @@
      "addr": "3C2A9",
      "hex": "466174696d61fc",
      "us": "Fatima",
-     "en": "Kitoarha",
+     "en": "Kito Arha",
      "jp": "キトアーハ"
     },
     {
@@ -5273,7 +5278,7 @@
      "addr": "3C2B0",
      "hex": "5a616669726168fc",
      "us": "Zafirah",
-     "en": "Lightarha",
+     "en": "Light Arha",
      "jp": "ライトアーハ"
     },
     {
@@ -5283,7 +5288,7 @@
      "addr": "3C2B8",
      "hex": "4b68616c69646168fc",
      "us": "Khalidah",
-     "en": "Trahitarha",
+     "en": "Trahite Arha",
      "jp": "トラハイトアーハ"
     },
     {
@@ -5353,7 +5358,7 @@
      "addr": "3C2F0",
      "hex": "436f6e6a75726572fc",
      "us": "Conjurer",
-     "en": "Gu Ran Ga",
+     "en": "Gu-Ran-Ga",
      "jp": "グ。ラン。ガ"
     },
     {
@@ -5363,7 +5368,7 @@
      "addr": "3C2F9",
      "hex": "57697a617264fc",
      "us": "Wizard",
-     "en": "Ril Ha Ma",
+     "en": "Ril-Ha-Ma",
      "jp": "リル。ハ。マ"
     },
     {
@@ -5373,7 +5378,7 @@
      "addr": "3C300",
      "hex": "536f726365726572fc",
      "us": "Sorcerer",
-     "en": "Giga Ra Rug",
+     "en": "Giga-Ra-Lug",
      "jp": "ギガ。ラ。ルグ"
     },
     {
@@ -5610,7 +5615,7 @@
      "addr": "3D972",
      "hex": "44616d61676520e400fc",
      "us": "Damage {NUM:00}",
-     "en": "Damage {NUM:00}",
+     "en": "Damage to {NAME:00} is {NUM:00}.",
      "jp": "ダメージ {NUM:00}"
     },
     {
@@ -5670,7 +5675,7 @@
      "addr": "3DA01",
      "hex": "e800277320646566656e736520696e6372656173642efc",
      "us": "{NAME:00}'s defense increasd.",
-     "en": "{NAME:00}'s defense increased.",
+     "en": "{NAME:00} enters a defensive posture.",
      "jp": "{NAME:00}は まもりを かためた。"
     },
     {
@@ -5680,7 +5685,7 @@
      "addr": "3DA18",
      "hex": "e80020686173206e6f20746563686e69717565732efc",
      "us": "{NAME:00} has no techniques.",
-     "en": "{NAME:00} has no techniques.",
+     "en": "{NAME:00} knows no techniques!",
      "jp": "{NAME:00}は テクニックを しらない ！"
     },
     {
@@ -5720,7 +5725,7 @@
      "addr": "3DA63",
      "hex": "4566666563746976656e65737320697320e4002efc",
      "us": "Effectiveness is {NUM:00}.",
-     "en": "Effectiveness is {NUM:00}.",
+     "en": "{NAME:00} heals for {NUM:00}.",
      "jp": "こうか {NUM:00}"
     },
     {
@@ -5730,7 +5735,7 @@
      "addr": "3DA78",
      "hex": "e8002063616e206e6f206c6f6e676572206669676874fc",
      "us": "{NAME:00} can no longer fight",
-     "en": "{NAME:00} can no longer fight",
+     "en": "{NAME:00} can no longer fight.",
      "jp": "{NAME:00}は たたかえなくなった。"
     },
     {
@@ -5772,6 +5777,116 @@
      "us": "Failed!",
      "en": "Failed!",
      "jp": "しっぱい ！"
+    },
+    {
+     "id": "battle#026",
+     "line": 0,
+     "line_end": 0,
+     "addr": "",
+     "hex": "",
+     "us": "{NAME:00}'s speed increased by {NUM:00}.",
+     "en": "{NAME:00}'s speed increased by {NUM:00}.",
+     "jp": ""
+    },
+    {
+     "id": "battle#027",
+     "line": 0,
+     "line_end": 0,
+     "addr": "",
+     "hex": "",
+     "us": "Escape chance increased by {NUM:00}.",
+     "en": "Escape chance increased by {NUM:00}.",
+     "jp": ""
+    },
+    {
+     "id": "battle#028",
+     "line": 0,
+     "line_end": 0,
+     "addr": "",
+     "hex": "",
+     "us": "{NAME:00}'s attack increased by {NUM:00}.",
+     "en": "{NAME:00}'s attack increased by {NUM:00}.",
+     "jp": ""
+    },
+    {
+     "id": "battle#029",
+     "line": 0,
+     "line_end": 0,
+     "addr": "",
+     "hex": "",
+     "us": "{NAME:00}'s defense increased by {NUM:00}.",
+     "en": "{NAME:00}'s defense increased by {NUM:00}.",
+     "jp": ""
+    },
+    {
+     "id": "battle#030",
+     "line": 0,
+     "line_end": 0,
+     "addr": "",
+     "hex": "",
+     "us": "{NAME:00} is revived.",
+     "en": "{NAME:00} is revived.",
+     "jp": ""
+    },
+    {
+     "id": "battle#031",
+     "line": 0,
+     "line_end": 0,
+     "addr": "",
+     "hex": "",
+     "us": "{NAME:00}'s poison was cured.",
+     "en": "{NAME:00}'s poison was cured.",
+     "jp": ""
+    },
+    {
+     "id": "battle#032",
+     "line": 0,
+     "line_end": 0,
+     "addr": "",
+     "hex": "",
+     "us": "{NAME:00} cannot use techniques.",
+     "en": "{NAME:00} cannot use Techniques.",
+     "jp": ""
+    },
+    {
+     "id": "battle#033",
+     "line": 0,
+     "line_end": 0,
+     "addr": "",
+     "hex": "",
+     "us": "{NAME:00} cannot attack.",
+     "en": "{NAME:00} cannot attack.",
+     "jp": ""
+    },
+    {
+     "id": "battle#034",
+     "line": 0,
+     "line_end": 0,
+     "addr": "",
+     "hex": "",
+     "us": "{NAME:00} is destroyed.",
+     "en": "{NAME:00} is destroyed.",
+     "jp": ""
+    },
+    {
+     "id": "battle#035",
+     "line": 0,
+     "line_end": 0,
+     "addr": "",
+     "hex": "",
+     "us": "{NAME:00} resists the effect.",
+     "en": "{NAME:00} resists the effect.",
+     "jp": ""
+    },
+    {
+     "id": "battle#036",
+     "line": 0,
+     "line_end": 0,
+     "addr": "",
+     "hex": "",
+     "us": "{NAME:00} was unaffected.",
+     "en": "{NAME:00} was unaffected.",
+     "jp": ""
     }
    ]
   },
@@ -5787,7 +5902,7 @@
      "addr": "3DD8A",
      "hex": "4d656c656520546563682efc",
      "us": "Melee Tech.",
-     "en": "Attack Tech.",
+     "en": "Attack Techniques",
      "jp": "こうげきの テクニック"
     },
     {
@@ -5797,7 +5912,7 @@
      "addr": "3DD96",
      "hex": "4f7264657220546563682efc",
      "us": "Order Tech.",
-     "en": "Balance Tech.",
+     "en": "Balance Techniques",
      "jp": "バランスの テクニック"
     },
     {
@@ -5807,7 +5922,7 @@
      "addr": "3DDA2",
      "hex": "4865616c20546563682efc",
      "us": "Heal Tech.",
-     "en": "Recovery Tech.",
+     "en": "Recovery Techniques",
      "jp": "かいふくの テクニック"
     },
     {
@@ -5817,7 +5932,7 @@
      "addr": "3DDAD",
      "hex": "54696d6520546563682efc",
      "us": "Time Tech.",
-     "en": "Time Tech.",
+     "en": "Time Techniques",
      "jp": "じかんの テクニック"
     },
     {
@@ -5857,7 +5972,7 @@
      "addr": "3DE4C",
      "hex": "57686f2773206265656e20706f69736f6e65643ff8fc",
      "us": "Who's been poisoned?{BR}",
-     "en": "Who needs the poison cured?{BR}",
+     "en": "Who needs to be cured of poison?{BR}",
      "jp": "どなたが どくの ちりょうを ？{BR}"
     },
     {
@@ -5887,7 +6002,7 @@
      "addr": "3DEB2",
      "hex": "537465702072696768742075702120466f7274756e6573f8746f6c6420666f7220e400206d657365746121fc",
      "us": "Step right up! Fortunes{BR}told for {NUM:00} meseta!",
-     "en": "You want to hear my fortune?{BR}It costs {NUM:00} meseta. All right?",
+     "en": "You want to hear your fortune?{BR}It costs {NUM:00} meseta. All right?",
      "jp": "わしの うらないが ききたいのかい ？{BR}{NUM:00} メセタ かかるが いいかい ？"
     },
     {
@@ -6017,7 +6132,7 @@
      "addr": "3E01B",
      "hex": "5468616e6b732c20627574206e6f207468616e6b732ef8fc",
      "us": "Thanks, but no thanks.{BR}",
-     "en": "It's better not to, then.{BR}",
+     "en": "I'm better off not taking that.{BR}",
      "jp": "うらないほうが いいですよ。{BR}"
     },
     {
@@ -6047,7 +6162,7 @@
      "addr": "3E08E",
      "hex": "5468617427732077686174204920736565206f66f8796f7572206675747572652e2054616b65206865656421fc",
      "us": "That's what I see of{BR}your future. Take heed!",
-     "en": "That's the end of the old woman's tale.{BR}Go carefully now.",
+     "en": "That's the end of this old woman's tale.{BR}Go carefully now.",
      "jp": "おばばの はなしは これで おわりじゃ。{BR}きをつけて いくんじゃぞ。"
     },
     {
@@ -6167,7 +6282,7 @@
      "addr": "3E1FF",
      "hex": "57686f7365205465636820446973747269627574696f6ef86e6565647320746f20626520616c74657265643ffc",
      "us": "Whose Tech Distribution{BR}needs to be altered?",
-     "en": "Who wants to change their power?{BR}",
+     "en": "Who seeks to alter their power?{BR}",
      "jp": "だれが ちからを かえたいのか ？{BR}"
     },
     {

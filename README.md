@@ -12,7 +12,8 @@ The dialogue window, the field menu, the shop lists and the battle box draw
 proportional (variable-width) text, a page of dialogue scrolls up smoothly
 at the rate of the message-speed option, there are four save slots (one per third-generation branch), the Japanese release's
 scrolling battle ground is restored, the party walks twice as fast, and the
-Technique Distributor no longer runs off the screen at high levels.
+Technique Distributor no longer runs off the screen at high levels. The title
+screen uses the "Successors of Time" subtitle artwork.
 
 This repository holds everything needed to rebuild the patch and to carry the
 translation work forward:
@@ -57,15 +58,20 @@ release/               release templates: readme_template.txt, patcher_template.
 python tools/sourcebuild.py ps3en.bin
 ```
 
-writes the JSON into `ps3.asm` (`gentext.py`), assembles with Macro
-Assembler AS (`PSIII_Disasm/AS/win32/asw.exe`, Windows), fixes the header
-checksum and copies the ROM. Then:
+Always use this command without `--no-gen` for a ROM rebuild. It runs
+`gentext.py` to incorporate the current `work/dialogue.json` and
+`work/script.json` into `ps3.asm`, assembles with Macro Assembler AS
+(`PSIII_Disasm/AS/win32/asw.exe`, Windows), fixes the header checksum and
+copies the ROM. Then:
 
 ```bash
 python tools/checkbuild.py
 python tools/test_text.py
 python tools/test_vwf.py
 python tools/test_techdist.py
+python tools/test_battle.py
+python tools/test_scriptbank.py
+python tools/linecheck.py
 ```
 
 With every option in `ps3.options.asm` at 0 the assembled ROM is

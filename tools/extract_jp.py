@@ -1,14 +1,15 @@
 """Fill the `jp` fields of work/script.json from the Japanese ROM.
 
-    python tools/extract_jp.py
+    python tools/extract_jp.py [--monitor-only]
 
 The JP tables live at different addresses but keep the US order for the name tables, so
 items, techniques, enemies and party names pair by index (the party names are found by
 their stat records). The menu strings pair by index after their position headers; the
 battle and shop messages need explicit maps because the JP script has lines the US
 merged or dropped (`jp_extra` on a segment lists the unpaired JP lines, in order, for
-the translator). Names for the credits, equipment slots and the monitor messages are
-left for the translator (the monitor text is attached as jp_extra).
+the translator). Names for the credits and equipment slots are left for the
+translator. The ending transmissions have an explicit map because 40 Japanese
+lines are reflowed into 48 English lines.
 """
 import json
 import os
@@ -29,7 +30,20 @@ JP_MENUS = 0x1F6B0
 JP_BATTLE = 0x3D8FA
 JP_SHOPS_TECHTYPES = {0: 0x3DD64, 1: 0x3DD71, 2: 0x3DD7E, 3: 0x3DD8A}   # Melee/Order/Heal/Time
 JP_SHOPS = 0x3DD8A
-JP_MONITOR = 0x30CD7
+JP_MONITOR = 0x30E70
+
+# English `namestrings` indices 0-13, 14-27, 28-41 and 42-47 are the four
+# endings. Some English lines split a Japanese line, so repeating that source
+# is intentional. A pair means that one English line spans two JP lines.
+MONITOR_JP_MAP = (
+    (0,), (1,), (2,), (3,), (4,), (4, 5), (5,), (6,), (7,),
+    (8,), (9,), (8,), (10,), (11,),
+    (12,), (12,), (14, 15), (14,), (15,), (16,), (17,), (18,),
+    (19,), (20,), (21,), (22,), (22,), (23,),
+    (24,), (24,), (26, 27), (26,), (27,), (28,), (29,), (30,),
+    (31,), (32,), (33,), (35,), (34,), (34,),
+    (36,), (37,), (38, 39), (38,), (39,), (39,),
+)
 
 
 def strings(rom, start, n=None, stride=None, limit=None):
@@ -72,11 +86,31 @@ def clean_menu(text):
     return text
 
 
+def assign_monitor(segs, jp):
+    """Pair each reflowed English ending line with its Japanese source."""
+    monitor = [clean(t) for _, t in strings(jp, JP_MONITOR, 40)]
+    runs = segs['namestrings']['runs']
+    assert len(runs) == len(MONITOR_JP_MAP) == 48
+    for r, indices in zip(runs, MONITOR_JP_MAP):
+        r['jp'] = ' / '.join(monitor[i] for i in indices)
+    segs['namestrings'].pop('jp_extra', None)
+
+
+def save_doc(doc):
+    with open(SCRIPT, 'w', encoding='utf-8', newline='') as f:
+        f.write((json.dumps(doc, ensure_ascii=False, indent=1) + '\n').replace('\n', '\r\n'))
+
+
 def main():
     jp = open(JP_ROM, 'rb').read()
     us = open(US_ROM, 'rb').read()
     doc = json.load(open(SCRIPT, encoding='utf-8'))
     segs = doc['segments']
+    if sys.argv[1:] == ['--monitor-only']:
+        assign_monitor(segs, jp)
+        save_doc(doc)
+        print('filled 48 namestrings jp fields, wrote %s' % SCRIPT)
+        return
     filled = 0
 
     def pair(seg, texts):
@@ -93,6 +127,8 @@ def main():
 
     # party names: the JP stat record has the same 7 bytes (mask, 5 stats, level) before the name
     for r in segs['charnames']['runs']:
+        if not r.get('addr'):
+            continue  # translated-only name entries have no address in the stock ROM
         a = int(r['addr'], 16)
         key = us[a - 7:a]
         for m in re.finditer(re.escape(key), jp):
@@ -133,11 +169,10 @@ def main():
         filled += 1
     segs['shops']['jp_extra'] = [clean(js[8]), clean(js[26])]   # inn "stay or talk?" prompt and its menu, dropped in the US
 
-    # monitor messages: different line breaks; attach the JP lines for the translator
-    segs['namestrings']['jp_extra'] = [clean(t) for _, t in strings(jp, JP_MONITOR, 43)]
+    assign_monitor(segs, jp)
+    filled += 48
 
-    with open(SCRIPT, 'w', encoding='utf-8') as f:
-        json.dump(doc, f, ensure_ascii=False, indent=1)
+    save_doc(doc)
     print('filled %d jp fields, wrote %s' % (filled, SCRIPT))
 
 
