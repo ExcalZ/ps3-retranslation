@@ -1,4 +1,4 @@
-"""fast_walk: the party's step on the field and the scripted walks of the opening.
+"""fast_walk: field cadence and scripted demo endpoint checks.
 
     python work/scripts/walkspeed.py [ps3en.bin] [slow.bin]
 
@@ -6,7 +6,7 @@ From power-on through the wedding and the Landen intro to the town, logging the 
 position (x, y of the sprite manager) whenever the demo input or the map changes, then
 walking on the field for 60 frames: the px per frame, frames per step and the sprite's
 animation frame per frame. With a second ROM (built with fast_walk = 0) the demo
-positions are compared: the cutscenes must end each walk on the same tile."""
+positions are compared: scripted walks must end on the same tiles."""
 import sys, os; sys.path.insert(0, 'tools')
 from ps3emu import *
 

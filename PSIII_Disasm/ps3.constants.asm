@@ -600,6 +600,7 @@ obj_game_event = $FFFFD380
 game_event_pointer = $FFFFD384
 
 demo_joypad_input = $FFFFD396
+fast_walk_demo_active = $FFFFD3C0 ; reserved gap before the sprite table
 
 sprite_table_buffer = $FFFFD400
 

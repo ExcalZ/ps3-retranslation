@@ -1,6 +1,6 @@
 # PS3 Retranslation — Current Handoff
 
-Updated: 2026-09-25
+Updated: 2026-09-27
 
 ## State
 
@@ -18,8 +18,8 @@ the Japanese throughout - the user's decision of 2026-09-19, recorded in
 `work/glossary.md`. What remains is proofreading in play: only a handful of
 lines have been seen on the console side so far (see the log).
 
-Canonical experimental ROM `ps3en.bin` (every option on): 827,584 bytes,
-SHA-256 `BC4C7AC06063260160D4F5320D2726686F92A05F29AE19E07AB81213C0CC47E2`;
+Canonical experimental ROM `ps3en.bin` (every option on): 827,664 bytes,
+SHA-256 `0EDA75F7C976E372AEA2A2ABE7B1DDA6A6BCBD924C82F54940967DDEADC26D8A`;
 `tools/checkbuild.py` prints its SHA-256 after each build.
 Stock US ROM (every option 0 and every `en` equal to `us` reproduces it -
 verified 2026-09-20 after the translation pass): 786,432 bytes, SHA-256
@@ -27,6 +27,13 @@ verified 2026-09-20 after the translation pass): 786,432 bytes, SHA-256
 `C6B42B0F`, internal checksum `3A33`.
 
 ## Done
+
+* **Maia kidnapping escort (2026-09-27).** The 2x walk modifier shortened
+  Rhys's demo input while Maia and the guards followed one-pixel, eight-frame
+  paths. Scripted demo walks now keep that stock cadence through the final tile
+  step, then restore 2x field movement. The pre-wedding BlastEm slot reaches
+  the Landen prison cell entrance at `(752, 432)`; the old build stopped at
+  `(912, 528)`. `work/scripts/kidnapping.py` checks the route and speed reset.
 
 * **Full dialogue pointer audit (2026-09-25).** All 546 compiled dialogue
   entries match `work/dialogue.json`, all 144 conditional redirects land on

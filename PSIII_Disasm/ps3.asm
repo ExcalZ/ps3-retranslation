@@ -24293,7 +24293,7 @@ loc_11CC8:
 	rts
 loc_11CE8:
 	if fast_walk
-	jsr	(FastWalk_DemoFrames).l	; four frames per step; pauses stay stock
+	jsr	(FastWalk_DemoFrames).l	; stock demo timing for moving NPCs
 	nop
 	nop
 	else
@@ -24312,7 +24312,11 @@ loc_11D04:
 loc_11D06:
 	st	$FFFFBF04.w
 loc_11D0A:
+	if fast_walk
+	jsr	(FastWalk_DemoEnd).l
+	else
 	bclr	#2, $FFFFD004.w
+	endif
 	clr.w	(demo_joypad_input).w
 	bclr	#7, $FFFFD286.w
 	bclr	#5, $FFFFC001.w

@@ -14,8 +14,8 @@ fast_transitions = 1
 
 ; The party walks at a steady 2x speed on foot: 2 px per frame, with each
 ; 8-px step kept intact for collision (vehicles keep their speeds). The walking
-; animation runs at its stock pace; the scripted walks (demo input, the dock)
-; count steps, so cutscenes cover the same ground.
+; animation runs at its stock pace. Scripted demo walks retain stock speed so
+; Rhys stays in step with other actors; the dock keeps its step count.
 fast_walk = 1
 
 ; Ignore confirm presses for the first eight frames after a character's

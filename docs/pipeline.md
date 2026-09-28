@@ -44,7 +44,7 @@ The options in `ps3.options.asm`:
 | `vwf_battle` | proportional enemy-group row, stat-window names and item / technique lists in the battle box; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `smooth_scroll` | a page advance in the dialogue window scrolls the text up smoothly at the rate of the "message scrolling speed" option; requires `vwf_dialogue` (`ext/vwf.asm`) |
 | `four_save_slots` | four save slots with safety copies in 32 KB of backup RAM (`ext/saveslots.asm`) |
-| `fast_walk` | the party walks at a steady 2x speed on foot: every 8-px step takes four frames of 2 px (`FastWalk_UpdateStep`); followers use the same delta, the animation keeps its pace, and scripted walks/dock timing count the same steps. Save loading preserves vehicle speed 4. `work/scripts/walkspeed.py` asserts the cadence and can compare endpoints with a `fast_walk = 0` build. |
+| `fast_walk` | the party walks at a steady 2x speed on foot: every 8-px step takes four frames of 2 px (`FastWalk_UpdateStep`); followers use the same delta and the animation keeps its pace. Scripted walks driven by the wedding/demo controller retain stock speed to stay synchronized with NPC paths; the dock counts its steps at 2x speed. Save loading preserves vehicle speed 4. `work/scripts/walkspeed.py` asserts the cadence and can compare endpoints with a `fast_walk = 0` build. |
 
 New code lives in `PSIII_Disasm/ext/*.asm`, included just before `EndOfRom`,
 so it sits past the original 768 KB and nothing in the original image moves
