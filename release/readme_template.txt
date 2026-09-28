@@ -61,6 +61,12 @@ Open Patcher.html in any browser, drop the ROM on it, save the result. It
 accepts interleaved .smd dumps too and can save the patched game as .smd.
 Alternatively apply @PATCH@ with Flips, beat or any BPS patcher.
 
+If you prefer the original US battle background without the Japanese-style
+ground parallax, apply @ALT_PATCH@
+to the clean US ROM with a BPS patcher.
+Patcher.html applies the standard version. Apply only one of the two BPS files;
+the no-parallax patch includes the full translation and all other changes.
+
 The patched ROM:
 
   Size:   @OUT_SIZE@ bytes
@@ -68,6 +74,14 @@ The patched ROM:
   MD5:    @OUT_MD5@
   SHA-1:  @OUT_SHA1@
   Mega Drive header checksum: @OUT_CHECKSUM@
+
+The no-parallax patched ROM:
+
+  Size:   @ALT_SIZE@ bytes
+  CRC32:  @ALT_CRC32@
+  MD5:    @ALT_MD5@
+  SHA-1:  @ALT_SHA1@
+  Mega Drive header checksum: @ALT_CHECKSUM@
 
 The patched ROM is slightly larger than the original: the new text engine and
 its font live past the end of the original data. Every emulator and flash

@@ -116,8 +116,10 @@ original and are what the generators key on.
 python tools/release.py 1.0
 ```
 
-writes `release/PS3_Retranslation_v1.0/` (BPS, offline `Patcher.html` that
-also accepts `.smd`, readme with every hash filled in) and zips it.
+writes `release/PS3_Retranslation_v1.0/` (standard BPS, an alternate BPS with
+the original US battle background scrolling, offline `Patcher.html` for the
+standard patch that also accepts `.smd`, and a readme with both output hashes)
+and zips it.
 
 ## Credits and legal
 
