@@ -1,7 +1,11 @@
 # Phantasy Star III: English Retranslation — source and tools
 
-Repository: https://github.com/ExcalZ/ps3-retranslation (no release yet - the
-translation pass is in progress; see `work/STATUS.md`).
+**Players:** Visit the
+[Releases page](https://github.com/ExcalZ/ps3-retranslation/releases) for patch
+ZIPs when published. Each ZIP includes an offline patcher (`Patcher.html`),
+a BPS patch, and instructions. Bring your own clean US ROM; no ROM is included.
+
+For translation progress and build status, see [`work/STATUS.md`](work/STATUS.md).
 
 A new English translation of *Phantasy Star III: Generations of Doom*
 (*Toki no Keishousha*, Mega Drive / Genesis), made from the Japanese script,
