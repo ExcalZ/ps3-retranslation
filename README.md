@@ -1,9 +1,11 @@
 # Phantasy Star III: English Retranslation — source and tools
 
-**Players:** Visit the
-[Releases page](https://github.com/ExcalZ/ps3-retranslation/releases) for patch
-ZIPs when published. Each ZIP includes an offline patcher (`Patcher.html`),
-a BPS patch, and instructions. Bring your own clean US ROM; no ROM is included.
+[![Latest release](https://img.shields.io/github/v/release/ExcalZ/ps3-retranslation?label=Download%20the%20patch)](https://github.com/ExcalZ/ps3-retranslation/releases/latest)
+
+**Players:** Get the patch from the
+[Releases page](https://github.com/ExcalZ/ps3-retranslation/releases/latest).
+The ZIP includes an offline patcher (`Patcher.html`), a BPS patch, and
+instructions. Bring your own clean US ROM; no ROM is included.
 
 For translation progress and build status, see [`work/STATUS.md`](work/STATUS.md).
 
