@@ -636,6 +636,10 @@ def test_battle_box(sym):
     x = check_line(m, b'Blue Dragon King enters a defensive posture.',
                    0xFFFF2C0A, 0, label='defensive posture')
     assert x <= 192, x
+    render(m, sym, "{NAME:00}'s Techniques are locked.", row0=0xFFFF2C0A)
+    x = check_line(m, b"Blue Dragon King's Techniques are locked.",
+                   0xFFFF2C0A, 0, label='Techniques locked')
+    assert x <= 192, x
     # the victory message: two lines from the box's top row (plane A rows 20-23, stride $80)
     m.poke(CTX + 0x42, (0x80).to_bytes(2, 'big'))
     m.poke(0x0FF800, b'Kein\xFC')

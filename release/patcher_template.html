@@ -39,7 +39,7 @@
 <div id="out"></div>
 
 <p class="fine">Expected ROM: @GAME@, @SRC_SIZE@ bytes, CRC32 @SRC_CRC32@ (as a plain binary).
-Interleaved .smd dumps are converted automatically, and the patched ROM can be saved either as a plain 4 MB .bin
+Interleaved .smd dumps are converted automatically, and the patched ROM can be saved either as a plain .bin
 or as an interleaved .smd.
 If you prefer a conventional patcher, the same patch is in @PATCH@ next to this file.@README_NOTE@</p>
 
@@ -67,13 +67,14 @@ function smdToBin(u8) { const body = u8.subarray(512), out = new Uint8Array(body
   for (let base = 0; base < body.length; base += 16384) {
     for (let i = 0; i < 8192; i++) { out[base + 2 * i + 1] = body[base + i]; out[base + 2 * i] = body[base + 8192 + i]; } }
   return out; }
-// The inverse, with the header tools/bin2smd.py writes.  A 4 MB image has 256
-// blocks, which does not fit the count byte; emulators (BlastEm, Genesis Plus
-// GX) size the data from the file length instead, verified for this ROM.
-function binToSmd(u8) { const out = new Uint8Array(512 + u8.length), blocks = u8.length / 16384;
+// SMD stores whole 16 KiB blocks. Pad the final block before interleaving,
+// matching tools/md/bin2smd.py; otherwise the saved file loses ROM bytes.
+function binToSmd(u8) { const blocks = Math.ceil(u8.length / 16384);
+  const padded = new Uint8Array(blocks * 16384); padded.fill(0xFF); padded.set(u8);
+  const out = new Uint8Array(512 + padded.length);
   out[0] = blocks & 0xFF; out[1] = 0x03; out[8] = 0xAA; out[9] = 0xBB; out[10] = 0x06;
-  for (let base = 0; base < u8.length; base += 16384) { const o = 512 + base;
-    for (let i = 0; i < 8192; i++) { out[o + i] = u8[base + 2 * i + 1]; out[o + 8192 + i] = u8[base + 2 * i]; } }
+  for (let base = 0; base < padded.length; base += 16384) { const o = 512 + base;
+    for (let i = 0; i < 8192; i++) { out[o + i] = padded[base + 2 * i + 1]; out[o + 8192 + i] = padded[base + 2 * i]; } }
   return out; }
 
 // --- BPS ----------------------------------------------------------------

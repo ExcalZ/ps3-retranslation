@@ -28,7 +28,16 @@ which is what lets the Japanese script be carried over in full.
   WHAT ELSE CHANGES
 
   Save slots .......... four instead of two, one per third-generation branch
+  Battle messages ..... attacks, damage, healing and Technique effects name
+                        their targets and show the amount or outcome clearly
+  Walking ............. twice as fast on foot
+  Screen transitions .. ordinary menu and map fades take about half as long
+  Dialogue ............ page changes scroll smoothly at the selected message
+                        scrolling speed
+  Battle targeting .... Left moves to the previous target for Items,
+                        Techniques and Defend
   Battle background ... the scrolling ground of the Japanese release is back
+  Prologue ............ narration letters have a shadow for readability
   Technique Distributor the distribution box stays on screen at high levels
                         (the original could crash there)
 
@@ -72,8 +81,8 @@ still loads - its two games are slots 1 and 2.
 --------------------------------------------------------------------------------
 
 Translation, hacking and testing by Excalibur_Z, with Claude (Anthropic) for
-translation and technical work. Built on lory90's Phantasy Star III
-disassembly. Phantasy Star III is copyright SEGA.
+technical work. Built on lory90's Phantasy Star III disassembly.
+Phantasy Star III is copyright SEGA.
 
 Source and tools: https://github.com/ExcalZ/ps3-retranslation
 Contact: Discord @Excalibur_Z, Twitter @ExcalZGaming

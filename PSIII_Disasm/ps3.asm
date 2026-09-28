@@ -71648,7 +71648,7 @@ BattleMsgPoisonCured:
 	dc.b	$FC
 
 BattleMsgTechniquesBlocked:
-	dc.b	$E8, $00, " cannot use Techniques."
+	dc.b	$E8, $00, "'s Techniques are locked."
 	dc.b	$FC
 
 BattleMsgAttackBlocked:

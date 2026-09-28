@@ -5845,7 +5845,7 @@
      "addr": "",
      "hex": "",
      "us": "{NAME:00} cannot use techniques.",
-     "en": "{NAME:00} cannot use Techniques.",
+     "en": "{NAME:00}'s Techniques are locked.",
      "jp": ""
     },
     {
